@@ -73,21 +73,32 @@ public class Renderer
         
         for (final PointLight light : scene.lights)
         {
-            final Vector toLight = light.location.sub(hitPoint).normalize();
+            final Vector toLight = light.location.sub(hitPoint);
+            final Vector dirToLight = toLight.normalize();
+            
+            final Ray lightRay = scene.shape.shootRay(hitPoint, dirToLight);
+            
+            if (lightRay != null)
+            {
+                continue;
+            }
+            
+            final double distToLight = toLight.length();
+            final double distCoeff = 1.0 / (distToLight * distToLight);
             
             /**
              * Diffuse light
              */
-            double c = toLight.dot(normal);
+            double c = dirToLight.dot(normal);
             c = (c < 0.0 ? 0.0 : c);
-            final Color cDiff = light.color.mul(c * finish.getDiffCoeff());
+            final Color cDiff = light.color.mul(c * finish.getDiffCoeff() * distCoeff);
             
             totalLight = totalLight.add(cDiff);
             
             /**
              * Specular light
              */
-            final Vector r = normal.mul(normal.mul(2).dot(toLight)).sub(toLight);
+            final Vector r = normal.mul(normal.mul(2).dot(dirToLight)).sub(dirToLight);
             final double cosTheta = -r.dot(dir);
             
             if (cosTheta > 0)
@@ -95,7 +106,7 @@ public class Renderer
                 final double shininess = finish.getShininess();
                 final double specCoeff = finish.getSpecCoeff();
                 
-                final Color cSpec = light.color.mul(Math.pow(cosTheta, shininess) * specCoeff);
+                final Color cSpec = light.color.mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
                 totalLight = totalLight.add(cSpec);
             }
         }

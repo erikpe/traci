@@ -9,6 +9,7 @@ import traci.model.csg.Box;
 import traci.model.csg.Csg;
 import traci.model.csg.Cylinder;
 import traci.model.csg.Difference;
+import traci.model.csg.Plane;
 import traci.model.csg.Sphere;
 import traci.model.csg.Union;
 import traci.model.light.PointLight;
@@ -68,6 +69,10 @@ public class Main
         csg.add(sphere6); csg.add(sphere7);
         csg.translate(-0.5, -0.5, -0.5);
         
+        final Plane plane = new Plane();
+        plane.texture.getPigment().setColor(Color.WHITE);
+        plane.translateY(-1);
+        
         final Csg csg2 = new Union();
         csg2.add(csg);
         csg2.add(cyl0);
@@ -79,11 +84,12 @@ public class Main
         csg2.add(s3);
         csg2.add(s4);
         csg2.add(s5);
+        csg2.add(plane);
         
         final Camera cam = new Camera(camLocation, camLookAt);
         final Scene scene = new Scene(csg2, cam);
-        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(0.75));
-        final PointLight light2 = new PointLight(Vector.make(-10, 100, 10), Color.WHITE.mul(0.75));
+        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*30));
+        final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.RED.mul(50));
         
         scene.addLight(light);
         scene.addLight(light2);

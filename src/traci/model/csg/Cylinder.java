@@ -49,7 +49,7 @@ public class Cylinder extends Primitive
             near = Point.farest(near, p0);
             far = Point.nearest(far, p1);
             
-            if (near.dist < far.dist)
+            if (near.dist > 0 && near.dist < far.dist)
             {
                 ray = new Ray(new Interval(near, far));
             }
