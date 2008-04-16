@@ -4,9 +4,10 @@ import traci.gui.DrawArea;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
-import traci.model.csg.Primitive;
 import traci.model.light.PointLight;
 import traci.model.texture.Color;
+import traci.model.texture.Finish;
+import traci.model.texture.Pigment;
 
 public class Renderer
 {
@@ -31,15 +32,10 @@ public class Renderer
                 lookX = lookX * xx;
                 lookY = lookY * yy;
                 
-                final Vector point = Vector.ORIGO;
                 final Vector dir = Vector.make(lookX, lookY, -1.0);
-                final Vector lookAt = point.add(dir);
+                final Vector camDir = cam.mat.mul(dir).normalize();
                 
-                final Vector camPoint = cam.location;
-                final Vector camDir = cam.mat.mul(dir);
-                final Vector camLookAt = camPoint.add(camDir);
-                
-                final Color color = raytrace(scene, 4, camPoint, camLookAt);
+                final Color color = raytrace(scene, 4, cam.location, camDir);
                 area.draw(x, y, color);
             }
         }
@@ -48,62 +44,62 @@ public class Renderer
     }
     
     private static Color raytrace(final Scene scene, final int depth,
-                                  final Vector p, final Vector lookAt)
+                                  final Vector p, final Vector dir)
     {
         if (depth <= 0)
         {
             return Color.BLACK;
         }
         
-        final Intervals ivals = scene.shape.shootRay(p, lookAt);
+        final Ray ray = scene.shape.shootRay(p, dir);
         
-        if (ivals == null || ivals.isEmpty())
+        if (ray == null)
         {
             return Color.BLACK;
         }
         
-        final Point hit = ivals.get(0).p0;
-        final Primitive obj = hit.obj;
+        final Point hit = ray.get(0).p0;
+        final Vector normal = hit.obj.transform.normal(hit.normal).normalize();
+        final Vector hitPoint = p.add(dir.mul(hit.dist));
         
-        final Vector normal = hit.normal.normalize();
-        final Vector hitP = p.add(lookAt.sub(p).normalize().mul(hit.dist));
+        final Pigment pigment = hit.obj.texture.getPigment();
+        final Finish finish = hit.obj.texture.getFinish();
         
         /**
          * Ambient light
          */
-        final Color cAmb = Color.make(0.1, 0.1, 0.1);
+        final Color cAmb = finish.getCAmb();
         Color totalLight = cAmb;
         
         for (final PointLight light : scene.lights)
         {
-            final Vector toLight = light.location.sub(hitP).normalize();
+            final Vector toLight = light.location.sub(hitPoint).normalize();
             
             /**
              * Diffuse light
              */
             double c = toLight.dot(normal);
             c = (c < 0.0 ? 0.0 : c);
-            final Color cDiff = light.color.mul(c * obj.diffCoeff());
+            final Color cDiff = light.color.mul(c * finish.getDiffCoeff());
             
             totalLight = totalLight.add(cDiff);
             
             /**
              * Specular light
              */
-            final Vector toCamera = p.sub(hitP).normalize();
             final Vector r = normal.mul(normal.mul(2).dot(toLight)).sub(toLight);
-            final double cosTheta = r.dot(toCamera);
+            final double cosTheta = -r.dot(dir);
             
             if (cosTheta > 0)
             {
-                final double shininess = obj.shininess();
-                final double specCoeff = obj.specCoeff();
+                final double shininess = finish.getShininess();
+                final double specCoeff = finish.getSpecCoeff();
                 
                 final Color cSpec = light.color.mul(Math.pow(cosTheta, shininess) * specCoeff);
                 totalLight = totalLight.add(cSpec);
             }
         }
         
-        return obj.getColor().mul(totalLight);
+        return pigment.getColor().mul(totalLight);
     }
 }

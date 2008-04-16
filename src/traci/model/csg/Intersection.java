@@ -4,7 +4,7 @@ import java.util.List;
 
 import traci.math.Vector;
 import traci.model.texture.Texture;
-import traci.render.Intervals;
+import traci.render.Ray;
 
 public class Intersection extends Csg
 {
@@ -19,7 +19,7 @@ public class Intersection extends Csg
     }
     
     @Override
-    public Intervals shootRay(final Vector p, final Vector lookAt)
+    public Ray shootRay(final Vector p, final Vector dir)
     {
         final List<Shape> shapes = getShapes();
         final int numShapes = shapes.size();
@@ -29,30 +29,30 @@ public class Intersection extends Csg
             return null;
         }
         
-        Intervals ivals = shapes.get(0).shootRay(p, lookAt);
+        Ray ray = shapes.get(0).shootRay(p, dir);
         
-        if (ivals == null)
+        if (ray == null)
         {
             return null;
         }
         
         for (int i = 1; i < numShapes; ++i)
         {
-            final Intervals shapeIvals = shapes.get(i).shootRay(p, lookAt);
+            final Ray shapeRay = shapes.get(i).shootRay(p, dir);
             
-            if (shapeIvals == null)
+            if (shapeRay == null)
             {
                 return null;
             }
             
-            ivals.intersect(shapeIvals);
+            ray.intersect(shapeRay);
             
-            if (ivals.isEmpty())
+            if (ray.isEmpty())
             {
                 return null;
             }
         }
         
-        return ivals;
+        return ray;
     }
 }

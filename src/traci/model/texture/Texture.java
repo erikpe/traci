@@ -1,24 +1,55 @@
 package traci.model.texture;
 
-public class Texture
+public class Texture implements Cloneable
 {
-    public static final Texture DEFAULT;
+    private Pigment pigment;
+    private Finish finish;
     
-    static
+    private Texture() { }
+    
+    public static Texture newDefault()
     {
-        DEFAULT = new Texture();
+        final Texture defTexture = new Texture();
         
-        DEFAULT.color = Color.WHITE;
-        DEFAULT.specularCoeff = 0.5;
-        DEFAULT.diffuseCoeff = 0.5;
-        DEFAULT.ambientCoeff = 0.1;
-        DEFAULT.shininess = 100;
+        defTexture.pigment = new Pigment();
+        defTexture.finish = new Finish();
+        
+        defTexture.getPigment().setColor(Color.WHITE);
+        defTexture.getFinish().setCAmb(Color.make(0.1, 0.1, 0.1));
+        defTexture.getFinish().setDiffCoeff(0.5);
+        defTexture.getFinish().setSpecCoeff(0.5);
+        defTexture.getFinish().setShininess(50);
+        
+        return defTexture;
     }
     
-    public Color color;
+    public Pigment getPigment()
+    {
+        return pigment;
+    }
     
-    public double specularCoeff;
-    public double diffuseCoeff;
-    public double ambientCoeff;
-    public double shininess;
+    public Finish getFinish()
+    {
+        return finish;
+    }
+    
+    @Override
+    public Object clone()
+    {
+        Texture res = null;
+        
+        try
+        {
+            res = (Texture) super.clone();
+            
+            res.pigment = (Pigment) res.pigment.clone();
+            res.finish = (Finish) res.finish.clone();
+        }
+        catch (CloneNotSupportedException e)
+        {
+            e.printStackTrace();
+        }
+        
+        return res;
+    }
 }

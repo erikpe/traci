@@ -2,8 +2,8 @@ package traci.model.csg;
 
 import traci.math.Vector;
 import traci.model.texture.Texture;
-import traci.render.Intervals;
-import traci.render.Ival;
+import traci.render.Ray;
+import traci.render.Interval;
 import traci.render.Point;
 
 public class Cylinder extends Primitive
@@ -19,9 +19,9 @@ public class Cylinder extends Primitive
     }
     
     @Override
-    public Intervals primitiveShootRay(final Vector p, final Vector dir)
+    public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
-        Intervals ivals = null;
+        Ray ray = null;
         
         /**
          * Begin with plane y = 0 and y = 1
@@ -51,10 +51,10 @@ public class Cylinder extends Primitive
             
             if (near.dist < far.dist)
             {
-                ivals = new Intervals(new Ival(near, far));
+                ray = new Ray(new Interval(near, far));
             }
         }
         
-        return ivals;
+        return ray;
     }
 }

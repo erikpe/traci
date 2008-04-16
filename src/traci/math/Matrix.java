@@ -144,6 +144,40 @@ public class Matrix
         return Vector.make(x, y, z);
     }
     
+    protected Vector mulIgnoreTranslate(final Vector vec)
+    {
+        final double x = vec.x * data[0][0] +
+                         vec.y * data[0][1] +
+                         vec.z * data[0][2];
+        
+        final double y = vec.x * data[1][0] +
+                         vec.y * data[1][1] +
+                         vec.z * data[1][2];
+        
+        final double z = vec.x * data[2][0] +
+                         vec.y * data[2][1] +
+                         vec.z * data[2][2];
+        
+        return Vector.make(x, y, z);
+    }
+    
+    protected Vector mulNormal(final Vector vec)
+    {
+        final double x = vec.x * data[0][0] +
+                         vec.y * data[1][0] +
+                         vec.z * data[2][0];
+        
+        final double y = vec.x * data[0][1] +
+                         vec.y * data[1][1] +
+                         vec.z * data[2][1];
+        
+        final double z = vec.x * data[0][2] +
+                         vec.y * data[1][2] +
+                         vec.z * data[2][2];
+        
+        return Vector.make(x, y, z);
+    }
+    
     public String toString()
     {
         final StringBuilder buf = new StringBuilder();

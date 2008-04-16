@@ -1,11 +1,28 @@
 package traci.model.texture;
 
-public class Pigment
+public class Pigment implements Cloneable
 {
-    public final Color color;
+    protected Color color;
     
-    public Pigment(final Color color)
+    protected Pigment() { }
+    
+    public Color getColor()
+    {
+        return color;
+    }
+    
+    public void setColor(final Color color)
     {
         this.color = color;
+    }
+    
+    @Override
+    protected Object clone() throws CloneNotSupportedException
+    {
+        final Pigment res = (Pigment) super.clone();
+        
+        res.color = color;
+        
+        return res;
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import traci.math.Vector;
 import traci.model.texture.Texture;
-import traci.render.Intervals;
+import traci.render.Ray;
 
 public class Union extends Csg
 {
@@ -19,27 +19,27 @@ public class Union extends Csg
     }
     
     @Override
-    public Intervals shootRay(final Vector p, final Vector lookAt)
+    public Ray shootRay(final Vector p, final Vector dir)
     {
         final List<Shape> shapes = getShapes();
         final int numShapes = shapes.size();
         
-        Intervals ivals = null;
+        Ray ray = null;
         
         for (int i = 0; i < numShapes; ++i)
         {
-            final Intervals shapeIvals = shapes.get(i).shootRay(p, lookAt);
+            final Ray shapeRay = shapes.get(i).shootRay(p, dir);
             
-            if (ivals == null)
+            if (ray == null)
             {
-                ivals = shapeIvals;
+                ray = shapeRay;
             }
             else
             {
-                ivals.add(shapeIvals);
+                ray.add(shapeRay);
             }
         }
         
-        return ivals;
+        return ray;
     }
 }

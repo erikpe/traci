@@ -27,11 +27,11 @@ public abstract class Csg extends Shape
     }
     
     @Override
-    public void transform(final Matrix invMat, final Matrix normalMat)
+    public void transform(final Matrix mat, final Matrix invMat)
     {
         for (final Shape shape : getShapes())
         {
-            shape.transform(invMat, normalMat);
+            shape.transform(mat, invMat);
         }
     }
 }

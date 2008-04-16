@@ -1,52 +1,33 @@
 package traci.model.csg;
 
 import traci.math.Matrix;
+import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.texture.Texture;
-import traci.render.Intervals;
+import traci.render.Ray;
 
 public abstract class Primitive extends Shape
 {
-    private Matrix invMat;
+    public final Transformation transform;
     
-    private Matrix normalMat;
-    
-    public Primitive(final Texture material)
+    public Primitive(final Texture texture)
     {
-        super(material);
-        
-        this.invMat = Matrix.eye();
-        this.normalMat = Matrix.eye();
+        super(texture);
+        transform = new Transformation();
     }
     
-    public Intervals primitiveShootRay(final Vector p, final Vector dir)
+    public abstract Ray primitiveShootRay(final Vector p, final Vector dir);
+    
+    public Ray shootRay(final Vector p, final Vector dir)
     {
-        throw new UnsupportedOperationException();
+        final Vector transP = transform.pointInv(p);
+        final Vector transDir = transform.dirInv(dir);
+        
+        return primitiveShootRay(transP, transDir);
     }
     
-    public Intervals shootRay(final Vector p, final Vector lookAt)
+    public void transform(final Matrix mat, final Matrix invMat)
     {
-        final Vector transP = invMat.mul(p);
-        final Vector transLookAt = invMat.mul(lookAt);
-        final Vector dir = transLookAt.sub(transP);
-        
-        final Intervals ivals = primitiveShootRay(transP, dir);
-        
-        if (ivals != null)
-        {
-            ivals.transformNormals(normalMat);
-        }
-        
-        return ivals;
-    }
-    
-    public void transform(final Matrix invMat, final Matrix normalMat)
-    {
-        this.invMat = this.invMat.mul(invMat);
-        
-        if (normalMat != null)
-        {
-            this.normalMat = normalMat.mul(this.normalMat);
-        }
+        transform.transform(mat, invMat);
     }
 }

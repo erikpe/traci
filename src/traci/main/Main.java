@@ -19,7 +19,7 @@ public class Main
 {
     public static void main(final String[] args)
     {
-        final DrawArea drawArea = new DrawArea(1600, 1200);
+        final DrawArea drawArea = new DrawArea(800, 600);
         final MainWindow window = new MainWindow(drawArea);
         window.setVisible(true);
         
@@ -46,6 +46,7 @@ public class Main
         final Sphere s3 = new Sphere(); s3.scale(0.1, 0.1, 0.5); s3.translate(0, 1, 0);
         final Sphere s4 = new Sphere(); s4.scale(0.1, 0.5, 0.1); s4.translate(0, 0, -1);
         final Sphere s5 = new Sphere(); s5.scale(0.1, 0.5, 0.1); s5.translate(0, 0, 1);
+        s5.texture.getPigment().setColor(Color.GREEN);
        
         final Box box = new Box();
         
@@ -57,6 +58,7 @@ public class Main
         final Sphere sphere5 = new Sphere(); sphere5.scale(0.2); sphere5.translate(Vector.make(1, 0, 1));
         final Sphere sphere6 = new Sphere(); sphere6.scale(0.2); sphere6.translate(Vector.make(1, 1, 0));
         final Sphere sphere7 = new Sphere(); sphere7.scale(0.2); sphere7.translate(Vector.make(1, 1, 1));
+        sphere7.texture.getPigment().setColor(Color.RED);
         
         final Csg csg = new Difference();
         csg.add(box);
@@ -80,9 +82,11 @@ public class Main
         
         final Camera cam = new Camera(camLocation, camLookAt);
         final Scene scene = new Scene(csg2, cam);
-        final PointLight light = new PointLight(Vector.make(2, 5, 100), Color.WHITE);
+        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(0.75));
+        final PointLight light2 = new PointLight(Vector.make(-10, 100, 10), Color.WHITE.mul(0.75));
         
         scene.addLight(light);
+        scene.addLight(light2);
         
         Renderer.drawScene(scene, drawArea);
     }

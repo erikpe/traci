@@ -2,39 +2,44 @@ package traci.model.csg;
 
 import traci.math.Matrix;
 import traci.math.Vector;
-import traci.model.texture.Color;
 import traci.model.texture.Texture;
-import traci.render.Intervals;
+import traci.render.Ray;
 
 public abstract class Shape
 {
-    private final Texture material;
+    public final Texture texture;
     
-    public Shape(final Texture material)
+    public Shape(final Texture texture)
     {
-        this.material = (material == null ? Texture.DEFAULT : material);
+        if (texture == null)
+        {
+            this.texture = Texture.newDefault();
+        }
+        else
+        {
+            this.texture = texture;
+        }
     }
     
     public void rotateX(final double theta)
     {
-        transform(Matrix.rotX(-theta), Matrix.rotX(theta));
+        transform(Matrix.rotX(theta), Matrix.rotX(-theta));
     }
     
     public void rotateY(final double theta)
     {
-        transform(Matrix.rotY(-theta), Matrix.rotY(theta));
+        transform(Matrix.rotY(theta), Matrix.rotY(-theta));
     }
     
     public void rotateZ(final double theta)
     {
-        transform(Matrix.rotZ(-theta), Matrix.rotZ(theta));
+        transform(Matrix.rotZ(theta), Matrix.rotZ(-theta));
     }
     
     public void scale(final Vector vec)
     {
-        final Vector trVec = Vector.make(1.0/vec.x, 1.0/vec.y, 1.0/vec.z);
-        final Matrix mat = Matrix.scale(trVec);
-        transform(mat, mat);
+        final Vector invVec = Vector.make(1.0/vec.x, 1.0/vec.y, 1.0/vec.z);
+        transform(Matrix.scale(vec), Matrix.scale(invVec));
     }
     
     public void scale(final double val)
@@ -64,7 +69,7 @@ public abstract class Shape
     
     public void translate(final Vector vec)
     {
-        transform(Matrix.translate(vec.neg()), null);
+        transform(Matrix.translate(vec), Matrix.translate(vec.neg()));
     }
     
     public void translate(final double x, final double y, final double z)
@@ -87,37 +92,7 @@ public abstract class Shape
         translate(0, 0, z);
     }
     
-    protected abstract void transform(final Matrix invMat, final Matrix normalMat);
+    protected abstract void transform(final Matrix mat, final Matrix invMat);
     
-    public abstract Intervals shootRay(final Vector p, final Vector lookAt);
-    
-    public double ambCoeff()
-    {
-        return material.ambientCoeff;
-    }
-    
-    public double diffCoeff()
-    {
-        return material.diffuseCoeff;
-    }
-    
-    public double specCoeff()
-    {
-        return material.specularCoeff;
-    }
-    
-    public double shininess()
-    {
-        return material.shininess;
-    }
-    
-    public Color getColor()
-    {
-        return material.color;
-    }
-    
-    public void setColor(final Color color)
-    {
-        material.color = color;
-    }
+    public abstract Ray shootRay(final Vector p, final Vector dir);
 }

@@ -1,18 +1,64 @@
 package traci.model.texture;
 
-public class Finish
+public class Finish implements Cloneable
 {
-    public final Color cAmb;
-    public final double specCoeff;
-    public final double diffCoeff;
-    public final double shininess;
+    protected Color cAmb;
+    protected double specCoeff;
+    protected double diffCoeff;
+    protected double shininess;
     
-    public Finish(final Color cAmb, final double specCoeff,
-                  final double diffCoeff, final double shininess)
+    protected Finish() { }
+    
+    public Color getCAmb()
     {
-        this.cAmb = cAmb;
+        return cAmb;
+    }
+    
+    public void setCAmb(final Color amb)
+    {
+        cAmb = amb;
+    }
+    
+    public double getSpecCoeff()
+    {
+        return specCoeff;
+    }
+    
+    public void setSpecCoeff(final double specCoeff)
+    {
         this.specCoeff = specCoeff;
+    }
+    
+    public double getDiffCoeff()
+    {
+        return diffCoeff;
+    }
+    
+    public void setDiffCoeff(final double diffCoeff)
+    {
         this.diffCoeff = diffCoeff;
+    }
+    
+    public double getShininess()
+    {
+        return shininess;
+    }
+    
+    public void setShininess(final double shininess)
+    {
         this.shininess = shininess;
+    }
+    
+    @Override
+    protected Object clone() throws CloneNotSupportedException
+    {
+        final Finish res = (Finish) super.clone();
+        
+        res.cAmb = cAmb;
+        res.specCoeff = specCoeff;
+        res.diffCoeff = diffCoeff;
+        res.shininess = shininess;
+        
+        return res;
     }
 }
