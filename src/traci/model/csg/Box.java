@@ -1,7 +1,7 @@
 package traci.model.csg;
 
 import traci.math.Vector;
-import traci.model.texture.Texture;
+import traci.model.material.Material;
 import traci.render.Interval;
 import traci.render.Point;
 import traci.render.Ray;
@@ -13,7 +13,7 @@ public class Box extends Primitive
         this(null);
     }
     
-    public Box(final Texture material)
+    public Box(final Material material)
     {
         super(material);
     }

@@ -1,10 +1,10 @@
 package traci.model.csg;
 
 import traci.math.Vector;
-import traci.model.texture.Texture;
-import traci.render.Ray;
+import traci.model.material.Material;
 import traci.render.Interval;
 import traci.render.Point;
+import traci.render.Ray;
 
 public class Sphere extends Primitive
 {
@@ -13,7 +13,7 @@ public class Sphere extends Primitive
         this(null);
     }
     
-    public Sphere(final Texture material)
+    public Sphere(final Material material)
     {
         super(material);
     }

@@ -1,0 +1,38 @@
+(scene
+  
+  (camera
+    (location -1 1 5)
+    (look-at 0 0 0))
+  
+  (light
+    (location 2 5 30)
+    (color 900 900 900))
+  
+  (light
+    (location -10 10 10)
+    (color 50 0 0))
+  
+  (union
+    (difference
+      (box)
+      (sphere (scale .2 .2 .2) (translate 0 0 0))
+      (sphere (scale .2 .2 .2) (translate 0 0 1))
+      (sphere (scale .2 .2 .2) (translate 0 1 0))
+      (sphere (scale .2 .2 .2) (translate 0 1 1))
+      (sphere (scale .2 .2 .2) (translate 1 0 0))
+      (sphere (scale .2 .2 .2) (translate 1 0 1))
+      (sphere (scale .2 .2 .2) (translate 1 1 0))
+      (sphere (scale .2 .2 .2) (translate 1 1 0) (color 1 0 0))
+      (translate -.5 -.5 -.5))
+    
+    (cylinder (translate 0 -.5 0) (scale .1 2 .5))
+    (cylinder (translate 0 -.5 0) (scale .1 2 .5) (rotateZ 90))
+    (cylinder (translate 0 -.5 0) (scale .1 2 .5) (rotateX 90))
+    (sphere (scale .1 .1 .5) (translate -1 0 0))
+    (sphere (scale .1 .1 .5) (translate 1 0 0))
+    (sphere (scale .1 .1 .5) (translate 0 -1 0))
+    (sphere (scale .1 .1 .5) (translate 0 1 0))
+    (sphere (scale .1 .5 .1) (translate 0 0 -1))
+    (sphere (scale .1 .5 .1) (translate 0 0 1) (color 0 1 0))
+    (plane (translate 0 -1 0) (color 1 1 1))))
+      

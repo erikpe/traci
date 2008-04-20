@@ -3,16 +3,25 @@ package traci.model.csg;
 import traci.math.Matrix;
 import traci.math.Transformation;
 import traci.math.Vector;
-import traci.model.texture.Texture;
+import traci.model.material.Material;
 import traci.render.Ray;
 
 public abstract class Primitive extends Shape
 {
     public final Transformation transform;
     
-    public Primitive(final Texture texture)
+    public static boolean isPrimitive(final String str)
     {
-        super(texture);
+        return str.equals("sphere") ||
+               str.equals("box") ||
+               str.equals("cylinder") ||
+               str.equals("plane") ||
+               str.equals("torus");
+    }
+    
+    public Primitive(final Material material)
+    {
+        super(material);
         transform = new Transformation();
     }
     

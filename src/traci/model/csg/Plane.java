@@ -1,7 +1,7 @@
 package traci.model.csg;
 
 import traci.math.Vector;
-import traci.model.texture.Texture;
+import traci.model.material.Material;
 import traci.render.Interval;
 import traci.render.Point;
 import traci.render.Ray;
@@ -13,9 +13,9 @@ public class Plane extends Primitive
         this(null);
     }
     
-    public Plane(final Texture texture)
+    public Plane(final Material material)
     {
-        super(texture);
+        super(material);
     }
     
     @Override

@@ -1,7 +1,7 @@
 package traci.model.csg;
 
 import traci.math.Vector;
-import traci.model.texture.Texture;
+import traci.model.material.Material;
 import traci.render.Ray;
 
 public class Torus extends Primitive
@@ -13,9 +13,9 @@ public class Torus extends Primitive
         this(null, r);
     }
     
-    public Torus(final Texture texture, final double r)
+    public Torus(final Material material, final double r)
     {
-        super(texture);
+        super(material);
         
         this.r = r;
     }

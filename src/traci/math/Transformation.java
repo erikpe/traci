@@ -30,12 +30,12 @@ public class Transformation
     
     public Vector dir(final Vector vec)
     {
-        return mat.mulIgnoreTranslate(vec);
+        return mat.mulDir(vec);
     }
     
     public Vector dirInv(final Vector vec)
     {
-        return invMat.mulIgnoreTranslate(vec);
+        return invMat.mulDir(vec);
     }
     
     public Vector normal(final Vector vec)

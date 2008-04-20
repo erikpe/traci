@@ -13,7 +13,7 @@ import traci.model.csg.Plane;
 import traci.model.csg.Sphere;
 import traci.model.csg.Union;
 import traci.model.light.PointLight;
-import traci.model.texture.Color;
+import traci.model.material.Color;
 import traci.render.Renderer;
 
 public class Main
@@ -47,8 +47,8 @@ public class Main
         final Sphere s3 = new Sphere(); s3.scale(0.1, 0.1, 0.5); s3.translate(0, 1, 0);
         final Sphere s4 = new Sphere(); s4.scale(0.1, 0.5, 0.1); s4.translate(0, 0, -1);
         final Sphere s5 = new Sphere(); s5.scale(0.1, 0.5, 0.1); s5.translate(0, 0, 1);
-        s5.texture.getPigment().setColor(Color.GREEN);
-       
+        s5.material.setColor(Color.GREEN);
+        
         final Box box = new Box();
         
         final Sphere sphere0 = new Sphere(); sphere0.scale(0.2); sphere0.translate(Vector.make(0, 0, 0));
@@ -59,7 +59,7 @@ public class Main
         final Sphere sphere5 = new Sphere(); sphere5.scale(0.2); sphere5.translate(Vector.make(1, 0, 1));
         final Sphere sphere6 = new Sphere(); sphere6.scale(0.2); sphere6.translate(Vector.make(1, 1, 0));
         final Sphere sphere7 = new Sphere(); sphere7.scale(0.2); sphere7.translate(Vector.make(1, 1, 1));
-        sphere7.texture.getPigment().setColor(Color.RED);
+        sphere7.material.setColor(Color.RED);
         
         final Csg csg = new Difference();
         csg.add(box);
@@ -70,7 +70,7 @@ public class Main
         csg.translate(-0.5, -0.5, -0.5);
         
         final Plane plane = new Plane();
-        plane.texture.getPigment().setColor(Color.WHITE);
+        plane.material.setColor(Color.WHITE);
         plane.translateY(-1);
         
         final Csg csg2 = new Union();

@@ -5,9 +5,9 @@ import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.light.PointLight;
-import traci.model.texture.Color;
-import traci.model.texture.Finish;
-import traci.model.texture.Pigment;
+import traci.model.material.Color;
+import traci.model.material.Finish;
+import traci.model.material.Pigment;
 
 public class Renderer
 {
@@ -23,19 +23,27 @@ public class Renderer
         {
             for (int x = 0; x < area.width; ++x)
             {
-                double lookX = ((double) x) / (area.width-1); // [0.0 .. 1.0]
-                double lookY = ((double) y) / (area.height-1); // [0.0 .. 1.0]
+                Color color = Color.BLACK;
                 
-                lookX = (lookX - 0.5); // [-0.5 .. 0.5]
-                lookY = (0.5 - lookY); // [0.5 .. -0.5] 
+                //for (int i = 0; i < 16; ++i)
+                //{
+                    double lookX = ((double) x) / (area.width-1); // [0.0 .. 1.0]
+                    double lookY = ((double) y) / (area.height-1); // [0.0 .. 1.0]
+                    
+                    lookX = (lookX - 0.5); // [-0.5 .. 0.5]
+                    lookY = (0.5 - lookY); // [0.5 .. -0.5] 
+                    
+                    lookX = lookX * xx;
+                    lookY = lookY * yy;
+                    
+                    final Vector dir = Vector.make(lookX, lookY, -1.0);
+                    final Vector camDir = cam.mat.mul(dir).normalize();
+                    
+                    color = color.add(raytrace(scene, 4, cam.location, camDir));
+                //}
                 
-                lookX = lookX * xx;
-                lookY = lookY * yy;
+                //color = color.div(16);
                 
-                final Vector dir = Vector.make(lookX, lookY, -1.0);
-                final Vector camDir = cam.mat.mul(dir).normalize();
-                
-                final Color color = raytrace(scene, 4, cam.location, camDir);
                 area.draw(x, y, color);
             }
         }
@@ -62,8 +70,8 @@ public class Renderer
         final Vector normal = hit.obj.transform.normal(hit.normal).normalize();
         final Vector hitPoint = p.add(dir.mul(hit.dist));
         
-        final Pigment pigment = hit.obj.texture.getPigment();
-        final Finish finish = hit.obj.texture.getFinish();
+        final Pigment pigment = hit.obj.material.getPigment();
+        final Finish finish = hit.obj.material.getFinish();
         
         /**
          * Ambient light

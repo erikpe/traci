@@ -144,7 +144,7 @@ public class Matrix
         return Vector.make(x, y, z);
     }
     
-    protected Vector mulIgnoreTranslate(final Vector vec)
+    protected Vector mulDir(final Vector vec)
     {
         final double x = vec.x * data[0][0] +
                          vec.y * data[0][1] +

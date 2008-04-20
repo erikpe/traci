@@ -3,7 +3,7 @@ package traci.model.csg;
 import java.util.List;
 
 import traci.math.Vector;
-import traci.model.texture.Texture;
+import traci.model.material.Material;
 import traci.render.Ray;
 
 public class Difference extends Csg
@@ -13,7 +13,7 @@ public class Difference extends Csg
         this(null);
     }
     
-    public Difference(final Texture material)
+    public Difference(final Material material)
     {
         super(material);
     }

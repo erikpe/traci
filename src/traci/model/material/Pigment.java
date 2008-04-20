@@ -1,4 +1,4 @@
-package traci.model.texture;
+package traci.model.material;
 
 public class Pigment implements Cloneable
 {

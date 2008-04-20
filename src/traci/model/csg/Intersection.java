@@ -3,7 +3,7 @@ package traci.model.csg;
 import java.util.List;
 
 import traci.math.Vector;
-import traci.model.texture.Texture;
+import traci.model.material.Material;
 import traci.render.Ray;
 
 public class Intersection extends Csg
@@ -13,7 +13,7 @@ public class Intersection extends Csg
         this(null);
     }
     
-    public Intersection(final Texture material)
+    public Intersection(final Material material)
     {
         super(material);
     }

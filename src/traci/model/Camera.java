@@ -20,6 +20,11 @@ public class Camera
         mat = calcMat();
     }
     
+    public static boolean isCamera(final String str)
+    {
+        return str.equals("camera");
+    }
+    
     /**
      * The initial camera position is in origo, and it is directed
      * towards {@link Vector.UNIT_NEG_Z}.
@@ -40,7 +45,7 @@ public class Camera
         
         final Matrix rotX = Matrix.rotX(sinAlpha, cosAlpha);
         final Matrix rotY = Matrix.rotY(sinBeta, cosBeta);
-        final Matrix mat = rotX.mul(rotY);
+        final Matrix mat = rotY.mul(rotX);
         
         return mat;
     }

@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import traci.model.texture.Color;
+import traci.model.material.Color;
 
 public class DrawArea extends JPanel
 {

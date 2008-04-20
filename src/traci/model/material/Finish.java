@@ -1,4 +1,4 @@
-package traci.model.texture;
+package traci.model.material;
 
 public class Finish implements Cloneable
 {
@@ -6,6 +6,7 @@ public class Finish implements Cloneable
     protected double specCoeff;
     protected double diffCoeff;
     protected double shininess;
+    protected double reflective;
     
     protected Finish() { }
     

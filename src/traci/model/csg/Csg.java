@@ -4,13 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import traci.math.Matrix;
-import traci.model.texture.Texture;
+import traci.model.material.Material;
 
 public abstract class Csg extends Shape
 {
     private final List<Shape> shapes;
     
-    public Csg(final Texture material)
+    public static boolean isCsg(final String str)
+    {
+        return str.equals("union") ||
+               str.equals("intersection") ||
+               str.equals("difference");
+    }
+    
+    public Csg(final Material material)
     {
         super(material);
         shapes = new ArrayList<Shape>();

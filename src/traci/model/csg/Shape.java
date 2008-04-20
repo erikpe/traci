@@ -2,22 +2,27 @@ package traci.model.csg;
 
 import traci.math.Matrix;
 import traci.math.Vector;
-import traci.model.texture.Texture;
+import traci.model.material.Material;
 import traci.render.Ray;
 
 public abstract class Shape
 {
-    public final Texture texture;
+    public final Material material;
     
-    public Shape(final Texture texture)
+    public static boolean isShape(final String str)
     {
-        if (texture == null)
+        return Csg.isCsg(str) || Primitive.isPrimitive(str);
+    }
+    
+    public Shape(final Material material)
+    {
+        if (material == null)
         {
-            this.texture = Texture.newDefault();
+            this.material = Material.newDefault();
         }
         else
         {
-            this.texture = texture;
+            this.material = material;
         }
     }
     
