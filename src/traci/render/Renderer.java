@@ -19,30 +19,35 @@ public class Renderer
         final double xx = 2.0 * Math.tan(cam.fov / 2.0);
         final double yy = 2.0 * Math.tan(fovy / 2.0);
         
+        final int aa = 4;
+        
         for (int y = 0; y < area.height; ++y)
         {
             for (int x = 0; x < area.width; ++x)
             {
                 Color color = Color.BLACK;
                 
-                //for (int i = 0; i < 16; ++i)
-                //{
-                    double lookX = ((double) x) / (area.width-1); // [0.0 .. 1.0]
-                    double lookY = ((double) y) / (area.height-1); // [0.0 .. 1.0]
-                    
-                    lookX = (lookX - 0.5); // [-0.5 .. 0.5]
-                    lookY = (0.5 - lookY); // [0.5 .. -0.5] 
-                    
-                    lookX = lookX * xx;
-                    lookY = lookY * yy;
-                    
-                    final Vector dir = Vector.make(lookX, lookY, -1.0);
-                    final Vector camDir = cam.mat.mul(dir).normalize();
-                    
-                    color = color.add(raytrace(scene, 4, cam.location, camDir));
-                //}
+                for (int aay = 0; aay < aa; ++aay)
+                {
+                    for (int aax = 0; aax < aa; ++aax)
+                    {
+                        double lookX = ((double) x + aax*(1.0/aa)) / (area.width-1); // [0.0 .. 1.0]
+                        double lookY = ((double) y + aay*(1.0/aa)) / (area.height-1); // [0.0 .. 1.0]
+                        
+                        lookX = (lookX - 0.5); // [-0.5 .. 0.5]
+                        lookY = (0.5 - lookY); // [0.5 .. -0.5] 
+                        
+                        lookX = lookX * xx;
+                        lookY = lookY * yy;
+                        
+                        final Vector dir = Vector.make(lookX, lookY, -1.0);
+                        final Vector camDir = cam.mat.mul(dir).normalize();
+                        
+                        color = color.add(raytrace(scene, 5, cam.location, camDir));
+                    }
+                }
                 
-                //color = color.div(16);
+                color = color.div(aa*aa);
                 
                 area.draw(x, y, color);
             }
@@ -118,6 +123,13 @@ public class Renderer
                 totalLight = totalLight.add(cSpec);
             }
         }
+        
+        /**
+         * Reflection
+         */
+        final Vector rr = dir.sub(normal.mul(dir.mul(2).dot(normal)));
+        final Color reflectColor = raytrace(scene, depth-1, hitPoint, rr.normalize());
+        totalLight = totalLight.add(reflectColor.mul(finish.getReflectivness()));
         
         return pigment.getColor().mul(totalLight);
     }

@@ -7,6 +7,8 @@ import traci.render.Ray;
 
 public abstract class Shape
 {
+    protected static final double EPSILON = 0.000001;
+    
     public final Material material;
     
     public static boolean isShape(final String str)

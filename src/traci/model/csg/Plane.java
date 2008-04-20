@@ -27,7 +27,7 @@ public class Plane extends Primitive
          */
         final double t = -p.y / dir.y;
         
-        if (t <= 0)
+        if (t <= EPSILON)
         {
             return null;
         }

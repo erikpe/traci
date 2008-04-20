@@ -50,7 +50,7 @@ public class Box extends Primitive
         near = Point.farest(near, Point.nearest(z0, z1));
         far = Point.nearest(far, Point.farest(z0, z1));
         
-        if (near.dist > 0 && near.dist < far.dist)
+        if (near.dist > EPSILON && near.dist < far.dist)
         {
             ray = new Ray(new Interval(near, far));
         }

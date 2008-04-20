@@ -24,8 +24,8 @@ public class Main
         final MainWindow window = new MainWindow(drawArea);
         window.setVisible(true);
         
-        final Vector camLocation = Vector.make(-1, 1, 5);
-        final Vector camLookAt = Vector.make(0, 0, 0);
+        final Vector camLocation = Vector.make(-1, 1.5, 5);
+        final Vector camLookAt = Vector.make(0, -.5, 0);
         
         final Cylinder cyl0 = new Cylinder();
         cyl0.translateY(-0.5);
@@ -44,12 +44,13 @@ public class Main
         final Sphere s0 = new Sphere(); s0.scale(0.1, 0.1, 0.5); s0.translate(-1, 0, 0);
         final Sphere s1 = new Sphere(); s1.scale(0.1, 0.1, 0.5); s1.translate(1, 0, 0);
         final Sphere s2 = new Sphere(); s2.scale(0.1, 0.1, 0.5); s2.translate(0, -1, 0);
-        final Sphere s3 = new Sphere(); s3.scale(0.1, 0.1, 0.5); s3.translate(0, 1, 0);
+        final Sphere s3 = new Sphere(); s3.scale(0.1, 0.1, 0.5); s3.translate(0, 1, 0); s3.material.setColor(Color.CYAN);
         final Sphere s4 = new Sphere(); s4.scale(0.1, 0.5, 0.1); s4.translate(0, 0, -1);
         final Sphere s5 = new Sphere(); s5.scale(0.1, 0.5, 0.1); s5.translate(0, 0, 1);
         s5.material.setColor(Color.GREEN);
         
         final Box box = new Box();
+        box.material.setColor(Color.BLUE);
         
         final Sphere sphere0 = new Sphere(); sphere0.scale(0.2); sphere0.translate(Vector.make(0, 0, 0));
         final Sphere sphere1 = new Sphere(); sphere1.scale(0.2); sphere1.translate(Vector.make(0, 0, 1));

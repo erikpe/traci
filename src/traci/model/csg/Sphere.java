@@ -37,7 +37,7 @@ public class Sphere extends Primitive
             final double sqrtD = Math.sqrt(d);
             
             final double t0 = -a/2 - sqrtD;
-            if (t0 < 0) return null;
+            if (t0 <= EPSILON) return null;
             final double t1 = -a/2 + sqrtD;
             
             final Vector normal0 = p.add(dir.mul(t0));

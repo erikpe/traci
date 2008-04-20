@@ -6,7 +6,7 @@ public class Finish implements Cloneable
     protected double specCoeff;
     protected double diffCoeff;
     protected double shininess;
-    protected double reflective;
+    protected double reflectiveness;
     
     protected Finish() { }
     
@@ -48,6 +48,16 @@ public class Finish implements Cloneable
     public void setShininess(final double shininess)
     {
         this.shininess = shininess;
+    }
+    
+    public double getReflectivness()
+    {
+        return reflectiveness;
+    }
+    
+    public void setReflectivness(final double reflectivness)
+    {
+        this.reflectiveness = reflectivness;
     }
     
     @Override
