@@ -2,23 +2,12 @@ package traci.model.material;
 
 public class Finish implements Cloneable
 {
-    protected Color cAmb;
     protected double specCoeff;
     protected double diffCoeff;
     protected double shininess;
     protected double reflectiveness;
     
     protected Finish() { }
-    
-    public Color getCAmb()
-    {
-        return cAmb;
-    }
-    
-    public void setCAmb(final Color amb)
-    {
-        cAmb = amb;
-    }
     
     public double getSpecCoeff()
     {
@@ -65,7 +54,6 @@ public class Finish implements Cloneable
     {
         final Finish res = (Finish) super.clone();
         
-        res.cAmb = cAmb;
         res.specCoeff = specCoeff;
         res.diffCoeff = diffCoeff;
         res.shininess = shininess;

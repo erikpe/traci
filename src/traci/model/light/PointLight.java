@@ -8,6 +8,8 @@ public class PointLight
     public final Vector location;
     public final Color color;
     
+    public static final Color ambient = Color.make(0.1, 0.1, 0.1);
+    
     public static boolean isLight(final String str)
     {
         return str.equals("light");

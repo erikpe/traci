@@ -19,7 +19,7 @@ public class Renderer
         final double xx = 2.0 * Math.tan(cam.fov / 2.0);
         final double yy = 2.0 * Math.tan(fovy / 2.0);
         
-        final int aa = 4;
+        final int aa = 1;
         
         for (int y = 0; y < area.height; ++y)
         {
@@ -81,8 +81,8 @@ public class Renderer
         /**
          * Ambient light
          */
-        final Color cAmb = finish.getCAmb();
-        Color totalLight = cAmb;
+        final Color colorAmb = pigment.getColor().mul(PointLight.ambient);
+        Color colorTotal = colorAmb;
         
         for (final PointLight light : scene.lights)
         {
@@ -98,29 +98,30 @@ public class Renderer
             
             final double distToLight = toLight.length();
             final double distCoeff = 1.0 / (distToLight * distToLight);
+            final Color lightAtPoint = light.color.mul(distCoeff);
             
             /**
              * Diffuse light
              */
             double c = dirToLight.dot(normal);
-            c = (c < 0.0 ? 0.0 : c);
-            final Color cDiff = light.color.mul(c * finish.getDiffCoeff() * distCoeff);
+            c = Math.max(c, 0.0);
+            final Color colorDiff = pigment.getColor().mul(lightAtPoint.mul(c * finish.getDiffCoeff()));
             
-            totalLight = totalLight.add(cDiff);
+            colorTotal = colorTotal.add(colorDiff);
             
             /**
              * Specular light
              */
-            final Vector r = normal.mul(normal.mul(2).dot(dirToLight)).sub(dirToLight);
-            final double cosTheta = -r.dot(dir);
+            final Vector lightRef = normal.mul(normal.mul(2).dot(dirToLight)).sub(dirToLight);
+            final double cosTheta = -lightRef.dot(dir);
             
             if (cosTheta > 0)
             {
                 final double shininess = finish.getShininess();
                 final double specCoeff = finish.getSpecCoeff();
                 
-                final Color cSpec = light.color.mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
-                totalLight = totalLight.add(cSpec);
+                final Color colorSpec = light.color.mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
+                colorTotal = colorTotal.add(colorSpec);
             }
         }
         
@@ -128,9 +129,9 @@ public class Renderer
          * Reflection
          */
         final Vector rr = dir.sub(normal.mul(dir.mul(2).dot(normal)));
-        final Color reflectColor = raytrace(scene, depth-1, hitPoint, rr.normalize());
-        totalLight = totalLight.add(reflectColor.mul(finish.getReflectivness()));
+        final Color colorReflect = raytrace(scene, depth-1, hitPoint, rr.normalize());
+        colorTotal = colorTotal.add(colorReflect.mul(finish.getReflectivness()));
         
-        return pigment.getColor().mul(totalLight);
+        return colorTotal;
     }
 }

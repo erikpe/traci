@@ -15,11 +15,11 @@ public class Material
         mat.getTexture().finish = new Finish();
         
         mat.setColor(Color.WHITE);
-        mat.getFinish().setCAmb(Color.make(0.1, 0.1, 0.1));
+        
         mat.getFinish().setDiffCoeff(0.3);
         mat.getFinish().setSpecCoeff(0.3);
         mat.getFinish().setShininess(50);
-        mat.getFinish().setReflectivness(0.7);
+        mat.getFinish().setReflectivness(0.3);
         
         return mat;
     }

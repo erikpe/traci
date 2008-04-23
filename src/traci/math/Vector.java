@@ -82,27 +82,6 @@ public class Vector
     public double sinTheta(final Vector vec)
     {
         return cross(vec).div(length() * vec.length()).length();
-        
-//        final double sinTheta = cross(vec).div(length() * vec.length()).length();
-//        
-//        if (cross(vec).x > 0)
-//        {
-//            return -sinTheta;
-//        }
-//        
-//        return sinTheta;
-    }
-    
-    public double sinThetaXZ(final Vector vec)
-    {
-        final double sinTheta = cross(vec).div(length() * vec.length()).length();
-        
-        if (cross(vec).y > 0)
-        {
-            return -sinTheta;
-        }
-        
-        return sinTheta;
     }
     
     public String toString()
