@@ -73,7 +73,6 @@ public class Tokenizer implements Iterable<Token>
         return idx;
     }
     
-    @Override
     public Iterator<Token> iterator()
     {
         return tokens.iterator();
