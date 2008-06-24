@@ -1,25 +1,5 @@
 package traci.parser;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import traci.model.Camera;
-import traci.model.Scene;
-import traci.model.csg.Box;
-import traci.model.csg.Csg;
-import traci.model.csg.Cylinder;
-import traci.model.csg.Difference;
-import traci.model.csg.Intersection;
-import traci.model.csg.Plane;
-import traci.model.csg.Primitive;
-import traci.model.csg.Shape;
-import traci.model.csg.Sphere;
-import traci.model.csg.Torus;
-import traci.model.csg.Union;
-import traci.model.light.PointLight;
-import traci.model.material.Color;
-import traci.model.material.Texture;
-
 public class BuildScene
 {
 //    public static Scene run(final Node node) throws ParseError

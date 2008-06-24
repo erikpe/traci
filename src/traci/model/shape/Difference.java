@@ -1,19 +1,20 @@
-package traci.model.csg;
+package traci.model.shape;
 
 import java.util.List;
 
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.model.shape.Shape;
 import traci.render.Ray;
 
-public class Union extends Csg
+public class Difference extends Csg
 {
-    public Union()
+    public Difference()
     {
         this(null);
     }
     
-    public Union(final Material material)
+    public Difference(final Material material)
     {
         super(material);
     }
@@ -24,19 +25,30 @@ public class Union extends Csg
         final List<Shape> shapes = getShapes();
         final int numShapes = shapes.size();
         
-        Ray ray = null;
+        if (numShapes <= 0)
+        {
+            return null;
+        }
         
-        for (int i = 0; i < numShapes; ++i)
+        Ray ray = shapes.get(0).shootRay(p, dir);
+        
+        if (ray == null)
+        {
+            return null;
+        }
+        
+        for (int i = 1; i < numShapes; ++i)
         {
             final Ray shapeRay = shapes.get(i).shootRay(p, dir);
             
-            if (ray == null)
+            if (shapeRay != null)
             {
-                ray = shapeRay;
+                ray.subtract(shapeRay);
             }
-            else
+            
+            if (ray.isEmpty())
             {
-                ray.add(shapeRay);
+                return null;
             }
         }
         

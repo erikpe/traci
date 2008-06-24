@@ -1,4 +1,4 @@
-package traci.model.csg;
+package traci.model.shape;
 
 import java.util.Arrays;
 
@@ -6,18 +6,18 @@ import traci.math.Vector;
 import traci.model.material.Material;
 import traci.render.Ray;
 
-public class Quadric extends Primitive
+public class Quartic extends Primitive
 {
-    public static final int NUM_COEFFS = 10;
+    public static final int NUM_COEFFS = 35;
     
     private final double[] coeffs;
     
-    public Quadric(final double ... coeffs)
+    public Quartic(final double ... coeffs)
     {
         this(null, coeffs);
     }
     
-    public Quadric(final Material material, final double ... coeffs)
+    public Quartic(final Material material, final double ... coeffs)
     {
         super(material);
         
@@ -26,13 +26,7 @@ public class Quadric extends Primitive
     }
     
     /**
-     * A quadric is a polynomial shape of the second degree. It is defined by
-     * the equation
-     * 
-     * {@code A*x^2 + B*y^2 + C*z^2 + D*xy + E*xz + F*yz + G*x + H*y + I*z + J = 0}
-     * 
-     * where {@code coeffs} consists of the coefficients
-     * {@code { A, B, C, D ... }}
+     * a {@link Quartic} is a polynomial shape of the fourth degree.
      */
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)

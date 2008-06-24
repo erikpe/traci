@@ -1,19 +1,20 @@
-package traci.model.csg;
+package traci.model.shape;
 
 import java.util.List;
 
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.model.shape.Shape;
 import traci.render.Ray;
 
-public class Difference extends Csg
+public class Intersection extends Csg
 {
-    public Difference()
+    public Intersection()
     {
         this(null);
     }
     
-    public Difference(final Material material)
+    public Intersection(final Material material)
     {
         super(material);
     }
@@ -38,7 +39,14 @@ public class Difference extends Csg
         
         for (int i = 1; i < numShapes; ++i)
         {
-            ray.subtract(shapes.get(i).shootRay(p, dir));
+            final Ray shapeRay = shapes.get(i).shootRay(p, dir);
+            
+            if (shapeRay == null)
+            {
+                return null;
+            }
+            
+            ray.intersect(shapeRay);
             
             if (ray.isEmpty())
             {

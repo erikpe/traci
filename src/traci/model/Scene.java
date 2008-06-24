@@ -3,8 +3,8 @@ package traci.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import traci.model.csg.Shape;
 import traci.model.light.PointLight;
+import traci.model.shape.Shape;
 
 public class Scene
 {

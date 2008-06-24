@@ -1,4 +1,4 @@
-package traci.model.csg;
+package traci.model.shape;
 
 import java.util.Arrays;
 

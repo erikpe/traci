@@ -5,15 +5,15 @@ import traci.gui.MainWindow;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
-import traci.model.csg.Box;
-import traci.model.csg.Csg;
-import traci.model.csg.Cylinder;
-import traci.model.csg.Difference;
-import traci.model.csg.Plane;
-import traci.model.csg.Sphere;
-import traci.model.csg.Union;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
+import traci.model.shape.Box;
+import traci.model.shape.Csg;
+import traci.model.shape.Cylinder;
+import traci.model.shape.Difference;
+import traci.model.shape.Plane;
+import traci.model.shape.Sphere;
+import traci.model.shape.Union;
 import traci.render.Renderer;
 
 public class Main

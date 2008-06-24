@@ -1,10 +1,11 @@
-package traci.model.csg;
+package traci.model.shape;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import traci.math.Matrix;
 import traci.model.material.Material;
+import traci.model.shape.Shape;
 
 public abstract class Csg extends Shape
 {

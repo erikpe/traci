@@ -22,12 +22,9 @@ public class Ray extends AbstractList<Interval> implements List<Interval>
         ray.add(ival);
     }
     
-    public void add(final Ray otherRay)
+    public void merge(final Ray otherRay)
     {
-        if (otherRay == null)
-        {
-            return;
-        }
+        assert otherRay != null;
         
         final ListIterator<Interval> iter0 = ray.listIterator();
         final ListIterator<Interval> iter1 = otherRay.ray.listIterator();
@@ -64,10 +61,7 @@ public class Ray extends AbstractList<Interval> implements List<Interval>
     
     public void subtract(final Ray otherRay)
     {
-        if (otherRay == null)
-        {
-            return;
-        }
+        assert otherRay != null;
         
         final ListIterator<Interval> iter0 = ray.listIterator();
         final ListIterator<Interval> iter1 = otherRay.ray.listIterator();
@@ -120,10 +114,7 @@ public class Ray extends AbstractList<Interval> implements List<Interval>
     
     public void intersect(final Ray otherRay)
     {
-        if (otherRay == null)
-        {
-            return;
-        }
+        assert otherRay != null;
         
         final ListIterator<Interval> iter0 = ray.listIterator();
         final ListIterator<Interval> iter1 = otherRay.ray.listIterator();
