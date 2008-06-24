@@ -1,4 +1,4 @@
-package traci.model.shape;
+package traci.model.shape.primitive;
 
 import java.util.Arrays;
 

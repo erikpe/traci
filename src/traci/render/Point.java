@@ -2,7 +2,7 @@ package traci.render;
 
 import traci.math.Matrix;
 import traci.math.Vector;
-import traci.model.shape.Primitive;
+import traci.model.shape.primitive.Primitive;
 
 public class Point
 {

@@ -1,9 +1,10 @@
-package traci.model.shape;
+package traci.model.shape.primitive;
 
 import traci.math.Matrix;
 import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.model.shape.Shape;
 import traci.render.Ray;
 
 public abstract class Primitive extends Shape

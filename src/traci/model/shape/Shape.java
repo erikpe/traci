@@ -3,6 +3,8 @@ package traci.model.shape;
 import traci.math.Matrix;
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.model.shape.csg.Csg;
+import traci.model.shape.primitive.Primitive;
 import traci.render.Ray;
 
 public abstract class Shape
@@ -99,7 +101,7 @@ public abstract class Shape
         translate(0, 0, z);
     }
     
-    protected abstract void transform(final Matrix mat, final Matrix invMat);
+    public abstract void transform(final Matrix mat, final Matrix invMat);
     
     public abstract Ray shootRay(final Vector p, final Vector dir);
 }

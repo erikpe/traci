@@ -1,4 +1,4 @@
-package traci.model.shape;
+package traci.model.shape.primitive;
 
 import traci.math.Vector;
 import traci.model.material.Material;
