@@ -24,6 +24,8 @@ public class Sphere extends Primitive
         /**
          * The sphere has the equation:
          * x^2 + y^2 + z^2 = 1
+         * 
+         * (it has the center in origo and a radius of 1)
          */
         
         final double c = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
