@@ -6,9 +6,9 @@ public class MainWindow extends JFrame
 {
     private static final long serialVersionUID = 2288188481023569617L;
     
-    public MainWindow(final DrawArea drawArea)
+    public MainWindow(final DynamicJPanelDrawArea drawArea)
     {
-        setSize(drawArea.width, drawArea.height);
+        setSize(drawArea.width(), drawArea.height());
         setLocation(200, 200);
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

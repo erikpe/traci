@@ -1,6 +1,6 @@
 package traci.main;
 
-import traci.gui.DrawArea;
+import traci.gui.DynamicJPanelDrawArea;
 import traci.gui.MainWindow;
 import traci.math.Vector;
 import traci.model.Camera;
@@ -20,7 +20,7 @@ public class Main
 {
     public static void main(final String[] args)
     {
-        final DrawArea drawArea = new DrawArea(800, 600);
+        final DynamicJPanelDrawArea drawArea = new DynamicJPanelDrawArea(1280, 960);
         final MainWindow window = new MainWindow(drawArea);
         window.setVisible(true);
         
@@ -71,7 +71,7 @@ public class Main
         csg.translate(-0.5, -0.5, -0.5);
         
         final Plane plane = new Plane();
-        plane.material.setColor(Color.WHITE);
+        plane.material.setColor(Color.RED);
         plane.translateY(-1);
         
         final Csg csg2 = new Union();
@@ -95,6 +95,6 @@ public class Main
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.drawScene(scene, drawArea);
+        Renderer.renderScene(scene, drawArea, 4);
     }
 }

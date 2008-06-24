@@ -3,23 +3,30 @@ package traci.gui;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
 import traci.model.material.Color;
 
-public class DrawArea extends JPanel
+public class DynamicJPanelDrawArea extends JPanel implements DrawArea
 {
     private static final long serialVersionUID = 7195706708596046785L;
     
-    private long lastRedraw = 0;
+    /**
+     * Redraw period in milliseconds.
+     */
+    private static final long REDRAW_PERIOD = 250;
     
     private final BufferedImage image;
     
-    public final int width;
-    public final int height;
+    private Timer redrawTimer = null;
     
-    public DrawArea(final int width, final int height)
+    private final int width;
+    private final int height;
+    
+    public DynamicJPanelDrawArea(final int width, final int height)
     {
         this.width = width;
         this.height = height;
@@ -43,23 +50,46 @@ public class DrawArea extends JPanel
         
         final int intColor = 0xff000000 | (r << 16) | (g << 8) | b;
         
-        draw(x, y, intColor);
+        //image.setRGB(x, y, intColor);
+        image.getRaster().setDataElements(x, y,
+                image.getColorModel().getDataElements(intColor, null));
     }
     
-    public void draw(final int x, final int y, final int color)
+    public void start()
     {
-        image.setRGB(x, y, color);
+        assert redrawTimer == null;
         
-        if (System.currentTimeMillis() > lastRedraw + 250)
+        final TimerTask task = new TimerTask()
         {
-            repaint();
-            lastRedraw = System.currentTimeMillis();
-        }
+            public void run()
+            {
+                repaint();
+            }
+        };
+        
+        redrawTimer = new Timer();
+        redrawTimer.schedule(task, 0, REDRAW_PERIOD);
     }
     
     public void finish()
     {
+        if (redrawTimer != null)
+        {
+            redrawTimer.cancel();
+            redrawTimer = null;
+        }
+        
         repaint();
+    }
+    
+    public int width()
+    {
+        return width;
+    }
+    
+    public int height()
+    {
+        return height;
     }
     
     public void paintComponent(final Graphics g)
