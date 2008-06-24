@@ -2,6 +2,8 @@ package traci.main;
 
 import traci.gui.DynamicJPanelDrawArea;
 import traci.gui.MainWindow;
+import traci.gui.MultiDrawArea;
+import traci.gui.PngDrawArea;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
@@ -20,9 +22,17 @@ public class Main
 {
     public static void main(final String[] args)
     {
-        final DynamicJPanelDrawArea drawArea = new DynamicJPanelDrawArea(1280, 960);
-        final MainWindow window = new MainWindow(drawArea);
+        final int width = 1280;
+        final int height = 960;
+        final String filename = "C:\\Documents and Settings\\Erik Pettersson\\Desktop\\out.png";
+        
+        final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
+        final MainWindow window = new MainWindow(visibleDrawArea);
         window.setVisible(true);
+        
+        final PngDrawArea pngDrawArea = new PngDrawArea(width, height, filename);
+        final MultiDrawArea multiDrawArea = new MultiDrawArea(pngDrawArea);
+        multiDrawArea.add(visibleDrawArea);
         
         final Vector camLocation = Vector.make(-1, 1.5, 5);
         final Vector camLookAt = Vector.make(0, -.5, 0);
@@ -95,6 +105,6 @@ public class Main
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, drawArea, 4);
+        Renderer.renderScene(scene, multiDrawArea, 4);
     }
 }

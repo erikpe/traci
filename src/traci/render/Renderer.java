@@ -17,8 +17,8 @@ import traci.model.material.Pigment;
 
 public class Renderer
 {
-    private static int WORK_BLOCK_WIDTH = 50;
-    private static int WORK_BLOCK_HEIGHT = 50;
+    private static int WORK_BLOCK_WIDTH = 100;
+    private static int WORK_BLOCK_HEIGHT = 100;
     
     public static void renderScene(final Scene scene, final DrawArea area,
             final int numThreads)
@@ -64,6 +64,10 @@ public class Renderer
             });
         }
         
+        System.out.println("> Spawning " + numThreads
+                + " rendering threads working on " + workQueue.size()
+                + " blocks ...");
+        
         /**
          * Start the threads
          */
@@ -91,11 +95,11 @@ public class Renderer
         
         final long stopTime = System.currentTimeMillis();
         
-        area.finish();
-        
-        System.out.println("Successfully rendered scene in: "
+        System.out.println("> Successfully rendered scene in "
                 + ((stopTime - startTime) / 1000.0)
                 + " seconds.");
+        
+        area.finish();
     }
     
     private static void renderBlock(final Scene scene, final DrawArea area,

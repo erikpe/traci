@@ -2,9 +2,9 @@ package traci.gui;
 
 public abstract class AbstractDrawArea implements DrawArea
 {
-    protected final int width;
+    private final int width;
     
-    protected final int height;
+    private final int height;
     
     public AbstractDrawArea(final int width, final int height)
     {
