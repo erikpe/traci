@@ -18,16 +18,14 @@ public class Sphere extends Primitive
         super(material);
     }
     
+    /**
+     * The sphere is define by the equation
+     * 
+     * x^2 + y^2 + z^2 = 1
+     */
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
-        /**
-         * The sphere has the equation:
-         * x^2 + y^2 + z^2 = 1
-         * 
-         * (it has the center in origo and a radius of 1)
-         */
-        
         final double c = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
         final double a = 2 * (p.x * dir.x + p.y * dir.y + p.z * dir.z) / c;
         final double b = (p.x * p.x + p.y * p.y + p.z * p.z - 1) / c;

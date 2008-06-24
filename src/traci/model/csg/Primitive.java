@@ -12,11 +12,14 @@ public abstract class Primitive extends Shape
     
     public static boolean isPrimitive(final String str)
     {
-        return str.equals("sphere") ||
-               str.equals("box") ||
-               str.equals("cylinder") ||
-               str.equals("plane") ||
-               str.equals("torus");
+        return str.equals("sphere")
+            || str.equals("box")
+            || str.equals("cylinder")
+            || str.equals("plane")
+            || str.equals("torus")
+            || str.equals("quadric")
+            || str.equals("cubic")
+            || str.equals("quartic");
     }
     
     public Primitive(final Material material)

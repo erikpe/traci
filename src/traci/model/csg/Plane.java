@@ -18,13 +18,12 @@ public class Plane extends Primitive
         super(material);
     }
     
+    /**
+     * The plane is defined by the equation y = 0.
+     */
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
-        /**
-         * Plane:
-         * y = 0
-         */
         final double t = -p.y / dir.y;
         
         if (t <= EPSILON)

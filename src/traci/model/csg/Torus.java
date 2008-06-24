@@ -20,6 +20,12 @@ public class Torus extends Primitive
         this.r = r;
     }
     
+    /**
+     * The torus lies in the xz-plane, has a major radius of {@code 1}, and a
+     * minor radius of {@code r}.
+     * 
+     * It is a special case of a {@link Quartic} surface.
+     */
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {

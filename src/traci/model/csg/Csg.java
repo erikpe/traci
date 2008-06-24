@@ -12,9 +12,9 @@ public abstract class Csg extends Shape
     
     public static boolean isCsg(final String str)
     {
-        return str.equals("union") ||
-               str.equals("intersection") ||
-               str.equals("difference");
+        return str.equals("union")
+            || str.equals("intersection")
+            || str.equals("difference");
     }
     
     public Csg(final Material material)
