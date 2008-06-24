@@ -18,6 +18,10 @@ public class Cylinder extends Primitive
         super(material);
     }
     
+    /**
+     * The cylinder is bounded by the planes y = 0, y = 1 and the infinite
+     * cylinder x^2 + z^2 = 1.
+     */
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
