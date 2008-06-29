@@ -31,6 +31,7 @@ public abstract class Primitive extends Shape
     
     public abstract Ray primitiveShootRay(final Vector p, final Vector dir);
     
+    @Override
     public Ray shootRay(final Vector p, final Vector dir)
     {
         final Vector transP = transform.pointInv(p);
@@ -39,8 +40,10 @@ public abstract class Primitive extends Shape
         return primitiveShootRay(transP, transDir);
     }
     
+    @Override
     public void transform(final Matrix mat, final Matrix invMat)
     {
+        super.transform(mat, invMat);
         transform.transform(mat, invMat);
     }
 }

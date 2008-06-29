@@ -1,5 +1,6 @@
 package traci.model.shape;
 
+import traci.math.Matrix;
 import traci.math.Transformable;
 import traci.math.Vector;
 import traci.model.material.Material;
@@ -28,6 +29,12 @@ public abstract class Shape extends Transformable
         {
             this.material = material;
         }
+    }
+    
+    @Override
+    public void transform(final Matrix mat, final Matrix invMat)
+    {
+        material.getPigment().transform(mat, invMat);
     }
     
     public abstract Ray shootRay(final Vector p, final Vector dir);

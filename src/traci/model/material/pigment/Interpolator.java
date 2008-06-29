@@ -14,7 +14,7 @@ public abstract class Interpolator
         }
     };
     
-    public static Interpolator LINEAR = new Interpolator()
+    public static Interpolator BI_LINEAR = new Interpolator()
     {
         @Override
         public Color interpolate(final Interpolatable image, final double x,
@@ -42,6 +42,16 @@ public abstract class Interpolator
             NE = NE.mul(NECoeff);
             
             return SW.add(NW).add(SE).add(NE);
+        }
+    };
+    
+    public static Interpolator BI_CUBIC_SPLINE = new Interpolator()
+    {
+        @Override
+        public Color interpolate(final Interpolatable image, final double x,
+                final double y)
+        {
+            throw new UnsupportedOperationException();
         }
     };
     

@@ -37,6 +37,8 @@ public abstract class Csg extends Shape
     @Override
     public void transform(final Matrix mat, final Matrix invMat)
     {
+        super.transform(mat, invMat);
+        
         for (final Shape shape : getShapes())
         {
             shape.transform(mat, invMat);

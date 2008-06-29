@@ -3,13 +3,17 @@ package traci.model.material.pigment;
 import traci.math.Vector;
 import traci.model.material.Color;
 
-public class Checkers extends Pattern
+public class Checker extends Pattern
 {
-    protected Color color1 = Color.BLACK;
+    private final Color color1;
     
-    protected Color color2 = Color.WHITE;
+    private final Color color2;
     
-    public Checkers() { }
+    public Checker(final Color color1, final Color color2)
+    {
+        this.color1 = color1;
+        this.color2 = color2;
+    }
     
     @Override
     public Color getColorTransformed(final Vector p)

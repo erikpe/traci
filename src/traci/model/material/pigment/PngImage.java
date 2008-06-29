@@ -3,45 +3,81 @@ package traci.model.material.pigment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import traci.math.Projection2D;
+import traci.math.Vector;
+import traci.math.Vector2D;
 import traci.model.material.Color;
 
-public abstract class PngImage extends NonUniform implements Interpolatable
+public class PngImage extends NonUniform implements Interpolatable
 {
-    protected enum Repeater { REPEAT, BORDER, STRETCH };
+    public enum RepeatPolicy { REPEAT, BORDER, STRETCH };
     
-    private BufferedImage image;
+    private static Map<File, BufferedImage> imageCache =
+        new HashMap<File, BufferedImage>();
     
-    private final Interpolator interpolator = Interpolator.LINEAR;
+    private final BufferedImage image;
     
-    private final Repeater repeater;
+    private final Interpolator interpolator = Interpolator.BI_LINEAR;
     
-    public PngImage(final String filename, final Repeater repeater)
+    private final RepeatPolicy repeatPolicy;
+    
+    private final Projection2D projection;
+    
+    private final Color borderColor;
+    
+    public PngImage(final String filename, final RepeatPolicy repeater,
+            final Projection2D projection)
     {
-        this.repeater = repeater;
-        readFile(filename);
+        this(filename, repeater, projection, Color.BLACK);
     }
     
-    private void readFile(final String filename)
+    public PngImage(final String filename, final RepeatPolicy repeater,
+            final Projection2D projection, final Color borderColor)
+    {
+        this.repeatPolicy = repeater;
+        this.projection = projection;
+        this.borderColor = borderColor;
+        this.image = readFile(filename);
+    }
+    
+    private BufferedImage readFile(final String filename)
     {
         final File file = new File(filename);
         
-        try
+        BufferedImage image = imageCache.get(file);
+        
+        if (image == null)
         {
-            image = ImageIO.read(file);
+            try
+            {
+                image = ImageIO.read(file);
+            }
+            catch (final IOException e)
+            {
+                System.err.println(" *** ERROR: Failed to read file: " + filename);
+                System.exit(-1);
+            }
+            
+            imageCache.put(file, image);
         }
-        catch (final IOException e)
-        {
-            System.err.println(" *** ERROR: Failed to read file: " + filename);
-            System.exit(-1);
-        }
+        
+        return image;
     }
     
-    protected Color getSample(double x, double y)
+    @Override
+    protected Color getColorTransformed(final Vector p)
     {
-        switch(repeater)
+        final Vector2D projected = projection.project(p);
+        
+        double x = projected.x;
+        double y = projected.y;
+        
+        switch(repeatPolicy)
         {
         case REPEAT:
             x = x - Math.floor(x);
@@ -51,7 +87,7 @@ public abstract class PngImage extends NonUniform implements Interpolatable
         case BORDER:
             if (x < 0.0 || x > 1.0 || y < 0.0 || y > 1.0)
             {
-                return Color.BLACK;
+                return borderColor;
             }
             break;
             
@@ -60,6 +96,8 @@ public abstract class PngImage extends NonUniform implements Interpolatable
             y = Math.max(0.0, Math.min(1.0, y));
             break;
         }
+        
+        y = 1.0 - y;
         
         return interpolator.interpolate(this, x * (getWidth() - 1),
                 y * (getHeight() - 1));
@@ -75,6 +113,7 @@ public abstract class PngImage extends NonUniform implements Interpolatable
         return image.getHeight();
     }
     
+    @Override
     public Color getAt(final long x, final long y)
     {
         return Color.makeRGB(image.getRGB((int) x, (int) y));
