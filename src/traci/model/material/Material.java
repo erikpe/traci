@@ -1,5 +1,8 @@
 package traci.model.material;
 
+import traci.model.material.pigment.Pigment;
+import traci.model.material.pigment.Solid;
+
 public class Material
 {
     private Texture texture;
@@ -11,10 +14,8 @@ public class Material
         final Material mat = new Material();
         
         mat.texture = new Texture();
-        mat.getTexture().pigment = new Pigment();
         mat.getTexture().finish = new Finish();
-        
-        mat.setColor(Color.WHITE);
+        mat.setPigment(new Solid(Color.WHITE));
         
         mat.getFinish().setDiffCoeff(0.3);
         mat.getFinish().setSpecCoeff(0.3);
@@ -39,14 +40,19 @@ public class Material
         return getTexture().getPigment();
     }
     
-    public Color getColor()
+    public void setPigment(final Pigment pigment)
     {
-        return getPigment().getColor();
+        getTexture().setPigment(pigment);
     }
+    
+//    public Color getColor()
+//    {
+//        return getPigment().getColor();
+//    }
     
     public void setColor(final Color color)
     {
-        getPigment().setColor(color);
+        setPigment(new Solid(color));
     }
     
     @Override

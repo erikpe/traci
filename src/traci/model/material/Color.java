@@ -25,6 +25,15 @@ public class Color
         return new Color(r, g, b);
     }
     
+    public static Color makeRGB(final int rgb)
+    {
+        final double r = ((rgb >> 16) & 0xff) / 255.0;
+        final double g = ((rgb >> 8) & 0xff) / 255.0;
+        final double b = (rgb & 0xff) / 255.0;
+        
+        return make(r, g, b);
+    }
+    
     public Color mul(final double val)
     {
         return make(r * val, g * val, b * val);
@@ -45,6 +54,7 @@ public class Color
         return make(r + color.r, g + color.g, b + color.b);
     }
     
+    @Override
     public String toString()
     {
         return "<" + r + ", " + g + ", " + b + ">";

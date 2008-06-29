@@ -9,6 +9,7 @@ import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
+import traci.model.material.pigment.PngImageXZProj;
 import traci.model.shape.csg.Csg;
 import traci.model.shape.csg.Difference;
 import traci.model.shape.csg.Union;
@@ -22,8 +23,8 @@ public class Main
 {
     public static void main(final String[] args)
     {
-        final int width = 1280;
-        final int height = 960;
+        final int width = 800;
+        final int height = 600;
         final String filename = "C:\\Documents and Settings\\Erik Pettersson\\Desktop\\out.png";
         
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
@@ -81,20 +82,27 @@ public class Main
         csg.translate(-0.5, -0.5, -0.5);
         
         final Plane plane = new Plane();
-        plane.material.setColor(Color.RED);
-        plane.translateY(-1);
+        //plane.material.setPigment(new Checkers());
+        plane.material.setPigment(new PngImageXZProj("C:\\Documents and Settings\\Erik Pettersson\\Desktop\\lenna.png"));
+        plane.material.getPigment().translate(-.5, 0, -.5);
+        plane.material.getPigment().scale(3);
+        //plane.material.getPigment().rotateY(0.2);
+        //plane.translateY(-1);
         
         final Csg csg2 = new Union();
-        csg2.add(csg);
-        csg2.add(cyl0);
-        csg2.add(cyl1);
-        csg2.add(cyl2);
-        csg2.add(s0);
-        csg2.add(s1);
-        csg2.add(s2);
-        csg2.add(s3);
-        csg2.add(s4);
-        csg2.add(s5);
+//        csg2.add(csg);
+//        csg2.add(cyl0);
+//        csg2.add(cyl1);
+//        csg2.add(cyl2);
+//        csg2.add(s0);
+//        csg2.add(s1);
+//        csg2.add(s2);
+//        csg2.add(s3);
+//        csg2.add(s4);
+//        csg2.add(s5);
+        final Sphere origo = new Sphere();
+        origo.scale(0.1);
+        csg2.add(origo);
         csg2.add(plane);
         
         final Camera cam = new Camera(camLocation, camLookAt);
@@ -105,6 +113,6 @@ public class Main
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, multiDrawArea, 4);
+        Renderer.renderScene(scene, multiDrawArea, 1);
     }
 }

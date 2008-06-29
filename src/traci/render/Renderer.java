@@ -2,7 +2,7 @@ package traci.render;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -13,7 +13,7 @@ import traci.model.Scene;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
 import traci.model.material.Finish;
-import traci.model.material.Pigment;
+import traci.model.material.pigment.Pigment;
 
 public class Renderer
 {
@@ -41,7 +41,7 @@ public class Renderer
         /**
          * Create all rendering threads
          */
-        final Collection<Thread> renderThreads = new ArrayList<Thread>();
+        final List<Thread> renderThreads = new ArrayList<Thread>();
         for (int i = 0; i < numThreads; ++i)
         {
             renderThreads.add(new Thread("Rendering thread #" + i)
@@ -49,15 +49,10 @@ public class Renderer
                 @Override
                 public void run()
                 {
-                    while (true)
+                    Rectangle block;
+                    
+                    while ((block = workQueue.poll()) != null)
                     {
-                        final Rectangle block = workQueue.poll();
-                        
-                        if (block == null)
-                        {
-                            return;
-                        }
-                        
                         renderBlock(scene, area, block);
                     }
                 }
@@ -73,33 +68,42 @@ public class Renderer
          */
         area.start();
         final long startTime = System.currentTimeMillis();
-        for (final Thread thread : renderThreads)
+        if (numThreads == 1)
         {
-            thread.start();
+            renderThreads.get(0).run();
+        }
+        else
+        {
+            for (final Thread thread : renderThreads)
+            {
+                thread.start();
+            }
         }
         
         /**
          * Wait for all threads to finish
          */
-        for (final Thread thread : renderThreads)
+        if (numThreads != 1)
         {
-            try
+            for (final Thread thread : renderThreads)
             {
-                thread.join();
-            }
-            catch (final InterruptedException e)
-            {
-                e.printStackTrace();
+                try
+                {
+                    thread.join();
+                }
+                catch (final InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
         
         final long stopTime = System.currentTimeMillis();
+        area.finish();
         
         System.out.println("> Successfully rendered scene in "
                 + ((stopTime - startTime) / 1000.0)
                 + " seconds.");
-        
-        area.finish();
     }
     
     private static void renderBlock(final Scene scene, final DrawArea area,
@@ -161,7 +165,7 @@ public class Renderer
         /**
          * Ambient light
          */
-        final Color colorAmb = pigment.getColor().mul(PointLight.ambient);
+        final Color colorAmb = pigment.getColor(hitPoint).mul(PointLight.ambient);
         Color colorTotal = colorAmb;
         
         for (final PointLight light : scene.lights)
@@ -185,7 +189,8 @@ public class Renderer
              */
             double c = dirToLight.dot(normal);
             c = Math.max(c, 0.0);
-            final Color colorDiff = pigment.getColor().mul(lightAtPoint.mul(c * finish.getDiffCoeff()));
+            final Color colorDiff = pigment.getColor(hitPoint).mul(
+                    lightAtPoint.mul(c * finish.getDiffCoeff()));
             
             colorTotal = colorTotal.add(colorDiff);
             

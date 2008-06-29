@@ -1,5 +1,8 @@
 package traci.model.material;
 
+import traci.model.material.pigment.Pigment;
+
+
 public class Texture implements Cloneable
 {
     protected Pigment pigment;
@@ -15,6 +18,11 @@ public class Texture implements Cloneable
     public Finish getFinish()
     {
         return finish;
+    }
+    
+    public void setPigment(final Pigment pigment)
+    {
+        this.pigment = pigment;
     }
     
     @Override
