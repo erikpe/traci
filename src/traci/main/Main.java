@@ -21,13 +21,14 @@ import traci.model.shape.primitive.Cylinder;
 import traci.model.shape.primitive.Plane;
 import traci.model.shape.primitive.Sphere;
 import traci.render.Renderer;
+import traci.render.Settings;
 
 public class Main
 {
     public static void main(final String[] args)
     {
-        final int width = 800;
-        final int height = 600;
+        final int width = 1024;
+        final int height = 768;
         final String filename = "C:\\Documents and Settings\\Erik Pettersson\\Desktop\\out.png";
         
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
@@ -37,9 +38,6 @@ public class Main
         final PngDrawArea pngDrawArea = new PngDrawArea(width, height, filename);
         final MultiDrawArea multiDrawArea = new MultiDrawArea(pngDrawArea);
         multiDrawArea.add(visibleDrawArea);
-        
-        final Vector camLocation = Vector.make(-1, 1.5, 5);
-        final Vector camLookAt = Vector.make(0, -.5, 0);
         
         final Cylinder cyl0 = new Cylinder();
         cyl0.translateY(-0.5);
@@ -100,8 +98,10 @@ public class Main
                 "C:\\Documents and Settings\\Erik Pettersson\\Desktop\\lenna.png",
                 RepeatPolicy.STRETCH, Projection2D.CYLINDER));
         cylinder.rotateY(1.7);
+        cylinder.translateY(-0.3);
+        cylinder.rotateX(0.05);
         cylinder.scale(0.3, 1.5, 0.3);
-        cylinder.translateX(-1);
+        cylinder.translateX(-1.5);
         cylinder.rotateZ(0.3);
         
         final Csg csg2 = new Union();
@@ -115,13 +115,18 @@ public class Main
         csg2.add(s3);
         csg2.add(s4);
         csg2.add(s5);
+        csg2.rotateX(0.03);
         final Sphere origo = new Sphere();
         origo.scale(0.1);
         csg2.add(origo);
         csg2.add(plane);
         csg2.add(cylinder);
         
+        final Vector camLocation = Vector.make(-1, 1.5, 5);
+        final Vector camLookAt = Vector.make(0, -.5, 0);
         final Camera cam = new Camera(camLocation, camLookAt);
+        cam.rotateZ(0.3);
+        cam.rotateX(0.1);
         final Scene scene = new Scene(csg2, cam);
         final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*30));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.RED.mul(50));
@@ -129,6 +134,6 @@ public class Main
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, multiDrawArea, 1);
+        Renderer.renderScene(scene, new Settings(), multiDrawArea, 2);
     }
 }

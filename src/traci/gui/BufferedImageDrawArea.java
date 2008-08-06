@@ -15,11 +15,11 @@ public class BufferedImageDrawArea extends AbstractDrawArea implements DrawArea
     }
     
     @Override
-    public void draw(final int x, final int y, final Color color)
+    public void draw(final long x, final long y, final Color color)
     {
-        int r = (int) (color.r * 255);
-        int g = (int) (color.g * 255);
-        int b = (int) (color.b * 255);
+        long r = (long) (color.r * 255);
+        long g = (long) (color.g * 255);
+        long b = (long) (color.b * 255);
         
         r = (r > 255 ? 255 : r);
         g = (g > 255 ? 255 : g);
@@ -29,9 +29,12 @@ public class BufferedImageDrawArea extends AbstractDrawArea implements DrawArea
         g = (g < 0 ? 0 : g);
         b = (b < 0 ? 0 : b);
         
-        final int intColor = 0xff000000 | (r << 16) | (g << 8) | b;
+        final int intColor = 0xff000000
+                | (int) (r << 16)
+                | (int) (g << 8)
+                | (int) b;
         
-        image.getRaster().setDataElements(x, y,
+        image.getRaster().setDataElements((int) x, (int) y,
                 image.getColorModel().getDataElements(intColor, null));
     }
     

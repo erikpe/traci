@@ -28,7 +28,7 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
     }
     
     @Override
-    public void draw(final int x, final int y, final Color color)
+    public void draw(final long x, final long y, final Color color)
     {
         area.draw(x, y, color);
     }
@@ -54,6 +54,7 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
         
         final TimerTask task = new TimerTask()
         {
+            @Override
             public void run()
             {
                 repaint();

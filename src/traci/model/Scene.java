@@ -8,11 +8,16 @@ import traci.model.shape.Shape;
 
 public class Scene
 {
-    public final Camera camera;
+    public Camera camera = null;
     
-    public final Shape shape;
+    public Shape shape = null;
     
     public final List<PointLight> lights;
+    
+    public Scene()
+    {
+        this(null, null);
+    }
     
     public Scene(final Shape shape, final Camera camera)
     {
@@ -24,5 +29,15 @@ public class Scene
     public void addLight(final PointLight light)
     {
         lights.add(light);
+    }
+    
+    public void setCamera(final Camera camera)
+    {
+        this.camera = camera;
+    }
+    
+    public void setShape(final Shape shape)
+    {
+        this.shape = shape;
     }
 }

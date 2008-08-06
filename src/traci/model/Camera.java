@@ -1,23 +1,33 @@
 package traci.model;
 
 import traci.math.Matrix;
+import traci.math.Transformable;
+import traci.math.Transformation;
 import traci.math.Vector;
 
-public class Camera
+public class Camera extends Transformable
 {
-    public final Vector location;
-    public final Vector lookAt;
+    //public final Vector location;
+    //public final Vector lookAt;
     
     public final double fov = (50.0 / 360.0) * Math.PI * 2.0;
     
-    public final Matrix mat;
+    //public final Matrix mat;
+    
+    public final Transformation transformation;
+    
+    public final double focalDist = 4.8;
+    
+    public final double aperture = 0.15;
     
     public Camera(final Vector location, final Vector lookAt)
     {
-        this.location = location;
-        this.lookAt = lookAt;
+        //this.location = location;
+        //this.lookAt = lookAt;
         
-        mat = calcMat();
+        //mat = calcMat();
+        transformation = new Transformation();
+        calcTransformation(location, lookAt);
     }
     
     public static boolean isCamera(final String str)
@@ -29,7 +39,7 @@ public class Camera
      * The initial camera position is in origo, and it is directed
      * towards {@link Vector.UNIT_NEG_Z}.
      */
-    private Matrix calcMat()
+    private void calcTransformation(final Vector location, final Vector lookAt)
     {
         final Vector u = lookAt.sub(location);
         
@@ -43,10 +53,20 @@ public class Camera
         double sinBeta = u_XZ.sinTheta(Vector.UNIT_NEG_Z);
         sinBeta = (u_XZ.cross(Vector.UNIT_NEG_Z).y > 0 ? -sinBeta : sinBeta);
         
-        final Matrix rotX = Matrix.rotX(sinAlpha, cosAlpha);
-        final Matrix rotY = Matrix.rotY(sinBeta, cosBeta);
-        final Matrix mat = rotY.mul(rotX);
+        rotateX(sinAlpha);
+        rotateY(sinBeta);
+        translate(location);
         
-        return mat;
+//        final Matrix rotX = Matrix.rotX(sinAlpha, cosAlpha);
+//        final Matrix rotY = Matrix.rotY(sinBeta, cosBeta);
+//        final Matrix mat = rotY.mul(rotX);
+//        
+//        return mat;
+    }
+    
+    @Override
+    public void transform(final Matrix mat, final Matrix invMat)
+    {
+        transformation.transform(mat, invMat);
     }
 }

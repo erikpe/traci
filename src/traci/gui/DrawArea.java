@@ -4,7 +4,7 @@ import traci.model.material.Color;
 
 public interface DrawArea
 {
-    public void draw(final int x, final int y, final Color color);
+    public void draw(final long x, final long y, final Color color);
     
     public void start();
     
