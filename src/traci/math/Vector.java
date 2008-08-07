@@ -1,8 +1,10 @@
 package traci.math;
 
-public class Vector
+import traci.render.RenderingThread;
+
+final public class Vector
 {
-    public final double x, y, z;
+    public double x, y, z;
     
     public static final Vector ORIGO = new Vector(0, 0, 0);
     
@@ -19,22 +21,35 @@ public class Vector
         this.x = x;
         this.y = y;
         this.z = z;
+        
     }
     
     public static Vector make(final double x, final double y, final double z)
+    {
+        final Thread thisThread = Thread.currentThread();
+        
+        if (thisThread instanceof RenderingThread)
+        {
+            return ((RenderingThread) thisThread).vectorPool.make(x, y, z);
+        }
+        
+        return makeNew(x, y, z);
+    }
+    
+    public static Vector makeNew(final double x, final double y, final double z)
     {
         return new Vector(x, y, z);
     }
     
     public double length()
     {
-        return Math.sqrt(x*x + y*y + z*z);
+        return Math.sqrt(x * x + y * y + z * z);
     }
     
     public Vector normalize()
     {
         final double len = length();
-        return new Vector(x/len, y/len, z/len);
+        return make(x / len, y / len, z / len);
     }
     
     public double dot(final Vector vec)
@@ -44,22 +59,22 @@ public class Vector
     
     public Vector add(final Vector vec)
     {
-        return new Vector(x + vec.x, y + vec.y, z + vec.z);
+        return make(x + vec.x, y + vec.y, z + vec.z);
     }
     
     public Vector sub(final Vector vec)
     {
-        return new Vector(x - vec.x, y - vec.y, z - vec.z);
+        return make(x - vec.x, y - vec.y, z - vec.z);
     }
     
     public Vector neg()
     {
-        return new Vector(-x, -y, -z);
+        return make(-x, -y, -z);
     }
     
     public Vector mul(final double val)
     {
-        return new Vector(val * x, val * y, val * z);
+        return make(val * x, val * y, val * z);
     }
     
     public Vector div(final double val)
@@ -69,9 +84,8 @@ public class Vector
     
     public Vector cross(final Vector vec)
     {
-        return new Vector(y * vec.z - z * vec.y,
-                          z * vec.x - x * vec.z,
-                          x * vec.y - y * vec.x);
+        return make(y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y
+                * vec.x);
     }
     
     public double cosTheta(final Vector vec)

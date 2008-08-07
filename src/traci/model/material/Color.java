@@ -1,8 +1,10 @@
 package traci.model.material;
 
+import traci.render.RenderingThread;
+
 public class Color
 {
-    public final double r, g, b;
+    public double r, g, b;
     
     public static final Color BLACK = Color.make(0, 0, 0);
     public static final Color WHITE = Color.make(1, 1, 1);
@@ -22,7 +24,24 @@ public class Color
     
     public static Color make(final double r, final double g, final double b)
     {
+        final Thread thisThread = Thread.currentThread();
+        
+        if (thisThread instanceof RenderingThread)
+        {
+            return ((RenderingThread) thisThread).colorPool.make(r, g, b);
+        }
+        
+        return makeNew(r, g, b);
+    }
+    
+    public static Color makeNew(final double r, final double g, final double b)
+    {
         return new Color(r, g, b);
+    }
+    
+    public static Color makeNew(final Color other)
+    {
+        return makeNew(other.r, other.g, other.b);
     }
     
     public static Color makeRGB(final int rgb)

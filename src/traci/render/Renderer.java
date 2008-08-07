@@ -11,31 +11,10 @@ import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.material.Color;
+import traci.render.RenderingThread.WorkBlock;
 
 public class Renderer
 {
-    private static class WorkBlock
-    {
-        private final long x;
-        private final long y;
-        private final long width;
-        private final long height;
-        
-        private final Random randomSource;
-        
-        private WorkBlock(final long x, final long y, final long width,
-                final long height, final Random randomSource)
-        {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            
-            assert randomSource != null;
-            this.randomSource = randomSource;
-        }
-    }
-    
     private final Scene scene;
     private final Camera camera;
     private final Settings settings;
@@ -94,22 +73,11 @@ public class Renderer
         /**
          * Create all rendering threads
          */
-        final List<Thread> renderThreads = new ArrayList<Thread>();
+        final List<RenderingThread> renderingThreads =
+                new ArrayList<RenderingThread>();
         for (int i = 0; i < numThreads; ++i)
         {
-            renderThreads.add(new Thread("Rendering thread #" + i)
-            {
-                @Override
-                public void run()
-                {
-                    WorkBlock block;
-                    
-                    while ((block = workQueue.poll()) != null)
-                    {
-                        renderBlock(block);
-                    }
-                }
-            });
+            renderingThreads.add(new RenderingThread(this, workQueue));
         }
         
         System.out.println("> Spawning " + numThreads
@@ -122,7 +90,7 @@ public class Renderer
          */
         area.start();
         final long startTime = System.currentTimeMillis();
-        for (final Thread thread : renderThreads)
+        for (final Thread thread : renderingThreads)
         {
             thread.start();
         }
@@ -130,7 +98,7 @@ public class Renderer
         /**
          * Wait for all threads to finish
          */
-        for (final Thread thread : renderThreads)
+        for (final Thread thread : renderingThreads)
         {
             try
             {
@@ -151,7 +119,7 @@ public class Renderer
                 + " seconds.");
     }
     
-    private void renderBlock(final WorkBlock block)
+    protected void renderBlock(final WorkBlock block)
     {
         for (long y = block.y; y < block.y + block.height; ++y)
         {
@@ -164,7 +132,7 @@ public class Renderer
     
     private void renderPixel(final long x, final long y, final WorkBlock block)
     {
-        Color color = Color.BLACK;
+        final Color color = Color.makeNew(Color.BLACK);
         
         for (int aay = -settings.aaLevel; aay <= settings.aaLevel; ++aay)
         {
@@ -172,6 +140,14 @@ public class Renderer
             {
                 for (int i = 0; i < settings.focalBlurSamples; ++i)
                 {
+                    final Thread thisThread = Thread.currentThread();
+                    
+                    if (thisThread instanceof RenderingThread)
+                    {
+                        ((RenderingThread) thisThread).vectorPool.reset();
+                        ((RenderingThread) thisThread).colorPool.reset();
+                    }
+                    
                     final double subX = aax / (settings.aaLevel * 2.0 + 1);
                     final double subY = aay / (settings.aaLevel * 2.0 + 1);
                     
@@ -199,7 +175,11 @@ public class Renderer
                     final Vector camDir = camera.transformation.dir(
                             lookAt.sub(location)).normalize();
                     
-                    color = color.add(Raytrace.raytrace(scene, 5, camLoc, camDir));
+                    final Color rayColor = Raytrace.raytrace(scene, 5, camLoc, camDir);
+                    
+                    color.r += rayColor.r;
+                    color.g += rayColor.g;
+                    color.b += rayColor.b;
                 }
             }
         }
