@@ -29,7 +29,7 @@ public class Main
     {
         final int width = 1024;
         final int height = 768;
-        final String filename = "C:\\Documents and Settings\\Erik Pettersson\\Desktop\\out.png";
+        final String filename = "out.png";
         
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
         final MainWindow window = new MainWindow(visibleDrawArea);
@@ -84,18 +84,15 @@ public class Main
         
         final Plane plane = new Plane();
         plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
-//        plane.material
-//                .setPigment(new PngImage(
-//                        "C:\\Documents and Settings\\Erik Pettersson\\Desktop\\lenna.png",
-//                        RepeatPolicy.STRETCH, Projection2D.XZ_PLANE));
         plane.material.getPigment().translate(-.5, 0, -.5);
         plane.material.getPigment().scale(1);
         plane.material.getPigment().rotateY(0.2);
         plane.translateY(-1);
         
-        final Cylinder cylinder = new Cylinder();
-        cylinder.material.setPigment(new PngImage(
-                "C:\\Documents and Settings\\Erik Pettersson\\Desktop\\lenna.png",
+        final Sphere cylinder = new Sphere();
+        cylinder.translateY(0.5);
+        cylinder.material.setPigment(new PngImage("resources"
+                + System.getProperty("file.separator") + "lenna.png",
                 RepeatPolicy.STRETCH, Projection2D.CYLINDER));
         cylinder.rotateY(1.7);
         cylinder.translateY(-0.3);
@@ -134,6 +131,6 @@ public class Main
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, new Settings(), multiDrawArea, 2);
+        Renderer.renderScene(scene, new Settings(), multiDrawArea, 4);
     }
 }

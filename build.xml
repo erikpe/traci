@@ -4,6 +4,7 @@
 
     <target name="clean">
         <delete dir="bin"/>
+        <delete file="${jarfile}"/>
     </target>
 
     <target name="build">
