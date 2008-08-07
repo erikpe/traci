@@ -12,8 +12,7 @@
     </target>
 
     <target name="jar" depends="build">
-        <mkdir dir="bin"/>
-        <jar destfile="bin/${jarfile}" basedir="bin">
+        <jar destfile="${jarfile}" basedir="bin">
             <manifest>
                 <attribute name="Main-Class" value="traci.main.Main"/>
             </manifest>
@@ -21,7 +20,7 @@
     </target>
 
     <target name="run" depends="jar">
-        <java jar="bin/${jarfile}" fork="true"/>
+        <java jar="${jarfile}" fork="true"/>
     </target>
 
 </project>

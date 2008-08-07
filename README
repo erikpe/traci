@@ -8,7 +8,7 @@ Running
 =======
 
 Traci can be run either manually as:
-$ java -jar bin/traci.jar
+$ java -jar traci.jar
 
 or with ant as:
 $ ant run
