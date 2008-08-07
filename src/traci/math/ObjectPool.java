@@ -36,7 +36,7 @@ abstract public class ObjectPool<T>
         index = 0;
     }
     
-    public T make()
+    public T getFree()
     {
         if (index == pool.length)
         {

@@ -13,7 +13,6 @@ public class Ray extends AbstractList<Interval> implements List<Interval>
     public Ray()
     {
         ray = new LinkedList<Interval>();
-        ray.listIterator();
     }
     
     public Ray(final Interval ival)
@@ -53,8 +52,8 @@ public class Ray extends AbstractList<Interval> implements List<Interval>
             else
             {
                 iter0.remove();
-                iter0.add(new Interval(Point.nearest(i0.p0, i1.p0),
-                                       Point.farest(i0.p1, i1.p1)));
+                iter0.add(Interval.make(Point.nearest(i0.p0, i1.p0),
+                                        Point.farest(i0.p1, i1.p1)));
             }
         }
     }
@@ -85,13 +84,13 @@ public class Ray extends AbstractList<Interval> implements List<Interval>
                 
                 if (i0.p1.dist < i1.p1.dist)
                 {
-                    iter0.add(new Interval(i0.p0, i1.p0.invNormal()));
+                    iter0.add(Interval.make(i0.p0, i1.p0.invNormal()));
                     iter1.previous();
                 }
                 else
                 {
-                    iter0.add(new Interval(i0.p0, i1.p0.invNormal()));
-                    iter0.add(new Interval(i1.p1.invNormal(), i0.p1));
+                    iter0.add(Interval.make(i0.p0, i1.p0.invNormal()));
+                    iter0.add(Interval.make(i1.p1.invNormal(), i0.p1));
                     iter0.previous();
                 }
             }
@@ -101,7 +100,7 @@ public class Ray extends AbstractList<Interval> implements List<Interval>
                 
                 if (i1.p1.dist < i0.p1.dist)
                 {
-                    iter0.add(new Interval(i1.p1.invNormal(), i0.p1));
+                    iter0.add(Interval.make(i1.p1.invNormal(), i0.p1));
                     iter0.previous();
                 }
                 else
@@ -138,7 +137,7 @@ public class Ray extends AbstractList<Interval> implements List<Interval>
                 
                 if (i0.p1.dist < i1.p1.dist)
                 {
-                    iter0.add(new Interval(i1.p0, i0.p1));
+                    iter0.add(Interval.make(i1.p0, i0.p1));
                     iter1.previous();
                 }
 //                else

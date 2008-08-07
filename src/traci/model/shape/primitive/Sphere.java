@@ -43,10 +43,10 @@ public class Sphere extends Primitive
             final Vector normal0 = p.add(dir.mul(t0));
             final Vector normal1 = p.add(dir.mul(t1));
             
-            final Point p0 = new Point(t0, this, normal0);
-            final Point p1 = new Point(t1, this, normal1);
+            final Point p0 = Point.make(t0, this, normal0);
+            final Point p1 = Point.make(t1, this, normal1);
             
-            return new Ray(new Interval(p0, p1));
+            return new Ray(Interval.make(p0, p1));
         }
         
         return null;

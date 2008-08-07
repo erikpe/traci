@@ -1,22 +1,57 @@
 package traci.render;
 
 import traci.math.Matrix;
+import traci.math.ObjectPool;
 import traci.math.Vector;
 import traci.model.shape.primitive.Primitive;
 
 public class Point
 {
-    public final double dist;
+    public static class PointPool extends ObjectPool<Point>
+    {
+        @Override
+        protected Point makeNew()
+        {
+            return new Point(0, null, null);
+        }
+        
+        public Point make(final double dist, final Primitive obj,
+                final Vector normal)
+        {
+            final Point p = getFree();
+            
+            p.dist = dist;
+            p.obj = obj;
+            p.normal = normal;
+            
+            return p;
+        }
+    }
     
-    public final Primitive obj;
+    public double dist;
+    
+    public Primitive obj;
     
     public Vector normal;
     
-    public Point(final double dist, final Primitive obj, final Vector normal)
+    private Point(final double dist, final Primitive obj, final Vector normal)
     {
         this.dist = dist;
         this.obj = obj;
         this.normal = normal;
+    }
+    
+    public static Point make(final double dist, final Primitive obj,
+            final Vector normal)
+    {
+        final Thread thisThread = Thread.currentThread();
+        
+        if (thisThread instanceof RenderingThread)
+        {
+            return ((RenderingThread) thisThread).pointPool.make(dist, obj, normal);
+        }
+        
+        return new Point(dist, obj, normal);
     }
     
     public static Point nearest(final Point p0, final Point p1)
@@ -39,6 +74,7 @@ public class Point
         return new Point(dist, obj, normal.neg());
     }
     
+    @Override
     public String toString()
     {
         return "[" + dist + " " + normal + "]";

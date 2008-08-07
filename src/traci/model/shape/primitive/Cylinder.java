@@ -30,8 +30,8 @@ public class Cylinder extends Primitive
         /**
          * Begin with plane y = 0 and y = 1
          */
-        final Point y0 = new Point((0.0 - p.y) / dir.y, this, Vector.UNIT_NEG_Y);
-        final Point y1 = new Point((1.0 - p.y) / dir.y, this, Vector.UNIT_Y);
+        final Point y0 = Point.make((0.0 - p.y) / dir.y, this, Vector.UNIT_NEG_Y);
+        final Point y1 = Point.make((1.0 - p.y) / dir.y, this, Vector.UNIT_Y);
         
         Point near = Point.nearest(y0, y1);
         Point far = Point.farest(y0, y1);
@@ -47,15 +47,15 @@ public class Cylinder extends Primitive
             final double t0 = -a/2 - Math.sqrt((a*a)/4 - b);
             final double t1 = -a/2 + Math.sqrt((a*a)/4 - b);
             
-            final Point p0 = new Point(t0, this, Vector.make(p.x, 0, p.z).add(Vector.make(dir.x, 0, dir.z).mul(t0)));
-            final Point p1 = new Point(t1, this, Vector.make(p.x, 0, p.z).add(Vector.make(dir.x, 0, dir.z).mul(t1)));
+            final Point p0 = Point.make(t0, this, Vector.make(p.x, 0, p.z).add(Vector.make(dir.x, 0, dir.z).mul(t0)));
+            final Point p1 = Point.make(t1, this, Vector.make(p.x, 0, p.z).add(Vector.make(dir.x, 0, dir.z).mul(t1)));
             
             near = Point.farest(near, p0);
             far = Point.nearest(far, p1);
             
             if (near.dist > EPSILON && near.dist < far.dist)
             {
-                ray = new Ray(new Interval(near, far));
+                ray = new Ray(Interval.make(near, far));
             }
         }
         

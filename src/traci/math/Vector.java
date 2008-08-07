@@ -2,8 +2,28 @@ package traci.math;
 
 import traci.render.RenderingThread;
 
-final public class Vector
+public class Vector
 {
+    public static class VectorPool extends ObjectPool<Vector>
+    {
+        @Override
+        protected Vector makeNew()
+        {
+            return new Vector(0, 0, 0);
+        }
+        
+        public Vector make(final double x, final double y, final double z)
+        {
+            final Vector vec = getFree();
+            
+            vec.x = x;
+            vec.y = y;
+            vec.z = z;
+            
+            return vec;
+        }
+    }
+    
     public double x, y, z;
     
     public static final Vector ORIGO = new Vector(0, 0, 0);
@@ -25,8 +45,6 @@ final public class Vector
     
     public static Vector make(final double x, final double y, final double z)
     {
-        // return new Vector(x, y, z);
-        
         final Thread thisThread = Thread.currentThread();
         
         if (thisThread instanceof RenderingThread)
@@ -34,11 +52,6 @@ final public class Vector
             return ((RenderingThread) thisThread).vectorPool.make(x, y, z);
         }
         
-        return makeNew(x, y, z);
-    }
-    
-    public static Vector makeNew(final double x, final double y, final double z)
-    {
         return new Vector(x, y, z);
     }
     

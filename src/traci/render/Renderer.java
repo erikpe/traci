@@ -132,7 +132,7 @@ public class Renderer
     
     private void renderPixel(final long x, final long y, final WorkBlock block)
     {
-        final Color color = Color.makeNew(Color.BLACK);
+        final Color color = Color.makeCopy(Color.BLACK);
         
         for (int aay = -settings.aaLevel; aay <= settings.aaLevel; ++aay)
         {

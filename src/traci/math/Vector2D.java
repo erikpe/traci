@@ -4,6 +4,25 @@ import traci.render.RenderingThread;
 
 public class Vector2D
 {
+    public static class Vector2DPool extends ObjectPool<Vector2D>
+    {
+        @Override
+        protected Vector2D makeNew()
+        {
+            return new Vector2D(0, 0);
+        }
+        
+        public Vector2D make(final double x, final double y)
+        {
+            final Vector2D vec = getFree();
+            
+            vec.x = x;
+            vec.y = y;
+            
+            return vec;
+        }
+    }
+    
     public double x;
     public double y;
     
@@ -15,8 +34,6 @@ public class Vector2D
     
     public static Vector2D make(final double x, final double y)
     {
-        // return new Vector2D(x, y);
-        
         final Thread thisThread = Thread.currentThread();
         
         if (thisThread instanceof RenderingThread)
@@ -24,11 +41,6 @@ public class Vector2D
             return ((RenderingThread) thisThread).vector2DPool.make(x, y);
         }
         
-        return new Vector2D(x, y);
-    }
-    
-    public static Vector2D makeNew(final double x, final double y)
-    {
         return new Vector2D(x, y);
     }
 }
