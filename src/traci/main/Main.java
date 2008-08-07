@@ -1,7 +1,8 @@
 package traci.main;
 
+import traci.gui.DynamicJPanelDrawArea;
+import traci.gui.MainWindow;
 import traci.gui.MultiDrawArea;
-import traci.gui.NullDrawArea;
 import traci.gui.PngDrawArea;
 import traci.math.Projection2D;
 import traci.math.Vector;
@@ -30,13 +31,13 @@ public class Main
         final int height = 768;
         final String filename = "out.png";
         
-        //final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
-        //final MainWindow window = new MainWindow(visibleDrawArea);
-        //window.setVisible(true);
+        final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
+        final MainWindow window = new MainWindow(visibleDrawArea);
+        window.setVisible(true);
         
         final PngDrawArea pngDrawArea = new PngDrawArea(width, height, filename);
         final MultiDrawArea multiDrawArea = new MultiDrawArea(pngDrawArea);
-        //multiDrawArea.add(visibleDrawArea);
+        multiDrawArea.add(visibleDrawArea);
         
         final Cylinder cyl0 = new Cylinder();
         cyl0.translateY(-0.5);
@@ -130,6 +131,6 @@ public class Main
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, new Settings(), new NullDrawArea(width, height), 2);
+        Renderer.renderScene(scene, new Settings(), multiDrawArea, 2);
     }
 }
