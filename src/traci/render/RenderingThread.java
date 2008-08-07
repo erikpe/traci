@@ -5,6 +5,7 @@ import java.util.Random;
 
 import traci.math.ObjectPool;
 import traci.math.Vector;
+import traci.math.Vector2D;
 import traci.model.material.Color;
 
 public class RenderingThread extends Thread
@@ -39,7 +40,7 @@ public class RenderingThread extends Thread
             return Vector.makeNew(0, 0, 0);
         }
         
-        public Vector make(double x, double y, double z)
+        public Vector make(final double x, final double y, final double z)
         {
             final Vector vec = make();
             
@@ -59,7 +60,7 @@ public class RenderingThread extends Thread
             return Color.makeNew(0, 0, 0);
         }
         
-        public Color make(double r, double g, double b)
+        public Color make(final double r, final double g, final double b)
         {
             final Color color = make();
             
@@ -71,6 +72,25 @@ public class RenderingThread extends Thread
         }
     }
     
+    public static class Vector2DPool extends ObjectPool<Vector2D>
+    {
+        @Override
+        protected Vector2D makeNew()
+        {
+            return Vector2D.makeNew(0, 0);
+        }
+        
+        public Vector2D make(final double x, final double y)
+        {
+            final Vector2D vec = make();
+            
+            vec.x = x;
+            vec.y = y;
+            
+            return vec;
+        }
+    };
+    
     private static int index = 0;
     
     final private Queue<WorkBlock> workQueue;
@@ -78,6 +98,7 @@ public class RenderingThread extends Thread
     
     final public VectorPool vectorPool;
     final public ColorPool colorPool;
+    final public Vector2DPool vector2DPool;
     
     RenderingThread(final Renderer renderer, final Queue<WorkBlock> workQueue)
     {
@@ -88,6 +109,7 @@ public class RenderingThread extends Thread
         
         this.vectorPool = new VectorPool();
         this.colorPool = new ColorPool();
+        this.vector2DPool = new Vector2DPool();
     }
     
     @Override
@@ -99,5 +121,12 @@ public class RenderingThread extends Thread
         {
             renderer.renderBlock(block);
         }
+    }
+    
+    public void resetPools()
+    {
+        vectorPool.reset();
+        colorPool.reset();
+        vector2DPool.reset();
     }
 }

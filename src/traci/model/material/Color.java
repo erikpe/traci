@@ -24,6 +24,8 @@ public class Color
     
     public static Color make(final double r, final double g, final double b)
     {
+        // return new Color(r, g, b);
+        
         final Thread thisThread = Thread.currentThread();
         
         if (thisThread instanceof RenderingThread)

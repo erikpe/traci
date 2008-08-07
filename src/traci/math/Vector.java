@@ -21,11 +21,12 @@ final public class Vector
         this.x = x;
         this.y = y;
         this.z = z;
-        
     }
     
     public static Vector make(final double x, final double y, final double z)
     {
+        // return new Vector(x, y, z);
+        
         final Thread thisThread = Thread.currentThread();
         
         if (thisThread instanceof RenderingThread)
@@ -98,6 +99,7 @@ final public class Vector
         return cross(vec).div(length() * vec.length()).length();
     }
     
+    @Override
     public String toString()
     {
         return "<" + x + ", " + y + ", " + z + ">";

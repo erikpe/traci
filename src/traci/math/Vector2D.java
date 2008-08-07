@@ -1,9 +1,11 @@
 package traci.math;
 
+import traci.render.RenderingThread;
+
 public class Vector2D
 {
-    public final double x;
-    public final double y;
+    public double x;
+    public double y;
     
     private Vector2D(final double x, final double y)
     {
@@ -12,6 +14,20 @@ public class Vector2D
     }
     
     public static Vector2D make(final double x, final double y)
+    {
+        // return new Vector2D(x, y);
+        
+        final Thread thisThread = Thread.currentThread();
+        
+        if (thisThread instanceof RenderingThread)
+        {
+            return ((RenderingThread) thisThread).vector2DPool.make(x, y);
+        }
+        
+        return new Vector2D(x, y);
+    }
+    
+    public static Vector2D makeNew(final double x, final double y)
     {
         return new Vector2D(x, y);
     }

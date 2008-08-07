@@ -144,8 +144,7 @@ public class Renderer
                     
                     if (thisThread instanceof RenderingThread)
                     {
-                        ((RenderingThread) thisThread).vectorPool.reset();
-                        ((RenderingThread) thisThread).colorPool.reset();
+                        ((RenderingThread) thisThread).resetPools();
                     }
                     
                     final double subX = aax / (settings.aaLevel * 2.0 + 1);

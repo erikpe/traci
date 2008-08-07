@@ -62,7 +62,7 @@ abstract public class ObjectPool<T>
         if (Settings.DEBUG == true)
         {
             System.out.println(Thread.currentThread().getName()
-                    + " increasing " + makeNew().getClass().getSimpleName()
+                    + " increasing " + objClass.getSimpleName()
                     + " pool size to " + pool.length);
         }
     }
