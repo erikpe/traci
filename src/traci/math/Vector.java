@@ -36,7 +36,7 @@ public class Vector
     public static final Vector UNIT_NEG_Y = new Vector(0, -1, 0);
     public static final Vector UNIT_NEG_Z = new Vector(0, 0, -1);
     
-    private Vector(final double x, final double y, final double z)
+    Vector(final double x, final double y, final double z)
     {
         this.x = x;
         this.y = y;

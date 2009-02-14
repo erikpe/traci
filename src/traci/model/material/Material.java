@@ -7,8 +7,6 @@ public class Material
 {
     private Texture texture;
     
-    private Material() { }
-    
     public static Material newDefault()
     {
         final Material mat = new Material();

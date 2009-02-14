@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import traci.model.material.Color;
 
-public class BufferedImageDrawArea extends AbstractDrawArea implements DrawArea
+public class BufferedImageDrawArea extends AbstractDrawArea
 {
     private final BufferedImage image;
     

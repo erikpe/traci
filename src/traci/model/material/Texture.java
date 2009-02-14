@@ -8,8 +8,6 @@ public class Texture implements Cloneable
     protected Pigment pigment;
     protected Finish finish;
     
-    protected Texture() { }
-    
     public Pigment getPigment()
     {
         return pigment;

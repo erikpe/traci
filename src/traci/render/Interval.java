@@ -26,7 +26,7 @@ public class Interval
     public Point p0;
     public Point p1;
     
-    private Interval(final Point p0, final Point p1)
+    Interval(final Point p0, final Point p1)
     {
         assert (p0 == null && p1 == null) || p0.dist <= p1.dist;
         

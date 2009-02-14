@@ -16,10 +16,6 @@ import traci.model.Scene;
 
 public class XmlParser extends DefaultHandler
 {
-    private XmlParser()
-    {
-    }
-    
     public static void main(final String[] args)
     {
         try
@@ -56,7 +52,7 @@ public class XmlParser extends DefaultHandler
     {
         assert "scene".equals(node.getNodeName());
         
-        final Scene scene = new Scene();
+        //final Scene scene = new Scene();
         return null;//node.get
     }
 }

@@ -178,6 +178,7 @@ public class Matrix
         return Vector.make(x, y, z);
     }
     
+    @Override
     public String toString()
     {
         final StringBuilder buf = new StringBuilder();

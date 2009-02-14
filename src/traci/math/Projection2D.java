@@ -2,7 +2,7 @@ package traci.math;
 
 public abstract class Projection2D
 {
-    private static double PI2 = 2.0 * Math.PI;
+    static double PI2 = 2.0 * Math.PI;
     
     public static Projection2D XZ_PLANE = new Projection2D()
     {

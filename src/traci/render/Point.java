@@ -34,7 +34,7 @@ public class Point
     
     public Vector normal;
     
-    private Point(final double dist, final Primitive obj, final Vector normal)
+    Point(final double dist, final Primitive obj, final Vector normal)
     {
         this.dist = dist;
         this.obj = obj;

@@ -15,7 +15,7 @@ import traci.model.material.Color;
 
 public class PngImage extends NonUniform implements Interpolatable
 {
-    public enum RepeatPolicy { REPEAT, BORDER, STRETCH };
+    public enum RepeatPolicy { REPEAT, BORDER, STRETCH }
     
     private static Map<File, BufferedImage> imageCache =
         new HashMap<File, BufferedImage>();

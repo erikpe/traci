@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import traci.model.material.Color;
 
-public class MultiDrawArea extends AbstractDrawArea implements DrawArea
+public class MultiDrawArea extends AbstractDrawArea
 {
     private final Collection<DrawArea> areas;
     

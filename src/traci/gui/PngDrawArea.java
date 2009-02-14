@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class PngDrawArea extends BufferedImageDrawArea implements DrawArea
+public class PngDrawArea extends BufferedImageDrawArea
 {
     private final String filename;
     

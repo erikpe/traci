@@ -7,8 +7,6 @@ public class Finish implements Cloneable
     protected double shininess;
     protected double reflectiveness;
     
-    protected Finish() { }
-    
     public double getSpecCoeff()
     {
         return specCoeff;

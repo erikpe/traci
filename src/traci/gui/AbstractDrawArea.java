@@ -27,10 +27,12 @@ public abstract class AbstractDrawArea implements DrawArea
     @Override
     public void start()
     {
+    	// Do nothing by default
     }
     
     @Override
     public void finish()
     {
+    	// Do nothing by default
     }
 }

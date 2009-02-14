@@ -36,7 +36,7 @@ public class Color
     public static final Color CYAN = Color.make(0, 1, 1);
     public static final Color MAGENTA = Color.make(1, 0, 1);
     
-    private Color(final double r, final double g, final double b)
+    Color(final double r, final double g, final double b)
     {
         this.r = r;
         this.g = g;

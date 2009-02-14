@@ -2,7 +2,7 @@ package traci.gui;
 
 import traci.model.material.Color;
 
-public class NullDrawArea extends AbstractDrawArea implements DrawArea
+public class NullDrawArea extends AbstractDrawArea
 {
     public NullDrawArea(final int width, final int height)
     {
@@ -12,5 +12,6 @@ public class NullDrawArea extends AbstractDrawArea implements DrawArea
     @Override
     public void draw(final long x, final long y, final Color color)
     {
+    	// Do nothing by default
     }
 }

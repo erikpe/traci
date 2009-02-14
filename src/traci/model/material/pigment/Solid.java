@@ -27,6 +27,7 @@ public class Solid extends Pigment
     @Override
     public void transform(final Matrix mat, final Matrix invMat)
     {
+    	// Nothing to be done
     }
     
     @Override

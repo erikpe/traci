@@ -3,10 +3,9 @@ package traci.render;
 import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.ListIterator;
 
-public class Ray extends AbstractList<Interval> implements List<Interval>
+public class Ray extends AbstractList<Interval>
 {
     private final LinkedList<Interval> ray;
     
