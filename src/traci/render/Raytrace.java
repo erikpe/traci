@@ -12,11 +12,6 @@ public class Raytrace
     protected static Color raytrace(final Scene scene, final int depth,
             final Vector p, final Vector dir)
     {
-        if (depth <= 0)
-        {
-            return Color.BLACK;
-        }
-        
         final Ray ray = scene.shape.shootRay(p, dir);
         
         if (ray == null)
@@ -56,8 +51,7 @@ public class Raytrace
             /**
              * Diffuse light
              */
-            double c = dirToLight.dot(normal);
-            c = Math.max(c, 0.0);
+            final double c = Math.max(dirToLight.dot(normal), 0.0);
             final Color colorDiff = pigment.getColor(hitPoint).mul(
                     lightAtPoint.mul(c * finish.getDiffCoeff()));
             
@@ -74,7 +68,8 @@ public class Raytrace
                 final double shininess = finish.getShininess();
                 final double specCoeff = finish.getSpecCoeff();
                 
-                final Color colorSpec = light.color.mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
+                final Color colorSpec = light.color.mul(Math.pow(cosTheta,
+                        shininess) * specCoeff * distCoeff);
                 colorTotal = colorTotal.add(colorSpec);
             }
         }
@@ -82,9 +77,12 @@ public class Raytrace
         /**
          * Reflection
          */
-        final Vector rr = dir.sub(normal.mul(dir.mul(2).dot(normal)));
-        final Color colorReflect = raytrace(scene, depth-1, hitPoint, rr.normalize());
-        colorTotal = colorTotal.add(colorReflect.mul(finish.getReflectivness()));
+        if (depth > 0)
+        {
+            final Vector rr = dir.sub(normal.mul(dir.mul(2).dot(normal)));
+            final Color colorReflect = raytrace(scene, depth - 1, hitPoint, rr.normalize());
+            colorTotal = colorTotal.add(colorReflect.mul(finish.getReflectivness()));
+        }
         
         return colorTotal;
     }

@@ -25,7 +25,7 @@ public class Color
         }
     }
     
-    public double r, g, b;
+    double r, g, b;
     
     public static final Color BLACK = Color.make(0, 0, 0);
     public static final Color WHITE = Color.make(1, 1, 1);
@@ -53,6 +53,21 @@ public class Color
         }
         
         return new Color(r, g, b);
+    }
+    
+    public double r()
+    {
+        return r;
+    }
+    
+    public double g()
+    {
+        return g;
+    }
+    
+    public double b()
+    {
+        return b;
     }
     
     public static Color makeCopy(final Color other)

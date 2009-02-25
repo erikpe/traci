@@ -131,6 +131,6 @@ public class Main
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, new Settings(), multiDrawArea, 2);
+        Renderer.renderScene(scene, new Settings(), multiDrawArea, 3);
     }
 }

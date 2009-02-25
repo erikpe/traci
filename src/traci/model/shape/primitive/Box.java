@@ -29,8 +29,8 @@ public class Box extends Primitive
         /**
          * Plane x = 0 and x = 1
          */
-        final Point x0 = Point.make((0.0 - p.x) / dir.x, this, Vector.UNIT_NEG_X);
-        final Point x1 = Point.make((1.0 - p.x) / dir.x, this, Vector.UNIT_X);
+        final Point x0 = Point.make((0.0 - p.x()) / dir.x(), this, Vector.UNIT_NEG_X);
+        final Point x1 = Point.make((1.0 - p.x()) / dir.x(), this, Vector.UNIT_X);
         
         Point near = Point.nearest(x0, x1);
         Point far = Point.farest(x0, x1);
@@ -38,8 +38,8 @@ public class Box extends Primitive
         /**
          * Plane y = 0 and y = 1
          */
-        final Point y0 = Point.make((0.0 - p.y) / dir.y, this, Vector.UNIT_NEG_Y);
-        final Point y1 = Point.make((1.0 - p.y) / dir.y, this, Vector.UNIT_Y);
+        final Point y0 = Point.make((0.0 - p.y()) / dir.y(), this, Vector.UNIT_NEG_Y);
+        final Point y1 = Point.make((1.0 - p.y()) / dir.y(), this, Vector.UNIT_Y);
         
         near = Point.farest(near, Point.nearest(y0, y1));
         far = Point.nearest(far, Point.farest(y0, y1));
@@ -47,13 +47,13 @@ public class Box extends Primitive
         /**
          * Plane z = 0 and z = 1
          */
-        final Point z0 = Point.make((0.0 - p.z) / dir.z, this, Vector.UNIT_NEG_Z);
-        final Point z1 = Point.make((1.0 - p.z) / dir.z, this, Vector.UNIT_Z);
+        final Point z0 = Point.make((0.0 - p.z()) / dir.z(), this, Vector.UNIT_NEG_Z);
+        final Point z1 = Point.make((1.0 - p.z()) / dir.z(), this, Vector.UNIT_Z);
         
         near = Point.farest(near, Point.nearest(z0, z1));
         far = Point.nearest(far, Point.farest(z0, z1));
         
-        if (near.dist > EPSILON && near.dist < far.dist)
+        if (near.dist() > EPSILON && near.dist() < far.dist())
         {
             ray = new Ray(Interval.make(near, far));
         }

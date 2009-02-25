@@ -26,9 +26,9 @@ public class Sphere extends Primitive
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
-        final double c = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
-        final double a = 2 * (p.x * dir.x + p.y * dir.y + p.z * dir.z) / c;
-        final double b = (p.x * p.x + p.y * p.y + p.z * p.z - 1) / c;
+        final double c = dir.x() * dir.x() + dir.y() * dir.y() + dir.z() * dir.z();
+        final double a = 2 * (p.x() * dir.x() + p.y() * dir.y() + p.z() * dir.z()) / c;
+        final double b = (p.x() * p.x() + p.y() * p.y() + p.z() * p.z() - 1) / c;
         
         final double d = (a*a)/4 - b;
         

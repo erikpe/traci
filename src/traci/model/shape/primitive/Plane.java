@@ -24,15 +24,15 @@ public class Plane extends Primitive
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
-        final double t = -p.y / dir.y;
+        final double t = -p.y() / dir.y();
         
         if (t <= EPSILON)
         {
             return null;
         }
         
-        final Vector n0 = (p.y > 0 ? Vector.UNIT_Y : Vector.UNIT_NEG_Y);
-        final Vector n1 = (p.y > 0 ? Vector.UNIT_NEG_Y : Vector.UNIT_Y);
+        final Vector n0 = (p.y() > 0 ? Vector.UNIT_Y : Vector.UNIT_NEG_Y);
+        final Vector n1 = (p.y() > 0 ? Vector.UNIT_NEG_Y : Vector.UNIT_Y);
         
         final Point p0 = Point.make(t, this, n0);
         final Point p1 = Point.make(t, this, n1);

@@ -43,15 +43,15 @@ public class Camera extends Transformable
     {
         final Vector u = lookAt.sub(location);
         
-        final Vector u_YZ = Vector.make(0, u.y, u.z);
-        double cosAlpha = u_YZ.cosTheta(Vector.UNIT_NEG_Z);
+        final Vector u_YZ = Vector.make(0, u.y(), u.z());
+        // double cosAlpha = u_YZ.cosTheta(Vector.UNIT_NEG_Z);
         double sinAlpha = u_YZ.sinTheta(Vector.UNIT_NEG_Z);
-        sinAlpha = (u_YZ.cross(Vector.UNIT_NEG_Z).x > 0 ? -sinAlpha : sinAlpha);
+        sinAlpha = (u_YZ.cross(Vector.UNIT_NEG_Z).x() > 0 ? -sinAlpha : sinAlpha);
         
-        final Vector u_XZ = Vector.make(u.x, 0, u.z);
-        double cosBeta = u_XZ.cosTheta(Vector.UNIT_NEG_Z);
+        final Vector u_XZ = Vector.make(u.x(), 0, u.z());
+        // double cosBeta = u_XZ.cosTheta(Vector.UNIT_NEG_Z);
         double sinBeta = u_XZ.sinTheta(Vector.UNIT_NEG_Z);
-        sinBeta = (u_XZ.cross(Vector.UNIT_NEG_Z).y > 0 ? -sinBeta : sinBeta);
+        sinBeta = (u_XZ.cross(Vector.UNIT_NEG_Z).y() > 0 ? -sinBeta : sinBeta);
         
         rotateX(sinAlpha);
         rotateY(sinBeta);

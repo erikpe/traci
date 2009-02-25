@@ -49,13 +49,13 @@ public class PngImage extends NonUniform implements Interpolatable
     {
         final File file = new File(filename);
         
-        BufferedImage image = imageCache.get(file);
+        BufferedImage tmpImage = imageCache.get(file);
         
-        if (image == null)
+        if (tmpImage == null)
         {
             try
             {
-                image = ImageIO.read(file);
+                tmpImage = ImageIO.read(file);
             }
             catch (final IOException e)
             {
@@ -63,10 +63,10 @@ public class PngImage extends NonUniform implements Interpolatable
                 System.exit(-1);
             }
             
-            imageCache.put(file, image);
+            imageCache.put(file, tmpImage);
         }
         
-        return image;
+        return tmpImage;
     }
     
     @Override
@@ -74,8 +74,8 @@ public class PngImage extends NonUniform implements Interpolatable
     {
         final Vector2D projected = projection.project(p);
         
-        double x = projected.x;
-        double y = projected.y;
+        double x = projected.x();
+        double y = projected.y();
         
         switch(repeatPolicy)
         {

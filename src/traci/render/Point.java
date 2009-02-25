@@ -28,11 +28,11 @@ public class Point
         }
     }
     
-    public double dist;
+    double dist;
     
-    public Primitive obj;
+    Primitive obj;
     
-    public Vector normal;
+    Vector normal;
     
     Point(final double dist, final Primitive obj, final Vector normal)
     {
@@ -54,6 +54,21 @@ public class Point
         return new Point(dist, obj, normal);
     }
     
+    public double dist()
+    {
+        return dist;
+    }
+    
+    public Primitive obj()
+    {
+        return obj;
+    }
+    
+    public Vector normal()
+    {
+        return normal;
+    }
+    
     public static Point nearest(final Point p0, final Point p1)
     {
         return (p0.dist < p1.dist ? p0 : p1);
@@ -71,7 +86,7 @@ public class Point
     
     public Point invNormal()
     {
-        return new Point(dist, obj, normal.neg());
+        return Point.make(dist, obj, normal.neg());
     }
     
     @Override

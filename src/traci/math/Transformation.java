@@ -12,10 +12,10 @@ public class Transformation
         invMat = Matrix.eye();
     }
     
-    public void transform(final Matrix mat, final Matrix invMat)
+    public void transform(final Matrix bMat, final Matrix bInvMat)
     {
-        this.mat = mat.mul(this.mat);
-        this.invMat = this.invMat.mul(invMat);
+        mat = bMat.mul(mat);
+        invMat = invMat.mul(bInvMat);
     }
     
     public Vector point(final Vector vec)

@@ -11,7 +11,7 @@ import traci.render.Point.PointPool;
 
 public class RenderingThread extends Thread
 {
-    public static class WorkBlock
+    static class WorkBlock
     {
         public final long x;
         public final long y;
@@ -33,10 +33,15 @@ public class RenderingThread extends Thread
         }
     }
     
-    private static int index = 0;
+    static interface BlockRenderer
+    {
+        public void renderBlock(final WorkBlock block);
+    }
+    
+    private static long index = 0;
     
     private final Queue<WorkBlock> workQueue;
-    private final Renderer renderer;
+    private final BlockRenderer renderer;
     
     public final VectorPool vectorPool;
     public final ColorPool colorPool;
@@ -44,9 +49,10 @@ public class RenderingThread extends Thread
     public final PointPool pointPool;
     public final IntervalPool intervalPool;
     
-    RenderingThread(final Renderer renderer, final Queue<WorkBlock> workQueue)
+    RenderingThread(final BlockRenderer renderer,
+            final Queue<WorkBlock> workQueue)
     {
-        super("Rendering thread #" + (index++));
+        super("Rendering thread #" + nextIndex());
         
         this.renderer = renderer;
         this.workQueue = workQueue;
@@ -76,5 +82,10 @@ public class RenderingThread extends Thread
         vector2DPool.reset();
         pointPool.reset();
         intervalPool.reset();
+    }
+    
+    private static synchronized long nextIndex()
+    {
+        return index++;
     }
 }

@@ -23,8 +23,8 @@ public class Vector2D
         }
     }
     
-    public double x;
-    public double y;
+    double x;
+    double y;
     
     Vector2D(final double x, final double y)
     {
@@ -42,5 +42,15 @@ public class Vector2D
         }
         
         return new Vector2D(x, y);
+    }
+    
+    public double x()
+    {
+        return x;
+    }
+    
+    public double y()
+    {
+        return y;
     }
 }

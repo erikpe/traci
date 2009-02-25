@@ -23,12 +23,13 @@ public class Interval
         }
     }
     
-    public Point p0;
-    public Point p1;
+    Point p0;
+    Point p1;
     
     Interval(final Point p0, final Point p1)
     {
-        assert (p0 == null && p1 == null) || p0.dist <= p1.dist;
+        assert p0 == null || p1 == null || p0.dist <= p1.dist;
+        assert (p0 == null) == (p1 == null);
         
         this.p0 = p0;
         this.p1 = p1;
@@ -44,5 +45,15 @@ public class Interval
         }
         
         return new Interval(p0, p1);
+    }
+    
+    public Point p0()
+    {
+        return p0;
+    }
+    
+    public Point p1()
+    {
+        return p1;
     }
 }

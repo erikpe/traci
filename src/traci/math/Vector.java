@@ -24,7 +24,7 @@ public class Vector
         }
     }
     
-    public double x, y, z;
+    double x, y, z;
     
     public static final Vector ORIGO = new Vector(0, 0, 0);
     
@@ -53,6 +53,21 @@ public class Vector
         }
         
         return new Vector(x, y, z);
+    }
+    
+    public double x()
+    {
+        return x;
+    }
+    
+    public double y()
+    {
+        return y;
+    }
+    
+    public double z()
+    {
+        return z;
     }
     
     public double length()

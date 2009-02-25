@@ -18,13 +18,11 @@ public class Checker extends Pattern
     @Override
     public Color getColorTransformed(final Vector p)
     {
-        if ((Math.round(p.x) + Math.round(p.y) + Math.round(p.z)) % 2 == 0)
+        if ((Math.round(p.x()) + Math.round(p.y()) + Math.round(p.z())) % 2 == 0)
         {
             return color1;
         }
-        else
-        {
-            return color2;
-        }
+        
+        return color2;
     }
 }
