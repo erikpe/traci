@@ -7,12 +7,7 @@ import traci.math.Vector;
 
 public class Camera extends Transformable
 {
-    //public final Vector location;
-    //public final Vector lookAt;
-    
     public final double fov = (50.0 / 360.0) * Math.PI * 2.0;
-    
-    //public final Matrix mat;
     
     public final Transformation transformation;
     
@@ -20,14 +15,10 @@ public class Camera extends Transformable
     
     public final double aperture = 0.15;
     
-    public Camera(final Vector location, final Vector lookAt)
+    public Camera(final Vector location, final Vector lookAt, final Vector up)
     {
-        //this.location = location;
-        //this.lookAt = lookAt;
-        
-        //mat = calcMat();
         transformation = new Transformation();
-        calcTransformation(location, lookAt);
+        calcTransformation(location, lookAt, up);
     }
     
     public static boolean isCamera(final String str)
@@ -36,32 +27,30 @@ public class Camera extends Transformable
     }
     
     /**
-     * The initial camera position is in origo, and it is directed
-     * towards {@link Vector.UNIT_NEG_Z}.
+     * The initial camera position is in origo, and it is directed towards
+     * {@link Vector.UNIT_NEG_Z} with {@link Vector.UNIT_Y} as up.
      */
-    private void calcTransformation(final Vector location, final Vector lookAt)
+    private void calcTransformation(final Vector location, final Vector lookAt,
+            final Vector up)
     {
-        final Vector u = lookAt.sub(location);
+        Vector cam = Vector.UNIT_NEG_Z;
         
-        final Vector u_YZ = Vector.make(0, u.y(), u.z());
-        // double cosAlpha = u_YZ.cosTheta(Vector.UNIT_NEG_Z);
-        double sinAlpha = u_YZ.sinTheta(Vector.UNIT_NEG_Z);
-        sinAlpha = (u_YZ.cross(Vector.UNIT_NEG_Z).x() > 0 ? -sinAlpha : sinAlpha);
+        Vector u = lookAt.sub(location);
         
-        final Vector u_XZ = Vector.make(u.x(), 0, u.z());
-        // double cosBeta = u_XZ.cosTheta(Vector.UNIT_NEG_Z);
-        double sinBeta = u_XZ.sinTheta(Vector.UNIT_NEG_Z);
-        sinBeta = (u_XZ.cross(Vector.UNIT_NEG_Z).y() > 0 ? -sinBeta : sinBeta);
+        final Vector u_XZ = Vector.make(u.x(), 0, u.z()).normalize();
+        final double beta = Math.atan2(u_XZ.x(), u_XZ.z())
+                - Math.atan2(cam.x(), cam.z());
         
-        rotateX(sinAlpha);
-        rotateY(sinBeta);
+        rotateY(beta);
+        
+        cam = transformation.dir(cam);
+        
+        final Vector u_YZ = Vector.make(0, u.y(), u.z()).normalize();
+        final double alpha = Math.atan2(u_YZ.y(), u_YZ.z())
+                - Math.atan2(cam.y(), cam.z());
+        
+        rotateX(alpha);
         translate(location);
-        
-//        final Matrix rotX = Matrix.rotX(sinAlpha, cosAlpha);
-//        final Matrix rotY = Matrix.rotY(sinBeta, cosBeta);
-//        final Matrix mat = rotY.mul(rotX);
-//        
-//        return mat;
     }
     
     @Override

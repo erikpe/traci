@@ -104,6 +104,13 @@ public class Color
         return make(r + color.r, g + color.g, b + color.b);
     }
     
+    public void accumulate(final Color color)
+    {
+        r += color.r;
+        g += color.g;
+        b += color.b;
+    }
+    
     @Override
     public String toString()
     {

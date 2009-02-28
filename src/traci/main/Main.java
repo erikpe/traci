@@ -119,12 +119,17 @@ public class Main
         csg2.add(plane);
         csg2.add(cylinder);
         
-        final Vector camLocation = Vector.make(-1, 1.5, 5);
-        final Vector camLookAt = Vector.make(0, -.5, 0);
-        final Camera cam = new Camera(camLocation, camLookAt);
-        cam.rotateZ(0.3);
-        cam.rotateX(0.1);
-        final Scene scene = new Scene(csg2, cam);
+        final Union union = new Union();
+        final Sphere origoS = new Sphere(); union.add(origoS); origoS.translateZ(5); origoS.material.setColor(Color.WHITE);
+        final Sphere left = new Sphere(); union.add(left); left.translateX(-5); left.material.setColor(Color.CYAN);
+        final Sphere right = new Sphere(); union.add(right); right.translateX(5); right.material.setColor(Color.YELLOW);
+        
+        final Vector camLocation = Vector.make(0, 0, -30);
+        final Vector camLookAt = Vector.make(0, 0, 29);
+        final Camera cam = new Camera(camLocation, camLookAt, null);
+        //cam.rotateZ(0.2);
+        cam.rotateX(0.3);
+        final Scene scene = new Scene(union, cam);
         final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*30));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.RED.mul(50));
         

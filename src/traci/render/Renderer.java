@@ -133,7 +133,7 @@ public class Renderer implements BlockRenderer
     
     private void renderPixel(final long x, final long y, final WorkBlock block)
     {
-        Color color = Color.makeCopy(Color.BLACK);
+        final Color color = Color.makeCopy(Color.BLACK);
         
         for (int aay = -settings.aaLevel; aay <= settings.aaLevel; ++aay)
         {
@@ -186,7 +186,7 @@ public class Renderer implements BlockRenderer
                     
                     final Color rayColor = Raytrace.raytrace(scene, 5, camLoc, camDir);
                     
-                    color = Color.makeCopy(color.add(rayColor));
+                    color.accumulate(rayColor);
                 }
             }
         }

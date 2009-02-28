@@ -77,8 +77,7 @@ public class Vector
     
     public Vector normalize()
     {
-        final double len = length();
-        return make(x / len, y / len, z / len);
+        return div(length());
     }
     
     public double dot(final Vector vec)
