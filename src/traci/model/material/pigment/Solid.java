@@ -1,6 +1,6 @@
 package traci.model.material.pigment;
 
-import traci.math.Matrix;
+import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.material.Color;
 
@@ -25,7 +25,7 @@ public class Solid extends Pigment
     }
     
     @Override
-    public void transform(final Matrix mat, final Matrix invMat)
+    public void transform(final Transformation transformation)
     {
     	// Nothing to be done
     }

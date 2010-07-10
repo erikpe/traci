@@ -1,15 +1,15 @@
 package traci.model;
 
-import traci.math.Matrix;
 import traci.math.Transformable;
+import traci.math.TransformableHelper;
 import traci.math.Transformation;
 import traci.math.Vector;
 
-public class Camera extends Transformable
+public class Camera extends TransformableHelper implements Transformable
 {
     public final double fov = (50.0 / 360.0) * Math.PI * 2.0;
     
-    public final Transformation transformation;
+    public Transformation transformation;
     
     public final double focalDist = 4.8;
     
@@ -17,7 +17,7 @@ public class Camera extends Transformable
     
     public Camera(final Vector location, final Vector lookAt, final Vector up)
     {
-        transformation = new Transformation();
+        transformation = Transformation.identity();
         calcTransformation(location, lookAt, up);
     }
     
@@ -54,8 +54,8 @@ public class Camera extends Transformable
     }
     
     @Override
-    public void transform(final Matrix mat, final Matrix invMat)
+    public void transform(final Transformation tr)
     {
-        transformation.transform(mat, invMat);
+        transformation = transformation.transform(tr);
     }
 }

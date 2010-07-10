@@ -3,20 +3,13 @@ package traci.model.shape.csg;
 import java.util.ArrayList;
 import java.util.List;
 
-import traci.math.Matrix;
+import traci.math.Transformation;
 import traci.model.material.Material;
 import traci.model.shape.Shape;
 
 public abstract class Csg extends Shape
 {
     private final List<Shape> shapes;
-    
-    public static boolean isCsg(final String str)
-    {
-        return str.equals("union")
-            || str.equals("intersection")
-            || str.equals("difference");
-    }
     
     public Csg(final Material material)
     {
@@ -35,13 +28,13 @@ public abstract class Csg extends Shape
     }
     
     @Override
-    public void transform(final Matrix mat, final Matrix invMat)
+    public void transform(final Transformation tr)
     {
-        super.transform(mat, invMat);
+        super.transform(tr);
         
         for (final Shape shape : getShapes())
         {
-            shape.transform(mat, invMat);
+            shape.transform(tr);
         }
     }
 }
