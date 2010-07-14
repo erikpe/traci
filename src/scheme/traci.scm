@@ -113,11 +113,12 @@
     (loop i 0 (- pegs 2)
 	  (hole (translate (* i .5)))))
    (loop i 0 (- pegs 1)
-	 (peg (translate (* i .5))))))
+	 (peg (translate (* i .5))))
+   (insert args)))
 
 (define (disp arg)
   (display (car (list-ref (arg (make-shape 'dummy-object)) 2)))
   (display "\n"))
 
-(disp (lego 4))
-
+;(disp (lego 100))
+(disp (union (translate 1 2 3 (sphere))))
