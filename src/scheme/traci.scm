@@ -63,13 +63,35 @@
 (define (rotate . args)
   (transform 'rotate args))
 
-(define (insert . args)
+(define (insert2 . args)
   (lambda (outer-shape)
     (let ((outer-shape outer-shape))
       (for-each
        (lambda (inner-arg) (set! outer-shape (inner-arg outer-shape)))
        args)
       outer-shape)))
+
+(define-syntax insert3
+  (syntax-rules ()
+    ((_ (args ...) . rest)
+     (insert args ... . rest))
+    ((_ arg . rest)
+     (lambda (outer-shape)
+       (let ((outer-shape (arg outer-shape)))
+	 ((insert . rest) outer-shape))))))
+
+(define (insert . args)
+  (define (insert-helper arg)
+    (cond ((null? arg)
+	   (lambda (outer-shape) outer-shape))
+	  ((pair? arg)
+	   (lambda (outer-shape)
+	     (let ((outer-shape ((insert-helper (car arg)) outer-shape)))
+	       ((insert-helper (cdr arg)) outer-shape))))
+	  (#t
+	   (lambda (outer-shape)
+	     (arg outer-shape)))))
+  (insert-helper args))
 
 (define-syntax loop
   (syntax-rules ()
@@ -99,55 +121,46 @@
 (define (disp arg)
   (display (car (list-ref (arg (make-shape 'dummy-object)) 2))))
 
-(def peg (h hh)
-     (display "KESO")
-     (+ 1 2)
-     (cylinder (scale hh h h)))
+(define (peg . args)
+  (cylinder
+   (scale .3 .1 .3)
+   (translate .25 .6 .25)
+   (insert args)))
 
-(disp
+(disp (peg
+       (translate 1 0 0)
+       (translate 2 0 0)
+       (loop i 0 3
+	     (translate i i i)
+	     (translate (* i 2) i i))
+       (insert
+	(scale 11 22 33)
+	(scale 111 222 333))))
 
- (peg (17 23)
-      (translate 1 2 3)
-      (translate 11 22 33)))
+;(define (lego pegs)
+;  (union
+;   (difference
+;    (box (scale (/ n 2.0) .6 .5)))
+;   (peg
 
-(disp
-
- (peg (18 19)
-      (scale 8 8 8)))
-
-(disp
- 
- (peg (20 21)))
-
-;(define-syntax peg
-;  (syntax-rules ()
-;    ((_ (h) call-form)
-;     (insert-into-last call-form (+ 1 2) (cylinder (scale h h h))))))
-
-;(disp (peg (23) (translate 1 2 3) (translate 11 22 33)))
-
-;(begin
-;  (+ 1 2)
-;  (cylinder (scale 23 23 23)
-;	    (translate 1 2 3)
-;	    (translate 1 22 33)))
-
-;(def peg (h hh)
+;(def peg2 (h hh)
 ;     (+ 1 2)
-;     (cylinder
-;      (translate 0 h hh)))
+;     (cylinder (scale hh h h)))
 
-;(def moveit (h)
-;     (translate h 0 0))
+;(disp
 
-;(display
+; (peg2 (17 23)
+;      (translate 1 2 3)
+;      (translate 11 22 33)))
+
+;(disp
+
+; (peg2 (18 19)
+;      (scale 8 8 8)))
+
+;(disp
  
-; ((peg 17 23
-;       (moveit 66)
-;       (scale 6 7 8)
-;       (scale 11 12 13))
-  
-;  (make-shape 'object)))
+; (peg2 (20 21)))
 
 ;(define (lego len)
 ;  (union
@@ -156,30 +169,6 @@
 ;   (box (scale (/ len 2) .6 .5))
 ;   (loop i 1 len
 ;   (peg (translate (* i .5) 0 0))))
-
-(define (three-spheres)
-   (sphere)
-   (sphere)
-   (sphere))
-
-;(display
- 
-; (peg (scale 1 2 3)))
-;  (make-shape 'object)))
-
-;(display
- 
-; ((intersection
-;   (cylinder)
-;   (sphere)
-;   (three-spheres)
-;   (loop i 0 3
-;	 (rotate i)
-;	 (scale i (* 2 i) i))
-;   (union)
-;   (translate 1 2 3))
-  
-;  (make-shape 'object)))
 
 (display "\n")
 
