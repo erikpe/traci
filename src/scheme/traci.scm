@@ -50,7 +50,8 @@
   (shape 'box args))
 
 (define (transform variant args)
-  (let ((this-transform (replace-nth 2 (make-transform variant) args)))
+  (let ((this-transform (make-transform variant)))
+    (set! this-transform (replace-nth 2 this-transform args))
     (lambda (outer-shape)
       (add-transform outer-shape this-transform))))
 
