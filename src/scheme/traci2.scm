@@ -146,21 +146,39 @@
 ;;; Other stuff
 ;;; -----------
 
+(define (union? shape)
+  (and (shape? shape)
+       (eq? 'union (shape-variant shape))))
+
+(define (difference? shape)
+  (and (shape? shape)
+       (eq? 'difference (shape-variant shape))))
+
+(define (intersection? shape)
+  (and (shape? shape)
+       (eq? 'intersection (shape-variant shape))))
+
+(define (sphere? shape)
+  (and (shape? shape)
+       (eq? 'sphere (shape-variant shape))))
+
+(define (cylinder? shape)
+  (and (shape? shape)
+       (eq? 'cylinder (shape-variant shape))))
+
+(define (box? shape)
+  (and (shape? shape)
+       (eq? 'box (shape-variant shape))))
+
 (define (primitive-shape? shape)
-  (if (not (shape? shape))
-      (error 'primitive-shape? "Argument 1 not a shape: `~a'" shape)
-      (let ((variant (shape-variant shape)))
-	(or (eq? 'sphere variant)
-	    (eq? 'cylinder variant)
-	    (eq? 'box variant)))))
+  (or (sphere? shape)
+      (cylinder? shape)
+      (box? shape)))
 
 (define (csg-shape? shape)
-  (if (not (shape? shape))
-      (error 'csg-shape? "Argument 1 not a shape: `~a'" shape)
-      (let ((variant (shape-variant shape)))
-	(or (eq? 'union variant)
-	    (eq? 'difference variant)
-	    (eq? 'intersection variant)))))
+  (or (union? shape)
+      (difference? shape)
+      (box? shape)))
 
 (define (arg-list-merge arg-list1 arg-list2)
   (cond ((not (arg-list? arg-list1))
@@ -307,9 +325,18 @@
          (peg (translate (* i .5) 0 0)))
    (apply insert args)))
 
+
+(define (recu n)
+  (if (= 0 n) (sphere)
+      (insert (recu (- n 1))
+	      (recu (- n 1)))))
+
+(display (union (recu 0)))
+
+
 ;(define (keso . args)
 ;  (union
 ;   (insert args)))
 
-(display (lego 4))
+;(display (lego 100))
 (display "\n")
