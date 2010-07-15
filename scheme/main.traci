@@ -1,3 +1,8 @@
+;;; Imports
+;;; -------
+
+(import s2j)
+
 ;;; Generic helpers
 ;;; ---------------
 
@@ -25,29 +30,29 @@
 	((not (number? (list-ref args 2)))
 	 (error 'vec "Argument 3 not a number: `~a'" (list-ref args 2)))
 	(#t
-	 (cons 'vector args))))
+	 (cons 'vec args))))
 
 (define (vec? obj)
   (and (list? obj)
        (= 4 (length obj))
-       (eq? 'vector (list-ref obj 0))
+       (eq? 'vec (list-ref obj 0))
        (number? (list-ref obj 1))
        (number? (list-ref obj 2))
        (number? (list-ref obj 3))))
 
-(define (vector-x vec)
+(define (vec-x vec)
   (if (not (vec? vec))
-      (error 'vector-x "Argument 1 not a vactor: `~a'" vec)
+      (error 'vec-x "Not a vactor: `~a'" vec)
       (list-ref vec 1)))
 
-(define (vector-y vec)
+(define (vec-y vec)
   (if (not (vec? vec))
-      (error 'vector-y "Argument 1 not a vactor: `~a'" vec)
+      (error 'vec-y "Not a vactor: `~a'" vec)
       (list-ref vec 2)))
 
-(define (vector-z vec)
+(define (vec-z vec)
   (if (not (vec? vec))
-      (error 'vector-z "Argument 1 not a vactor: `~a'" vec)
+      (error 'vec-z "Not a vactor: `~a'" vec)
       (list-ref vec 3)))
 
 ;;; Shape primitives
@@ -55,8 +60,8 @@
 
 (define (make-shape variant)
   (if (not (symbol? variant))
-      (error 'make-shape "Argument 1 not a symbol: `~a'" variant))
-      (list 'shape variant '()))
+      (error 'make-shape "Not a symbol: `~a'" variant))
+      (list 'shape variant (make-arg-list)))
 
 (define (shape? obj)
   (and (list? obj)
@@ -65,33 +70,28 @@
 
 (define (shape-variant shape)
   (if (not (shape? shape))
-      (error 'shape-variant "Argument 1 not a shape: `~a'" shape)
-      (car (cdr shape))))
+      (error 'shape-variant "Not a shape: `~a'" shape)
+      (list-ref shape 1)))
 
-(define (add-shape-to-shape outer-shape shape)
-  (cond ((not (shape? outer-shape))
-	 (error 'add-shape-to-shape "Argument 1 not a shape: `~a'" shape))
-	((not (shape? shape))
-	 (error 'add-shape-to-shape "Argument 2 not a shape: `~a'" outer-shape))
-	(#t
-	 (let ((inner-args (list-ref outer-shape 2)))
-	   (replace-nth 2 outer-shape (add-last inner-args shape))))))
+(define (shape-get-arg-list shape)
+  (if (not (shape? shape))
+      (error 'shape-get-arg-list "Not a shape: `~a'" shape)
+      (list-ref shape 2)))
 
-(define (add-transform-to-shape outer-shape transform)
-  (cond ((not (shape? outer-shape))
-	 (error 'add-transform-to-shape "Argument 1 not a shape: `~a'" outer-shape))
-	((not (transform? transform))
-	 (error 'add-transform-to-shape "Argument 2 not a transform: `~a'" transform))
+(define (shape-set-arg-list shape arg-list)
+  (cond ((not (shape? shape))
+	 (error 'shape-set-arg-list "Argument 1 not a shape: `~a'" shape))
+	((not (arg-list? arg-list))
+	 (error 'shape-set-arg-list "Argument 2 not an arg-list: `~a'" arg-list))
 	(#t
-	 (let ((inner-args (list-ref outer-shape 2)))
-	   (replace-nth 2 outer-shape (add-last inner-args transform))))))
+	 (replace-nth 2 shape arg-list))))
 
 ;;; Transform primitives
 ;;; --------------------
 
 (define (make-generic-transform variant arg)
   (if (not (symbol? variant))
-      (error 'make-generic-transform "Argument 1 not a symbol: `~a'" variant)
+      (error 'make-generic-transform "Not a symbol: `~a'" variant)
       (list 'transform variant arg)))
 
 (define (transform? obj)
@@ -101,8 +101,13 @@
 
 (define (transform-variant transform)
   (if (not (transform? transform))
-      (error 'transform-variant "Argument 1 not a transform: `~a'" transform)
-      (car (cdr transform))))
+      (error 'transform-variant "Not a transform: `~a'" transform)
+      (list-ref transform 1)))
+
+(define (transform-argument transform)
+  (if (not (transform? transform))
+      (error 'transform-argument "Not a transform: `~a'" transform)
+      (list-ref transform 2)))
 
 ;;; Arg-list primitives
 ;;; -------------------
@@ -116,7 +121,7 @@
 
 (define (arg-list-add-arg arg-list arg)
   (cond ((not (arg-list? arg-list))
-	 (error 'arg-list-add-arg "Argument 1 not an arg-list: `~a'" arg-list))
+	 (error 'arg-list-add-arg "Not an arg-list: `~a'" arg-list))
 	((arg-list? arg)
 	 (error 'arg-list-add-arg "Attempting to insert arg-list into arg-list"))
 	(#t
@@ -142,6 +147,80 @@
 	 (error 'arg-list-rest "Arg-list empty"))
 	(#t
 	 (cons (car arg-list) (cdr (cdr arg-list))))))
+
+;;; Java converter
+;;; --------------
+
+;(define-java-class <traci.math.Vector>)
+;(define-java-class <traci.math.Transformation>)
+
+;(define-java-class <traci.model.shape.csg.Union>)
+;(define-java-class <traci.model.shape.csg.Difference>)
+;(define-java-class <traci.model.shape.csg.Intersection>)
+;(define-java-class <traci.model.shape.primitive.Sphere>)
+;(define-java-class <traci.model.shape.primitive.Cylinder>)
+;(define-java-class <traci.model.shape.primitive.Box>)
+
+;(define (->jvec vec)
+;  (if (not (vec? vec))
+;      (error 'vec->java "Not a vector: `~a'" vec)
+;      ((generic-java-method '|make|)
+;       (java-null <traci.math.Vector>)
+;       (->jdouble (vec-x vec))
+;       (->jdouble (vec-y vec))
+;       (->jdouble (vec-z vec)))))
+
+;(define (->jshape/empty shape)
+;  (let ((variant (shape-variant shape)))
+;    (cond ((eq? 'union variant)
+;	   (java-new <traci.model.shape.csg.Union>))
+;	  ((eq? 'difference variant)
+;	   (java-new <traci.model.shape.csg.Difference>))
+;	  ((eq? 'intersection variant)
+;	   (java-new <traci.model.shape.csg.Intersection>))
+;	  ((eq? 'sphere variant)
+;	   (java-new <traci.model.shape.primitive.Sphere>))
+;	  ((eq? 'cylinder variant)
+;	   (java-new <traci.model.shape.primitive.Cylinder>))
+;	  ((eq? 'box variant)
+;	   (java-new <traci.model.shape.primitive.Box>))
+;	  (#t
+;	   (error 'shape->java/empty "Unknown shape type: `~a'" shape)))))
+
+;(define (->jshape shape)
+;  (if (not (shape? shape))
+;      (error 'shape->java "Not a shape: `~a'" shape)
+;      (let ((java-shape (shape->java/empty) shape))
+;	(for-each
+;	 java-shape))))
+
+;(define (get-java-transform-method variant)
+;  (cond ((not (symbol? variant))
+;	 (error 'get-transform-method "Not a symbol: `~a'" variant))
+;	((eq? 'translate variant)
+;	 (generic-java-method '|translate|))
+;	((eq? 'scale variant)
+;	 (generic-java-method '|scale|))
+;	((eq? 'rotx variant)
+;	 (generic-java-method '|rotateX|))
+;	((eq? 'roty variant)
+;	 (generic-java-method '|rotateY|))
+;	((eq? 'rotz variant)
+;	 (generic-java-method '|rotatyZ|))
+;	(#t
+;	 (error 'get-transform-method "Unknown transform type: `~a'" variant))))
+
+;(define (->jtransform transform)
+;  (cond ((not (transform? transform))
+;	 (error 'transform->java "Not a transform: `~a'" transform))
+;	((vector-transform? transform)
+;	 ((get-java-transform-method (transform-variant transform))
+;	  (vec->java (transform-argument transform))))
+;	((scalar-transform? transform)
+;	 ((get-java-transform-method (transform-variant transform))
+;	  (->jdouble (transform-argument transform))))))
+;	(#t
+;	 (error 'transform->java "Unknown transform type: `~a'" transform))))
 
 ;;; Other stuff
 ;;; -----------
@@ -180,6 +259,17 @@
       (difference? shape)
       (box? shape)))
 
+(define (vector-transform? obj)
+  (and (transform? obj)
+       (or (eq 'translate (transform-variant obj))
+	   (eq 'scale (transform-variant obj)))))
+
+(define (scalar-transform? obj)
+  (and (transform? obj)
+       (or (eq 'rotx (transform-variant obj))
+	   (eq 'roty (transform-variant obj))
+	   (eq 'rotz (transform-variant obj)))))
+
 (define (arg-list-merge arg-list1 arg-list2)
   (cond ((not (arg-list? arg-list1))
 	 (error 'arg-list-merge "Argument 1 not an arg-list: `~a'" arg-list1))
@@ -192,26 +282,24 @@
 	  (arg-list-add-arg arg-list1 (arg-list-first arg-list2))
 	  (arg-list-rest arg-list2)))))
 
-(define (add-arg-to-shape outer-shape arg)
+(define (shape-add-arg outer-shape arg)
   (cond ((not (shape? outer-shape))
-	 (error 'add-arg-to-shape "Argument 1 is not a shape: `~a'" outer-shape))
-	((shape? arg)
-	 (add-shape-to-shape outer-shape arg))
-	((transform? arg)
-	 (add-transform-to-shape outer-shape arg))
+	 (error 'shape-add-arg "Argument 1 is not a shape: `~a'" outer-shape))
 	((arg-list? arg)
-	 (if (arg-list-empty? arg) outer-shape
-	     (add-arg-to-shape (add-arg-to-shape outer-shape (arg-list-first arg))
-			       (arg-list-rest arg))))
+	 (shape-set-arg-list outer-shape
+			     (arg-list-merge (shape-get-arg-list outer-shape) arg)))
+	((or (transform? arg) (shape? arg))
+	 (shape-set-arg-list outer-shape
+			     (arg-list-add-arg (shape-get-arg-list outer-shape) arg)))
 	(#t
-	 (error 'add-arg-to-shape "Argument 2: Unknown argument type: `~a'" arg))))
+	 (error 'add-arg-to-shape "Argument 2 of unknown type: `~a'" arg))))
 
 (define (generic-shape variant . args)
   (if (not (symbol? variant))
       (error 'generic-shape "Argument 1 not a symbol: `~a'" variant)
       (let ((this-shape (make-shape variant)))
 	(for-each
-	 (lambda (arg) (set! this-shape (add-arg-to-shape this-shape arg)))
+	 (lambda (arg) (set! this-shape (shape-add-arg this-shape arg)))
 	 args)
 	this-shape)))
 
