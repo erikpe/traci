@@ -1,10 +1,10 @@
 ;;; Generic helpers
 ;;; ---------------
 
-(define (add-last e l)
+(define (add-last l e)
   (if (null? l)
       (list e)
-      (cons (car l) (add-last e (cdr l)))))
+      (cons (car l) (add-last (cdr l) e))))
 
 (define (replace-nth n l e)
   (if (= 0 n)
@@ -35,6 +35,21 @@
        (number? (list-ref obj 2))
        (number? (list-ref obj 3))))
 
+(define (vector-x vec)
+  (if (not (vec? vec))
+      (error 'vector-x "Argument 1 not a vactor: `~a'" vec)
+      (list-ref vec 1)))
+
+(define (vector-y vec)
+  (if (not (vec? vec))
+      (error 'vector-y "Argument 1 not a vactor: `~a'" vec)
+      (list-ref vec 2)))
+
+(define (vector-z vec)
+  (if (not (vec? vec))
+      (error 'vector-z "Argument 1 not a vactor: `~a'" vec)
+      (list-ref vec 3)))
+
 ;;; Shape primitives
 ;;; ----------------
 
@@ -48,23 +63,28 @@
        (eq? 'shape (car obj))
        (= 3 (length obj))))
 
-(define (add-shape-to-shape shape outer-shape)
-  (cond ((not (shape? shape))
+(define (shape-variant shape)
+  (if (not (shape? shape))
+      (error 'shape-variant "Argument 1 not a shape: `~a'" shape)
+      (car (cdr shape))))
+
+(define (add-shape-to-shape outer-shape shape)
+  (cond ((not (shape? outer-shape))
 	 (error 'add-shape-to-shape "Argument 1 not a shape: `~a'" shape))
 	((not (shape? shape))
 	 (error 'add-shape-to-shape "Argument 2 not a shape: `~a'" outer-shape))
 	(#t
 	 (let ((inner-args (list-ref outer-shape 2)))
-	   (replace-nth 2 outer-shape (add-last shape inner-args))))))
+	   (replace-nth 2 outer-shape (add-last inner-args shape))))))
 
-(define (add-transform-to-shape transform outer-shape)
-  (cond ((not (transform? transform))
-	 (error 'add-transform-to-shape "Argument 1 not a transform: `~a'" transform))
-	((not (shape? outer-shape))
-	 (error 'add-transform-to-shape "Argument 2 not a shape: `~a'" outer-shape))
+(define (add-transform-to-shape outer-shape transform)
+  (cond ((not (shape? outer-shape))
+	 (error 'add-transform-to-shape "Argument 1 not a shape: `~a'" outer-shape))
+	((not (transform? transform))
+	 (error 'add-transform-to-shape "Argument 2 not a transform: `~a'" transform))
 	(#t
 	 (let ((inner-args (list-ref outer-shape 2)))
-	   (replace-nth 2 outer-shape (add-last transform inner-args))))))
+	   (replace-nth 2 outer-shape (add-last inner-args transform))))))
 
 ;;; Transform primitives
 ;;; --------------------
@@ -79,6 +99,11 @@
        (= 3 (length obj))
        (eq? 'transform (car obj))))
 
+(define (transform-variant transform)
+  (if (not (transform? transform))
+      (error 'transform-variant "Argument 1 not a transform: `~a'" transform)
+      (car (cdr transform))))
+
 ;;; Arg-list primitives
 ;;; -------------------
 
@@ -89,10 +114,13 @@
   (and (list? obj)
        (eq? 'arg-list (car obj))))
 
-(define (arg-list-add-arg arg arg-list)
-  (if (not (arg-list? arg-list))
-      (error 'arg-list-add-arg "Argument 1 not an arg-list: `~a'" arg-list)
-      (add-last arg arg-list)))
+(define (arg-list-add-arg arg-list arg)
+  (cond ((not (arg-list? arg-list))
+	 (error 'arg-list-add-arg "Argument 1 not an arg-list: `~a'" arg-list))
+	((arg-list? arg)
+	 (error 'arg-list-add-arg "Attempting to insert arg-list into arg-list"))
+	(#t
+	 (add-last arg-list arg))))
 
 (define (arg-list-empty? arg-list)
   (if (not (arg-list? arg-list))
@@ -118,41 +146,56 @@
 ;;; Other stuff
 ;;; -----------
 
+(define (primitive-shape? shape)
+  (if (not (shape? shape))
+      (error 'primitive-shape? "Argument 1 not a shape: `~a'" shape)
+      (let ((variant (shape-variant shape)))
+	(or (eq? 'sphere variant)
+	    (eq? 'cylinder variant)
+	    (eq? 'box variant)))))
+
+(define (csg-shape? shape)
+  (if (not (shape? shape))
+      (error 'csg-shape? "Argument 1 not a shape: `~a'" shape)
+      (let ((variant (shape-variant shape)))
+	(or (eq? 'union variant)
+	    (eq? 'difference variant)
+	    (eq? 'intersection variant)))))
+
 (define (arg-list-merge arg-list1 arg-list2)
   (cond ((not (arg-list? arg-list1))
 	 (error 'arg-list-merge "Argument 1 not an arg-list: `~a'" arg-list1))
 	((not (arg-list? arg-list2))
 	 (error 'arg-list-merge "Argument 2 not an arg-list: `~a'" arg-list2))
+	((arg-list-empty? arg-list2)
+	 arg-list1)
 	(#t
-	 (if (arg-list-empty? arg-list2)
-	     arg-list1
-	     (arg-list-merge
-	      (arg-list-add-arg (arg-list-first arg-list2) arg-list1)
-	      (arg-list-rest arg-list2))))))
+	 (arg-list-merge
+	  (arg-list-add-arg arg-list1 (arg-list-first arg-list2))
+	  (arg-list-rest arg-list2)))))
 
-(define (add-arg-to-shape arg shape)
-  (cond ((not (shape? shape))
-	 (error 'add-arg-to-shape "Argument 2 is not a shape: `~a'" shape))
+(define (add-arg-to-shape outer-shape arg)
+  (cond ((not (shape? outer-shape))
+	 (error 'add-arg-to-shape "Argument 1 is not a shape: `~a'" outer-shape))
 	((shape? arg)
-	 (add-shape-to-shape arg shape))
+	 (add-shape-to-shape outer-shape arg))
 	((transform? arg)
-	 (add-transform-to-shape arg shape))
+	 (add-transform-to-shape outer-shape arg))
 	((arg-list? arg)
-	 (if (arg-list-empty? arg) shape
-	     (add-arg-to-shape (arg-list-rest arg)
-			       (add-arg-to-shape (arg-list-first arg) shape))))
+	 (if (arg-list-empty? arg) outer-shape
+	     (add-arg-to-shape (add-arg-to-shape outer-shape (arg-list-first arg))
+			       (arg-list-rest arg))))
 	(#t
-	 (error 'add-arg-to-shape "Argument 1: Unknown argument type: `~a'" arg))))
+	 (error 'add-arg-to-shape "Argument 2: Unknown argument type: `~a'" arg))))
 
 (define (generic-shape variant . args)
-  (cond ((not (symbol? variant))
-	 (error 'generic-shape "Argument 1 not a symbol: `~a'" variant))
-	(#t
-	 (let ((this-shape (make-shape variant)))
-	   (for-each
-	    (lambda (arg) (set! this-shape (add-arg-to-shape arg this-shape)))
-	    args)
-	   this-shape))))
+  (if (not (symbol? variant))
+      (error 'generic-shape "Argument 1 not a symbol: `~a'" variant)
+      (let ((this-shape (make-shape variant)))
+	(for-each
+	 (lambda (arg) (set! this-shape (add-arg-to-shape this-shape arg)))
+	 args)
+	this-shape)))
 
 (define (generic-vector-transformation variant . args)
   (cond ((not (symbol? variant))
@@ -176,8 +219,8 @@
 	(#t
 	 (make-generic-transform variant (car args)))))
 
-;;; User functions: control
-;;; -----------------------
+;;; User functions: control functions
+;;; ---------------------------------
 
 (define (insert . args)
   (cond ((null? args)
@@ -186,7 +229,7 @@
 	 (arg-list-merge (car args)
 			 (apply insert (cdr args))))
 	(#t
-	 (arg-list-merge (arg-list-add-arg (car args) (make-arg-list))
+	 (arg-list-merge (arg-list-add-arg (make-arg-list) (car args))
 			 (apply insert (cdr args))))))
 
 (define-syntax loop
@@ -263,6 +306,10 @@
    (loop i 0 (- pegs 1)
          (peg (translate (* i .5) 0 0)))
    (apply insert args)))
+
+;(define (keso . args)
+;  (union
+;   (insert args)))
 
 (display (lego 4))
 (display "\n")
