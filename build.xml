@@ -1,28 +1,39 @@
 <project default="jar">
-
-    <property name="jarfile" value="traci.jar" />
-
-    <target name="clean">
-        <delete dir="bin"/>
-        <delete file="${jarfile}"/>
-    </target>
-
-    <target name="build">
-        <mkdir dir="bin"/>
-        <javac srcdir="src" destdir="bin"/>
-    </target>
-
-    <target name="jar" depends="build">
-        <jar destfile="${jarfile}" basedir="bin">
-            <manifest>
-                <attribute name="Main-Class" value="traci.main.Main"/>
-            </manifest>
-        </jar>
-    </target>
-
-    <target name="run" depends="jar">
-        <java jar="${jarfile}" fork="true"/>
-    </target>
-
+  
+  <property name="jarfile" value="traci.jar" />
+  
+  <target name="clean">
+    <delete dir="bin" />
+    <delete dir="lib/sisc-1.6.16" />
+    <delete file="${jarfile}" />
+  </target>
+  
+  <target name="build">
+    <mkdir dir="bin" />
+    <javac srcdir="src" destdir="bin" />
+  </target>
+  
+  <target name="extract-libs">
+    <unjar src="lib/sisc-1.6.16.jar" dest="lib/sisc-1.6.16">
+      <patternset>
+	<exclude name="META-INF/" />
+      </patternset>
+    </unjar>
+  </target>
+  
+  <target name="jar" depends="build, extract-libs">
+    <jar destfile="${jarfile}">
+      <fileset dir="bin" />
+      <fileset dir="lib/sisc-1.6.16" />
+      <manifest>
+        <attribute name="Main-Class" value="traci.main.Main" />
+      </manifest>
+    </jar>
+  </target>
+  
+  <target name="run" depends="jar">
+    <java jar="${jarfile}" fork="true" />
+  </target>
+  
 </project>
 
