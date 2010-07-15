@@ -24,15 +24,14 @@
   <target name="jar" depends="build, extract-libs">
     <jar destfile="${jarfile}">
       <fileset dir="bin" />
+      <fileset dir="src" />
+      <fileset dir="scheme" />
+      <fileset dir="images" />
       <fileset dir="lib/sisc-1.6.16" />
       <manifest>
         <attribute name="Main-Class" value="traci.main.Main" />
       </manifest>
     </jar>
-  </target>
-  
-  <target name="run" depends="jar">
-    <java jar="${jarfile}" fork="true" />
   </target>
   
 </project>
