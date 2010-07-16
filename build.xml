@@ -1,33 +1,54 @@
 <project default="jar">
   
+  <property name="src" value="src" />
+  <property name="bin" value="bin" />
+  <property name="lib" value="lib" />
+  <property name="tmp" value="tmp" />
+  <property name="ext" value="external" />
   <property name="jarfile" value="traci.jar" />
+  <property name="sisc" value="sisc-1.16.6" />
   
   <target name="clean">
-    <delete dir="bin" />
-    <delete dir="lib/sisc-1.6.16" />
+    <delete dir="${bin}" />
+    <delete dir="${tmp}" />
     <delete file="${jarfile}" />
   </target>
   
-  <target name="build">
-    <mkdir dir="bin" />
-    <javac srcdir="src" destdir="bin" />
+  <target name="compile">
+    <mkdir dir="${bin}" />
+    <javac srcdir="${src}" destdir="${bin}" />
   </target>
   
-  <target name="extract-libs">
-    <unjar src="lib/sisc-1.6.16.jar" dest="lib/sisc-1.6.16">
+  <target name="unpack-external-libs">
+    <mkdir dir="${tmp}" />
+    <gunzip src="${ext}/${sisc}.tar.gz" dest="${tmp}/${sisc}.tar" />
+    <untar src="${tmp}/${sisc}.tar" dest="${tmp}" />
+    <copy file="${tmp}/${sisc}/sisc.shp" todir="scheme" verbose="true" overwrite="true" />
+    <copy file="${tmp}/${sisc}/sisc.jar" todir="${lib}/${sisc}" verbose="true" overwrite="true" />
+    <copy file="${tmp}/${sisc}/sisc-opt.jar" todir="${lib}/${sisc}" verbose="true" overwrite="true" />
+  </target>
+
+  <target name="unpack-jars" depends="unpack-external-libs">
+    <mkdir dir="${tmp}/${sisc}-jar" />
+    <unjar src="${lib}/${sisc}/sisc.jar" dest="${tmp}/${sisc}-jar">
+      <patternset>
+	<exclude name="META-INF/" />
+      </patternset>
+    </unjar>
+    <unjar src="${lib}/${sisc}/sisc-opt.jar" dest="${tmp}/${sisc}-jar">
       <patternset>
 	<exclude name="META-INF/" />
       </patternset>
     </unjar>
   </target>
-  
-  <target name="jar" depends="build, extract-libs">
+
+  <target name="jar" depends="compile, unpack-jars">
     <jar destfile="${jarfile}">
-      <fileset dir="bin" />
-      <fileset dir="src" />
-      <fileset dir="scheme" />
-      <fileset dir="images" />
-      <fileset dir="lib/sisc-1.6.16" />
+      <fileset dir="${bin}" />
+      <fileset dir="${src}" />
+      <fileset dir="." includes="scheme/" />
+      <fileset dir="." includes="images/" />
+      <fileset dir="${tmp}/${sisc}-jar" />
       <manifest>
         <attribute name="Main-Class" value="traci.main.Main" />
       </manifest>
@@ -35,4 +56,3 @@
   </target>
   
 </project>
-
