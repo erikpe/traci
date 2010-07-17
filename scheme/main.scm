@@ -1,3 +1,3 @@
-(load "primitive.scm")
-(load "helper.scm")
-(load "user.scm")
+(load "scheme/primitive.scm")
+(load "scheme/helper.scm")
+(load "scheme/user.scm")
