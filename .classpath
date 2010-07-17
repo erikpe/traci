@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/sisc-1.6.16.jar"/>
+	<classpathentry kind="lib" path="lib/sisc-1.16.6/sisc.jar"/>
+	<classpathentry kind="lib" path="lib/sisc-1.16.6/sisc-opt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
