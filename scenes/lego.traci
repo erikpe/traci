@@ -1,0 +1,24 @@
+(define epsilon 0.0001)
+
+(define (peg . args)
+  (cylinder
+   (scale .3 .1 .3)
+   (translate .25 .6 .25)
+   (apply insert args)))
+
+(define (hole . args)
+  (cylinder
+   (scale .3 (+ (* 2 epsilon) .5) .3)
+   (rotx 90)
+   (translate .5 .3 (- epsilon))
+   (apply insert args)))
+
+(define (lego pegs . args)
+  (union
+   (difference
+    (box (scale (/ pegs 2.0) .6 .5))
+    (loop i 0 (- pegs 2)
+          (hole (translate (* i .5) 0 0))))
+   (loop i 0 (- pegs 1)
+         (peg (translate (* i .5) 0 0)))
+   (apply insert args)))
