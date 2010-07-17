@@ -1,17 +1,19 @@
-<project default="jar">
+<project default="standalone-jar">
   
+  <property name="version" value="0.0.1" />
   <property name="src" value="src" />
   <property name="bin" value="bin" />
   <property name="lib" value="lib" />
   <property name="tmp" value="tmp" />
-  <property name="ext" value="external" />
-  <property name="jarfile" value="traci.jar" />
   <property name="sisc" value="sisc-1.16.6" />
+  <property name="jarfile" value="traci-${version}.jar" />
+  <property name="src-distfile" value="traci-${version}.tar.gz" />
   
   <target name="clean">
     <delete dir="${bin}" />
     <delete dir="${tmp}" />
     <delete file="${jarfile}" />
+    <delete file="${src-distfile}" />
   </target>
   
   <target name="compile">
@@ -19,40 +21,38 @@
     <javac srcdir="${src}" destdir="${bin}" />
   </target>
   
-  <target name="unpack-external-libs">
-    <mkdir dir="${tmp}" />
-    <gunzip src="${ext}/${sisc}.tar.gz" dest="${tmp}/${sisc}.tar" />
-    <untar src="${tmp}/${sisc}.tar" dest="${tmp}" />
-    <copy file="${tmp}/${sisc}/sisc.shp" todir="scheme" verbose="true" overwrite="true" />
-    <copy file="${tmp}/${sisc}/sisc.jar" todir="${lib}/${sisc}" verbose="true" overwrite="true" />
-    <copy file="${tmp}/${sisc}/sisc-opt.jar" todir="${lib}/${sisc}" verbose="true" overwrite="true" />
-  </target>
-
-  <target name="unpack-jars" depends="unpack-external-libs">
-    <mkdir dir="${tmp}/${sisc}-jar" />
-    <unjar src="${lib}/${sisc}/sisc.jar" dest="${tmp}/${sisc}-jar">
+  <target name="unpack-lib-jars">
+    <mkdir dir="${tmp}/${sisc}" />
+    <unjar src="${lib}/${sisc}/sisc.jar" dest="${tmp}/${sisc}">
       <patternset>
 	<exclude name="META-INF/" />
       </patternset>
     </unjar>
-    <unjar src="${lib}/${sisc}/sisc-opt.jar" dest="${tmp}/${sisc}-jar">
+    <unjar src="${lib}/${sisc}/sisc-opt.jar" dest="${tmp}/${sisc}">
       <patternset>
 	<exclude name="META-INF/" />
       </patternset>
     </unjar>
   </target>
-
-  <target name="jar" depends="compile, unpack-jars">
+  
+  <target name="standalone-jar" depends="compile, unpack-lib-jars">
     <jar destfile="${jarfile}">
       <fileset dir="${bin}" />
       <fileset dir="${src}" />
       <fileset dir="." includes="scheme/" />
       <fileset dir="." includes="images/" />
-      <fileset dir="${tmp}/${sisc}-jar" />
+      <fileset dir="${tmp}/${sisc}" />
       <manifest>
         <attribute name="Main-Class" value="traci.main.Main" />
       </manifest>
     </jar>
+  </target>
+  
+  <target name="src-dist">
+    <tar destfile="${src-distfile}" compression="gzip">
+      <tarfileset dir="." prefix="traci-${version}"
+		  includes="src/, images/, scheme/, lib/, build.xml, README, COPYING" />
+    </tar>
   </target>
   
 </project>

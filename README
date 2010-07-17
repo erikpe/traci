@@ -1,14 +1,5 @@
 Build
 =====
 
-Traci is built by running ant as:
-$ ant jar
-
-Running
-=======
-
-Traci can be run either manually as:
-$ java -jar traci.jar
-
-or with ant as:
-$ ant run
+Traci is built by running ant:
+$ ant
