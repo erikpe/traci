@@ -32,25 +32,25 @@
       (difference? shape)
       (box? shape)))
 
-(define (tranlate? obj)
+(define (translate? obj)
   (and (transform? obj)
-       (eq 'translate (transform-variant obj))))
+       (eq? 'translate (transform-variant obj))))
 
 (define (scale? obj)
   (and (transform? obj)
-       (eq 'scale (transform-variant obj))))
+       (eq? 'scale (transform-variant obj))))
 
 (define (rotx? obj)
   (and (transform? obj)
-       (eq 'rotx (transform-variant obj))))
+       (eq? 'rotx (transform-variant obj))))
 
 (define (roty? obj)
   (and (transform? obj)
-       (eq 'roty (transform-variant obj))))
+       (eq? 'roty (transform-variant obj))))
 
 (define (rotz? obj)
   (and (transform? obj)
-       (eq 'rotz (transform-variant obj))))
+       (eq? 'rotz (transform-variant obj))))
 
 (define (vector-transform? obj)
   (or (translate? obj)

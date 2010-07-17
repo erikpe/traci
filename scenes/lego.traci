@@ -22,3 +22,8 @@
    (loop i 0 (- pegs 1)
          (peg (translate (* i .5) 0 0)))
    (apply insert args)))
+
+(define (rec level)
+  (if (= 1 level)
+      (sphere (scale 1 2 3))
+      (union (rec (- level 1)) (rec (- level 1)) (rotx 23))))
