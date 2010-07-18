@@ -1,15 +1,15 @@
-(define epsilon 0.0001)
+(define epsilon 0.001)
 
 (define (peg . args)
   (cylinder
-   (scale .3 .1 .3)
+   (scale .15 .1 .15)
    (translate .25 .6 .25)
    (apply insert args)))
 
 (define (hole . args)
   (cylinder
-   (scale .3 (+ (* 2 epsilon) .5) .3)
-   (rotx 90)
+   (scale .15 (+ (* 2 epsilon) .5) .15)
+   (rotx (/ 3.1415926535898 2))
    (translate .5 .3 (- epsilon))
    (apply insert args)))
 
@@ -23,7 +23,22 @@
          (peg (translate (* i .5) 0 0)))
    (apply insert args)))
 
-(define (rec level)
-  (if (= 1 level)
-      (sphere (scale 1 2 3))
-      (union (rec (- level 1)) (rec (- level 1)) (rotx 23))))
+(define (lego2 pegs)
+  (union
+    (loop i 0 (- pegs 2)
+      (hole (translate (* i .5) 0 0)))))
+      
+(define (round-cube x y z r)
+  (let ((r2 (* 2 r))
+        (pi 3.1415926535898))
+    (union
+      (box (scale x (- y r2) (- z r2))
+           (translate 0 r r))
+      (box (scale (- x r2) y (- z r2))
+           (translate r 0 r))
+      (box (scale (- x r2) (- y r2) z)
+           (translate r r 0))
+      (cylinder (scale r (- x r2) r)
+                (rotz (- 0 (/ pi 2)))
+                (translate r (- y r) (- z r))))))
+           

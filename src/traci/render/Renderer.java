@@ -160,8 +160,8 @@ public class Renderer implements BlockRenderer
                     lookX = lookX * xx;
                     lookY = lookY * yy;
                     
-                    final Vector lookAt = Vector.make(lookX, lookY, -1.0).mul(
-                            camera.focalDist);
+                    final Vector lookAt = Vector.make(lookX, lookY, -1);//.mul(
+//                            camera.focalDist);
                     final Vector location;
                     
                     if (settings.focalBlurEnabled)
@@ -173,7 +173,7 @@ public class Renderer implements BlockRenderer
                         final double apertureY = r * Math.sin(phi);
                         
                         location = Vector.make(camera.aperture * apertureX,
-                                camera.aperture * apertureY, 0);
+                                camera.aperture * apertureY, -1);
                     }
                     else
                     {

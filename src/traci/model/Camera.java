@@ -7,7 +7,7 @@ import traci.math.Vector;
 
 public class Camera extends TransformableHelper implements Transformable
 {
-    public final double fov = (50.0 / 360.0) * Math.PI * 2.0;
+    public final double fov = (15.0 / 360.0) * Math.PI * 2.0;
     
     public Transformation transformation;
     
@@ -33,24 +33,31 @@ public class Camera extends TransformableHelper implements Transformable
     private void calcTransformation(final Vector location, final Vector lookAt,
             final Vector up)
     {
-        Vector cam = Vector.UNIT_NEG_Z;
+        final Vector dir = lookAt.sub(location).normalize();
         
-        Vector u = lookAt.sub(location);
+        final Vector origLocation = Vector.ORIGO;
+        final Vector origLookAt = Vector.UNIT_NEG_Z;
+        final Vector origDir = origLookAt.sub(origLocation).normalize();
         
-        final Vector u_XZ = Vector.make(u.x(), 0, u.z()).normalize();
-        final double beta = Math.atan2(u_XZ.x(), u_XZ.z())
-                - Math.atan2(cam.x(), cam.z());
+        final Vector dir_XZ = Vector.make(dir.x(), 0, dir.z()).normalize();
+        final double beta = Math.atan2(dir_XZ.x(), dir_XZ.z())
+                - Math.atan2(origDir.x(), origDir.z());
         
+        Transformation tmpTr1 = Transformation.rotateY(beta);
+        //Vector foo = tmpTr1.dir(origDir);
+        Vector invRotDir = tmpTr1.dirInv(dir);
+        
+        final Vector dir_YZ = Vector.make(0, invRotDir.y(), invRotDir.z())
+                .normalize();
+        final double alpha = Math.atan2(dir_YZ.y(), dir_YZ.z())
+                - Math.atan2(origDir.y(), origDir.z());
+        
+        rotateX(-alpha);
         rotateY(beta);
-        
-        cam = transformation.dir(cam);
-        
-        final Vector u_YZ = Vector.make(0, u.y(), u.z()).normalize();
-        final double alpha = Math.atan2(u_YZ.y(), u_YZ.z())
-                - Math.atan2(cam.y(), cam.z());
-        
-        rotateX(alpha);
         translate(location);
+        
+        //foo = transformation.point(Vector.ORIGO);
+        //Vector bar = transformation.dir(Vector.UNIT_NEG_Z);
     }
     
     @Override

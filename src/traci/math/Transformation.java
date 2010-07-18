@@ -12,7 +12,7 @@ public class Transformation
     private Transformation(final Matrix mat, final Matrix invMat)
     {
         this.mat = mat;
-        this.invMat = mat;
+        this.invMat = invMat;
     }
     
     public static Transformation make(final Matrix mat, final Matrix invMat)

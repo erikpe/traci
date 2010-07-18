@@ -106,6 +106,25 @@ public class Matrix
         return res;
     }
     
+    public static Matrix make(final Vector v0, final Vector v1, final Vector v2)
+    {
+        final Matrix res = newEye();
+        
+        res.data[0][0] = v0.x;
+        res.data[0][1] = v0.y;
+        res.data[0][2] = v0.z;
+        
+        res.data[1][0] = v1.x;
+        res.data[1][1] = v1.y;
+        res.data[1][2] = v1.z;
+        
+        res.data[2][0] = v2.x;
+        res.data[2][1] = v2.y;
+        res.data[2][2] = v2.z;
+        
+        return res;
+    }
+    
     public Matrix mul(final Matrix mat)
     {
         final Matrix res = newZero();

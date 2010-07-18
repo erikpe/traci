@@ -61,25 +61,26 @@ public class TestSISC
         
         loadSchemeFile("scheme/main.scm", interpreter);
         loadSchemeFile("scheme/java.scm", interpreter);
-        loadSchemeFile("scenes/test.traci", interpreter);
-        //loadSchemeFile("scenes/lego.traci", interpreter);
+        //loadSchemeFile("scenes/test.traci", interpreter);
+        loadSchemeFile("scenes/lego.traci", interpreter);
         
         start = System.currentTimeMillis();
-        Value val = interpreter.eval("(->java (hej))");
+        //Value val = interpreter.eval("(->java (lego 4))");
+        Value val = interpreter.eval("(->java (round-cube 2 .6 .5 .05))");
         stop = System.currentTimeMillis();
         System.out.println("Creation of scene: " + (stop - start) + " ms.");
         
-        final PointLight light = new PointLight(Vector.make(2, 5, -30), Color.WHITE.mul(30*30));
+        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*30));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.RED.mul(50));
         
-        final Vector camLocation = Vector.make(-5, 0, -15);
-        final Vector camLookAt = Vector.make(0, 0, 0);
+        final Vector camLocation = Vector.make(-5, 5, 15);
+        final Vector camLookAt = Vector.make(1, 0, 0);
         final Camera cam = new Camera(camLocation, camLookAt, null);
         final Scene scene = new Scene((Shape) ((JavaObject) val).get(), cam);
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, new Settings(), multiDrawArea, 3);
+        Renderer.renderScene(scene, new Settings(), multiDrawArea, 8);
         
         start = 0;
      }
