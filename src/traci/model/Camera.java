@@ -24,6 +24,6 @@ public class Camera extends TransformableHelper implements Transformable
     @Override
     public void transform(final Transformation tr)
     {
-        transformation = transformation.transform(tr);
+        transformation = transformation.compose(tr);
     }
 }

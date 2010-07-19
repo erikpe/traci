@@ -14,7 +14,7 @@ public abstract class NonUniform extends Pigment
     @Override
     public void transform(Transformation tr)
     {
-        transformation = transformation.transform(tr);
+        transformation = transformation.compose(tr);
     }
     
     @Override

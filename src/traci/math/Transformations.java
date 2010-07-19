@@ -2,8 +2,8 @@ package traci.math;
 
 public class Transformations
 {
-    private static final Transformation IDENTITY = Transformation.make(Matrix
-            .eye(), Matrix.eye());
+    private static final Transformation IDENTITY = make(Matrix.eye(), Matrix
+            .eye());
     
     private static Transformation make(final Matrix mat, final Matrix invMat)
     {
@@ -48,63 +48,52 @@ public class Transformations
         final Vector yzVec = Vector.make(0, vecNorm.y(), vecNorm.z());
         final double yzLen = yzVec.length();
         
-        final Transformation rotX;
-        
-        if (yzLen > 1.0e-15)
-        {
-            final double cosAlpha = vecNorm.z() / yzLen;
-            final double sinAlpha = vecNorm.y() / yzLen;
-
-            rotX = make(Matrix.rotx(sinAlpha, cosAlpha), Matrix.rotx(-sinAlpha,
-                    cosAlpha));
-        }
-        else
-        {
-            rotX = identity();
-        }
-        
-        final double cosBeta = yzLen;
-        final double sinBeta = -vecNorm.x();
-        
-        final Transformation rotY = make(Matrix.roty(sinBeta, cosBeta),
-                Matrix.roty(-sinBeta, cosBeta));
-        
-        return rotX.transform(rotY);
-    }
-    
-    public static Transformation rotZToVec(final Vector vec)
-    {
-        final Vector vecNorm = vec.normalize();
-        final Vector yzVec = Vector.make(0, vecNorm.y(), vecNorm.z());
-        final double yzLen = yzVec.length();
-        
-        final Transformation rotX;
+        Transformation res = identity();
         
         if (yzLen > 1.0e-15)
         {
             final double cosAlpha = vecNorm.z() / yzLen;
             final double sinAlpha = vecNorm.y() / yzLen;
             
-            rotX = make(Matrix.rotx(-sinAlpha, cosAlpha), Matrix.rotx(sinAlpha,
-                    cosAlpha));
-        }
-        else
-        {
-            rotX = identity();
+            res = res.compose(make(Matrix.rotx(sinAlpha, cosAlpha), Matrix
+                    .rotx(-sinAlpha, cosAlpha)));
         }
         
         final double cosBeta = yzLen;
         final double sinBeta = -vecNorm.x();
         
-        final Transformation rotY = make(Matrix.roty(-sinBeta, cosBeta),
-                Matrix.roty(sinBeta, cosBeta));
+        res = res.compose(make(Matrix.roty(sinBeta, cosBeta), Matrix.roty(
+                -sinBeta, cosBeta)));
         
-        return rotY.transform(rotX);
+        return res;
     }
     
-    public static Transformation rotVecToVec(final Vector vec1, final Vector vec2)
+    public static Transformation rotZToVec(final Vector vec)
     {
-        return rotVecToZ(vec1).transform(rotZToVec(vec2));
+        return rotVecToZ(vec).invert();
+    }
+    
+    public static Transformation rotVecToVec(final Vector vec1,
+            final Vector vec2)
+    {
+        return rotVecToZ(vec1).compose(rotZToVec(vec2));
+    }
+    
+    public static Transformation rotAround(final double theta,
+            final Vector vec1, final Vector vec2)
+    {
+        final Vector dir = vec2.sub(vec1).normalize();
+        
+        Transformation rotToZ = rotVecToZ(dir);
+        Transformation res = identity();
+        
+        res.compose(translate(vec1.neg()));
+        res.compose(rotToZ);
+        res.compose(rotz(theta));
+        res.compose(rotToZ.invert());
+        res.compose(translate(vec1));
+        
+        return res;
     }
     
     public static Transformation camera(final Vector location,
@@ -114,9 +103,11 @@ public class Transformations
         final Vector right = forward.cross(up).normalize();
         up = right.cross(forward).normalize();
         
-        Transformation res = Transformations.scale(Vector.make(1, 1, -1));
-        res = res.transform(make(Matrix.make(right, up, forward), Matrix.eye()));
-        res = res.transform(translate(location));
+        Transformation res = identity();
+        
+        res = res.compose(scale(Vector.make(1, 1, -1)));
+        res = res.compose(make(Matrix.make(right, up, forward), Matrix.eye()));
+        res = res.compose(translate(location));
         
         return res;
     }

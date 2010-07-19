@@ -32,6 +32,6 @@ public abstract class Primitive extends Shape
     public void transform(final Transformation tr)
     {
         super.transform(tr);
-        transformation = transformation.transform(tr);
+        transformation = transformation.compose(tr);
     }
 }

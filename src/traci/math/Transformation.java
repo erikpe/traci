@@ -17,12 +17,17 @@ public class Transformation
         return new Transformation(mat, invMat);
     }
     
-    public Transformation transform(final Transformation transformation)
+    public Transformation compose(final Transformation transformation)
     {
-        Matrix newMat = transformation.mat.mul(mat);
-        Matrix newInvMat = invMat.mul(transformation.invMat);
+        final Matrix newMat = transformation.mat.mul(mat);
+        final Matrix newInvMat = invMat.mul(transformation.invMat);
         
         return make(newMat, newInvMat);
+    }
+    
+    public Transformation invert()
+    {
+        return make(invMat, mat);
     }
     
     public Vector point(final Vector vec)
