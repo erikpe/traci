@@ -1,6 +1,5 @@
 package traci.render;
 
-import traci.math.Matrix;
 import traci.math.ObjectPool;
 import traci.math.Vector;
 import traci.model.shape.primitive.Primitive;
@@ -77,11 +76,6 @@ public class Point
     public static Point farest(final Point p0, final Point p1)
     {
         return (p0.dist > p1.dist ? p0 : p1);
-    }
-    
-    public void transformNormal(final Matrix mat)
-    {
-        normal = mat.mul(normal);
     }
     
     public Point invNormal()

@@ -1,6 +1,6 @@
 package traci.model.shape.primitive;
 
-import traci.math.Transformation;
+import traci.math.Transformations;
 import traci.math.Vector;
 import traci.model.material.Material;
 import traci.render.Interval;
@@ -26,7 +26,7 @@ public class Cylinder extends Primitive
         final double length = v1.sub(v0).length();
         
         scale(radius, length, radius);
-        transform(Transformation.rotVecToVec(Vector.UNIT_Y, v1.sub(v0)));
+        transform(Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0)));
         translate(v0);
     }
     

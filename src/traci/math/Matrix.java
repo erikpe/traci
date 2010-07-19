@@ -28,17 +28,17 @@ public class Matrix
         return new Matrix();
     }
     
-    public static Matrix eye()
+    static Matrix eye()
     {
         return EYE;
     }
     
-    public static Matrix rotX(final double theta)
+    static Matrix rotx(final double theta)
     {
-        return rotX(Math.sin(theta), Math.cos(theta));
+        return rotx(Math.sin(theta), Math.cos(theta));
     }
     
-    public static Matrix rotX(final double sinTheta, final double cosTheta)
+    static Matrix rotx(final double sinTheta, final double cosTheta)
     {
         final Matrix res = newEye();
         
@@ -50,12 +50,12 @@ public class Matrix
         return res;
     }
     
-    public static Matrix rotY(final double theta)
+    static Matrix roty(final double theta)
     {
-        return rotY(Math.sin(theta), Math.cos(theta));
+        return roty(Math.sin(theta), Math.cos(theta));
     }
     
-    public static Matrix rotY(final double sinTheta, final double cosTheta)
+    static Matrix roty(final double sinTheta, final double cosTheta)
     {
         final Matrix res = newEye();
         
@@ -67,12 +67,12 @@ public class Matrix
         return res;
     }
     
-    public static Matrix rotZ(final double theta)
+    static Matrix rotz(final double theta)
     {
-        return rotZ(Math.sin(theta), Math.cos(theta));
+        return rotz(Math.sin(theta), Math.cos(theta));
     }
     
-    public static Matrix rotZ(final double sinTheta, final double cosTheta)
+    static Matrix rotz(final double sinTheta, final double cosTheta)
     {
         final Matrix res = newEye();
         
@@ -84,7 +84,7 @@ public class Matrix
         return res;
     }
     
-    public static Matrix scale(final Vector scale)
+    static Matrix scale(final Vector scale)
     {
         final Matrix res = newEye();
         
@@ -95,7 +95,7 @@ public class Matrix
         return res;
     }
     
-    public static Matrix translate(final Vector translate)
+    static Matrix translate(final Vector translate)
     {
         final Matrix res = newEye();
         
@@ -106,7 +106,7 @@ public class Matrix
         return res;
     }
     
-    public static Matrix make(final Vector v0, final Vector v1, final Vector v2)
+    static Matrix make(final Vector v0, final Vector v1, final Vector v2)
     {
         final Matrix res = newEye();
         
@@ -125,7 +125,7 @@ public class Matrix
         return res;
     }
     
-    public Matrix mul(final Matrix mat)
+    Matrix mul(final Matrix mat)
     {
         final Matrix res = newZero();
         
@@ -143,7 +143,7 @@ public class Matrix
         return res;
     }
     
-    public Vector mul(final Vector vec)
+    Vector mul(final Vector vec)
     {
         final double x = vec.x * data[0][0] +
                          vec.y * data[0][1] +
@@ -163,7 +163,7 @@ public class Matrix
         return Vector.make(x, y, z);
     }
     
-    protected Vector mulDir(final Vector vec)
+    Vector mulDir(final Vector vec)
     {
         final double x = vec.x * data[0][0] +
                          vec.y * data[0][1] +
@@ -180,7 +180,7 @@ public class Matrix
         return Vector.make(x, y, z);
     }
     
-    protected Vector mulNormal(final Vector vec)
+    Vector mulNormal(final Vector vec)
     {
         final double x = vec.x * data[0][0] +
                          vec.y * data[1][0] +

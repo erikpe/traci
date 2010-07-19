@@ -4,7 +4,6 @@ import traci.gui.DynamicJPanelDrawArea;
 import traci.gui.MainWindow;
 import traci.gui.MultiDrawArea;
 import traci.gui.PngDrawArea;
-import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
@@ -37,7 +36,7 @@ public class Main
         multiDrawArea.add(visibleDrawArea);
         
         final Plane plane = new Plane();
-        plane.translateY(-1);
+        plane.translatey(-1);
         plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
         plane.material.getPigment().translate(-.5, 0, -.5);
         plane.material.getPigment().scale(5);
@@ -46,23 +45,23 @@ public class Main
         origoS.material.setColor(Color.WHITE);
         
         final Sphere left = new Sphere();
-        left.translateX(-5);
+        left.translatex(-5);
         left.material.setColor(Color.CYAN);
         
         final Sphere right = new Sphere();
-        right.translateX(5);
+        right.translatex(5);
         right.material.setColor(Color.YELLOW);
         
         final Sphere near = new Sphere();
-        near.translateZ(5);
+        near.translatez(5);
         near.material.setColor(Color.GREEN);
         
         final Sphere far = new Sphere();
-        far.translateZ(-5);
+        far.translatez(-5);
         far.material.setColor(Color.RED);
         
         final Cylinder cyl = new Cylinder();
-        cyl.translateX(-2.5);
+        cyl.translatex(-2.5);
         
         final Cylinder cyl2 = new Cylinder(.5, Vector.make(-5, 1, 0), Vector.make(5, 1, 0));
         
@@ -72,7 +71,7 @@ public class Main
         spheres.add(right);
         spheres.add(near);
         spheres.add(far);
-        spheres.rotateZ(Math.PI / 16);
+        spheres.rotz(Math.PI / 16);
         
         final Union union = new Union();
         union.add(plane);
@@ -82,7 +81,7 @@ public class Main
         
         //final Vector camLocation = Vector.make(100, 200, 300);
         //final Vector camLookAt = Vector.make(101, 203, 309);
-        final Vector camLocation = Vector.make(-1, 55, 30);
+        final Vector camLocation = Vector.make(-1, 15, 30);
         final Vector camLookAt = Vector.make(0, 0, 0);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.make(1, 1, 0));
         

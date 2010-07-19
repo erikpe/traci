@@ -1,6 +1,7 @@
 package traci.model.shape.primitive;
 
 import traci.math.Transformation;
+import traci.math.Transformations;
 import traci.math.Vector;
 import traci.model.material.Material;
 import traci.model.shape.Shape;
@@ -13,7 +14,7 @@ public abstract class Primitive extends Shape
     public Primitive(final Material material)
     {
         super(material);
-        transformation = Transformation.identity();
+        transformation = Transformations.identity();
     }
     
     public abstract Ray primitiveShootRay(final Vector p, final Vector dir);

@@ -3,6 +3,7 @@ package traci.model;
 import traci.math.Transformable;
 import traci.math.TransformableHelper;
 import traci.math.Transformation;
+import traci.math.Transformations;
 import traci.math.Vector;
 
 public class Camera extends TransformableHelper implements Transformable
@@ -15,45 +16,9 @@ public class Camera extends TransformableHelper implements Transformable
     
     public final double aperture = 0.15;
     
-//  public Camera(final Vector location, final Vector lookAt, final Vector up)
-//  {
-//      transformation = Transformation.identity();
-//      calcTransformation(location, lookAt, up);
-//  }
-  
     public Camera(final Vector location, final Vector lookAt, final Vector up)
     {
-        transformation = Transformation.camera(location, lookAt, up);
-    }
-  
-    /**
-     * The initial camera position is in origo, and it is directed towards
-     * {@link Vector.UNIT_NEG_Z} with {@link Vector.UNIT_Y} as up.
-     */
-    private void calcTransformation(final Vector location, final Vector lookAt,
-            final Vector up)
-    {
-        final Vector dir = lookAt.sub(location).normalize();
-        
-        final Vector origLocation = Vector.ORIGO;
-        final Vector origLookAt = Vector.UNIT_NEG_Z;
-        final Vector origDir = origLookAt.sub(origLocation).normalize();
-        
-        final Vector dir_XZ = Vector.make(dir.x(), 0, dir.z()).normalize();
-        final double beta = Math.atan2(dir_XZ.x(), dir_XZ.z())
-                - Math.atan2(origDir.x(), origDir.z());
-        
-        Transformation tmpTr1 = Transformation.rotateY(beta);
-        Vector invRotDir = tmpTr1.dirInv(dir);
-        
-        final Vector dir_YZ = Vector.make(0, invRotDir.y(), invRotDir.z())
-                .normalize();
-        final double alpha = Math.atan2(dir_YZ.y(), dir_YZ.z())
-                - Math.atan2(origDir.y(), origDir.z());
-        
-        rotateX(-alpha);
-        rotateY(beta);
-        translate(location);
+        transformation = Transformations.camera(location, lookAt, up);
     }
     
     @Override

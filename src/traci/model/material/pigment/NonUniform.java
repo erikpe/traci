@@ -1,12 +1,13 @@
 package traci.model.material.pigment;
 
 import traci.math.Transformation;
+import traci.math.Transformations;
 import traci.math.Vector;
 import traci.model.material.Color;
 
 public abstract class NonUniform extends Pigment
 {
-    private Transformation transformation = Transformation.identity();
+    private Transformation transformation = Transformations.identity();
     
     protected abstract Color getColorTransformed(final Vector p);
     
