@@ -4,6 +4,7 @@ import traci.gui.DynamicJPanelDrawArea;
 import traci.gui.MainWindow;
 import traci.gui.MultiDrawArea;
 import traci.gui.PngDrawArea;
+import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
@@ -21,6 +22,8 @@ public class Main
 {
     public static void main(final String[] args)
     {
+        //Transformation.camera(Vector.ORIGO, Vector.make(1, 2, 3), Vector.UNIT_Y);
+        
         final int width = 1024;
         final int height = 768;
         final String filename = "out.png";
@@ -61,6 +64,8 @@ public class Main
         final Cylinder cyl = new Cylinder();
         cyl.translateX(-2.5);
         
+        final Cylinder cyl2 = new Cylinder(.5, Vector.make(-5, 1, 0), Vector.make(5, 1, 0));
+        
         final Union spheres = new Union();
         spheres.add(origoS);
         spheres.add(left);
@@ -73,12 +78,13 @@ public class Main
         union.add(plane);
         union.add(spheres);
         union.add(cyl);
+        union.add(cyl2);
         
         //final Vector camLocation = Vector.make(100, 200, 300);
         //final Vector camLookAt = Vector.make(101, 203, 309);
-        final Vector camLocation = Vector.make(-1, 5, 30);
-        final Vector camLookAt = Vector.make(0, -3, 0);
-        final Camera cam = new Camera(camLocation, camLookAt, null);
+        final Vector camLocation = Vector.make(-1, 55, 30);
+        final Vector camLookAt = Vector.make(0, 0, 0);
+        final Camera cam = new Camera(camLocation, camLookAt, Vector.make(1, 1, 0));
         
         final Scene scene = new Scene(union, cam);
         final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*30));

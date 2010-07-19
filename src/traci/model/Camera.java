@@ -7,7 +7,7 @@ import traci.math.Vector;
 
 public class Camera extends TransformableHelper implements Transformable
 {
-    public final double fov = (15.0 / 360.0) * Math.PI * 2.0;
+    public final double fov = (50.0 / 360.0) * Math.PI * 2.0;
     
     public Transformation transformation;
     
@@ -15,17 +15,17 @@ public class Camera extends TransformableHelper implements Transformable
     
     public final double aperture = 0.15;
     
+//  public Camera(final Vector location, final Vector lookAt, final Vector up)
+//  {
+//      transformation = Transformation.identity();
+//      calcTransformation(location, lookAt, up);
+//  }
+  
     public Camera(final Vector location, final Vector lookAt, final Vector up)
     {
-        transformation = Transformation.identity();
-        calcTransformation(location, lookAt, up);
+        transformation = Transformation.camera(location, lookAt, up);
     }
-    
-    public static boolean isCamera(final String str)
-    {
-        return str.equals("camera");
-    }
-    
+  
     /**
      * The initial camera position is in origo, and it is directed towards
      * {@link Vector.UNIT_NEG_Z} with {@link Vector.UNIT_Y} as up.
@@ -44,7 +44,6 @@ public class Camera extends TransformableHelper implements Transformable
                 - Math.atan2(origDir.x(), origDir.z());
         
         Transformation tmpTr1 = Transformation.rotateY(beta);
-        //Vector foo = tmpTr1.dir(origDir);
         Vector invRotDir = tmpTr1.dirInv(dir);
         
         final Vector dir_YZ = Vector.make(0, invRotDir.y(), invRotDir.z())
@@ -55,9 +54,6 @@ public class Camera extends TransformableHelper implements Transformable
         rotateX(-alpha);
         rotateY(beta);
         translate(location);
-        
-        //foo = transformation.point(Vector.ORIGO);
-        //Vector bar = transformation.dir(Vector.UNIT_NEG_Z);
     }
     
     @Override

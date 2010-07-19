@@ -1,5 +1,6 @@
 package traci.model.shape.primitive;
 
+import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.material.Material;
 import traci.render.Interval;
@@ -16,6 +17,17 @@ public class Cylinder extends Primitive
     public Cylinder(final Material material)
     {
         super(material);
+    }
+    
+    public Cylinder(final double radius, final Vector v0, final Vector v1)
+    {
+        this();
+        
+        final double length = v1.sub(v0).length();
+        
+        scale(radius, length, radius);
+        transform(Transformation.rotVecToVec(Vector.UNIT_Y, v1.sub(v0)));
+        translate(v0);
     }
     
     /**
@@ -46,10 +58,10 @@ public class Cylinder extends Primitive
         final double b = (p.x() * p.x() + p.z() * p.z() - 1)
                 / (dir.x() * dir.x() + dir.z() * dir.z());
         
-        if ((a*a)/4 - b > 0)
+        if ((a * a) / 4 - b > 0)
         {
-            final double t0 = -a/2 - Math.sqrt((a*a)/4 - b);
-            final double t1 = -a/2 + Math.sqrt((a*a)/4 - b);
+            final double t0 = -a / 2 - Math.sqrt((a * a) / 4 - b);
+            final double t1 = -a / 2 + Math.sqrt((a * a) / 4 - b);
             
             final Point p0 = Point.make(t0, this, Vector.make(p.x(), 0, p.z())
                     .add(Vector.make(dir.x(), 0, dir.z()).mul(t0)));
