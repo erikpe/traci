@@ -1,4 +1,5 @@
 (define epsilon 0.001)
+(define pi 3.1415926535898)
 
 (define (peg . args)
   (cylinder
@@ -29,8 +30,7 @@
       (hole (translate (* i .5) 0 0)))))
       
 (define (round-cube x y z r)
-  (let ((r2 (* 2 r))
-        (pi 3.1415926535898))
+  (let ((r2 (* 2 r)))
     (union
       (box (scale x (- y r2) (- z r2))
            (translate 0 r r))
@@ -38,7 +38,6 @@
            (translate r 0 r))
       (box (scale (- x r2) (- y r2) z)
            (translate r r 0))
-      (cylinder (scale r (- x r2) r)
-                (rotz (- 0 (/ pi 2)))
-                (translate r (- y r) (- z r))))))
-           
+      (cylinder r (vec r (- y r) (- z r))
+                  (vec (- x r) (- y r) (- z r))))))
+       

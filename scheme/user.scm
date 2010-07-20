@@ -23,22 +23,27 @@
 ;;; ----------------------
 
 (define (union . args)
-  (apply generic-shape 'union args))
+  (generic-shape 'union '() args))
 
 (define (difference . args)
-  (apply generic-shape 'difference args))
+  (generic-shape 'difference '() args))
 
 (define (intersection . args)
-  (apply generic-shape 'intersection args))
+  (generic-shape 'intersection '() args))
 
 (define (sphere . args)
-  (apply generic-shape 'sphere args))
+  (generic-shape 'sphere '() args))
 
 (define (cylinder . args)
-  (apply generic-shape 'cylinder args))
+  (if (and (>= (length args) 3)
+	   (number? (list-ref args 0))
+	   (vec? (list-ref args 1))
+	   (vec? (list-ref args 2)))
+      (generic-shape 'cylinder (first-n args 3) (rest-n args 3))
+      (generic-shape 'cylinder '() args)))
 
 (define (box . args)
-  (apply generic-shape 'box args))
+  (generic-shape 'box '() args))
 
 ;;; User functions: transformations
 ;;; -------------------------------

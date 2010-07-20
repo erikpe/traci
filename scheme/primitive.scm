@@ -12,6 +12,14 @@
       (cons (car l)
             (replace-nth (- n 1) (cdr l) e))))
 
+(define (first-n l n)
+  (if (= 0 n) '()
+      (cons (car l) (first-n (cdr l) (- n 1)))))
+
+(define (rest-n l n)
+  (if (= 0 n) l
+      (rest-n (cdr l) (- n 1))))
+
 ;;; Vector primitives
 ;;; -----------------
 
@@ -56,22 +64,35 @@
 (define (make-shape variant)
   (if (not (symbol? variant))
       (error 'make-shape "Not a symbol: `~a'" variant))
-      (list 'shape variant (make-arg-list)))
+      (list 'shape variant (make-arg-list) (make-arg-list)))
 
 (define (shape? obj)
   (and (list? obj)
        (eq? 'shape (car obj))
-       (= 3 (length obj))))
+       (= 4 (length obj))))
 
 (define (shape-variant shape)
   (if (not (shape? shape))
       (error 'shape-variant "Not a shape: `~a'" shape)
       (list-ref shape 1)))
 
+(define (shape-get-constructor-arg-list shape)
+  (if (not (shape? shape))
+      (error 'shape-get-constructor-arg-list "Not a shape: `~a'" shape)
+      (list-ref shape 2)))
+
+(define (shape-set-constructor-arg-list shape arg-list)
+  (cond ((not (shape? shape))
+	 (error 'shape-set-constructor-arg-list "Argument 1 not a shape: `~a'" shape))
+	((not (arg-list? arg-list))
+	 (error 'shape-set-constructor-arg-list "Argument 2 not an arg-list: `~a'" arg-list))
+	(#t
+	 (replace-nth 2 shape arg-list))))
+
 (define (shape-get-arg-list shape)
   (if (not (shape? shape))
       (error 'shape-get-arg-list "Not a shape: `~a'" shape)
-      (list-ref shape 2)))
+      (list-ref shape 3)))
 
 (define (shape-set-arg-list shape arg-list)
   (cond ((not (shape? shape))
@@ -79,7 +100,7 @@
 	((not (arg-list? arg-list))
 	 (error 'shape-set-arg-list "Argument 2 not an arg-list: `~a'" arg-list))
 	(#t
-	 (replace-nth 2 shape arg-list))))
+	 (replace-nth 3 shape arg-list))))
 
 ;;; Transform primitives
 ;;; --------------------
