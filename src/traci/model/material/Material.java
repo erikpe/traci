@@ -18,7 +18,7 @@ public class Material
         mat.getFinish().setDiffCoeff(0.3);
         mat.getFinish().setSpecCoeff(0.3);
         mat.getFinish().setShininess(50);
-        mat.getFinish().setReflectivness(0.3);
+        mat.getFinish().setReflectivness(0.1);
         
         return mat;
     }

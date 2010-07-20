@@ -7,7 +7,6 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import traci.gui.DrawArea;
-import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.material.Color;
@@ -22,9 +21,6 @@ public class Renderer implements BlockRenderer
     private final DrawArea area;
     private final int numThreads;
     
-    private final double xx;
-    private final double yy;
-    
     private Renderer(final Scene scene, final Settings settings,
             final DrawArea area, final int numThreads)
     {
@@ -33,10 +29,6 @@ public class Renderer implements BlockRenderer
         this.settings = settings;
         this.area = area;
         this.numThreads = numThreads;
-        
-        final double fovy = camera.fov * (((double) area.height()) / area.width());
-        this.xx = 2.0 * Math.tan(camera.fov / 2.0);
-        this.yy = 2.0 * Math.tan(fovy / 2.0);
     }
     
     public static void renderScene(final Scene scene, final Settings settings,
@@ -153,38 +145,9 @@ public class Renderer implements BlockRenderer
                     
                     double lookX = (x + subX) / (area.width() - 1); // [0.0 .. 1.0]
                     double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
-                    
-                    lookX = (lookX - 0.5); // [-0.5 .. 0.5]
-                    lookY = (0.5 - lookY); // [0.5 .. -0.5]
-                    
-                    lookX = lookX * xx;
-                    lookY = lookY * yy;
-                    
-                    final Vector lookAt = Vector.make(lookX, lookY, -1);//.mul(
-//                            camera.focalDist);
-                    final Vector location;
-                    
-                    if (settings.focalBlurEnabled)
-                    {
-                        final double r = Math.sqrt(block.randomSource.nextDouble()) / 2.0;
-                        final double phi = block.randomSource.nextDouble() * Math.PI * 2.0;
-                        
-                        final double apertureX = r * Math.cos(phi);
-                        final double apertureY = r * Math.sin(phi);
-                        
-                        location = Vector.make(camera.aperture * apertureX,
-                                camera.aperture * apertureY, -1);
-                    }
-                    else
-                    {
-                        location = Vector.ORIGO;
-                    }
-                    
-                    final Vector camLoc = camera.transformation.point(location);
-                    final Vector camDir = camera.transformation.dir(
-                            lookAt.sub(location)).normalize();
-                    
-                    final Color rayColor = Raytrace.raytrace(scene, 5, camLoc, camDir);
+
+                    final Color rayColor = Raytrace.raytrace(scene, 5, camera
+                            .getLoc(), camera.getDir(lookX, lookY));
                     
                     color.accumulate(rayColor);
                 }

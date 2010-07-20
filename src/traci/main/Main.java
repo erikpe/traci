@@ -81,9 +81,9 @@ public class Main
         
         //final Vector camLocation = Vector.make(100, 200, 300);
         //final Vector camLookAt = Vector.make(101, 203, 309);
-        final Vector camLocation = Vector.make(-1, 15, 30);
+        final Vector camLocation = Vector.make(-2, 2, 5);
         final Vector camLookAt = Vector.make(0, 0, 0);
-        final Camera cam = new Camera(camLocation, camLookAt, Vector.make(1, 1, 0));
+        final Camera cam = new Camera(camLocation, camLookAt, Vector.make(0, 1, 0));
         
         final Scene scene = new Scene(union, cam);
         final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*30));

@@ -19,7 +19,10 @@ import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
+import traci.model.material.pigment.Checker;
 import traci.model.shape.Shape;
+import traci.model.shape.csg.Union;
+import traci.model.shape.primitive.Plane;
 import traci.render.Renderer;
 import traci.render.Settings;
 
@@ -40,8 +43,8 @@ public class TestSISC
     
     public static void main(final String[] args) throws IOException, SchemeException
     {
-        final int width = 1024;
-        final int height = 768;
+        final int width = 1600;
+        final int height = 1200;
         final String filename = "out.png";
         
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
@@ -59,24 +62,38 @@ public class TestSISC
         double stop = System.currentTimeMillis();
         System.out.println("Startup time: " + (stop - start) + " ms.");
         
-        loadSchemeFile("scheme/main.scm", interpreter);
+        loadSchemeFile("scheme/primitive.scm", interpreter);
+        loadSchemeFile("scheme/helper.scm", interpreter);
+        loadSchemeFile("scheme/user.scm", interpreter);
         loadSchemeFile("scheme/java.scm", interpreter);
         //loadSchemeFile("scenes/test.traci", interpreter);
         loadSchemeFile("scenes/lego.traci", interpreter);
         
         start = System.currentTimeMillis();
         //Value val = interpreter.eval("(->java (lego 4))");
-        Value val = interpreter.eval("(->java (round-cube 2 .6 .5 .05))");
+        Value val = interpreter.eval("(->java (lego 10))");
         stop = System.currentTimeMillis();
         System.out.println("Creation of scene: " + (stop - start) + " ms.");
         
-        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*30));
-        final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.RED.mul(50));
+        final Shape shape = (Shape) ((JavaObject) val).get();
         
-        final Vector camLocation = Vector.make(-5, 5, 15);
-        final Vector camLookAt = Vector.make(1, 0, 0);
-        final Camera cam = new Camera(camLocation, camLookAt, null);
-        final Scene scene = new Scene((Shape) ((JavaObject) val).get(), cam);
+        Union union = new Union();
+        union.add(shape);
+        
+        final Plane plane = new Plane();
+        //plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
+        plane.material.setColor(Color.WHITE);
+        plane.material.getPigment().translate(-.5, 0, -.5);
+        plane.roty(15.23);
+        union.add(plane);
+        
+        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*50));
+        final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
+        
+        final Vector camLocation = Vector.make(-2, 2, 10);
+        final Vector camLookAt = Vector.make(2.5, 0, 0);
+        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y);
+        final Scene scene = new Scene(union, cam);
         scene.addLight(light);
         scene.addLight(light2);
         

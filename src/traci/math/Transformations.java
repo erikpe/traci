@@ -96,6 +96,12 @@ public class Transformations
         return res;
     }
     
+    /**
+     * Initial camera position is:
+     * right = {@link Vector.UNIT_X}
+     * up = {@link Vector.UNIT_Y}
+     * forward = {@ Vector.UNIT_Z}
+     */
     public static Transformation camera(final Vector location,
             final Vector lookAt, Vector up)
     {
@@ -105,7 +111,6 @@ public class Transformations
         
         Transformation res = identity();
         
-        res = res.compose(scale(Vector.make(1, 1, -1)));
         res = res.compose(make(Matrix.make(right, up, forward), Matrix.eye()));
         res = res.compose(translate(location));
         

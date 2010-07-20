@@ -1,36 +1,16 @@
 (define epsilon 0.001)
-(define pi 3.1415926535898)
-
-(define (peg . args)
-  (cylinder
-   (scale .15 .1 .15)
-   (translate .25 .6 .25)
-   (apply insert args)))
-
-(define (hole . args)
-  (cylinder
-   (scale .15 (+ (* 2 epsilon) .5) .15)
-   (rotx (/ 3.1415926535898 2))
-   (translate .5 .3 (- epsilon))
-   (apply insert args)))
-
-(define (lego pegs . args)
-  (union
-   (difference
-    (box (scale (/ pegs 2.0) .6 .5))
-    (loop i 0 (- pegs 2)
-          (hole (translate (* i .5) 0 0))))
-   (loop i 0 (- pegs 1)
-         (peg (translate (* i .5) 0 0)))
-   (apply insert args)))
-
-(define (lego2 pegs)
-  (union
-    (loop i 0 (- pegs 2)
-      (hole (translate (* i .5) 0 0)))))
+(define lego-rounding .01)
       
-(define (round-cube x y z r)
-  (let ((r2 (* 2 r)))
+(define (round-box x y z r . args)
+  (let ((r2 (* 2 r))
+        (v0 (vec r r r))
+        (v1 (vec (- x r) r r))
+        (v2 (vec (- x r) r (- z r)))
+        (v3 (vec r r (- z r)))
+        (v4 (vec r (- y r) r))
+        (v5 (vec (- x r) (- y r) r))
+        (v6 (vec (- x r) (- y r) (- z r)))
+        (v7 (vec r (- y r) (- z r))))
     (union
       (box (scale x (- y r2) (- z r2))
            (translate 0 r r))
@@ -38,6 +18,46 @@
            (translate r 0 r))
       (box (scale (- x r2) (- y r2) z)
            (translate r r 0))
-      (cylinder r (vec r (- y r) (- z r))
-                  (vec (- x r) (- y r) (- z r))))))
-       
+      (sphere (scale r r r) (translate v0))
+      (sphere (scale r r r) (translate v1))
+      (sphere (scale r r r) (translate v2))
+      (sphere (scale r r r) (translate v3))
+      (sphere (scale r r r) (translate v4))
+      (sphere (scale r r r) (translate v5))
+      (sphere (scale r r r) (translate v6))
+      (sphere (scale r r r) (translate v7))
+      (cylinder r v0 v1)
+      (cylinder r v1 v2)
+      (cylinder r v2 v3)
+      (cylinder r v3 v0)
+      (cylinder r v4 v5)
+      (cylinder r v5 v6)
+      (cylinder r v6 v7)
+      (cylinder r v7 v4)
+      (cylinder r v0 v4)
+      (cylinder r v1 v5)
+      (cylinder r v2 v6)
+      (cylinder r v3 v7)
+      (apply insert args))))
+
+(define (lego-peg . args)
+  (cylinder .15
+    (vec .25 .6 .25)
+    (vec .25 .7 .25)
+    (apply insert args)))
+
+(define (lego-hole . args)
+  (cylinder .15
+    (vec .5 .3 (+ .5 epsilon))
+    (vec .5 .3 (- epsilon))
+    (apply insert args)))
+
+(define (lego pegs . args)
+  (union
+    (difference
+      (round-box (/ pegs 2.0) .6 .5 lego-rounding)
+      (loop i 0 (- pegs 2)
+        (lego-hole (translate (* i .5) 0 0))))
+    (loop i 0 (- pegs 1)
+      (lego-peg (translate (* i .5) 0 0)))
+    (apply insert args)))
