@@ -22,6 +22,10 @@
   (and (shape? shape)
        (eq? 'box (shape-variant shape))))
 
+(define (bbox? shape)
+  (and (shape? shape)
+       (eq? 'bbox (shape-variant shape))))
+
 (define (primitive-shape? shape)
   (or (sphere? shape)
       (cylinder? shape)
@@ -102,15 +106,6 @@
 	  outer-shape (arg-list-add-arg (shape-get-constructor-arg-list outer-shape) arg)))
 	(#t
 	 (error 'shape-add-constructor-arg "Argument 2 of unknown type: `~a'" arg))))
-
-;(define (generic-shape variant . args)
-;  (if (not (symbol? variant))
-;      (error 'generic-shape "Argument 1 not a symbol: `~a'" variant)
-;      (let ((this-shape (make-shape variant)))
-;	(for-each
-;	 (lambda (arg) (set! this-shape (shape-add-arg this-shape arg)))
-;	 args)
-;	this-shape)))
 
 (define (generic-shape variant constructor-args args)
   (if (not (symbol? variant))

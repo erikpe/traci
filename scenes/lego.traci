@@ -60,4 +60,5 @@
         (lego-hole (translate (* i .5) 0 0))))
     (loop i 0 (- pegs 1)
       (lego-peg (translate (* i .5) 0 0)))
+    (bbox (scale (/ pegs 2.0) .7 .5))
     (apply insert args)))

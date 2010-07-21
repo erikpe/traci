@@ -5,11 +5,14 @@ import java.util.List;
 
 import traci.math.Transformation;
 import traci.model.material.Material;
+import traci.model.shape.BoundingBox;
 import traci.model.shape.Shape;
 
 public abstract class Csg extends Shape
 {
     private final List<Shape> shapes;
+    
+    protected BoundingBox bBox;
     
     public Csg(final Material material)
     {
@@ -27,10 +30,20 @@ public abstract class Csg extends Shape
         shapes.add(shape);
     }
     
+    public void setBoundingBox(final BoundingBox bBox)
+    {
+        this.bBox = bBox;
+    }
+    
     @Override
     public void transform(final Transformation tr)
     {
         super.transform(tr);
+        
+        if (bBox != null)
+        {
+            bBox.transform(tr);
+        }
         
         for (final Shape shape : getShapes())
         {

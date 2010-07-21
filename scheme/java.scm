@@ -15,6 +15,7 @@
 (define-java-class <traci.model.shape.primitive.Sphere>)
 (define-java-class <traci.model.shape.primitive.Cylinder>)
 (define-java-class <traci.model.shape.primitive.Box>)
+(define-java-class <traci.model.shape.Bounding-Box>)
 
 (define (->jvec vec)
   (if (not (vec? vec))
@@ -48,66 +49,15 @@
        (java-null <traci.math.Transformations>)
        (->java (transform-get-argument transform)))))
 
-;(define (->jshape/empty shape)
-;  (let ((variant (shape-variant shape)))
-;    (cond ((union? shape)
-;	   (java-new <traci.model.shape.csg.Union>))
-;	  ((difference? shape)
-;	   (java-new <traci.model.shape.csg.Difference>))
-;	  ((intersection? shape)
-;	   (java-new <traci.model.shape.csg.Intersection>))
-;	  ((sphere? shape)
-;	   (java-new <traci.model.shape.primitive.Sphere>))
-;	  ((cylinder? shape)
-;	   (java-new <traci.model.shape.primitive.Cylinder>))
-;	  ((box? shape)
-;	   (java-new <traci.model.shape.primitive.Box>))
-;	  (#t
-;	   (error 'shape->java/empty "Unknown shape type: `~a'" shape)))))
-
-;(define (jshape-add-shape jshape shape)
-;  (if (not (shape? shape))
-;      (error 'jshape-add-shape "Argument 2 not a shape: `~a'" shape)
-;      ((generic-java-method '|add|)
-;       jshape
-;       (->jshape shape))))
-
-;(define (jshape-add-transform jshape transform)
-;  (if (not (transform? transform))
-;      (error 'jshape-add-transform "Argument 2 not a transform: `~a'" transform)
-;      ((generic-java-method '|transform|)
-;       jshape
-;       (->jtransform transform))))
-
-;(define (jshape-add-arg jshape arg)
-;  (cond ((transform? arg)
-;	 (jshape-add-transform jshape arg))
-;	((shape? arg)
-;	 (jshape-add-shape jshape arg))
-;	(#t
-;	 (error 'jshape-add-arg "Unable to add arg to jshape: `~a'" arg))))
-
 (define (jshape-add-arg jshape arg)
-  (cond ((shape? arg)
+  (cond ((bbox? arg)
+	 ((generic-java-method '|setBoundingBox|) jshape (->jshape arg)))
+	((shape? arg)
 	 ((generic-java-method '|add|) jshape (->jshape arg)))
 	((transform? arg)
 	 ((generic-java-method '|transform|) jshape (->jtransform arg)))
 	(#t
 	 (error 'jshape-add-arg "Unable to add arg to jshape: `~a'" arg))))
-
-;(define (jshape-add-arg-list jshape arg-list)
-;  (cond ((not (arg-list? arg-list))
-;	 (error 'jshape-add-arg-list "Argument 2 not an arg-list: `~a'" arg-list))
-;	((not (arg-list-empty? arg-list))
-;	 (jshape-add-arg jshape (arg-list-first arg-list))
-;	 (jshape-add-arg-list jshape (arg-list-rest arg-list)))))
-
-;(define (->jshape shape)
-;  (if (not (shape? shape))
-;      (error '->jshape "Not a shape: `~a'" shape)
-;      (let ((jshape (->jshape/empty shape)))
-;	(jshape-add-arg-list jshape (shape-get-arg-list shape))
-;	jshape)))
 
 (define (->jshape-class shape)
   (cond ((not (shape? shape))
@@ -124,6 +74,8 @@
 	 <traci.model.shape.primitive.Cylinder>)
 	((box? shape)
 	 <traci.model.shape.primitive.Box>)
+	((bbox? shape)
+	 <traci.model.shape.Bounding-Box>)
 	(#t
 	 (error '->jclass "Unknown shape type: `~a'" shape))))
 

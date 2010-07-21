@@ -29,6 +29,16 @@ public class Torus extends Primitive
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
-        throw new UnsupportedOperationException();
+        final double a = dir.dot(dir);
+        final double b = 2 * (p.dot(dir));
+        final double g = (p.dot(p)) - r * r - 1;
+        
+        final double a4 = a * a;
+        final double a3 = 2 * a * b;
+        final double a2 = (b * b) + (2 * a * g) + (4 * dir.z() * dir.z());
+        final double a1 = (2 * b * g) + (8 * p.z() * dir.z());
+        final double a0 = (g * g) + (4 * p.z() * p.z()) - (4 * r * r);
+        
+        return null;
     }
 }

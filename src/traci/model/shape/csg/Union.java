@@ -22,6 +22,11 @@ public class Union extends Csg
     @Override
     public Ray shootRay(final Vector p, final Vector dir)
     {
+        if (bBox != null && !bBox.test(p, dir))
+        {
+            return null;
+        }
+        
         final List<Shape> shapes = getShapes();
         final int numShapes = shapes.size();
         

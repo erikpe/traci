@@ -45,6 +45,9 @@
 (define (box . args)
   (generic-shape 'box '() args))
 
+(define (bbox . args)
+  (generic-shape 'bbox '() args))
+
 ;;; User functions: transformations
 ;;; -------------------------------
 

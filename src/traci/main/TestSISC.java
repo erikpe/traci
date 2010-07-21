@@ -81,18 +81,17 @@ public class TestSISC
         union.add(shape);
         
         final Plane plane = new Plane();
-        //plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
-        plane.material.setColor(Color.WHITE);
+        plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
         plane.material.getPigment().translate(-.5, 0, -.5);
         plane.roty(15.23);
         union.add(plane);
         
-        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*50));
+        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*40));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
         
         final Vector camLocation = Vector.make(-2, 2, 10);
         final Vector camLookAt = Vector.make(2.5, 0, 0);
-        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y);
+        final Camera cam = new Camera(camLocation, camLookAt, Vector.make(.1, 1, .1));
         final Scene scene = new Scene(union, cam);
         scene.addLight(light);
         scene.addLight(light2);
