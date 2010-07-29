@@ -1,5 +1,6 @@
 (define epsilon 0.001)
 (define lego-rounding .01)
+(define pi 3.1415926535898)
       
 (define (round-box x y z r . args)
   (let ((r2 (* 2 r))
@@ -41,6 +42,24 @@
       (apply insert args))))
 
 (define (lego-peg . args)
+  (let ((height .1)
+        (radius .15)
+        (rounding lego-rounding))
+    (union
+      (cylinder (scale radius (- height rounding) radius))
+      (cylinder (scale (- radius rounding) .1 (- .15 rounding)))
+      (torus rounding (- radius rounding)
+        (rotx (/ pi 2))
+        (translate 0 (- height rounding) 0))
+      (difference
+        (cylinder (scale (+ radius rounding) rounding (+ radius rounding)))
+        (torus rounding (+ radius rounding)
+          (rotx (/ pi 2))
+          (translate 0 rounding 0)))
+      (translate .25 .6 .25)
+      (apply insert args))))
+
+(define (lego-peg-old . args)
   (cylinder .15
     (vec .25 .6 .25)
     (vec .25 .7 .25)
