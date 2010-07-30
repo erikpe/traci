@@ -15,6 +15,7 @@
 (define-java-class <traci.model.shape.primitive.Sphere>)
 (define-java-class <traci.model.shape.primitive.Cylinder>)
 (define-java-class <traci.model.shape.primitive.Box>)
+(define-java-class <traci.model.shape.primitive.Torus>)
 (define-java-class <traci.model.shape.Bounding-Box>)
 
 (define (->jvec vec)
@@ -74,6 +75,8 @@
 	 <traci.model.shape.primitive.Cylinder>)
 	((box? shape)
 	 <traci.model.shape.primitive.Box>)
+	((torus? shape)
+	 <traci.model.shape.primitive.Torus>)
 	((bbox? shape)
 	 <traci.model.shape.Bounding-Box>)
 	(#t
@@ -90,6 +93,7 @@
 	jshape)))
 
 (define (->java obj)
+  (display obj)
   (cond ((transform? obj)
 	 (->jtransform obj))
 	((shape? obj)

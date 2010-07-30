@@ -45,6 +45,9 @@
 (define (box . args)
   (generic-shape 'box '() args))
 
+(define (torus . args)
+  (generic-shape 'torus (first-n args 2) (rest-n args 2)))
+
 (define (bbox . args)
   (generic-shape 'bbox '() args))
 

@@ -22,6 +22,10 @@
   (and (shape? shape)
        (eq? 'box (shape-variant shape))))
 
+(define (torus? shape)
+  (and (shape? shape)
+       (eq? 'torus (shape-variant shape))))
+
 (define (bbox? shape)
   (and (shape? shape)
        (eq? 'bbox (shape-variant shape))))
