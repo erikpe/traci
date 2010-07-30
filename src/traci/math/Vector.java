@@ -2,17 +2,18 @@ package traci.math;
 
 import traci.render.RenderingThread;
 
+
 public class Vector
 {
-    public static class VectorPool extends ObjectPool<Vector>
+    public static final class VectorPool extends ObjectPool<Vector>
     {
         @Override
-        protected Vector makeNew()
+        protected final Vector makeNew()
         {
             return new Vector(0, 0, 0);
         }
         
-        public Vector make(final double x, final double y, final double z)
+        private final Vector make(final double x, final double y, final double z)
         {
             final Vector vec = getFree();
             
@@ -24,7 +25,7 @@ public class Vector
         }
     }
     
-    double x, y, z;
+    private double x, y, z;
     
     public static final Vector ORIGO = new Vector(0, 0, 0);
     
@@ -36,7 +37,7 @@ public class Vector
     public static final Vector UNIT_NEG_Y = new Vector(0, -1, 0);
     public static final Vector UNIT_NEG_Z = new Vector(0, 0, -1);
     
-    Vector(final double x, final double y, final double z)
+    private Vector(final double x, final double y, final double z)
     {
         this.x = x;
         this.y = y;

@@ -5,7 +5,7 @@ import traci.model.shape.primitive.Primitive;
 
 public class Point
 {
-    public static class PointPool extends ObjectPool<Point>
+    public static final class PointPool extends ObjectPool<Point>
     {
         @Override
         protected Point makeNew()
@@ -13,7 +13,7 @@ public class Point
             return new Point(0, null);
         }
         
-        public Point make(final double dist, final Primitive obj)
+        private final Point make(final double dist, final Primitive obj)
         {
             final Point p = getFree();
             
@@ -24,11 +24,11 @@ public class Point
         }
     }
     
-    double dist;
+    private double dist;
     
-    Primitive obj;
+    private Primitive obj;
     
-    Point(final double dist, final Primitive obj)
+    private Point(final double dist, final Primitive obj)
     {
         this.dist = dist;
         this.obj = obj;
@@ -58,12 +58,12 @@ public class Point
     
     public static Point nearest(final Point p0, final Point p1)
     {
-        return (p0.dist < p1.dist ? p0 : p1);
+        return p0.dist < p1.dist ? p0 : p1;
     }
     
     public static Point farest(final Point p0, final Point p1)
     {
-        return (p0.dist > p1.dist ? p0 : p1);
+        return p0.dist > p1.dist ? p0 : p1;
     }
     
     @Override

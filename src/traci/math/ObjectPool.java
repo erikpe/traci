@@ -12,6 +12,7 @@ abstract public class ObjectPool<T>
     
     private int index;
     private T[] pool;
+    private int size;
     
     public ObjectPool()
     {
@@ -24,6 +25,7 @@ abstract public class ObjectPool<T>
         this.objClass = (Class<T>) makeNew().getClass();
         this.index = 0;
         this.pool = (T[]) Array.newInstance(objClass, initialSize);
+        this.size = pool.length;
         
         for (int i = 0; i < pool.length; ++i)
         {
@@ -36,9 +38,9 @@ abstract public class ObjectPool<T>
         index = 0;
     }
     
-    public T getFree()
+    public final T getFree()
     {
-        if (index == pool.length)
+        if (index == size)
         {
             increaseSize();
         }
@@ -51,6 +53,7 @@ abstract public class ObjectPool<T>
     {
         final T[] oldPool = pool;
         pool = (T[]) Array.newInstance(objClass, oldPool.length * 2);
+        size = pool.length;
         
         System.arraycopy(oldPool, 0, pool, 0, oldPool.length);
         

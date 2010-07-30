@@ -21,8 +21,7 @@ public class Plane extends Primitive
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {
-        final Vector normal = Vector.UNIT_Y;
-        return transformation.normal(normal);
+        return Vector.UNIT_Y;
     }
     
     /**

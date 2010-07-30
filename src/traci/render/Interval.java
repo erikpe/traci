@@ -4,7 +4,7 @@ import traci.math.ObjectPool;
 
 public class Interval
 {
-    public static class IntervalPool extends ObjectPool<Interval>
+    public static final class IntervalPool extends ObjectPool<Interval>
     {
         @Override
         protected Interval makeNew()
@@ -12,7 +12,7 @@ public class Interval
             return new Interval(null, null);
         }
         
-        public Interval make(final Point p0, final Point p1)
+        private final Interval make(final Point p0, final Point p1)
         {
             final Interval ival = getFree();
             
@@ -23,12 +23,12 @@ public class Interval
         }
     }
     
-    Point p0;
-    Point p1;
+    private Point p0;
+    private Point p1;
     
-    Interval(final Point p0, final Point p1)
+    private Interval(final Point p0, final Point p1)
     {
-        assert p0 == null || p1 == null || p0.dist <= p1.dist;
+        assert p0 == null || p1 == null || p0.dist() <= p1.dist();
         assert (p0 == null) == (p1 == null);
         
         this.p0 = p0;

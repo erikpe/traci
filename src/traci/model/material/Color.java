@@ -5,7 +5,7 @@ import traci.render.RenderingThread;
 
 public class Color
 {
-    public static class ColorPool extends ObjectPool<Color>
+    public static final class ColorPool extends ObjectPool<Color>
     {
         @Override
         protected Color makeNew()
@@ -13,7 +13,7 @@ public class Color
             return new Color(0, 0, 0);
         }
         
-        public Color make(final double r, final double g, final double b)
+        private final Color make(final double r, final double g, final double b)
         {
             final Color color = getFree();
             
@@ -25,7 +25,7 @@ public class Color
         }
     }
     
-    double r, g, b;
+    private double r, g, b;
     
     public static final Color BLACK = Color.make(0, 0, 0);
     public static final Color WHITE = Color.make(1, 1, 1);
@@ -36,7 +36,7 @@ public class Color
     public static final Color CYAN = Color.make(0, 1, 1);
     public static final Color MAGENTA = Color.make(1, 0, 1);
     
-    Color(final double r, final double g, final double b)
+    private Color(final double r, final double g, final double b)
     {
         this.r = r;
         this.g = g;

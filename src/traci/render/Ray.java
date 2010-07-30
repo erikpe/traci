@@ -39,11 +39,11 @@ public class Ray extends AbstractList<Interval>
             
             final Interval i0 = iter0.next();
             
-            if (i0.p1.dist < i1.p0.dist)
+            if (i0.p1().dist() < i1.p0().dist())
             {
                 iter1.previous();
             }
-            else if (i0.p0.dist > i1.p1.dist)
+            else if (i0.p0().dist() > i1.p1().dist())
             {
                 iter0.previous();
                 iter0.add(i1);
@@ -51,8 +51,8 @@ public class Ray extends AbstractList<Interval>
             else
             {
                 iter0.remove();
-                iter0.add(Interval.make(Point.nearest(i0.p0, i1.p0),
-                                        Point.farest(i0.p1, i1.p1)));
+                iter0.add(Interval.make(Point.nearest(i0.p0(), i1.p0()),
+                                        Point.farest(i0.p1(), i1.p1())));
             }
         }
     }
@@ -69,27 +69,27 @@ public class Ray extends AbstractList<Interval>
             final Interval i0 = iter0.next();
             final Interval i1 = iter1.next();
             
-            if (i0.p1.dist < i1.p0.dist)
+            if (i0.p1().dist() < i1.p0().dist())
             {
                 iter1.previous();
             }
-            else if (i0.p0.dist > i1.p1.dist)
+            else if (i0.p0().dist() > i1.p1().dist())
             {
                 iter0.previous();
             }
-            else if (i0.p0.dist < i1.p0.dist)
+            else if (i0.p0().dist() < i1.p0().dist())
             {
                 iter0.remove();
                 
-                if (i0.p1.dist < i1.p1.dist)
+                if (i0.p1().dist() < i1.p1().dist())
                 {
-                    iter0.add(Interval.make(i0.p0, i1.p0));
+                    iter0.add(Interval.make(i0.p0(), i1.p0()));
                     iter1.previous();
                 }
                 else
                 {
-                    iter0.add(Interval.make(i0.p0, i1.p0));
-                    iter0.add(Interval.make(i1.p1, i0.p1));
+                    iter0.add(Interval.make(i0.p0(), i1.p0()));
+                    iter0.add(Interval.make(i1.p1(), i0.p1()));
                     iter0.previous();
                 }
             }
@@ -97,9 +97,9 @@ public class Ray extends AbstractList<Interval>
             {
                 iter0.remove();
                 
-                if (i1.p1.dist < i0.p1.dist)
+                if (i1.p1().dist() < i0.p1().dist())
                 {
-                    iter0.add(Interval.make(i1.p1, i0.p1));
+                    iter0.add(Interval.make(i1.p1(), i0.p1()));
                     iter0.previous();
                 }
                 else
@@ -122,21 +122,21 @@ public class Ray extends AbstractList<Interval>
             final Interval i0 = iter0.next();
             final Interval i1 = iter1.next();
             
-            if (i0.p1.dist < i1.p0.dist)
+            if (i0.p1().dist() < i1.p0().dist())
             {
                 iter1.previous();
             }
-            else if (i0.p0.dist > i1.p1.dist)
+            else if (i0.p0().dist() > i1.p1().dist())
             {
                 iter0.previous();
             }
-            else if (i0.p0.dist < i1.p0.dist)
+            else if (i0.p0().dist() < i1.p0().dist())
             {
                 iter0.remove();
                 
-                if (i0.p1.dist < i1.p1.dist)
+                if (i0.p1().dist() < i1.p1().dist())
                 {
-                    iter0.add(Interval.make(i1.p0, i0.p1));
+                    iter0.add(Interval.make(i1.p0(), i0.p1()));
                     iter1.previous();
                 }
 //                else

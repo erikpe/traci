@@ -40,18 +40,12 @@ public class Cylinder extends Primitive
         final double dist = Math.sqrt(x * x + z * z);
         final double h = 2.0 * Math.abs(y - 0.5);
         
-        final Vector normal;
-        
         if (h > dist)
         {
-            normal = Vector.UNIT_Y;
-        }
-        else
-        {
-            normal = Vector.make(x, 0, z).normalize();
+            return Vector.UNIT_Y;
         }
         
-        return transformation.normal(normal);
+        return Vector.make(x, 0, z);
     }
     
     /**

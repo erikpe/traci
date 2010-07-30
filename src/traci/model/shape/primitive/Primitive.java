@@ -22,13 +22,14 @@ public abstract class Primitive extends Shape
     public Vector getNormalAt(final Vector p, final Vector dir)
     {
         Vector normal = primitiveGetNormalAt(transformation.pointInv(p));
+        normal = transformation.normal(normal).normalize();
         
         if (dir.dot(normal) > 0)
         {
             normal = normal.neg();
         }
         
-        return normal.normalize();
+        return normal;
     }
     
     protected abstract Ray primitiveShootRay(final Vector p, final Vector dir);

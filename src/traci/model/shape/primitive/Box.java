@@ -25,29 +25,21 @@ public class Box extends Primitive
         final double absY = Math.abs(p.y() - 0.5);
         final double absZ = Math.abs(p.z() - 0.5);
         
-        final Vector normal;
-        
         if (absX > absY)
         {
             if (absX > absZ)
             {
-                normal = Vector.UNIT_X;
+                return Vector.UNIT_X;
             }
-            else
-            {
-                normal = Vector.UNIT_Z;
-            }
+            
+            return Vector.UNIT_Z;
         }
         else if (absY > absZ)
         {
-            normal = Vector.UNIT_Y;
-        }
-        else
-        {
-            normal = Vector.UNIT_Z;
+            return Vector.UNIT_Y;
         }
         
-        return transformation.normal(normal);
+        return Vector.UNIT_Z;
     }
     
     /**

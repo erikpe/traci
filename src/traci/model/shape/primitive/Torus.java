@@ -32,9 +32,7 @@ public class Torus extends Primitive
         
         final double k = x * x + y * y + z * z + r * r - 1;
         
-        final Vector normal = Vector.make(4 * x * k, 4 * y * k, 4 * z * k + 8 * z);
-        
-        return transformation.normal(normal);
+        return Vector.make(4 * x * k, 4 * y * k, 4 * z * k + 8 * z);
     }
     
     /**

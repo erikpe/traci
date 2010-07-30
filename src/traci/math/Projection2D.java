@@ -9,7 +9,7 @@ public abstract class Projection2D
         @Override
         public Vector2D project(final Vector p)
         {
-            return Vector2D.make(p.x, p.z);
+            return Vector2D.make(p.x(), p.z());
         }
     };
     
@@ -18,7 +18,7 @@ public abstract class Projection2D
         @Override
         public Vector2D project(final Vector p)
         {
-            return Vector2D.make(p.x, p.y);
+            return Vector2D.make(p.x(), p.y());
         }
     };
     
@@ -27,7 +27,7 @@ public abstract class Projection2D
         @Override
         public Vector2D project(final Vector p)
         {
-            return Vector2D.make(p.y, p.z);
+            return Vector2D.make(p.y(), p.z());
         }
     };
     
@@ -36,13 +36,13 @@ public abstract class Projection2D
         @Override
         public Vector2D project(final Vector p)
         {
-            final double d = Math.sqrt(p.x * p.x + p.z * p.z);
-            final double cosAlpha = p.x / d;
+            final double d = Math.sqrt(p.x() * p.x() + p.z() * p.z());
+            final double cosAlpha = p.x() / d;
             
-            final double alpha = (p.z > 0.0 ? Math.acos(cosAlpha)
+            final double alpha = (p.z() > 0.0 ? Math.acos(cosAlpha)
                     : PI2 - Math.acos(cosAlpha));
             
-            return Vector2D.make(alpha / PI2, p.y);
+            return Vector2D.make(alpha / PI2, p.y());
         }
     };
     

@@ -19,13 +19,13 @@ public class Raytrace
             return Color.BLACK;
         }
         
-        final Point hit = ray.get(0).p0;
+        final Point hit = ray.get(0).p0();
         
-        final Vector hitPoint = p.add(dir.mul(hit.dist));
-        final Vector normal = hit.obj.getNormalAt(hitPoint, dir);
+        final Vector hitPoint = p.add(dir.mul(hit.dist()));
+        final Vector normal = hit.obj().getNormalAt(hitPoint, dir);
         
-        final Pigment pigment = hit.obj.material.getPigment();
-        final Finish finish = hit.obj.material.getFinish();
+        final Pigment pigment = hit.obj().material.getPigment();
+        final Finish finish = hit.obj().material.getFinish();
         
         /**
          * Ambient light

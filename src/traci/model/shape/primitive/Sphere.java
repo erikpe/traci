@@ -20,8 +20,7 @@ public class Sphere extends Primitive
     
     public Vector primitiveGetNormalAt(final Vector p)
     {
-        final Vector normal = p;
-        return transformation.normal(normal);
+        return p;
     }
     
     /**

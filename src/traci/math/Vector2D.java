@@ -4,7 +4,7 @@ import traci.render.RenderingThread;
 
 public class Vector2D
 {
-    public static class Vector2DPool extends ObjectPool<Vector2D>
+    public static final class Vector2DPool extends ObjectPool<Vector2D>
     {
         @Override
         protected Vector2D makeNew()
@@ -12,7 +12,7 @@ public class Vector2D
             return new Vector2D(0, 0);
         }
         
-        public Vector2D make(final double x, final double y)
+        private final Vector2D make(final double x, final double y)
         {
             final Vector2D vec = getFree();
             
@@ -23,10 +23,10 @@ public class Vector2D
         }
     }
     
-    double x;
-    double y;
+    private double x;
+    private double y;
     
-    Vector2D(final double x, final double y)
+    private Vector2D(final double x, final double y)
     {
         this.x = x;
         this.y = y;

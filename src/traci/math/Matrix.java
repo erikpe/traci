@@ -88,9 +88,9 @@ public class Matrix
     {
         final Matrix res = newEye();
         
-        res.data[0][0] = scale.x;
-        res.data[1][1] = scale.y;
-        res.data[2][2] = scale.z;
+        res.data[0][0] = scale.x();
+        res.data[1][1] = scale.y();
+        res.data[2][2] = scale.z();
         
         return res;
     }
@@ -99,9 +99,9 @@ public class Matrix
     {
         final Matrix res = newEye();
         
-        res.data[0][3] = translate.x;
-        res.data[1][3] = translate.y;
-        res.data[2][3] = translate.z;
+        res.data[0][3] = translate.x();
+        res.data[1][3] = translate.y();
+        res.data[2][3] = translate.z();
         
         return res;
     }
@@ -110,17 +110,17 @@ public class Matrix
     {
         final Matrix res = newEye();
         
-        res.data[0][0] = v0.x;
-        res.data[1][0] = v0.y;
-        res.data[2][0] = v0.z;
+        res.data[0][0] = v0.x();
+        res.data[1][0] = v0.y();
+        res.data[2][0] = v0.z();
         
-        res.data[0][1] = v1.x;
-        res.data[1][1] = v1.y;
-        res.data[2][1] = v1.z;
+        res.data[0][1] = v1.x();
+        res.data[1][1] = v1.y();
+        res.data[2][1] = v1.z();
         
-        res.data[0][2] = v2.x;
-        res.data[1][2] = v2.y;
-        res.data[2][2] = v2.z;
+        res.data[0][2] = v2.x();
+        res.data[1][2] = v2.y();
+        res.data[2][2] = v2.z();
         
         return res;
     }
@@ -145,19 +145,19 @@ public class Matrix
     
     Vector mul(final Vector vec)
     {
-        final double x = vec.x * data[0][0] +
-                         vec.y * data[0][1] +
-                         vec.z * data[0][2] +
+        final double x = vec.x() * data[0][0] +
+                         vec.y() * data[0][1] +
+                         vec.z() * data[0][2] +
                          data[0][3];
         
-        final double y = vec.x * data[1][0] +
-                         vec.y * data[1][1] +
-                         vec.z * data[1][2] +
+        final double y = vec.x() * data[1][0] +
+                         vec.y() * data[1][1] +
+                         vec.z() * data[1][2] +
                          data[1][3];
         
-        final double z = vec.x * data[2][0] +
-                         vec.y * data[2][1] +
-                         vec.z * data[2][2] +
+        final double z = vec.x() * data[2][0] +
+                         vec.y() * data[2][1] +
+                         vec.z() * data[2][2] +
                          data[2][3];
         
         return Vector.make(x, y, z);
@@ -165,34 +165,42 @@ public class Matrix
     
     Vector mulDir(final Vector vec)
     {
-        final double x = vec.x * data[0][0] +
-                         vec.y * data[0][1] +
-                         vec.z * data[0][2];
+        final double vx = vec.x();
+        final double vy = vec.y();
+        final double vz = vec.z();
         
-        final double y = vec.x * data[1][0] +
-                         vec.y * data[1][1] +
-                         vec.z * data[1][2];
+        final double x = vx * data[0][0] +
+                         vy * data[0][1] +
+                         vz * data[0][2];
         
-        final double z = vec.x * data[2][0] +
-                         vec.y * data[2][1] +
-                         vec.z * data[2][2];
+        final double y = vx * data[1][0] +
+                         vy * data[1][1] +
+                         vz * data[1][2];
+        
+        final double z = vx * data[2][0] +
+                         vy * data[2][1] +
+                         vz * data[2][2];
         
         return Vector.make(x, y, z);
     }
     
     Vector mulNormal(final Vector vec)
     {
-        final double x = vec.x * data[0][0] +
-                         vec.y * data[1][0] +
-                         vec.z * data[2][0];
+        final double vx = vec.x();
+        final double vy = vec.y();
+        final double vz = vec.z();
         
-        final double y = vec.x * data[0][1] +
-                         vec.y * data[1][1] +
-                         vec.z * data[2][1];
+        final double x = vx * data[0][0] +
+                         vy * data[1][0] +
+                         vz * data[2][0];
         
-        final double z = vec.x * data[0][2] +
-                         vec.y * data[1][2] +
-                         vec.z * data[2][2];
+        final double y = vx * data[0][1] +
+                         vy * data[1][1] +
+                         vz * data[2][1];
+        
+        final double z = vx * data[0][2] +
+                         vy * data[1][2] +
+                         vz * data[2][2];
         
         return Vector.make(x, y, z);
     }
