@@ -4,6 +4,7 @@ import traci.gui.DynamicJPanelDrawArea;
 import traci.gui.MainWindow;
 import traci.gui.MultiDrawArea;
 import traci.gui.PngDrawArea;
+import traci.math.PolynomSolver;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
@@ -14,6 +15,7 @@ import traci.model.shape.csg.Union;
 import traci.model.shape.primitive.Cylinder;
 import traci.model.shape.primitive.Plane;
 import traci.model.shape.primitive.Sphere;
+import traci.model.shape.primitive.Torus;
 import traci.render.Renderer;
 import traci.render.Settings;
 
@@ -73,15 +75,24 @@ public class Main
         spheres.add(far);
         spheres.rotz(Math.PI / 16);
         
+        double[] res = PolynomSolver.solveQuartic(new double[] { 1, 2, -3, 4, 5 });
+        
+        final Sphere sphere = new Sphere();
+        final Torus torus = new Torus(.1); torus.rotx(Math.PI / 2);
+        final Cylinder xcyl = new Cylinder(); xcyl.translatey(-.5); xcyl.scale(.05, 7, .05); xcyl.rotz(Math.PI / 2);
+        final Cylinder ycyl = new Cylinder(); ycyl.translatey(-.5); ycyl.scale(.05, 7, .05);
+        final Cylinder zcyl = new Cylinder(); zcyl.translatey(-.5); zcyl.scale(.05, 7, .05); zcyl.rotx(Math.PI / 2);
+        
         final Union union = new Union();
         union.add(plane);
-        union.add(spheres);
-        union.add(cyl);
-        union.add(cyl2);
+        union.add(torus);
+        union.add(xcyl);
+        union.add(ycyl);
+        union.add(zcyl);
         
         //final Vector camLocation = Vector.make(100, 200, 300);
         //final Vector camLookAt = Vector.make(101, 203, 309);
-        final Vector camLocation = Vector.make(-2, 2, 5);
+        final Vector camLocation = Vector.make(-2, 2, 10);
         final Vector camLookAt = Vector.make(0, 0, 0);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.make(0, 1, 0));
         

@@ -145,7 +145,7 @@ public class Renderer implements BlockRenderer
                     
                     double lookX = (x + subX) / (area.width() - 1); // [0.0 .. 1.0]
                     double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
-
+                    
                     final Color rayColor = Raytrace.raytrace(scene, 5, camera
                             .getLoc(), camera.getDir(lookX, lookY));
                     

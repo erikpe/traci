@@ -20,6 +20,7 @@ public class Raytrace
         }
         
         final Point hit = ray.get(0).p0;
+        
         final Vector normal = hit.obj.transformation.normal(hit.normal).normalize();
         final Vector hitPoint = p.add(dir.mul(hit.dist));
         

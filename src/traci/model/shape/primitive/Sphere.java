@@ -30,7 +30,7 @@ public class Sphere extends Primitive
         final double a = 2 * (p.x() * dir.x() + p.y() * dir.y() + p.z() * dir.z()) / c;
         final double b = (p.x() * p.x() + p.y() * p.y() + p.z() * p.z() - 1) / c;
         
-        final double d = (a*a)/4 - b;
+        final double d = (a * a) / 4 - b;
         
         if (d > 0)
         {

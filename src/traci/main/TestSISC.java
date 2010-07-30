@@ -54,7 +54,7 @@ public class TestSISC
         final PngDrawArea pngDrawArea = new PngDrawArea(width, height, filename);
         final MultiDrawArea multiDrawArea = new MultiDrawArea(pngDrawArea);
         multiDrawArea.add(visibleDrawArea);
-
+        
         double start = System.currentTimeMillis();
         final AppContext appContext = new AppContext();
         appContext.addDefaultHeap();
@@ -71,7 +71,7 @@ public class TestSISC
         
         start = System.currentTimeMillis();
         //Value val = interpreter.eval("(->java (lego 4))");
-        Value val = interpreter.eval("(->java (lego 10))");
+        Value val = interpreter.eval("(->java (lego 5))");
         stop = System.currentTimeMillis();
         System.out.println("Creation of scene: " + (stop - start) + " ms.");
         
@@ -89,8 +89,8 @@ public class TestSISC
         final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*40));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
         
-        final Vector camLocation = Vector.make(-2, 2, 10);
-        final Vector camLookAt = Vector.make(2.5, 0, 0);
+        final Vector camLocation = Vector.make(-1, 2, 10);
+        final Vector camLookAt = Vector.make(2.5, .35, .25);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.make(.1, 1, .1));
         final Scene scene = new Scene(union, cam);
         scene.addLight(light);
