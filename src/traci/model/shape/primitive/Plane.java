@@ -18,6 +18,13 @@ public class Plane extends Primitive
         super(material);
     }
     
+    @Override
+    public Vector primitiveGetNormalAt(final Vector p)
+    {
+        final Vector normal = Vector.UNIT_Y;
+        return transformation.normal(normal);
+    }
+    
     /**
      * The plane is defined by the equation y = 0.
      */
@@ -31,11 +38,8 @@ public class Plane extends Primitive
             return null;
         }
         
-        final Vector n0 = (p.y() > 0 ? Vector.UNIT_Y : Vector.UNIT_NEG_Y);
-        final Vector n1 = (p.y() > 0 ? Vector.UNIT_NEG_Y : Vector.UNIT_Y);
-        
-        final Point p0 = Point.make(t, this, n0);
-        final Point p1 = Point.make(t, this, n1);
+        final Point p0 = Point.make(t, this);
+        final Point p1 = Point.make(t, this);
         
         return new Ray(Interval.make(p0, p1));
     }

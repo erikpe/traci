@@ -23,17 +23,18 @@ public class Torus extends Primitive
         scale(R);
     }
     
-    private Point hitPoint(final Vector p, final Vector dir, final double t)
+    @Override
+    public Vector primitiveGetNormalAt(final Vector p)
     {
-        final Vector hit = p.add(dir.mul(t));
-        final double x = hit.x();
-        final double y = hit.y();
-        final double z = hit.z();
+        final double x = p.x();
+        final double y = p.y();
+        final double z = p.z();
         
-        final double k = x * x + y * y + z * z - r * r - 1;
-        final Vector normal = Vector.make(4 * x * k, 4 * y * k, 4 * z * k + 8 * z).normalize();
+        final double k = x * x + y * y + z * z + r * r - 1;
         
-        return Point.make(t, this, normal);
+        final Vector normal = Vector.make(4 * x * k, 4 * y * k, 4 * z * k + 8 * z);
+        
+        return transformation.normal(normal);
     }
     
     /**
@@ -75,10 +76,7 @@ public class Torus extends Primitive
                 return null;
             }
             
-            final Point nearP = hitPoint(p, dir, near);
-            final Point farP = hitPoint(p, dir, far);
-            
-            ray = new Ray(Interval.make(nearP, farP));
+            ray = new Ray(Interval.make(Point.make(near, this), Point.make(far, this)));
         }
         
 //        if (roots.length == 4)

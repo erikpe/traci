@@ -23,6 +23,12 @@ public class Cubic extends Primitive
         // this.coeffs = Arrays.copyOf(coeffs, NUM_COEFFS);
     }
     
+    @Override
+    public Vector primitiveGetNormalAt(final Vector p)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * A {@link Cubic} is a polynomial shape of the third degree.
      */

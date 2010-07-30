@@ -30,6 +30,30 @@ public class Cylinder extends Primitive
         translate(v0);
     }
     
+    @Override
+    public Vector primitiveGetNormalAt(final Vector p)
+    {
+        final double x = p.x();
+        final double y = p.y();
+        final double z = p.z();
+        
+        final double dist = Math.sqrt(x * x + z * z);
+        final double h = 2.0 * Math.abs(y - 0.5);
+        
+        final Vector normal;
+        
+        if (h > dist)
+        {
+            normal = Vector.UNIT_Y;
+        }
+        else
+        {
+            normal = Vector.make(x, 0, z).normalize();
+        }
+        
+        return transformation.normal(normal);
+    }
+    
     /**
      * The cylinder is bounded by the planes y = 0, y = 1 and the infinite
      * cylinder x^2 + z^2 = 1.
@@ -42,10 +66,8 @@ public class Cylinder extends Primitive
         /**
          * Begin with plane y = 0 and y = 1
          */
-        final Point y0 = Point.make((0.0 - p.y()) / dir.y(), this,
-                Vector.UNIT_NEG_Y);
-        final Point y1 = Point.make((1.0 - p.y()) / dir.y(), this,
-                Vector.UNIT_Y);
+        final Point y0 = Point.make((0.0 - p.y()) / dir.y(), this);
+        final Point y1 = Point.make((1.0 - p.y()) / dir.y(), this);
         
         Point near = Point.nearest(y0, y1);
         Point far = Point.farest(y0, y1);
@@ -63,10 +85,8 @@ public class Cylinder extends Primitive
             final double t0 = -a / 2 - Math.sqrt((a * a) / 4 - b);
             final double t1 = -a / 2 + Math.sqrt((a * a) / 4 - b);
             
-            final Point p0 = Point.make(t0, this, Vector.make(p.x(), 0, p.z())
-                    .add(Vector.make(dir.x(), 0, dir.z()).mul(t0)));
-            final Point p1 = Point.make(t1, this, Vector.make(p.x(), 0, p.z())
-                    .add(Vector.make(dir.x(), 0, dir.z()).mul(t1)));
+            final Point p0 = Point.make(t0, this);
+            final Point p1 = Point.make(t1, this);
             
             near = Point.farest(near, p0);
             far = Point.nearest(far, p1);

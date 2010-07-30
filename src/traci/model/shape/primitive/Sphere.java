@@ -18,6 +18,12 @@ public class Sphere extends Primitive
         super(material);
     }
     
+    public Vector primitiveGetNormalAt(final Vector p)
+    {
+        final Vector normal = p;
+        return transformation.normal(normal);
+    }
+    
     /**
      * The sphere is define by the equation
      * 
@@ -40,11 +46,8 @@ public class Sphere extends Primitive
             if (t0 <= EPSILON) return null;
             final double t1 = -a/2 + sqrtD;
             
-            final Vector normal0 = p.add(dir.mul(t0));
-            final Vector normal1 = p.add(dir.mul(t1));
-            
-            final Point p0 = Point.make(t0, this, normal0);
-            final Point p1 = Point.make(t1, this, normal1);
+            final Point p0 = Point.make(t0, this);
+            final Point p1 = Point.make(t1, this);
             
             return new Ray(Interval.make(p0, p1));
         }

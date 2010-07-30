@@ -83,13 +83,13 @@ public class Ray extends AbstractList<Interval>
                 
                 if (i0.p1.dist < i1.p1.dist)
                 {
-                    iter0.add(Interval.make(i0.p0, i1.p0.invNormal()));
+                    iter0.add(Interval.make(i0.p0, i1.p0));
                     iter1.previous();
                 }
                 else
                 {
-                    iter0.add(Interval.make(i0.p0, i1.p0.invNormal()));
-                    iter0.add(Interval.make(i1.p1.invNormal(), i0.p1));
+                    iter0.add(Interval.make(i0.p0, i1.p0));
+                    iter0.add(Interval.make(i1.p1, i0.p1));
                     iter0.previous();
                 }
             }
@@ -99,7 +99,7 @@ public class Ray extends AbstractList<Interval>
                 
                 if (i1.p1.dist < i0.p1.dist)
                 {
-                    iter0.add(Interval.make(i1.p1.invNormal(), i0.p1));
+                    iter0.add(Interval.make(i1.p1, i0.p1));
                     iter0.previous();
                 }
                 else

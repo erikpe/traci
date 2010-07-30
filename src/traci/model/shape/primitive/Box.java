@@ -18,6 +18,38 @@ public class Box extends Primitive
         super(material);
     }
     
+    @Override
+    public Vector primitiveGetNormalAt(final Vector p)
+    {
+        final double absX = Math.abs(p.x() - 0.5);
+        final double absY = Math.abs(p.y() - 0.5);
+        final double absZ = Math.abs(p.z() - 0.5);
+        
+        final Vector normal;
+        
+        if (absX > absY)
+        {
+            if (absX > absZ)
+            {
+                normal = Vector.UNIT_X;
+            }
+            else
+            {
+                normal = Vector.UNIT_Z;
+            }
+        }
+        else if (absY > absZ)
+        {
+            normal = Vector.UNIT_Y;
+        }
+        else
+        {
+            normal = Vector.UNIT_Z;
+        }
+        
+        return transformation.normal(normal);
+    }
+    
     /**
      * The box is bounded by the planes x = 0, x = 1, y = 0, y = 1, z = 0 and z = 1.
      */
@@ -29,8 +61,8 @@ public class Box extends Primitive
         /**
          * Plane x = 0 and x = 1
          */
-        final Point x0 = Point.make((0.0 - p.x()) / dir.x(), this, Vector.UNIT_NEG_X);
-        final Point x1 = Point.make((1.0 - p.x()) / dir.x(), this, Vector.UNIT_X);
+        final Point x0 = Point.make((0.0 - p.x()) / dir.x(), this);
+        final Point x1 = Point.make((1.0 - p.x()) / dir.x(), this);
         
         Point near = Point.nearest(x0, x1);
         Point far = Point.farest(x0, x1);
@@ -38,8 +70,8 @@ public class Box extends Primitive
         /**
          * Plane y = 0 and y = 1
          */
-        final Point y0 = Point.make((0.0 - p.y()) / dir.y(), this, Vector.UNIT_NEG_Y);
-        final Point y1 = Point.make((1.0 - p.y()) / dir.y(), this, Vector.UNIT_Y);
+        final Point y0 = Point.make((0.0 - p.y()) / dir.y(), this);
+        final Point y1 = Point.make((1.0 - p.y()) / dir.y(), this);
         
         near = Point.farest(near, Point.nearest(y0, y1));
         far = Point.nearest(far, Point.farest(y0, y1));
@@ -47,8 +79,8 @@ public class Box extends Primitive
         /**
          * Plane z = 0 and z = 1
          */
-        final Point z0 = Point.make((0.0 - p.z()) / dir.z(), this, Vector.UNIT_NEG_Z);
-        final Point z1 = Point.make((1.0 - p.z()) / dir.z(), this, Vector.UNIT_Z);
+        final Point z0 = Point.make((0.0 - p.z()) / dir.z(), this);
+        final Point z1 = Point.make((1.0 - p.z()) / dir.z(), this);
         
         near = Point.farest(near, Point.nearest(z0, z1));
         far = Point.nearest(far, Point.farest(z0, z1));

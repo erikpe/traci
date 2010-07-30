@@ -17,7 +17,21 @@ public abstract class Primitive extends Shape
         transformation = Transformations.identity();
     }
     
-    public abstract Ray primitiveShootRay(final Vector p, final Vector dir);
+    protected abstract Vector primitiveGetNormalAt(final Vector p);
+    
+    public Vector getNormalAt(final Vector p, final Vector dir)
+    {
+        Vector normal = primitiveGetNormalAt(transformation.pointInv(p));
+        
+        if (dir.dot(normal) > 0)
+        {
+            normal = normal.neg();
+        }
+        
+        return normal.normalize();
+    }
+    
+    protected abstract Ray primitiveShootRay(final Vector p, final Vector dir);
     
     @Override
     public Ray shootRay(final Vector p, final Vector dir)

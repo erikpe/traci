@@ -1,7 +1,6 @@
 package traci.render;
 
 import traci.math.ObjectPool;
-import traci.math.Vector;
 import traci.model.shape.primitive.Primitive;
 
 public class Point
@@ -11,17 +10,15 @@ public class Point
         @Override
         protected Point makeNew()
         {
-            return new Point(0, null, null);
+            return new Point(0, null);
         }
         
-        public Point make(final double dist, final Primitive obj,
-                final Vector normal)
+        public Point make(final double dist, final Primitive obj)
         {
             final Point p = getFree();
             
             p.dist = dist;
             p.obj = obj;
-            p.normal = normal;
             
             return p;
         }
@@ -31,26 +28,22 @@ public class Point
     
     Primitive obj;
     
-    Vector normal;
-    
-    Point(final double dist, final Primitive obj, final Vector normal)
+    Point(final double dist, final Primitive obj)
     {
         this.dist = dist;
         this.obj = obj;
-        this.normal = normal;
     }
     
-    public static Point make(final double dist, final Primitive obj,
-            final Vector normal)
+    public static Point make(final double dist, final Primitive obj)
     {
         final Thread thisThread = Thread.currentThread();
         
         if (thisThread instanceof RenderingThread)
         {
-            return ((RenderingThread) thisThread).pointPool.make(dist, obj, normal);
+            return ((RenderingThread) thisThread).pointPool.make(dist, obj);
         }
         
-        return new Point(dist, obj, normal);
+        return new Point(dist, obj);
     }
     
     public double dist()
@@ -63,11 +56,6 @@ public class Point
         return obj;
     }
     
-    public Vector normal()
-    {
-        return normal;
-    }
-    
     public static Point nearest(final Point p0, final Point p1)
     {
         return (p0.dist < p1.dist ? p0 : p1);
@@ -78,14 +66,9 @@ public class Point
         return (p0.dist > p1.dist ? p0 : p1);
     }
     
-    public Point invNormal()
-    {
-        return Point.make(dist, obj, normal.neg());
-    }
-    
     @Override
     public String toString()
     {
-        return "[" + dist + " " + normal + "]";
+        return "[" + dist + "]";
     }
 }

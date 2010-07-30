@@ -23,6 +23,12 @@ public class Quadric extends Primitive
         // this.coeffs = Arrays.copyOf(coeffs, NUM_COEFFS);
     }
     
+    @Override
+    public Vector primitiveGetNormalAt(final Vector p)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * A quadric is a polynomial shape of the second degree. It is defined by
      * the equation

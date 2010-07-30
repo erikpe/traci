@@ -23,6 +23,12 @@ public class Quartic extends Primitive
         // this.coeffs = Arrays.copyOf(coeffs, NUM_COEFFS);
     }
     
+    @Override
+    public Vector primitiveGetNormalAt(final Vector p)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * a {@link Quartic} is a polynomial shape of the fourth degree.
      */
