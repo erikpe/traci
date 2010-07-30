@@ -1,10 +1,7 @@
 package traci.model.shape.csg;
 
-import java.util.List;
-
 import traci.math.Vector;
 import traci.model.material.Material;
-import traci.model.shape.Shape;
 import traci.render.Ray;
 
 public class Union extends Csg
@@ -27,7 +24,6 @@ public class Union extends Csg
             return null;
         }
         
-        final List<Shape> shapes = getShapes();
         final int numShapes = shapes.size();
         
         Ray ray = null;
@@ -47,5 +43,21 @@ public class Union extends Csg
         }
         
         return ray;
+    }
+    
+    @Override
+    public boolean isInside(final Vector p)
+    {
+        final int numShapes = shapes.size();
+        
+        for (int i = 0; i < numShapes; ++i)
+        {
+            if (shapes.get(i).isInside(p))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

@@ -43,6 +43,16 @@ public abstract class Primitive extends Shape
         return primitiveShootRay(transP, transDir);
     }
     
+    protected abstract boolean primitiveIsInside(final Vector p);
+    
+    @Override
+    public boolean isInside(final Vector p)
+    {
+        final Vector transP = transformation.pointInv(p);
+        
+        return primitiveIsInside(transP);
+    }
+    
     @Override
     public void transform(final Transformation tr)
     {

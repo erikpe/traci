@@ -43,4 +43,9 @@ public class Plane extends Primitive
         return new Ray(Interval.make(p0, p1));
     }
     
+    @Override
+    protected boolean primitiveIsInside(final Vector p)
+    {
+        return false;
+    }
 }

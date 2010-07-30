@@ -32,4 +32,6 @@ public abstract class Shape extends TransformableHelper implements Transformable
     }
     
     public abstract Ray shootRay(final Vector p, final Vector dir);
+    
+    public abstract boolean isInside(final Vector p);
 }

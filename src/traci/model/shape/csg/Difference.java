@@ -1,10 +1,7 @@
 package traci.model.shape.csg;
 
-import java.util.List;
-
 import traci.math.Vector;
 import traci.model.material.Material;
-import traci.model.shape.Shape;
 import traci.render.Ray;
 
 public class Difference extends Csg
@@ -27,7 +24,6 @@ public class Difference extends Csg
             return null;
         }
         
-        final List<Shape> shapes = getShapes();
         final int numShapes = shapes.size();
         
         if (numShapes <= 0)
@@ -58,5 +54,31 @@ public class Difference extends Csg
         }
         
         return ray;
+    }
+    
+    @Override
+    public boolean isInside(final Vector p)
+    {
+        final int numShapes = shapes.size();
+        
+        if (numShapes == 0)
+        {
+            return false;
+        }
+        
+        if (!shapes.get(0).isInside(p))
+        {
+            return false;
+        }
+        
+        for (int i = 1; i < numShapes; ++i)
+        {
+            if (shapes.get(i).isInside(p))
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }

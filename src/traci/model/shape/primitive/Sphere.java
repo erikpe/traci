@@ -31,9 +31,9 @@ public class Sphere extends Primitive
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
-        final double c = dir.x() * dir.x() + dir.y() * dir.y() + dir.z() * dir.z();
-        final double a = 2 * (p.x() * dir.x() + p.y() * dir.y() + p.z() * dir.z()) / c;
-        final double b = (p.x() * p.x() + p.y() * p.y() + p.z() * p.z() - 1) / c;
+        final double c = dir.dot(dir);
+        final double a = 2 * p.dot(dir) / c;
+        final double b = (p.dot(p) - 1) / c;
         
         final double d = (a * a) / 4 - b;
         
@@ -41,9 +41,14 @@ public class Sphere extends Primitive
         {
             final double sqrtD = Math.sqrt(d);
             
-            final double t0 = -a/2 - sqrtD;
-            if (t0 <= EPSILON) return null;
-            final double t1 = -a/2 + sqrtD;
+            final double t0 = -a / 2 - sqrtD;
+            
+            if (t0 <= EPSILON)
+            {
+                return null;
+            }
+            
+            final double t1 = -a / 2 + sqrtD;
             
             final Point p0 = Point.make(t0, this);
             final Point p1 = Point.make(t1, this);
@@ -52,5 +57,11 @@ public class Sphere extends Primitive
         }
         
         return null;
+    }
+    
+    @Override
+    protected boolean primitiveIsInside(final Vector p)
+    {
+        return p.length() <= 1.0;
     }
 }

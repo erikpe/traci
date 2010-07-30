@@ -43,4 +43,10 @@ public class Quadric extends Primitive
     {
         throw new UnsupportedOperationException();
     }
+    
+    @Override
+    protected boolean primitiveIsInside(final Vector p)
+    {
+        throw new UnsupportedOperationException();
+    }
 }

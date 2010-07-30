@@ -69,10 +69,16 @@ public class Cylinder extends Primitive
         /**
          * Then the infinite cylinder x^2 + z^2 = 1
          */
-        final double a = (2 * p.x() * dir.x() + 2 * p.z() * dir.z())
-                / (dir.x() * dir.x() + dir.z() * dir.z());
-        final double b = (p.x() * p.x() + p.z() * p.z() - 1)
-                / (dir.x() * dir.x() + dir.z() * dir.z());
+        
+        final double px = p.x();
+        final double pz = p.z();
+        final double dirx = dir.x();
+        final double dirz = dir.z();
+        
+        final double a = (2 * px * dirx + 2 * pz * dirz)
+                / (dirx * dirx + dirz * dirz);
+        final double b = (px * px + pz * pz - 1)
+                / (dirx * dirx + dirz * dirz);
         
         if ((a * a) / 4 - b > 0)
         {
@@ -92,5 +98,22 @@ public class Cylinder extends Primitive
         }
         
         return ray;
+    }
+    
+    @Override
+    protected boolean primitiveIsInside(final Vector p)
+    {
+        final double x = p.x();
+        final double y = p.y();
+        final double z = p.z();
+        
+        if (y > 1.0 || y < 0.0)
+        {
+            return false;
+        }
+        
+        final double dist = Math.sqrt(x * x + z * z);
+        
+        return dist <= 1.0;
     }
 }

@@ -84,4 +84,16 @@ public class Box extends Primitive
         
         return ray;
     }
+    
+    @Override
+    protected boolean primitiveIsInside(final Vector p)
+    {
+        final double x = p.x();
+        final double y = p.y();
+        final double z = p.z();
+        
+        return x >= 0.0 && x <= 1.0
+            && y >= 0.0 && y <= 1.0
+            && z >= 0.0 && z <= 1.0;
+    }
 }

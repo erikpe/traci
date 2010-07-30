@@ -85,4 +85,14 @@ public class Torus extends Primitive
         
         return ray;
     }
+    
+    @Override
+    protected boolean primitiveIsInside(final Vector p)
+    {
+        final double r2 = r * r;
+        final double a = p.dot(p) - r2 - 1;
+        final double b = a * a + 4 * (p.z() * p.z() - r2);
+        
+        return b <= 0;
+    }
 }

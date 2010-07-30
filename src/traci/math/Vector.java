@@ -83,7 +83,7 @@ public class Vector
     
     public double dot(final Vector vec)
     {
-        return (x * vec.x) + (y * vec.y) + (z * vec.z);
+        return x * vec.x + y * vec.y + z * vec.z;
     }
     
     public Vector add(final Vector vec)
