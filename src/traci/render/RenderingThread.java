@@ -6,6 +6,7 @@ import java.util.Random;
 import traci.math.Vector.VectorPool;
 import traci.math.Vector2D.Vector2DPool;
 import traci.model.material.Color.ColorPool;
+import traci.render.IntersectionStack.IntersectionStackPool;
 import traci.render.Interval.IntervalPool;
 import traci.render.Point.PointPool;
 
@@ -48,6 +49,7 @@ public class RenderingThread extends Thread
     public final Vector2DPool vector2DPool;
     public final PointPool pointPool;
     public final IntervalPool intervalPool;
+    public final IntersectionStackPool intersectionStackPool;
     
     RenderingThread(final BlockRenderer renderer,
             final Queue<WorkBlock> workQueue)
@@ -62,6 +64,7 @@ public class RenderingThread extends Thread
         this.vector2DPool = new Vector2DPool();
         this.pointPool = new PointPool();
         this.intervalPool = new IntervalPool();
+        this.intersectionStackPool = new IntersectionStackPool();
     }
     
     @Override
@@ -82,6 +85,7 @@ public class RenderingThread extends Thread
         vector2DPool.reset();
         pointPool.reset();
         intervalPool.reset();
+        intersectionStackPool.reset();
     }
     
     private static synchronized long nextIndex()

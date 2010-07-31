@@ -5,6 +5,7 @@ import traci.math.Transformations;
 import traci.math.Vector;
 import traci.model.material.Material;
 import traci.model.shape.Shape;
+import traci.render.IntersectionStack;
 import traci.render.Ray;
 
 public abstract class Primitive extends Shape
@@ -51,6 +52,29 @@ public abstract class Primitive extends Shape
         final Vector transP = transformation.pointInv(p);
         
         return primitiveIsInside(transP);
+    }
+    
+    protected abstract boolean primitiveIsOutside(final Vector p);
+    
+    @Override
+    public boolean isOutside(final Vector p)
+    {
+        final Vector transP = transformation.pointInv(p);
+        
+        return primitiveIsOutside(transP);
+    }
+    
+    protected abstract void primitiveAllIntersections(
+            final IntersectionStack iStack, final Vector p, final Vector dir);
+    
+    @Override
+    public void allIntersections(final IntersectionStack iStack,
+            final Vector p, final Vector dir)
+    {
+        final Vector transP = transformation.pointInv(p);
+        final Vector transDir = transformation.dirInv(dir);
+        
+        primitiveAllIntersections(iStack, transP, transDir);
     }
     
     @Override

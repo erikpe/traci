@@ -12,14 +12,41 @@ public class Raytrace
     protected static Color raytrace(final Scene scene, final int depth,
             final Vector p, final Vector dir)
     {
-        final Ray ray = scene.shape.shootRay(p, dir);
+        boolean newShit = true;
         
-        if (ray == null)
+        Point hit;
+        
+        if (newShit)
         {
-            return Color.BLACK;
+            final IntersectionStack iStack = IntersectionStack.make();
+            scene.shape.allIntersections(iStack, p, dir);
+            
+            if (iStack.isEmpty())
+            {
+                return Color.RED;
+            }
+            
+            hit = Point.make(iStack.dists[0], iStack.objs[0]);
+            
+            for (int i = 1; i < iStack.size(); ++i)
+            {
+                if (iStack.dists[i] < hit.dist())
+                {
+                    hit = Point.make(iStack.dists[i], iStack.objs[i]);
+                }
+            }
         }
-        
-        final Point hit = ray.get(0).p0();
+        else
+        {
+            final Ray ray = scene.shape.shootRay(p, dir);
+            
+            if (ray == null)
+            {
+                return Color.RED;
+            }
+            
+            hit = ray.get(0).p0();
+        }
         
         final Vector hitPoint = p.add(dir.mul(hit.dist()));
         final Vector normal = hit.obj().getNormalAt(hitPoint, dir);

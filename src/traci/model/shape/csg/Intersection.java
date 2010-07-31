@@ -2,6 +2,7 @@ package traci.model.shape.csg;
 
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.render.IntersectionStack;
 import traci.render.Ray;
 
 public class Intersection extends Csg
@@ -61,6 +62,11 @@ public class Intersection extends Csg
     @Override
     public boolean isInside(final Vector p)
     {
+        if (bBox != null && !bBox.isInside(p))
+        {
+            return false;
+        }
+        
         final int numShapes = shapes.size();
         
         if (numShapes == 0)
@@ -77,5 +83,75 @@ public class Intersection extends Csg
         }
         
         return true;
+    }
+    
+    @Override
+    public boolean isOutside(final Vector p)
+    {
+        if (bBox != null && bBox.isOutside(p))
+        {
+            return true;
+        }
+        
+        final int numShapes = shapes.size();
+        
+        if (numShapes == 0)
+        {
+            return false;
+        }
+        
+        for (int i = 0; i < numShapes; ++i)
+        {
+            if (shapes.get(i).isOutside(p))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    @Override
+    public void allIntersections(final IntersectionStack iStack,
+            final Vector p, final Vector dir)
+    {
+        if (bBox != null && !bBox.test(p, dir))
+        {
+            return;
+        }
+        
+        final int numShapes = shapes.size();
+        final IntersectionStack localStack = IntersectionStack.make();
+        
+        for (int isecObj = 0; isecObj < numShapes; ++isecObj)
+        {
+            shapes.get(isecObj).allIntersections(localStack, p, dir);
+            
+            for (int isecNr = 0; isecNr < localStack.size(); ++isecNr)
+            {
+                boolean keepIsec = true;
+                
+                for (int testObj = 0; testObj < numShapes; ++testObj)
+                {
+                    if (isecObj == testObj)
+                    {
+                        continue;
+                    }
+                    
+                    if (!shapes.get(testObj).isInside(p.add(dir.mul(localStack.dists[isecNr]))));
+                    {
+                        keepIsec = false;
+                        break;
+                    }
+                }
+                
+                if (keepIsec)
+                {
+                    iStack.push(localStack.dists[isecNr], localStack.objs[isecNr]);
+                }
+            }
+            
+            localStack.reset();
+        }
     }
 }

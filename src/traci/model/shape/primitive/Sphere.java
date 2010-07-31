@@ -2,6 +2,7 @@ package traci.model.shape.primitive;
 
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.render.IntersectionStack;
 import traci.render.Interval;
 import traci.render.Point;
 import traci.render.Ray;
@@ -62,6 +63,34 @@ public class Sphere extends Primitive
     @Override
     protected boolean primitiveIsInside(final Vector p)
     {
-        return p.length() <= 1.0;
+        return p.length() < 1.0 + INSIDE_MARIGIN;
+    }
+    
+    @Override
+    protected boolean primitiveIsOutside(final Vector p)
+    {
+        return p.length() > 1.0 - INSIDE_MARIGIN;
+    }
+    
+    @Override
+    protected void primitiveAllIntersections(final IntersectionStack iStack,
+            final Vector p, final Vector dir)
+    {
+        final Ray ray = primitiveShootRay(p, dir);
+        
+        if (ray == null)
+        {
+            return;
+        }
+        
+        for (final Interval ival : ray)
+        {
+            iStack.push(ival.p0().dist(), ival.p0().obj());
+            
+            if (ival.p1().dist() > ival.p0().dist())
+            {
+                iStack.push(ival.p1().dist(), ival.p1().obj());
+            }
+        }
     }
 }

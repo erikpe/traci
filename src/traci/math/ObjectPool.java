@@ -6,7 +6,7 @@ import traci.render.Settings;
 
 abstract public class ObjectPool<T>
 {
-    private static final int DEFAULT_INITIAL_SIZE = 128;
+    private static final int DEFAULT_INITIAL_SIZE = 16;
     
     private final Class<T> objClass;
     

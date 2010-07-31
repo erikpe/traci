@@ -11,7 +11,9 @@ import traci.model.Scene;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
 import traci.model.material.pigment.Checker;
+import traci.model.shape.csg.Difference;
 import traci.model.shape.csg.Union;
+import traci.model.shape.primitive.Box;
 import traci.model.shape.primitive.Cylinder;
 import traci.model.shape.primitive.Plane;
 import traci.model.shape.primitive.Sphere;
@@ -25,8 +27,8 @@ public class Main
     {
         //Transformation.camera(Vector.ORIGO, Vector.make(1, 2, 3), Vector.UNIT_Y);
         
-        final int width = 1024;
-        final int height = 768;
+        final int width = 640;
+        final int height = 480;
         final String filename = "out.png";
         
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
@@ -90,19 +92,34 @@ public class Main
         union.add(ycyl);
         union.add(zcyl);
         
+        final Difference diff = new Difference();
+        final Box box = new Box();
+        //final Sphere sp = new Sphere();
+        //sp.scale(0.5);
+        //sp.translate(0, 1, 1);
+        //final Union minus = new Union();
+        final Cylinder cy = new Cylinder(.3, Vector.make(.5, .5, 1.01), Vector.make(.5, .5, -0.01));
+        final Cylinder cy2 = new Cylinder(.3, Vector.make(0, .5, 1.01), Vector.make(0, .5, -0.01));
+        //minus.add(cy);
+        //minus.add(cy2);
+        
+        diff.add(box);
+        diff.add(cy);
+        diff.add(cy2);
+        
         //final Vector camLocation = Vector.make(100, 200, 300);
         //final Vector camLookAt = Vector.make(101, 203, 309);
         final Vector camLocation = Vector.make(-2, 2, 10);
-        final Vector camLookAt = Vector.make(0, 0, 0);
+        final Vector camLookAt = Vector.make(.2, .5, .5);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.make(0, 1, 0));
         
-        final Scene scene = new Scene(union, cam);
+        final Scene scene = new Scene(diff, cam);
         final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*30));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.RED.mul(50));
         
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, new Settings(), multiDrawArea, 8);
+        Renderer.renderScene(scene, new Settings(), multiDrawArea, 1);
     }
 }

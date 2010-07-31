@@ -2,6 +2,8 @@ package traci.model.shape.primitive;
 
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.render.IntersectionStack;
+import traci.render.Interval;
 import traci.render.Ray;
 
 public class Quartic extends Primitive
@@ -42,5 +44,33 @@ public class Quartic extends Primitive
     protected boolean primitiveIsInside(final Vector p)
     {
         throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    protected boolean primitiveIsOutside(final Vector p)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    protected void primitiveAllIntersections(final IntersectionStack iStack,
+            final Vector p, final Vector dir)
+    {
+        final Ray ray = primitiveShootRay(p, dir);
+        
+        if (ray == null)
+        {
+            return;
+        }
+        
+        for (final Interval ival : ray)
+        {
+            iStack.push(ival.p0().dist(), ival.p0().obj());
+            
+            if (ival.p1().dist() > ival.p0().dist())
+            {
+                iStack.push(ival.p1().dist(), ival.p1().obj());
+            }
+        }
     }
 }

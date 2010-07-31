@@ -2,6 +2,7 @@ package traci.model.shape.primitive;
 
 import traci.math.PolynomSolver;
 import traci.math.Vector;
+import traci.render.IntersectionStack;
 import traci.render.Interval;
 import traci.render.Point;
 import traci.render.Ray;
@@ -93,6 +94,38 @@ public class Torus extends Primitive
         final double a = p.dot(p) - r2 - 1;
         final double b = a * a + 4 * (p.z() * p.z() - r2);
         
-        return b <= 0;
+        return b < INSIDE_MARIGIN;
+    }
+    
+    @Override
+    protected boolean primitiveIsOutside(final Vector p)
+    {
+        final double r2 = r * r;
+        final double a = p.dot(p) - r2 - 1;
+        final double b = a * a + 4 * (p.z() * p.z() - r2);
+        
+        return b > -INSIDE_MARIGIN;
+    }
+    
+    @Override
+    protected void primitiveAllIntersections(final IntersectionStack iStack,
+            final Vector p, final Vector dir)
+    {
+        final Ray ray = primitiveShootRay(p, dir);
+        
+        if (ray == null)
+        {
+            return;
+        }
+        
+        for (final Interval ival : ray)
+        {
+            iStack.push(ival.p0().dist(), ival.p0().obj());
+            
+            if (ival.p1().dist() > ival.p0().dist())
+            {
+                iStack.push(ival.p1().dist(), ival.p1().obj());
+            }
+        }
     }
 }
