@@ -136,16 +136,6 @@ public class Cylinder extends Primitive
         return dist > 1.0 - INSIDE_MARIGIN;
     }
     
-    private final double min(final double val0, final double val1)
-    {
-        return val0 < val1 ? val0 : val1;
-    }
-    
-    private final double max(final double val0, final double val1)
-    {
-        return val0 > val1 ? val0 : val1;
-    }
-    
     @Override
     protected void primitiveAllIntersections(final IntersectionStack iStack,
             final Vector p, final Vector dir)

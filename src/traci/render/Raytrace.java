@@ -10,7 +10,7 @@ import traci.model.shape.primitive.Primitive;
 
 public class Raytrace
 {
-    private static final boolean USE_NEW_MODEL = false;
+    private static final boolean USE_NEW_METHOD = false;
     
     protected static Color raytrace(final Scene scene, final int depth,
             final Vector p, final Vector dir)
@@ -18,7 +18,7 @@ public class Raytrace
         double dist;
         Primitive obj;
         
-        if (USE_NEW_MODEL)
+        if (USE_NEW_METHOD)
         {
             final IntersectionStack iStack = IntersectionStack.make();
             scene.shape.allIntersections(iStack, p, dir);
@@ -72,12 +72,9 @@ public class Raytrace
             final Vector toLight = light.location.sub(hitPoint);
             final Vector dirToLight = toLight.normalize();
             
-            if (USE_NEW_MODEL)
+            if (USE_NEW_METHOD)
             {
-                final IntersectionStack iStack = IntersectionStack.make();
-                scene.shape.allIntersections(iStack, hitPoint, dirToLight);
-                
-                if (!iStack.isEmpty())
+                if (scene.shape.anyIntersection(hitPoint, dirToLight))
                 {
                     continue;
                 }

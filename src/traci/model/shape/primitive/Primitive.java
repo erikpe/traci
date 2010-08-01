@@ -18,6 +18,16 @@ public abstract class Primitive extends Shape
         transformation = Transformations.identity();
     }
     
+    protected final static double min(final double val0, final double val1)
+    {
+        return val0 < val1 ? val0 : val1;
+    }
+    
+    protected final static double max(final double val0, final double val1)
+    {
+        return val0 > val1 ? val0 : val1;
+    }
+    
     protected abstract Vector primitiveGetNormalAt(final Vector p);
     
     public Vector getNormalAt(final Vector p, final Vector dir)

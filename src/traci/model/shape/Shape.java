@@ -44,4 +44,12 @@ public abstract class Shape extends TransformableHelper implements Transformable
     
     public abstract void allIntersections(final IntersectionStack iStack,
             final Vector p, final Vector dir);
+    
+    public boolean anyIntersection(final Vector p, final Vector dir)
+    {
+        final IntersectionStack localStack = IntersectionStack.make();
+        allIntersections(localStack, p, dir);
+        
+        return !localStack.isEmpty();
+    }
 }

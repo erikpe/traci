@@ -106,4 +106,25 @@ public class Union extends Csg
             shapes.get(i).allIntersections(iStack, p, dir);
         }
     }
+    
+    @Override
+    public boolean anyIntersection(final Vector p, final Vector dir)
+    {
+        if (bBox != null && !bBox.test(p, dir))
+        {
+            return false;
+        }
+        
+        final int numShapes = shapes.size();
+        
+        for (int i = 0; i < numShapes; ++i)
+        {
+            if (shapes.get(i).anyIntersection(p, dir))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }

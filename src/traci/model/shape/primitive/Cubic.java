@@ -57,21 +57,6 @@ public class Cubic extends Primitive
     protected void primitiveAllIntersections(final IntersectionStack iStack,
             final Vector p, final Vector dir)
     {
-        final Ray ray = primitiveShootRay(p, dir);
-        
-        if (ray == null)
-        {
-            return;
-        }
-        
-        for (final Interval ival : ray)
-        {
-            iStack.push(ival.p0().dist(), ival.p0().obj());
-            
-            if (ival.p1().dist() != ival.p0().dist())
-            {
-                iStack.push(ival.p1().dist(), ival.p1().obj());
-            }
-        }
+        throw new UnsupportedOperationException();
     }
 }
