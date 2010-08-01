@@ -34,6 +34,7 @@ public class Quartic extends Primitive
     /**
      * a {@link Quartic} is a polynomial shape of the fourth degree.
      */
+    @Deprecated
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {

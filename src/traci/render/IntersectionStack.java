@@ -23,7 +23,7 @@ public class IntersectionStack
         }
     }
     
-    private static final int SIZE = 32;
+    private static final int SIZE = 64;
     
     public final double[] dists;
     public final Primitive[] objs;

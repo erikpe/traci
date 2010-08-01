@@ -2,6 +2,7 @@ package traci.render;
 
 import traci.math.ObjectPool;
 
+@Deprecated
 public class Interval
 {
     public static final class IntervalPool extends ObjectPool<Interval>

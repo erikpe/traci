@@ -6,17 +6,19 @@ import traci.model.light.PointLight;
 import traci.model.material.Color;
 import traci.model.material.Finish;
 import traci.model.material.pigment.Pigment;
+import traci.model.shape.primitive.Primitive;
 
 public class Raytrace
 {
+    private static final boolean USE_NEW_MODEL = false;
+    
     protected static Color raytrace(final Scene scene, final int depth,
             final Vector p, final Vector dir)
     {
-        boolean newShit = true;
+        double dist;
+        Primitive obj;
         
-        Point hit;
-        
-        if (newShit)
+        if (USE_NEW_MODEL)
         {
             final IntersectionStack iStack = IntersectionStack.make();
             scene.shape.allIntersections(iStack, p, dir);
@@ -26,13 +28,15 @@ public class Raytrace
                 return Color.RED;
             }
             
-            hit = Point.make(iStack.dists[0], iStack.objs[0]);
+            dist = iStack.dists[0];
+            obj = iStack.objs[0];
             
             for (int i = 1; i < iStack.size(); ++i)
             {
-                if (iStack.dists[i] < hit.dist())
+                if (iStack.dists[i] < dist)
                 {
-                    hit = Point.make(iStack.dists[i], iStack.objs[i]);
+                    dist = iStack.dists[i];
+                    obj = iStack.objs[i];
                 }
             }
         }
@@ -45,14 +49,17 @@ public class Raytrace
                 return Color.RED;
             }
             
-            hit = ray.get(0).p0();
+            final Point hit = ray.get(0).p0();
+            
+            dist = hit.dist();
+            obj = hit.obj();
         }
         
-        final Vector hitPoint = p.add(dir.mul(hit.dist()));
-        final Vector normal = hit.obj().getNormalAt(hitPoint, dir);
+        final Vector hitPoint = p.add(dir.mul(dist));
+        final Vector normal = obj.getNormalAt(hitPoint, dir);
         
-        final Pigment pigment = hit.obj().material.getPigment();
-        final Finish finish = hit.obj().material.getFinish();
+        final Pigment pigment = obj.material.getPigment();
+        final Finish finish = obj.material.getFinish();
         
         /**
          * Ambient light
@@ -65,11 +72,24 @@ public class Raytrace
             final Vector toLight = light.location.sub(hitPoint);
             final Vector dirToLight = toLight.normalize();
             
-            final Ray lightRay = scene.shape.shootRay(hitPoint, dirToLight);
-            
-            if (lightRay != null)
+            if (USE_NEW_MODEL)
             {
-                continue;
+                final IntersectionStack iStack = IntersectionStack.make();
+                scene.shape.allIntersections(iStack, hitPoint, dirToLight);
+                
+                if (!iStack.isEmpty())
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                final Ray lightRay = scene.shape.shootRay(hitPoint, dirToLight);
+                
+                if (lightRay != null)
+                {
+                    continue;
+                }
             }
             
             final double distToLight = toLight.length();

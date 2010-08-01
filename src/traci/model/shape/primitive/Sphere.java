@@ -29,6 +29,7 @@ public class Sphere extends Primitive
      * 
      * x^2 + y^2 + z^2 = 1
      */
+    @Deprecated
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
@@ -76,21 +77,28 @@ public class Sphere extends Primitive
     protected void primitiveAllIntersections(final IntersectionStack iStack,
             final Vector p, final Vector dir)
     {
-        final Ray ray = primitiveShootRay(p, dir);
+        final double c = dir.dot(dir);
+        final double a = 2 * p.dot(dir) / c;
+        final double b = (p.dot(p) - 1) / c;
         
-        if (ray == null)
-        {
-            return;
-        }
+        final double d = (a * a) / 4 - b;
         
-        for (final Interval ival : ray)
+        if (d > 0)
         {
-            iStack.push(ival.p0().dist(), ival.p0().obj());
+            final double sqrtD = Math.sqrt(d);
+            final double ma2 = -a / 2;
             
-            if (ival.p1().dist() > ival.p0().dist())
+            final double t0 = ma2 - sqrtD;
+            
+            if (t0 <= EPSILON)
             {
-                iStack.push(ival.p1().dist(), ival.p1().obj());
+                return;
             }
+            
+            final double t1 = ma2 + sqrtD;
+            
+            iStack.push(t0, this);
+            iStack.push(t1, this);
         }
     }
 }

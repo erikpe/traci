@@ -2,6 +2,7 @@ package traci.model.shape.csg;
 
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.model.shape.primitive.Primitive;
 import traci.render.IntersectionStack;
 import traci.render.Ray;
 
@@ -17,6 +18,7 @@ public class Union extends Csg
         super(material);
     }
     
+    @Deprecated
     @Override
     public Ray shootRay(final Vector p, final Vector dir)
     {
@@ -47,7 +49,7 @@ public class Union extends Csg
     }
     
     @Override
-    public boolean isInside(final Vector p)
+    public boolean isInside(final Vector p, final Primitive primitive)
     {
         if (bBox != null && !bBox.isInside(p))
         {
@@ -58,7 +60,7 @@ public class Union extends Csg
         
         for (int i = 0; i < numShapes; ++i)
         {
-            if (shapes.get(i).isInside(p))
+            if (shapes.get(i).isInside(p, primitive))
             {
                 return true;
             }
@@ -68,7 +70,7 @@ public class Union extends Csg
     }
     
     @Override
-    public boolean isOutside(final Vector p)
+    public boolean isOutside(final Vector p, final Primitive primitive)
     {
         if (bBox != null && bBox.isOutside(p))
         {
@@ -79,7 +81,7 @@ public class Union extends Csg
         
         for (int i = 0; i < numShapes; ++i)
         {
-            if (!shapes.get(i).isOutside(p))
+            if (!shapes.get(i).isOutside(p, primitive))
             {
                 return false;
             }

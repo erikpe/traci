@@ -28,6 +28,7 @@ public class Plane extends Primitive
     /**
      * The plane is defined by the equation y = 0.
      */
+    @Deprecated
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
@@ -60,21 +61,11 @@ public class Plane extends Primitive
     protected void primitiveAllIntersections(final IntersectionStack iStack,
             final Vector p, final Vector dir)
     {
-        final Ray ray = primitiveShootRay(p, dir);
+        final double t = -p.y() / dir.y();
         
-        if (ray == null)
+        if (t > EPSILON)
         {
-            return;
-        }
-        
-        for (final Interval ival : ray)
-        {
-            iStack.push(ival.p0().dist(), ival.p0().obj());
-            
-            if (ival.p1().dist() != ival.p0().dist())
-            {
-                iStack.push(ival.p1().dist(), ival.p1().obj());
-            }
+            iStack.push(t, this);
         }
     }
 }

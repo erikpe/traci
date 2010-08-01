@@ -3,6 +3,7 @@ package traci.render;
 import traci.math.ObjectPool;
 import traci.model.shape.primitive.Primitive;
 
+@Deprecated
 public class Point
 {
     public static final class PointPool extends ObjectPool<Point>

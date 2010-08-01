@@ -34,6 +34,7 @@ public class Cubic extends Primitive
     /**
      * A {@link Cubic} is a polynomial shape of the third degree.
      */
+    @Deprecated
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {

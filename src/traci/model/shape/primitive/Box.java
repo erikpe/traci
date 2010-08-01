@@ -46,6 +46,7 @@ public class Box extends Primitive
     /**
      * The box is bounded by the planes x = 0, x = 1, y = 0, y = 1, z = 0 and z = 1.
      */
+    @Deprecated
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {

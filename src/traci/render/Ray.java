@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+@Deprecated
 public class Ray extends AbstractList<Interval>
 {
     private final LinkedList<Interval> ray;

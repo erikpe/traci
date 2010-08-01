@@ -33,8 +33,10 @@ public abstract class Primitive extends Shape
         return normal;
     }
     
+    @Deprecated
     protected abstract Ray primitiveShootRay(final Vector p, final Vector dir);
     
+    @Deprecated
     @Override
     public Ray shootRay(final Vector p, final Vector dir)
     {
@@ -47,20 +49,29 @@ public abstract class Primitive extends Shape
     protected abstract boolean primitiveIsInside(final Vector p);
     
     @Override
-    public boolean isInside(final Vector p)
+    public boolean isInside(final Vector p, final Primitive primitive)
     {
-        final Vector transP = transformation.pointInv(p);
+        if (primitive == this)
+        {
+            return true;
+        }
         
+        final Vector transP = transformation.pointInv(p);
         return primitiveIsInside(transP);
     }
     
     protected abstract boolean primitiveIsOutside(final Vector p);
     
     @Override
-    public boolean isOutside(final Vector p)
+    public boolean isOutside(final Vector p, final Primitive primitive)
     {
-        final Vector transP = transformation.pointInv(p);
+        if (primitive == this)
+        {
+            return true;
+        }
         
+        final Vector transP = transformation.pointInv(p);
+
         return primitiveIsOutside(transP);
     }
     

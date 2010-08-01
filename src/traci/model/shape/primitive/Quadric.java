@@ -40,6 +40,7 @@ public class Quadric extends Primitive
      * where {@code coeffs} consists of the coefficients
      * {@code { A, B, C, D ... }}
      */
+    @Deprecated
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
