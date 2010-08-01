@@ -22,14 +22,7 @@ public class Intersection extends Csg
     @Override
     public Ray shootRay(final Vector p, final Vector dir)
     {
-        if (bBox != null && !bBox.test(p, dir))
-        {
-            return null;
-        }
-        
-        final int numShapes = shapes.size();
-        
-        if (numShapes <= 0)
+        if ((bBox != null && !bBox.test(p, dir)) || numShapes == 0)
         {
             return null;
         }
@@ -64,14 +57,7 @@ public class Intersection extends Csg
     @Override
     public boolean isInside(final Vector p, final Primitive primitive)
     {
-        if (bBox != null && !bBox.isInside(p))
-        {
-            return false;
-        }
-        
-        final int numShapes = shapes.size();
-        
-        if (numShapes == 0)
+        if ((bBox != null && !bBox.isInside(p)) || numShapes == 0)
         {
             return false;
         }
@@ -94,8 +80,6 @@ public class Intersection extends Csg
         {
             return true;
         }
-        
-        final int numShapes = shapes.size();
         
         if (numShapes == 0)
         {
@@ -122,7 +106,6 @@ public class Intersection extends Csg
             return;
         }
         
-        final int numShapes = shapes.size();
         final IntersectionStack localStack = IntersectionStack.make();
         
         for (int isecObj = 0; isecObj < numShapes; ++isecObj)

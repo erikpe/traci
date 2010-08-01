@@ -11,18 +11,22 @@ import traci.model.shape.Shape;
 public abstract class Csg extends Shape
 {
     protected final List<Shape> shapes;
+    protected int numShapes;
     
     protected BoundingBox bBox;
     
     public Csg(final Material material)
     {
         super(material);
-        shapes = new ArrayList<Shape>();
+        
+        this.shapes = new ArrayList<Shape>();
+        this.numShapes = this.shapes.size();
     }
     
     public void add(final Shape shape)
     {
         shapes.add(shape);
+        numShapes = shapes.size();
     }
     
     public void setBoundingBox(final BoundingBox bBox)

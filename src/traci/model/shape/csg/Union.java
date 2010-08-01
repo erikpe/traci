@@ -27,8 +27,6 @@ public class Union extends Csg
             return null;
         }
         
-        final int numShapes = shapes.size();
-        
         Ray ray = null;
         
         for (int i = 0; i < numShapes; ++i)
@@ -56,8 +54,6 @@ public class Union extends Csg
             return false;
         }
         
-        final int numShapes = shapes.size();
-        
         for (int i = 0; i < numShapes; ++i)
         {
             if (shapes.get(i).isInside(p, primitive))
@@ -76,8 +72,6 @@ public class Union extends Csg
         {
             return true;
         }
-        
-        final int numShapes = shapes.size();
         
         for (int i = 0; i < numShapes; ++i)
         {
@@ -99,8 +93,6 @@ public class Union extends Csg
             return;
         }
         
-        final int numShapes = shapes.size();
-        
         for (int i = 0; i < numShapes; ++i)
         {
             shapes.get(i).allIntersections(iStack, p, dir);
@@ -114,8 +106,6 @@ public class Union extends Csg
         {
             return false;
         }
-        
-        final int numShapes = shapes.size();
         
         for (int i = 0; i < numShapes; ++i)
         {

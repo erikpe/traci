@@ -10,7 +10,7 @@ import traci.model.shape.primitive.Primitive;
 
 public class Raytrace
 {
-    private static final boolean USE_NEW_METHOD = false;
+    private static final boolean USE_NEW_METHOD = true;
     
     protected static Color raytrace(final Scene scene, final int depth,
             final Vector p, final Vector dir)
