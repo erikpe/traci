@@ -8,6 +8,7 @@ import traci.model.material.Material;
 import traci.model.shape.primitive.Primitive;
 import traci.render.IntersectionStack;
 import traci.render.Ray;
+import traci.render.Ray2;
 
 public abstract class Shape extends TransformableHelper implements Transformable
 {
@@ -34,6 +35,8 @@ public abstract class Shape extends TransformableHelper implements Transformable
     {
         material.getPigment().transform(transformation);
     }
+    
+    public abstract Ray2 shootRay2(final Vector p, final Vector dir);
     
     @Deprecated
     public abstract Ray shootRay(final Vector p, final Vector dir);

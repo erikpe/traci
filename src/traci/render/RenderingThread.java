@@ -9,6 +9,7 @@ import traci.model.material.Color.ColorPool;
 import traci.render.IntersectionStack.IntersectionStackPool;
 import traci.render.Interval.IntervalPool;
 import traci.render.Point.PointPool;
+import traci.render.Ray2.Ray2Pool;
 
 public class RenderingThread extends Thread
 {
@@ -50,6 +51,7 @@ public class RenderingThread extends Thread
     public final PointPool pointPool;
     public final IntervalPool intervalPool;
     public final IntersectionStackPool intersectionStackPool;
+    public final Ray2Pool ray2Pool;
     
     RenderingThread(final BlockRenderer renderer,
             final Queue<WorkBlock> workQueue)
@@ -65,6 +67,7 @@ public class RenderingThread extends Thread
         this.pointPool = new PointPool();
         this.intervalPool = new IntervalPool();
         this.intersectionStackPool = new IntersectionStackPool();
+        this.ray2Pool = new Ray2Pool();
     }
     
     @Override
@@ -86,6 +89,7 @@ public class RenderingThread extends Thread
         pointPool.reset();
         intervalPool.reset();
         intersectionStackPool.reset();
+        ray2Pool.reset();
     }
     
     private static synchronized long nextIndex()

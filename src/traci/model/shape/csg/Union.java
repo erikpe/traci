@@ -5,6 +5,7 @@ import traci.model.material.Material;
 import traci.model.shape.primitive.Primitive;
 import traci.render.IntersectionStack;
 import traci.render.Ray;
+import traci.render.Ray2;
 
 public class Union extends Csg
 {
@@ -16,6 +17,23 @@ public class Union extends Csg
     public Union(final Material material)
     {
         super(material);
+    }
+    
+    public Ray2 shootRay2(final Vector p, final Vector dir)
+    {
+        if (bBox != null && !bBox.test(p, dir))
+        {
+            return null;
+        }
+        
+        Ray2 ray = null;
+        
+        for (int i = 0; i < numShapes; ++i)
+        {
+            ray = Ray2.union(ray, shapes.get(i).shootRay2(p, dir));
+        }
+        
+        return ray;
     }
     
     @Deprecated

@@ -5,7 +5,10 @@ import traci.model.material.Material;
 import traci.render.IntersectionStack;
 import traci.render.Interval;
 import traci.render.Point;
+import traci.render.Point2;
 import traci.render.Ray;
+import traci.render.Ray2;
+import traci.render.Point2.Type;
 
 public class Sphere extends Primitive
 {
@@ -22,6 +25,39 @@ public class Sphere extends Primitive
     public Vector primitiveGetNormalAt(final Vector p)
     {
         return p;
+    }
+    
+    public Ray2 primitiveShootRay2(final Vector p, final Vector dir)
+    {
+        final double c = dir.dot(dir);
+        final double a = 2 * p.dot(dir) / c;
+        final double b = (p.dot(p) - 1) / c;
+        
+        final double d = (a * a) / 4 - b;
+        
+        if (d > 0)
+        {
+            final double sqrtD = Math.sqrt(d);
+            final double ma2 = -a / 2;
+            
+            final double t0 = ma2 - sqrtD;
+            
+            if (t0 <= EPSILON)
+            {
+                return null;
+            }
+            
+            final double t1 = ma2 + sqrtD;
+            
+            final Ray2 ray = Ray2.make();
+            
+            ray.add(Point2.make(t0, this, Type.ENTER));
+            ray.add(Point2.make(t1, this, Type.LEAVE));
+            
+            return ray;
+        }
+        
+        return null;
     }
     
     /**

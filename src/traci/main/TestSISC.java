@@ -43,8 +43,8 @@ public class TestSISC
     
     public static void main(final String[] args) throws IOException, SchemeException
     {
-        final int width = 1600;
-        final int height = 1200;
+        final int width = 800;
+        final int height = 600;
         final String filename = "out.png";
         
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
@@ -96,7 +96,7 @@ public class TestSISC
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, new Settings(), multiDrawArea, 8);
+        Renderer.renderScene(scene, new Settings(), multiDrawArea, 1);
         
         start = 0;
      }

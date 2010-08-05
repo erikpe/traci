@@ -5,7 +5,10 @@ import traci.model.material.Material;
 import traci.render.IntersectionStack;
 import traci.render.Interval;
 import traci.render.Point;
+import traci.render.Point2;
+import traci.render.Point2.Type;
 import traci.render.Ray;
+import traci.render.Ray2;
 
 public class Box extends Primitive
 {
@@ -41,6 +44,47 @@ public class Box extends Primitive
         }
         
         return Vector.UNIT_Z;
+    }
+    
+    public Ray2 primitiveShootRay2(final Vector p, final Vector dir)
+    {
+        final double px = p.x();
+        final double py = p.y();
+        final double pz = p.z();
+        
+        final double dirx = dir.x();
+        final double diry = dir.y();
+        final double dirz = dir.z();
+        
+        final double x0 = -px / dirx;
+        final double x1 = (1.0 - px) / dirx;
+        
+        double near = min(x0, x1);
+        double far = max(x0, x1);
+        
+        final double y0 = -py / diry;
+        final double y1 = (1.0 - py) / diry;
+        
+        near = max(near, min(y0, y1));
+        far = min(far, max(y0, y1));
+        
+        final double z0 = -pz / dirz;
+        final double z1 = (1.0 - pz) / dirz;
+        
+        near = max(near, min(z0, z1));
+        far = min(far, max(z0, z1));
+        
+        if (near > EPSILON && near < far)
+        {
+            final Ray2 ray = Ray2.make();
+            
+            ray.add(Point2.make(near, this, Type.ENTER));
+            ray.add(Point2.make(far, this, Type.LEAVE));
+            
+            return ray;
+        }
+        
+        return null;
     }
     
     /**

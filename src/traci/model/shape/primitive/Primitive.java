@@ -7,6 +7,7 @@ import traci.model.material.Material;
 import traci.model.shape.Shape;
 import traci.render.IntersectionStack;
 import traci.render.Ray;
+import traci.render.Ray2;
 
 public abstract class Primitive extends Shape
 {
@@ -41,6 +42,16 @@ public abstract class Primitive extends Shape
         }
         
         return normal;
+    }
+    
+    protected abstract Ray2 primitiveShootRay2(final Vector p, final Vector dir);
+    
+    public Ray2 shootRay2(final Vector p, final Vector dir)
+    {
+        final Vector transP = transformation.pointInv(p);
+        final Vector transDir = transformation.dirInv(dir);
+        
+        return primitiveShootRay2(transP, transDir);
     }
     
     @Deprecated
