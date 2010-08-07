@@ -4,21 +4,27 @@ public class Matrix
 {
     private static final Matrix EYE = newEye();
     
-    private final double[][] data;
+    //private final double[][] data;
+    private final double[] data;
     
     private Matrix()
     {
-        data = new double[4][4];
+        //data = new double[4][4];
+        data = new double[16];
     }
     
     private static Matrix newEye()
     {
         Matrix res = newZero();
         
-        res.data[0][0] = 1.0;
-        res.data[1][1] = 1.0;
-        res.data[2][2] = 1.0;
-        res.data[3][3] = 1.0;
+        //res.data[0][0] = 1.0;
+        //res.data[1][1] = 1.0;
+        //res.data[2][2] = 1.0;
+        //res.data[3][3] = 1.0;
+        res.data[0] = 1.0;
+        res.data[5] = 1.0;
+        res.data[10] = 1.0;
+        res.data[15] = 1.0;
         
         return res;
     }
@@ -40,12 +46,18 @@ public class Matrix
     
     static Matrix rotx(final double sinTheta, final double cosTheta)
     {
+        //final Matrix res = newEye();
+        
+        //res.data[1][1] = cosTheta;
+        //res.data[1][2] = -sinTheta;
+        //res.data[2][1] = sinTheta;
+        //res.data[2][2] = cosTheta;
         final Matrix res = newEye();
         
-        res.data[1][1] = cosTheta;
-        res.data[1][2] = -sinTheta;
-        res.data[2][1] = sinTheta;
-        res.data[2][2] = cosTheta;
+        res.data[5] = cosTheta;
+        res.data[6] = -sinTheta;
+        res.data[9] = sinTheta;
+        res.data[10] = cosTheta;
         
         return res;
     }
@@ -59,10 +71,14 @@ public class Matrix
     {
         final Matrix res = newEye();
         
-        res.data[0][0] = cosTheta;
-        res.data[0][2] = sinTheta;
-        res.data[2][0] = -sinTheta;
-        res.data[2][2] = cosTheta;
+        //res.data[0][0] = cosTheta;
+        //res.data[0][2] = sinTheta;
+        //res.data[2][0] = -sinTheta;
+        //res.data[2][2] = cosTheta;
+        res.data[0] = cosTheta;
+        res.data[2] = sinTheta;
+        res.data[8] = -sinTheta;
+        res.data[10] = cosTheta;
         
         return res;
     }
@@ -76,10 +92,14 @@ public class Matrix
     {
         final Matrix res = newEye();
         
-        res.data[0][0] = cosTheta;
-        res.data[0][1] = -sinTheta;
-        res.data[1][0] = sinTheta;
-        res.data[1][1] = cosTheta;
+        //res.data[0][0] = cosTheta;
+        //res.data[0][1] = -sinTheta;
+        //res.data[1][0] = sinTheta;
+        //res.data[1][1] = cosTheta;
+        res.data[0] = cosTheta;
+        res.data[1] = -sinTheta;
+        res.data[4] = sinTheta;
+        res.data[5] = cosTheta;
         
         return res;
     }
@@ -88,9 +108,12 @@ public class Matrix
     {
         final Matrix res = newEye();
         
-        res.data[0][0] = scale.x();
-        res.data[1][1] = scale.y();
-        res.data[2][2] = scale.z();
+        //res.data[0][0] = scale.x();
+        //res.data[1][1] = scale.y();
+        //res.data[2][2] = scale.z();
+        res.data[0] = scale.x();
+        res.data[5] = scale.y();
+        res.data[10] = scale.z();
         
         return res;
     }
@@ -99,9 +122,12 @@ public class Matrix
     {
         final Matrix res = newEye();
         
-        res.data[0][3] = translate.x();
-        res.data[1][3] = translate.y();
-        res.data[2][3] = translate.z();
+        //res.data[0][3] = translate.x();
+        //res.data[1][3] = translate.y();
+        //res.data[2][3] = translate.z();
+        res.data[3] = translate.x();
+        res.data[7] = translate.y();
+        res.data[11] = translate.z();
         
         return res;
     }
@@ -110,17 +136,29 @@ public class Matrix
     {
         final Matrix res = newEye();
         
-        res.data[0][0] = v0.x();
-        res.data[1][0] = v0.y();
-        res.data[2][0] = v0.z();
+        //res.data[0][0] = v0.x();
+        //res.data[1][0] = v0.y();
+        //res.data[2][0] = v0.z();
         
-        res.data[0][1] = v1.x();
-        res.data[1][1] = v1.y();
-        res.data[2][1] = v1.z();
+        //res.data[0][1] = v1.x();
+        //res.data[1][1] = v1.y();
+        //res.data[2][1] = v1.z();
         
-        res.data[0][2] = v2.x();
-        res.data[1][2] = v2.y();
-        res.data[2][2] = v2.z();
+        //res.data[0][2] = v2.x();
+        //res.data[1][2] = v2.y();
+        //res.data[2][2] = v2.z();
+        
+        res.data[0] = v0.x();
+        res.data[4] = v0.y();
+        res.data[8] = v0.z();
+        
+        res.data[1] = v1.x();
+        res.data[5] = v1.y();
+        res.data[9] = v1.z();
+        
+        res.data[2] = v2.x();
+        res.data[6] = v2.y();
+        res.data[10] = v2.z();
         
         return res;
     }
@@ -133,10 +171,14 @@ public class Matrix
         {
             for (int col = 0; col < 4; ++col)
             {
-                res.data[row][col] = data[row][0] * mat.data[0][col] +
-                                     data[row][1] * mat.data[1][col] +
-                                     data[row][2] * mat.data[2][col] +
-                                     data[row][3] * mat.data[3][col];
+                //res.data[row][col] = data[row][0] * mat.data[0][col] +
+                //data[row][1] * mat.data[1][col] +
+                //data[row][2] * mat.data[2][col] +
+                //data[row][3] * mat.data[3][col];
+                res.data[row * 4 + col] = data[row * 4 + 0] * mat.data[0 * 4 + col] +
+                                          data[row * 4 + 1] * mat.data[1 * 4 + col] +
+                                          data[row * 4 + 2] * mat.data[2 * 4 + col] +
+                                          data[row * 4 + 3] * mat.data[3 * 4 + col];
             }
         }
         
@@ -145,22 +187,43 @@ public class Matrix
     
     Vector mul(final Vector vec)
     {
-        final double x = vec.x() * data[0][0] +
-                         vec.y() * data[0][1] +
-                         vec.z() * data[0][2] +
-                         data[0][3];
+        final double vx = vec.x();
+        final double vy = vec.y();
+        final double vz = vec.z();
         
-        final double y = vec.x() * data[1][0] +
-                         vec.y() * data[1][1] +
-                         vec.z() * data[1][2] +
-                         data[1][3];
+        final double[] tmpData = data;
         
-        final double z = vec.x() * data[2][0] +
-                         vec.y() * data[2][1] +
-                         vec.z() * data[2][2] +
-                         data[2][3];
+        return Vector.make(vx * tmpData[0] +
+                           vy * tmpData[1] +
+                           vz * tmpData[2] +
+                           tmpData[3],
+                           
+                           vx * tmpData[4] +
+                           vy * tmpData[5] +
+                           vz * tmpData[6] +
+                           tmpData[7],
+                           
+                           vx * tmpData[8] +
+                           vy * tmpData[9] +
+                           vz * tmpData[10] +
+                           tmpData[11]);
         
-        return Vector.make(x, y, z);
+//        final double x = vec.x() * data[0][0] +
+//                         vec.y() * data[0][1] +
+//                         vec.z() * data[0][2] +
+//                         data[0][3];
+//        
+//        final double y = vec.x() * data[1][0] +
+//                         vec.y() * data[1][1] +
+//                         vec.z() * data[1][2] +
+//                         data[1][3];
+//        
+//        final double z = vec.x() * data[2][0] +
+//                         vec.y() * data[2][1] +
+//                         vec.z() * data[2][2] +
+//                         data[2][3];
+//        
+//        return Vector.make(x, y, z);
     }
     
     Vector mulDir(final Vector vec)
@@ -169,19 +232,33 @@ public class Matrix
         final double vy = vec.y();
         final double vz = vec.z();
         
-        final double x = vx * data[0][0] +
-                         vy * data[0][1] +
-                         vz * data[0][2];
+        final double[] tmpData = data;
         
-        final double y = vx * data[1][0] +
-                         vy * data[1][1] +
-                         vz * data[1][2];
+        return Vector.make(vx * tmpData[0] +
+                           vy * tmpData[1] +
+                           vz * tmpData[2],
+                           
+                           vx * tmpData[4] +
+                           vy * tmpData[5] +
+                           vz * tmpData[6],
+                           
+                           vx * tmpData[8] +
+                           vy * tmpData[9] +
+                           vz * tmpData[10]);
         
-        final double z = vx * data[2][0] +
-                         vy * data[2][1] +
-                         vz * data[2][2];
-        
-        return Vector.make(x, y, z);
+//        final double x = vx * data[0][0] +
+//                         vy * data[0][1] +
+//                         vz * data[0][2];
+//        
+//        final double y = vx * data[1][0] +
+//                         vy * data[1][1] +
+//                         vz * data[1][2];
+//        
+//        final double z = vx * data[2][0] +
+//                         vy * data[2][1] +
+//                         vz * data[2][2];
+//        
+//        return Vector.make(x, y, z);
     }
     
     Vector mulNormal(final Vector vec)
@@ -190,19 +267,33 @@ public class Matrix
         final double vy = vec.y();
         final double vz = vec.z();
         
-        final double x = vx * data[0][0] +
-                         vy * data[1][0] +
-                         vz * data[2][0];
+        final double[] tmpData = data;
         
-        final double y = vx * data[0][1] +
-                         vy * data[1][1] +
-                         vz * data[2][1];
+        return Vector.make(vx * tmpData[0] +
+                           vy * tmpData[4] +
+                           vz * tmpData[8],
+                           
+                           vx * tmpData[1] +
+                           vy * tmpData[5] +
+                           vz * tmpData[9],
+                           
+                           vx * tmpData[2] +
+                           vy * tmpData[6] +
+                           vz * tmpData[10]);
         
-        final double z = vx * data[0][2] +
-                         vy * data[1][2] +
-                         vz * data[2][2];
-        
-        return Vector.make(x, y, z);
+//        final double x = vx * data[0][0] +
+//                         vy * data[1][0] +
+//                         vz * data[2][0];
+//        
+//        final double y = vx * data[0][1] +
+//                         vy * data[1][1] +
+//                         vz * data[2][1];
+//        
+//        final double z = vx * data[0][2] +
+//                         vy * data[1][2] +
+//                         vz * data[2][2];
+//        
+//        return Vector.make(x, y, z);
     }
     
     @Override
@@ -222,7 +313,7 @@ public class Matrix
             for (int col = 0; col < 4; ++col)
             {
                 buf.append(' ');
-                buf.append(data[row][col]);
+                buf.append(data[row * 4 + col]);
             }
             
             buf.append(" ]");

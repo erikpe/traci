@@ -51,8 +51,10 @@ public class Sphere extends Primitive
             
             final Ray2 ray = Ray2.make();
             
-            ray.add(Point2.make(t0, this, Type.ENTER));
-            ray.add(Point2.make(t1, this, Type.LEAVE));
+//            ray.add(Point2.make(t0, this, Type.ENTER));
+//            ray.add(Point2.make(t1, this, Type.LEAVE));
+            ray.add(t0, this, Type.ENTER);
+            ray.add(t1, this, Type.LEAVE);
             
             return ray;
         }

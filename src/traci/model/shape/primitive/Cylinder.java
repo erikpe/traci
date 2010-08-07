@@ -87,8 +87,10 @@ public class Cylinder extends Primitive
             {
                 final Ray2 ray = Ray2.make();
                 
-                ray.add(Point2.make(near, this, Type.ENTER));
-                ray.add(Point2.make(far, this, Type.LEAVE));
+//                ray.add(Point2.make(near, this, Type.ENTER));
+//                ray.add(Point2.make(far, this, Type.LEAVE));
+                ray.add(near, this, Type.ENTER);
+                ray.add(far, this, Type.LEAVE);
                 
                 return ray;
             }

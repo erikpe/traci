@@ -1,5 +1,8 @@
 package traci.math;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import traci.render.RenderingThread;
 
 
@@ -44,12 +47,26 @@ public class Vector
         this.z = z;
     }
     
+    public static Map<String, Long> locMap = new HashMap<String, Long>();
+    
     public static Vector make(final double x, final double y, final double z)
     {
         final Thread thisThread = Thread.currentThread();
         
         if (thisThread instanceof RenderingThread)
         {
+//            StackTraceElement[] ste = thisThread.getStackTrace();
+//            String loc = ste[2] + "\n" + ste[3] + "\n" + ste[4];
+//            
+//            Long val = locMap.get(loc);
+//            
+//            if (val == null)
+//            {
+//                val = Long.valueOf(1);
+//            }
+//            
+//            locMap.put(loc, val + 1);
+            
             return ((RenderingThread) thisThread).vectorPool.make(x, y, z);
         }
         
@@ -108,7 +125,7 @@ public class Vector
     
     public Vector div(final double val)
     {
-        return mul(1.0 / val);
+        return make(x / val, y / val, z / val);
     }
     
     public Vector cross(final Vector vec)

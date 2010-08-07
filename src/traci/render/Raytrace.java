@@ -49,7 +49,7 @@ public class Raytrace
                 return Color.RED;
             }
             
-            final Point2 hit = ray.get(0);
+            final Point2 hit = ray.first();
             
             dist = hit.dist();
             obj = hit.obj();

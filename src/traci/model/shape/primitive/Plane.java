@@ -35,7 +35,8 @@ public class Plane extends Primitive
         if (t > EPSILON)
         {
             final Ray2 ray = Ray2.make();
-            ray.add(Point2.make(t, this, Type.INTERSECT));
+            //ray.add(Point2.make(t, this, Type.INTERSECT));
+            ray.add(t, this, Type.INTERSECT);
             return ray;
         }
         

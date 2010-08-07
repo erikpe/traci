@@ -3,6 +3,10 @@ package traci.main;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map.Entry;
 
 import sisc.data.Value;
 import sisc.interpreter.AppContext;
@@ -97,6 +101,21 @@ public class TestSISC
         scene.addLight(light2);
         
         Renderer.renderScene(scene, new Settings(), multiDrawArea, 1);
+        
+//        ArrayList<Entry<String, Long>> list = new ArrayList<Entry<String, Long>>();
+//        list.addAll(Vector.locMap.entrySet());
+//        Collections.sort(list, new Comparator<Entry<String, Long>>()
+//        {
+//            @Override
+//            public int compare(Entry<String, Long> o1, Entry<String, Long> o2)
+//            {
+//                return o1.getValue().compareTo(o2.getValue());
+//            }
+//        });
+//        for (Entry<String, Long> entry : list)
+//        {
+//            System.out.println(entry.getValue() + ":\n" + entry.getKey() + "\n\n");
+//        }
         
         start = 0;
      }

@@ -12,7 +12,7 @@ public class Point2
         INTERSECT
     }
     
-    public static final class PointPool extends ObjectPool<Point2>
+    public static final class Point2Pool extends ObjectPool<Point2>
     {
         @Override
         protected Point2 makeNew()
@@ -32,11 +32,11 @@ public class Point2
         }
     }
     
-    private double dist;
+    double dist;
     
-    private Primitive obj;
+    Primitive obj;
     
-    private Type type;
+    Type type;
     
     private Point2(final double dist, final Primitive obj, final Type type)
     {
@@ -51,7 +51,7 @@ public class Point2
 //        
 //        if (thisThread instanceof RenderingThread)
 //        {
-//            return ((RenderingThread) thisThread).pointPool.make(dist, obj);
+//            return ((RenderingThread) thisThread).point2Pool.make(dist, obj, type);
 //        }
         
         return new Point2(dist, obj, type);
