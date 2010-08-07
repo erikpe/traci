@@ -47,7 +47,7 @@ public class Vector
         this.z = z;
     }
     
-    public static Map<String, Long> locMap = new HashMap<String, Long>();
+    //public static Map<String, Long> locMap = new HashMap<String, Long>();
     
     public static Vector make(final double x, final double y, final double z)
     {
@@ -132,16 +132,6 @@ public class Vector
     {
         return make(y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y
                 * vec.x);
-    }
-    
-    public double cosTheta(final Vector vec)
-    {
-        return dot(vec) / (length() * vec.length());
-    }
-    
-    public double sinTheta(final Vector vec)
-    {
-        return cross(vec).div(length() * vec.length()).length();
     }
     
     @Override

@@ -47,8 +47,8 @@ public class TestSISC
     
     public static void main(final String[] args) throws IOException, SchemeException
     {
-        final int width = 800;
-        final int height = 600;
+        final int width = 1600;
+        final int height = 1200;
         final String filename = "out.png";
         
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
@@ -74,8 +74,9 @@ public class TestSISC
         loadSchemeFile("scenes/lego.traci", interpreter);
         
         start = System.currentTimeMillis();
-        //Value val = interpreter.eval("(->java (lego 4))");
-        Value val = interpreter.eval("(->java (lego 5))");
+        Value val = interpreter.eval("(->java (lego 8))");
+        //Value val = interpreter.eval("(->java (lego-hole))");
+        //Value val = interpreter.eval("(->java (lego-hole))");
         stop = System.currentTimeMillis();
         System.out.println("Creation of scene: " + (stop - start) + " ms.");
         
@@ -95,12 +96,13 @@ public class TestSISC
         
         final Vector camLocation = Vector.make(-1, 2, 10);
         final Vector camLookAt = Vector.make(2.5, .35, .25);
+        //final Vector camLookAt = Vector.make(0, 0, 0);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.make(.1, 1, .1));
         final Scene scene = new Scene(union, cam);
         scene.addLight(light);
         scene.addLight(light2);
         
-        Renderer.renderScene(scene, new Settings(), multiDrawArea, 1);
+        Renderer.renderScene(scene, new Settings(), multiDrawArea, 8);
         
 //        ArrayList<Entry<String, Long>> list = new ArrayList<Entry<String, Long>>();
 //        list.addAll(Vector.locMap.entrySet());

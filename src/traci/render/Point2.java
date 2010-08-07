@@ -47,12 +47,12 @@ public class Point2
     
     public static Point2 make(final double dist, final Primitive obj, final Type type)
     {
-//        final Thread thisThread = Thread.currentThread();
-//        
-//        if (thisThread instanceof RenderingThread)
-//        {
-//            return ((RenderingThread) thisThread).point2Pool.make(dist, obj, type);
-//        }
+        final Thread thisThread = Thread.currentThread();
+        
+        if (thisThread instanceof RenderingThread)
+        {
+            return ((RenderingThread) thisThread).point2Pool.make(dist, obj, type);
+        }
         
         return new Point2(dist, obj, type);
     }
@@ -83,7 +83,7 @@ public class Point2
         default: assert false;
         }
         
-        return new Point2(dist, obj, newType);
+        return Point2.make(dist, obj, newType);
     }
     
     @Override

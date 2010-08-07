@@ -51,11 +51,7 @@ public abstract class Primitive extends Shape
         final Vector transP = transformation.pointInv(p);
         final Vector transDir = transformation.dirInv(dir);
         
-        final Ray2 ray = primitiveShootRay2(transP, transDir);
-        
-        assert Ray2.checkRay(ray);
-        
-        return ray;
+        return primitiveShootRay2(transP, transDir);
     }
     
     @Deprecated

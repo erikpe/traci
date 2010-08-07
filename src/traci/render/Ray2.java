@@ -30,12 +30,6 @@ public class Ray2
     private Ray2()
     {
         points = new Point2[INITIAL_SIZE];
-        
-        for (int i = 0; i < INITIAL_SIZE; ++i)
-        {
-            points[i] = Point2.make(0, null, null);
-        }
-        
         size = 0;
     }
     
@@ -69,8 +63,8 @@ public class Ray2
             return false;
         }
         
-        if (ray.points[0].type() == Type.LEAVE ||
-                ray.points[ray.size - 1].type() == Type.ENTER)
+        if (ray.points[0].type == Type.LEAVE ||
+                ray.points[ray.size - 1].type == Type.ENTER)
         {
             return false;
         }
@@ -80,15 +74,15 @@ public class Ray2
             final Point2 pPrev = ray.points[i - 1];
             final Point2 pThis = ray.points[i];
             
-            if (pPrev.dist() >= pThis.dist())
+            if (pPrev.dist >= pThis.dist)
             {
                 return false;
             }
             
-            switch (pPrev.type())
+            switch (pPrev.type)
             {
             case ENTER:
-                if (pThis.type() != Type.LEAVE)
+                if (pThis.type != Type.LEAVE)
                 {
                     return false;
                 }
@@ -96,7 +90,7 @@ public class Ray2
                 
             case LEAVE:
             case INTERSECT:
-                if (pThis.type() == Type.LEAVE)
+                if (pThis.type == Type.LEAVE)
                 {
                     return false;
                 }
@@ -110,18 +104,17 @@ public class Ray2
     private double nearest()
     {
         assert size > 0;
-        return points[0].dist();
+        return points[0].dist;
     }
     
     private double farest()
     {
         assert size > 0;
-        return points[size - 1].dist();
+        return points[size - 1].dist;
     }
     
     public void add(final double dist, final Primitive obj, final Type type)
     {
-        //add(Point2.make(dist, obj, type));
         points[size++] = Point2.make(dist, obj, type);
     }
     
@@ -129,7 +122,7 @@ public class Ray2
     {
         if (size == 0)
         {
-            assert p.type() == Type.ENTER || p.type() == Type.INTERSECT;
+            assert p.type == Type.ENTER || p.type == Type.INTERSECT;
             points[0] = p;
             size = 1;
             return;
@@ -153,13 +146,13 @@ public class Ray2
             return;
         }
         
-        assert p.dist() > pLast.dist();
+        assert p.dist > pLast.dist;
         
-        switch (p.type())
+        switch (p.type)
         {
-        case ENTER: assert pLast.type() != Type.ENTER; break;
-        case LEAVE: assert pLast.type() == Type.ENTER; break;
-        case INTERSECT: assert pLast.type() != Type.ENTER; break;
+        case ENTER: assert pLast.type != Type.ENTER; break;
+        case LEAVE: assert pLast.type == Type.ENTER; break;
+        case INTERSECT: assert pLast.type != Type.ENTER; break;
         }
         
         points[size++] = p;
@@ -195,7 +188,7 @@ public class Ray2
             return ray1;
         }
         
-        final Ray2 newRay = new Ray2();//Ray2.make();
+        final Ray2 newRay = Ray2.make();
         assert newRay.size == 0;
         
         int i0 = 0;
@@ -210,7 +203,7 @@ public class Ray2
             final Point2 pNear;
             final int pointMask;
             
-            if (p0.dist() < p1.dist())
+            if (p0.dist < p1.dist)
             {
                 pNear = p0;
                 pointMask = 0x01;
@@ -223,7 +216,7 @@ public class Ray2
                 i1++;
             }
             
-            switch (pNear.type())
+            switch (pNear.type)
             {
             case ENTER:
                 assert (insideMask & pointMask) == 0;
@@ -282,7 +275,7 @@ public class Ray2
             return null;
         }
         
-        final Ray2 newRay = new Ray2();
+        final Ray2 newRay = Ray2.make();
         
         int i0 = 0;
         int i1 = 0;
@@ -296,7 +289,7 @@ public class Ray2
             final Point2 pNear;
             final int pointMask;
             
-            if (p0.dist() < p1.dist())
+            if (p0.dist < p1.dist)
             {
                 pNear = p0;
                 pointMask = 0x01;
@@ -309,7 +302,7 @@ public class Ray2
                 i1++;
             }
             
-            switch (pNear.type())
+            switch (pNear.type)
             {
             case ENTER:
                 assert (insideMask & pointMask) == 0;
@@ -361,7 +354,7 @@ public class Ray2
             return ray0;
         }
         
-        final Ray2 newRay = new Ray2();
+        final Ray2 newRay = Ray2.make();
         
         int i0 = 0;
         int i1 = 0;
@@ -372,7 +365,7 @@ public class Ray2
             final Point2 p0 = ray0.points[i0];
             final Point2 p1 = ray1.points[i1];
             
-            if (p1.type() == Type.INTERSECT)
+            if (p1.type == Type.INTERSECT)
             {
                 i1++;
                 continue;
@@ -381,7 +374,7 @@ public class Ray2
             final Point2 pNear;
             final int pointMask;
             
-            if (p0.dist() < p1.dist())
+            if (p0.dist < p1.dist)
             {
                 pNear = p0;
                 pointMask = 0x01;
@@ -394,7 +387,7 @@ public class Ray2
                 i1++;
             }
             
-            switch (pNear.type())
+            switch (pNear.type)
             {
             case ENTER:
                 assert (insideMask & pointMask) == 0;

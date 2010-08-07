@@ -1,5 +1,5 @@
 (define epsilon 0.001)
-(define lego-rounding .01)
+(define lego-rounding .005)
 (define pi 3.1415926535898)
       
 (define (round-box x y z r . args)
@@ -67,7 +67,72 @@
       (translate .25 .6 .25)
       (apply insert args))))
 
+(define (lego-hole-part radius rounding cw cd . args)
+  (union
+    (cylinder (+ radius cw)
+      (vec 0 0 (- epsilon))
+      (vec 0 0 (- cd rounding)))
+    (cylinder (- (+ radius cw) rounding)
+      (vec 0 0 (- cd rounding epsilon))
+      (vec 0 0 cd))
+    (torus rounding (- (+ radius cw) rounding)
+      (translate 0 0 (- cd rounding)))
+    (difference
+      (cylinder (+ radius rounding)
+        (vec 0 0 (- cd epsilon))
+        (vec 0 0 (+ cd rounding)))
+      (torus rounding (+ radius rounding)
+        (translate 0 0 (+ cd rounding))))
+    (difference
+      (cylinder (+ radius cw rounding)
+        (vec 0 0 (- epsilon))
+        (vec 0 0 rounding))
+      (torus rounding (+ radius cw rounding)
+        (translate 0 0 rounding)))
+    (apply insert args)))
+
 (define (lego-hole . args)
+  (let ((length .5)
+        (radius .15)
+        (hole-rounding lego-rounding)
+        (cw .04)
+        (cd .04))
+    (union
+      (lego-hole-part radius hole-rounding cw cd)
+      (lego-hole-part radius hole-rounding cw cd
+        (roty pi)
+        (translate 0 0 length))
+      (cylinder radius
+        (vec 0 0 (+ length epsilon))
+        (vec 0 0 (- epsilon)))
+      (bbox
+        (translate -.5 -.5 0)
+        (scale (* 2 (+ radius cw hole-rounding))
+               (* 2 (+ radius cw hole-rounding))
+               length))
+      (translate .5 .35 0)
+      (apply insert args))))
+
+;(define (lego-hole . args)
+;  (let ((radius .15)
+;        (length .5)
+;        (rounding .025)
+;        (cw .1)
+;        (cd .1))
+;    (difference
+;      (union
+;        (cylinder radius
+;          (vec 0 0 (+ length epsilon))
+;          (vec 0 0 (- epsilon)))
+;        (cylinder (+ radius cw)
+;          (vec 0 0 (+ length epsilon))
+;          (vec 0 0 (+ (- length cd) rounding)))
+;        (cylinder (- (+ radius cw) rounding)
+;          (vec 0 0 (+ (- length cd) rounding))
+;          (vec 0 0 (- length cd))))
+;      (roty (+ pi (/ pi 4))))))
+
+(define (lego-hole2 . args)
   (let ((radius .15)
         (length .5)
         (rounding lego-rounding))

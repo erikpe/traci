@@ -10,16 +10,33 @@ import traci.model.shape.primitive.Primitive;
 
 public class Raytrace
 {
-    private static final boolean USE_NEW_METHOD = false;
+    private static enum Method { OLD_RAY, ISTACK, RAY2 }
+    
+    private static final Method method = Method.RAY2;
     
     protected static Color raytrace(final Scene scene, final int depth,
             final Vector p, final Vector dir)
     {
-        double dist;
-        Primitive obj;
+        double dist = 0;
+        Primitive obj = null;
         
-        if (USE_NEW_METHOD)
+        switch (method)
         {
+        case OLD_RAY:
+            final Ray ray = scene.shape.shootRay(p, dir);
+            
+            if (ray == null)
+            {
+                return Color.RED;
+            }
+            
+            final Point hit = ray.get(0).p0();
+            
+            dist = hit.dist();
+            obj = hit.obj();
+            break;
+            
+        case ISTACK:
             final IntersectionStack iStack = IntersectionStack.make();
             scene.shape.allIntersections(iStack, p, dir);
             
@@ -39,20 +56,21 @@ public class Raytrace
                     obj = iStack.objs[i];
                 }
             }
-        }
-        else
-        {
-            final Ray2 ray = scene.shape.shootRay2(p, dir);
+            break;
             
-            if (ray == null)
+        case RAY2:
+            final Ray2 ray2 = scene.shape.shootRay2(p, dir);
+            
+            if (ray2 == null)
             {
                 return Color.RED;
             }
             
-            final Point2 hit = ray.first();
+            final Point2 hit2 = ray2.first();
             
-            dist = hit.dist();
-            obj = hit.obj();
+            dist = hit2.dist();
+            obj = hit2.obj();
+            break;
         }
         
         final Vector hitPoint = p.add(dir.mul(dist));
@@ -72,21 +90,30 @@ public class Raytrace
             final Vector toLight = light.location.sub(hitPoint);
             final Vector dirToLight = toLight.normalize();
             
-            if (USE_NEW_METHOD)
+            switch (method)
             {
-                if (scene.shape.anyIntersection(hitPoint, dirToLight))
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                final Ray2 lightRay = scene.shape.shootRay2(hitPoint, dirToLight);
-                
+            case OLD_RAY:
+                final Ray lightRay = scene.shape.shootRay(hitPoint, dirToLight);
                 if (lightRay != null)
                 {
                     continue;
                 }
+                break;
+                
+            case ISTACK:
+                if (scene.shape.anyIntersection(hitPoint, dirToLight))
+                {
+                    continue;
+                }
+                break;
+                
+            case RAY2:
+                final Ray2 lightRay2 = scene.shape.shootRay2(hitPoint, dirToLight);
+                if (lightRay2 != null)
+                {
+                    continue;
+                }
+                break;
             }
             
             final double distToLight = toLight.length();
