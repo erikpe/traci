@@ -23,6 +23,30 @@ public abstract class Csg extends Shape
         this.numShapes = this.shapes.size();
     }
     
+    public int numCsgs()
+    {
+        int num = 1;
+        
+        for (final Shape shape : shapes)
+        {
+            num += shape.numCsgs();
+        }
+        
+        return num;
+    }
+    
+    public int numPrimitives()
+    {
+        int num = 1;
+        
+        for (final Shape shape : shapes)
+        {
+            num += shape.numPrimitives();
+        }
+        
+        return num;
+    }
+    
     public void add(final Shape shape)
     {
         shapes.add(shape);

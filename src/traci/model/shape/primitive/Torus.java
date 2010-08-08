@@ -59,6 +59,11 @@ public class Torus extends Primitive
         final double[] roots = PolynomSolver.solveQuartic(new double[] { a4,
                 a3, a2, a1, a0 });
         
+//        if (roots != null && roots.length != 2 && roots.length != 4)
+//        {
+//            throw new RuntimeException();
+//        }
+        
         if (roots == null || (roots.length != 2 && roots.length != 4))
         {
             return null;
@@ -68,25 +73,23 @@ public class Torus extends Primitive
         
         Arrays.sort(roots);
         
-        if (roots[0] > EPSILON)
+        //if (roots[0] > EPSILON)
+        if (roots[1] > -EPSILON)
         {
             ray = Ray2.make();
             
-//            ray.add(Point2.make(roots[0], this, Type.ENTER));
-//            ray.add(Point2.make(roots[1], this, Type.LEAVE));
             ray.add(roots[0], this, Type.ENTER);
             ray.add(roots[1], this, Type.LEAVE);
         }
         
-        if (roots.length == 4 && roots[2] > EPSILON)
+        //if (roots.length == 4 && roots[2] > EPSILON)
+        if (roots.length == 4 && roots[3] > -EPSILON)
         {
             if (ray == null)
             {
                 ray = Ray2.make();
             }
             
-//            ray.add(Point2.make(roots[2], this, Type.ENTER));
-//            ray.add(Point2.make(roots[3], this, Type.LEAVE));
             ray.add(roots[2], this, Type.ENTER);
             ray.add(roots[3], this, Type.LEAVE);
         }

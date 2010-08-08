@@ -1,12 +1,13 @@
 package traci.render;
 
 import traci.math.ObjectPool;
+import traci.model.shape.Shape;
 import traci.model.shape.primitive.Primitive;
 import traci.render.Point2.Type;
 
 public class Ray2
 {
-    private static final int INITIAL_SIZE = 32;
+    private static final int INITIAL_SIZE = 128;
     
     public Point2[] points;
     public int size;
@@ -36,7 +37,18 @@ public class Ray2
     public Point2 first()
     {
         assert size > 0;
-        return points[0];
+        
+        for (int i = 0; i < size; ++i)
+        {
+            final Point2 p = points[i];
+            
+            if (p.dist > Shape.EPSILON)
+            {
+                return p;
+            }
+        }
+        
+        return null;
     }
     
     public static Ray2 make()

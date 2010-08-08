@@ -29,6 +29,16 @@ public abstract class Primitive extends Shape
         return val0 > val1 ? val0 : val1;
     }
     
+    public int numCsgs()
+    {
+        return 0;
+    }
+    
+    public int numPrimitives()
+    {
+        return 1;
+    }
+    
     protected abstract Vector primitiveGetNormalAt(final Vector p);
     
     public Vector getNormalAt(final Vector p, final Vector dir)

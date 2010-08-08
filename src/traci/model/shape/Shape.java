@@ -12,7 +12,7 @@ import traci.render.Ray2;
 
 public abstract class Shape extends TransformableHelper implements Transformable
 {
-    protected static final double EPSILON = 0.000001;
+    public static final double EPSILON = 0.000001;
     
     protected static final double INSIDE_MARIGIN = 1e-7;
     
@@ -29,6 +29,10 @@ public abstract class Shape extends TransformableHelper implements Transformable
             this.material = material;
         }
     }
+    
+    public abstract int numCsgs();
+    
+    public abstract int numPrimitives();
     
     @Override
     public void transform(final Transformation transformation)

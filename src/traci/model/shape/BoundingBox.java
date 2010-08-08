@@ -1,5 +1,7 @@
 package traci.model.shape;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import traci.math.Transformable;
 import traci.math.Transformation;
 import traci.math.Transformations;
@@ -7,6 +9,9 @@ import traci.math.Vector;
 
 public class BoundingBox implements Transformable
 {
+    public static final AtomicLong miss = new AtomicLong(1);
+    public static final AtomicLong hit = new AtomicLong(1);
+    
     protected static final double INSIDE_MARIGIN = 1e-10;
     
     private Transformation transformation;
@@ -48,6 +53,7 @@ public class BoundingBox implements Transformable
         
         if (far < 0)
         {
+            //miss.incrementAndGet();
             return false;
         }
         
@@ -62,6 +68,7 @@ public class BoundingBox implements Transformable
         
         if (far < 0 || far < near)
         {
+            //miss.incrementAndGet();
             return false;
         }
         
@@ -74,7 +81,14 @@ public class BoundingBox implements Transformable
         near = max(near, min(z0, z1));
         far = min(far, max(z0, z1));
         
-        return far > 0 && near < far;
+        if (far > 0 && near < far)
+        {
+            //hit.incrementAndGet();
+            return true;
+        }
+        
+        //miss.incrementAndGet();
+        return false;
     }
     
     public boolean isInside(final Vector p)

@@ -1,5 +1,5 @@
 (define epsilon 0.001)
-(define lego-rounding .005)
+(define lego-rounding .003)
 (define pi 3.1415926535898)
       
 (define (round-box x y z r . args)
@@ -49,10 +49,61 @@
 (define (lego-peg . args)
   (let ((height .1)
         (radius .15)
-        (rounding lego-rounding))
+        (inner-radius .10)
+        (rounding lego-rounding)
+        (upper-rounding .012))
     (union
-      (cylinder (scale radius (- height rounding) radius))
-      (cylinder (scale (- radius rounding) .1 (- .15 rounding)))
+      (difference
+        (union
+          (cylinder radius
+            (vec 0 (- epsilon) 0)
+            (vec 0 (- height upper-rounding) 0))
+          (cylinder (- radius upper-rounding)
+            (vec 0 (- height rounding epsilon) 0)
+            (vec 0 height 0)))
+        (cylinder (- inner-radius rounding)
+          (vec 0 epsilon 0)
+          (vec 0 (+ rounding epsilon epsilon) 0))
+        (cylinder inner-radius
+          (vec 0 (+ rounding epsilon) 0)
+          (vec 0 (+ (- height upper-rounding) epsilon) 0))
+        (cylinder (+ inner-radius upper-rounding)
+          (vec 0 (- height upper-rounding) 0)
+          (vec 0 (+ height epsilon) 0))
+        (torus rounding (- inner-radius rounding)
+          (rotx (/ pi 2))
+          (translate 0 (+ rounding epsilon) 0)))
+      (torus upper-rounding (+ inner-radius upper-rounding)
+        (rotx (/ pi 2))
+        (translate 0 (- height upper-rounding) 0))
+      (torus upper-rounding (- radius upper-rounding)
+        (rotx (/ pi 2))
+        (translate 0 (- height upper-rounding) 0))
+      (difference
+        (cylinder (+ radius rounding)
+          (vec 0 (- epsilon) 0)
+          (vec 0 rounding 0))
+        (cylinder (- radius epsilon)
+          (vec 0 (- 0 epsilon epsilon) 0)
+          (vec 0 (+ rounding epsilon) 0))
+        (torus rounding (+ radius rounding)
+          (rotx (/ pi 2))
+          (translate 0 rounding 0)))
+      (bbox
+        (translate -.5 0 -.5)
+        (scale 2 2 2)
+        (scale (+ radius rounding) height (+ radius rounding)))
+      (translate .25 .6 .25)
+      (apply insert args))))
+
+(define (lego-peg2 . args)
+  (let ((height .1)
+        (radius .15)
+        (inner-radius .05)
+        (rounding .02));lego-rounding))
+    (union
+      ;(cylinder (scale radius (- height rounding) radius))
+      ;(cylinder (scale (- radius rounding) .1 (- .15 rounding)))
       (torus rounding (- radius rounding)
         (rotx (/ pi 2))
         (translate 0 (- height rounding) 0))
@@ -64,6 +115,7 @@
       (bbox
         (translate -.5 0 -.5)
         (scale (* 2 (+ radius rounding)) height (* 2 (+ radius rounding))))
+      (rotx (/ pi 6))
       (translate .25 .6 .25)
       (apply insert args))))
 
@@ -111,45 +163,6 @@
                (* 2 (+ radius cw hole-rounding))
                length))
       (translate .5 .35 0)
-      (apply insert args))))
-
-;(define (lego-hole . args)
-;  (let ((radius .15)
-;        (length .5)
-;        (rounding .025)
-;        (cw .1)
-;        (cd .1))
-;    (difference
-;      (union
-;        (cylinder radius
-;          (vec 0 0 (+ length epsilon))
-;          (vec 0 0 (- epsilon)))
-;        (cylinder (+ radius cw)
-;          (vec 0 0 (+ length epsilon))
-;          (vec 0 0 (+ (- length cd) rounding)))
-;        (cylinder (- (+ radius cw) rounding)
-;          (vec 0 0 (+ (- length cd) rounding))
-;          (vec 0 0 (- length cd))))
-;      (roty (+ pi (/ pi 4))))))
-
-(define (lego-hole2 . args)
-  (let ((radius .15)
-        (length .5)
-        (rounding lego-rounding))
-    (union
-      (cylinder radius
-        (vec 0 0 (+ length epsilon))
-        (vec 0 0 (- epsilon)))
-      (cylinder (+ radius rounding)
-        (vec 0 0 (+ length epsilon))
-        (vec 0 0 (- length rounding)))
-      (cylinder (+ radius rounding)
-        (vec 0 0 (- epsilon))
-        (vec 0 0 rounding))
-      (bbox
-        (translate -.5 -.5 0)
-        (scale (* 2 (+ radius rounding)) (* 2 (+ radius rounding)) length))
-      (translate .5 .3 0)
       (apply insert args))))
 
 (define (lego pegs . args)

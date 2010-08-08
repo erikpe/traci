@@ -1,10 +1,6 @@
 package traci.math;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import traci.render.RenderingThread;
-
 
 public class Vector
 {
@@ -40,6 +36,22 @@ public class Vector
     public static final Vector UNIT_NEG_Y = new Vector(0, -1, 0);
     public static final Vector UNIT_NEG_Z = new Vector(0, 0, -1);
     
+    private static class ThreadLocalVectorPool extends ThreadLocal<VectorPool>
+    {
+        @Override
+        public VectorPool initialValue()
+        {
+            return new VectorPool();
+        }
+    }
+    
+    private static final ThreadLocalVectorPool vectorPool = new ThreadLocalVectorPool();
+    
+    public static void reset()
+    {
+        vectorPool.get().reset();
+    }
+    
     private Vector(final double x, final double y, final double z)
     {
         this.x = x;
@@ -51,24 +63,14 @@ public class Vector
     
     public static Vector make(final double x, final double y, final double z)
     {
-        final Thread thisThread = Thread.currentThread();
-        
-        if (thisThread instanceof RenderingThread)
-        {
-//            StackTraceElement[] ste = thisThread.getStackTrace();
-//            String loc = ste[2] + "\n" + ste[3] + "\n" + ste[4];
-//            
-//            Long val = locMap.get(loc);
-//            
-//            if (val == null)
-//            {
-//                val = Long.valueOf(1);
-//            }
-//            
-//            locMap.put(loc, val + 1);
-            
-            return ((RenderingThread) thisThread).vectorPool.make(x, y, z);
-        }
+//        return vectorPool.get().make(x, y, z);
+//        
+//        final Thread thisThread = Thread.currentThread();
+//        
+//        if (thisThread instanceof RenderingThread)
+//        {
+//            return ((RenderingThread) thisThread).vectorPool.make(x, y, z);
+//        }
         
         return new Vector(x, y, z);
     }

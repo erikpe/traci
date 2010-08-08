@@ -41,7 +41,7 @@ public class TestSISC
         interpreter.evalInput(pbReader);
         final double stop = System.currentTimeMillis();
         
-        System.out.println("Load time of `" + filename + "': " + (stop - start)
+        System.out.println("> Load time of `" + filename + "': " + (stop - start)
                 + " ms.");
     }
     
@@ -64,7 +64,7 @@ public class TestSISC
         appContext.addDefaultHeap();
         final Interpreter interpreter = Context.enter(appContext);
         double stop = System.currentTimeMillis();
-        System.out.println("Startup time: " + (stop - start) + " ms.");
+        System.out.println("> Startup time: " + (stop - start) + " ms.");
         
         loadSchemeFile("scheme/primitive.scm", interpreter);
         loadSchemeFile("scheme/helper.scm", interpreter);
@@ -74,11 +74,11 @@ public class TestSISC
         loadSchemeFile("scenes/lego.traci", interpreter);
         
         start = System.currentTimeMillis();
-        Value val = interpreter.eval("(->java (lego 8))");
+        Value val = interpreter.eval("(->java (lego 9))");
         //Value val = interpreter.eval("(->java (lego-hole))");
-        //Value val = interpreter.eval("(->java (lego-hole))");
+        //Value val = interpreter.eval("(->java (lego-peg))");
         stop = System.currentTimeMillis();
-        System.out.println("Creation of scene: " + (stop - start) + " ms.");
+        System.out.println("> Creation of scene: " + (stop - start) + " ms.");
         
         final Shape shape = (Shape) ((JavaObject) val).get();
         
@@ -89,14 +89,14 @@ public class TestSISC
         plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
         plane.material.getPigment().translate(-.5, 0, -.5);
         plane.roty(15.23);
-        union.add(plane);
+        //union.add(plane);
         
-        final PointLight light = new PointLight(Vector.make(2, 5, 30), Color.WHITE.mul(30*40));
+        final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*55));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
         
-        final Vector camLocation = Vector.make(-1, 2, 10);
+        final Vector camLocation = Vector.make(-1, 5, 10);
         final Vector camLookAt = Vector.make(2.5, .35, .25);
-        //final Vector camLookAt = Vector.make(0, 0, 0);
+        //final Vector camLookAt = Vector.make(.25, .65, .25);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.make(.1, 1, .1));
         final Scene scene = new Scene(union, cam);
         scene.addLight(light);

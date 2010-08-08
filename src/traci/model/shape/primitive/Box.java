@@ -74,12 +74,10 @@ public class Box extends Primitive
         near = max(near, min(z0, z1));
         far = min(far, max(z0, z1));
         
-        if (near > EPSILON && near < far)
+        if (far > -EPSILON && near < far)
         {
             final Ray2 ray = Ray2.make();
             
-//          ray.add(Point2.make(near, this, Type.ENTER));
-//          ray.add(Point2.make(far, this, Type.LEAVE));
             ray.add(near, this, Type.ENTER);
             ray.add(far, this, Type.LEAVE);
             

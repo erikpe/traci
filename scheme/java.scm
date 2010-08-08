@@ -93,7 +93,6 @@
 	jshape)))
 
 (define (->java obj)
-  (display obj)
   (cond ((transform? obj)
 	 (->jtransform obj))
 	((shape? obj)

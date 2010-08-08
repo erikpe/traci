@@ -9,7 +9,7 @@ import traci.math.Vector;
 public class Camera extends TransformableHelper implements Transformable
 {
     private final double aspectRatio = 1600.0 / 1200.0;
-    private final double fovx = (30 / 360.0) * Math.PI * 2.0;
+    private final double fovx = (50 / 360.0) * Math.PI * 2.0;
     private final double fovy = fovx / aspectRatio;
     
     private Transformation transformation;

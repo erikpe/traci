@@ -176,7 +176,7 @@ public class PolynomSolver
         
         if (p == 0)
         {
-            results[i++] = -0.5 * d1 - q2;
+            //results[i++] = -0.5 * d1 - q2;
         }
         else
         {
@@ -194,7 +194,7 @@ public class PolynomSolver
         
         if (p == 0)
         {
-            results[i++] = 0.5 * d1 - q2;
+            //results[i++] = 0.5 * d1 - q2;
         }
         else
         {

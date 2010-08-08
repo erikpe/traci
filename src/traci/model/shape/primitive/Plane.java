@@ -5,10 +5,9 @@ import traci.model.material.Material;
 import traci.render.IntersectionStack;
 import traci.render.Interval;
 import traci.render.Point;
-import traci.render.Point2;
+import traci.render.Point2.Type;
 import traci.render.Ray;
 import traci.render.Ray2;
-import traci.render.Point2.Type;
 
 public class Plane extends Primitive
 {
@@ -32,10 +31,9 @@ public class Plane extends Primitive
     {
         final double t = -p.y() / dir.y();
         
-        if (t > EPSILON)
+        if (t > -EPSILON)
         {
             final Ray2 ray = Ray2.make();
-            //ray.add(Point2.make(t, this, Type.INTERSECT));
             ray.add(t, this, Type.INTERSECT);
             return ray;
         }

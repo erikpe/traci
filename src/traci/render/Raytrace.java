@@ -63,10 +63,15 @@ public class Raytrace
             
             if (ray2 == null)
             {
-                return Color.RED;
+                return Color.BLACK;
             }
             
             final Point2 hit2 = ray2.first();
+            
+            if (hit2 == null)
+            {
+                return Color.BLACK;
+            }
             
             dist = hit2.dist();
             obj = hit2.obj();
@@ -109,7 +114,7 @@ public class Raytrace
                 
             case RAY2:
                 final Ray2 lightRay2 = scene.shape.shootRay2(hitPoint, dirToLight);
-                if (lightRay2 != null)
+                if (lightRay2 != null && lightRay2.first() != null)
                 {
                     continue;
                 }

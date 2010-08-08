@@ -7,9 +7,11 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import traci.gui.DrawArea;
+import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.material.Color;
+import traci.model.shape.BoundingBox;
 import traci.render.RenderingThread.BlockRenderer;
 import traci.render.RenderingThread.WorkBlock;
 
@@ -39,6 +41,10 @@ public class Renderer implements BlockRenderer
     
     private void renderScene()
     {
+        System.out.println("> Rendering scene consisting of "
+                + scene.shape.numPrimitives() + " primitive objects and "
+                + scene.shape.numCsgs() + " CSG objects");
+        
         /**
          * To get determinism, each {@link WorkBlock} gets its own
          * {@link Random} source, each block with a deterministic seed. In this
@@ -110,6 +116,13 @@ public class Renderer implements BlockRenderer
         System.out.println("> Successfully rendered scene in "
                 + ((stopTime - startTime) / 1000.0)
                 + " seconds.");
+        
+        final long hit = BoundingBox.hit.get();
+        final long miss = BoundingBox.miss.get();
+        
+        System.out.println("> Bounding-Box discard ratio: "
+                + ((100 * miss) / (miss + hit)) + "% (" + miss + "/"
+                + (miss + hit) + ")");
     }
     
     public void renderBlock(final WorkBlock block)
@@ -139,6 +152,8 @@ public class Renderer implements BlockRenderer
                     {
                         ((RenderingThread) thisThread).resetPools();
                     }
+                    
+                    Vector.reset();
                     
                     final double subX = aax / (settings.aaLevel * 2.0 + 1);
                     final double subY = aay / (settings.aaLevel * 2.0 + 1);
