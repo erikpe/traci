@@ -30,7 +30,7 @@ import traci.model.shape.primitive.Plane;
 import traci.render.Renderer;
 import traci.render.Settings;
 
-public class TestSISC
+public class Airplane
 {
     private static void loadSchemeFile(final String filename,
             final Interpreter interpreter) throws IOException, SchemeException
@@ -75,54 +75,24 @@ public class TestSISC
         loadSchemeFile("scenes/lego/basic-shapes.scm", interpreter);
         loadSchemeFile("scenes/lego/lego-bricks.scm", interpreter);
         loadSchemeFile("scenes/lego/lego-technic-div.scm", interpreter);
-        //loadSchemeFile("scenes/airplane.scm", interpreter);
+        loadSchemeFile("scenes/airplane.scm", interpreter);
         
         start = System.currentTimeMillis();
-        //Value val = interpreter.eval("(->java (lego-plate 2 4))");
-        Value val = interpreter.eval("(->java (legopiece-technic-pin))");
-        //Value val = interpreter.eval("(->java (lego-peg))");
+        Value val = interpreter.eval("(->java (airplane))");
         stop = System.currentTimeMillis();
         System.out.println("> Creation of scene: " + (stop - start) + " ms.");
-        
         final Shape shape = (Shape) ((JavaObject) val).get();
         
-        Union union = new Union();
-        union.add(shape);
-        
-        final Plane plane = new Plane();
-        plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
-        plane.material.getPigment().translate(-.5, 0, -.5);
-        plane.roty(15.23);
-        //union.add(plane);
-        
-        final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*55));
+        final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*60));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
         
-        final Vector camLocation = Vector.make(-1, 10, 15);
-        final Vector camLookAt = Vector.make(0, 0, 0);
-        //final Vector camLookAt = Vector.make(.25, .65, .25);
-        final Camera cam = new Camera(camLocation, camLookAt, Vector.make(.1, 1, .1));
-        final Scene scene = new Scene(union, cam);
+        final Vector camLocation = Vector.make(-10, 15, 15);
+        final Vector camLookAt = Vector.make(8, 2, 0);
+        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y);
+        final Scene scene = new Scene(shape, cam);
         scene.addLight(light);
         scene.addLight(light2);
         
         Renderer.renderScene(scene, new Settings(), multiDrawArea, 8);
-        
-//        ArrayList<Entry<String, Long>> list = new ArrayList<Entry<String, Long>>();
-//        list.addAll(Vector.locMap.entrySet());
-//        Collections.sort(list, new Comparator<Entry<String, Long>>()
-//        {
-//            @Override
-//            public int compare(Entry<String, Long> o1, Entry<String, Long> o2)
-//            {
-//                return o1.getValue().compareTo(o2.getValue());
-//            }
-//        });
-//        for (Entry<String, Long> entry : list)
-//        {
-//            System.out.println(entry.getValue() + ":\n" + entry.getKey() + "\n\n");
-//        }
-        
-        start = 0;
      }
 }

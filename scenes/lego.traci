@@ -1,8 +1,8 @@
 (define epsilon 0.001)
-(define lego-rounding .003)
+(define lego-rounding .01)
 (define pi 3.1415926535898)
       
-(define (round-box x y z r . args)
+(define (rounded-box x y z r . args)
   (let ((r2 (* 2 r))
         (v0 (vec r r r))
         (v1 (vec (- x r) r r))
@@ -46,12 +46,41 @@
       (bbox (scale x y z))
       (apply insert args))))
 
-(define (lego-peg . args)
+(define (legopart-peg . args)
   (let ((height .1)
         (radius .15)
-        (inner-radius .10)
         (rounding lego-rounding)
-        (upper-rounding .012))
+        (upper-rounding .015))
+    (union
+      (cylinder radius
+        (vec 0 (- epsilon) 0)
+        (vec 0 (- height upper-rounding) 0))
+      (cylinder (- radius upper-rounding)
+        (vec 0 (- height upper-rounding epsilon) 0)
+        (vec 0 height 0))
+      (torus upper-rounding (- radius upper-rounding)
+        (rotx (/ pi 2))
+        (translate 0 (- height upper-rounding) 0))
+      (difference
+        (cylinder (+ radius rounding)
+          (vec 0 (- epsilon) 0)
+          (vec 0 rounding 0))
+        (torus rounding (+ radius rounding)
+          (rotx (/ pi 2))
+          (translate 0 rounding 0)))
+      (bbox
+        (translate -.5 0 -.5)
+        (scale 2 2 2)
+        (scale (+ radius rounding) height (+ radius rounding)))
+      (translate .25 0 .25)
+      (apply insert args))))
+
+(define (legopart-peg-hole . args)
+  (let ((height .1)
+        (radius .15)
+        (inner-radius .1)
+        (rounding lego-rounding)
+        (upper-rounding .015))
     (union
       (difference
         (union
@@ -59,7 +88,7 @@
             (vec 0 (- epsilon) 0)
             (vec 0 (- height upper-rounding) 0))
           (cylinder (- radius upper-rounding)
-            (vec 0 (- height rounding epsilon) 0)
+            (vec 0 (- height upper-rounding epsilon) 0)
             (vec 0 height 0)))
         (cylinder (- inner-radius rounding)
           (vec 0 epsilon 0)
@@ -93,33 +122,10 @@
         (translate -.5 0 -.5)
         (scale 2 2 2)
         (scale (+ radius rounding) height (+ radius rounding)))
-      (translate .25 .6 .25)
+      (translate .25 0 .25)
       (apply insert args))))
 
-(define (lego-peg2 . args)
-  (let ((height .1)
-        (radius .15)
-        (inner-radius .05)
-        (rounding .02));lego-rounding))
-    (union
-      ;(cylinder (scale radius (- height rounding) radius))
-      ;(cylinder (scale (- radius rounding) .1 (- .15 rounding)))
-      (torus rounding (- radius rounding)
-        (rotx (/ pi 2))
-        (translate 0 (- height rounding) 0))
-      (difference
-        (cylinder (scale (+ radius rounding) rounding (+ radius rounding)))
-        (torus rounding (+ radius rounding)
-          (rotx (/ pi 2))
-          (translate 0 rounding 0)))
-      (bbox
-        (translate -.5 0 -.5)
-        (scale (* 2 (+ radius rounding)) height (* 2 (+ radius rounding))))
-      (rotx (/ pi 6))
-      (translate .25 .6 .25)
-      (apply insert args))))
-
-(define (lego-hole-part radius rounding cw cd . args)
+(define (legopart-technic-brick-hole-0 radius rounding cw cd . args)
   (union
     (cylinder (+ radius cw)
       (vec 0 0 (- epsilon))
@@ -143,15 +149,15 @@
         (translate 0 0 rounding)))
     (apply insert args)))
 
-(define (lego-hole . args)
+(define (legopart-technic-brick-hole . args)
   (let ((length .5)
         (radius .15)
-        (hole-rounding lego-rounding)
+        (hole-rounding (/ lego-rounding 2))
         (cw .04)
         (cd .04))
     (union
-      (lego-hole-part radius hole-rounding cw cd)
-      (lego-hole-part radius hole-rounding cw cd
+      (legopart-technic-brick-hole-0 radius hole-rounding cw cd)
+      (legopart-technic-brick-hole-0 radius hole-rounding cw cd
         (roty pi)
         (translate 0 0 length))
       (cylinder radius
@@ -165,13 +171,101 @@
       (translate .5 .35 0)
       (apply insert args))))
 
-(define (lego pegs . args)
+(define (legopart-technic-plate-hole . args)
+  (let ((radius .15)
+        (height .2)
+        (rounding lego-rounding))
+    (union
+      (cylinder radius
+        (vec 0 (- epsilon) 0)
+        (vec 0 (+ height epsilon) 0))
+      (difference
+        (cylinder (+ radius rounding)
+          (vec 0 (- height rounding) 0)
+          (vec 0 (+ height epsilon) 0))
+        (torus rounding (+ radius rounding)
+          (rotx (/ pi 2))
+          (translate 0 (- height rounding) 0)))
+      (translate .5 0 .5)
+      (apply insert args))))
+
+(define (legopiece-technic-brick-with-holes length . args)
   (union
     (difference
-      (round-box (/ pegs 2.0) .6 .5 lego-rounding)
-      (loop i 0 (- pegs 2)
-        (lego-hole (translate (* i .5) 0 0))))
-    (loop i 0 (- pegs 1)
-      (lego-peg (translate (* i .5) 0 0)))
-    (bbox (scale (/ pegs 2.0) .7 .5))
+      (rounded-box (/ length 2.0) .6 .5 lego-rounding)
+      (loop i 0 (- length 2)
+        (legopart-technic-brick-hole (translate (* i .5) 0 0))))
+    (loop i 0 (- length 1)
+      (legopart-peg-hole (translate (* i .5) .6 0)))
+    (bbox (scale (/ length 2.0) .7 .5))
     (apply insert args)))
+
+(define (legopiece-plate width length . args)
+  (union
+    (rounded-box (/ length 2.0) .2 (/ width 2.0) lego-rounding)
+    (loop x 0 (- length 1)
+      (loop y 0 (- width 1)
+        (legopart-peg (translate (* x .5) .2 (* y .5)))))
+    (bbox (scale (/ length 2.0) .3 (/ width 2.0)))
+    (apply insert args)))
+
+(define (legopice-technic-plate-with-holes width length . args)
+  (difference
+    (legopiece-plate width length)
+    (loop x 0 (- length 2)
+      (legopart-technic-plate-hole (translate (* x .5) 0 0)))
+    (apply insert args)))
+
+(define (legopiece-technic-pin . args)
+  (let ((radius .15)
+        (middle-radius .19)
+        (middle-length .04)
+        (inner-radius .11)
+        (stopping-radius .02)
+        (opening-width .05)
+        (opening-depth .2))
+    (difference
+      (union
+        (cylinder radius
+          (vec 0 0 (- .5))
+          (vec 0 0 .5))
+        (cylinder middle-radius
+          (vec 0 0 (/ middle-length 2))
+          (vec 0 0 (- (/ middle-length 2))))
+        (torus stopping-radius radius
+          (translate 0 0 (- .5 stopping-radius)))
+        (torus stopping-radius radius
+          (translate 0 0 (- stopping-radius .5))))
+      (cylinder inner-radius
+        (vec 0 0 (- 0.0 .5 epsilon))
+        (vec 0 0 (+ .5 epsilon)))
+      (cylinder (/ opening-width 2.0)
+        (vec (- 0.0 radius epsilon) 0 0)
+        (vec (+ radius epsilon) 0 0)
+        (translate 0 0 (- .5 opening-depth)))
+      (box
+        (translate -.5 -.5 0)
+        (scale 2 1 1)
+        (scale
+          (+ radius stopping-radius epsilon)
+          opening-width
+          (+ opening-depth epsilon))
+        (translate 0 0 (- .5 opening-depth)))
+      (cylinder (/ opening-width 2.0)
+        (vec (- 0.0 radius epsilon) 0 0)
+        (vec (+ radius epsilon) 0 0)
+        (translate 0 0 (- opening-depth .5)))
+      (box
+        (translate -.5 -.5 -1)
+        (scale 2 1 1)
+        (scale
+          (+ radius stopping-radius epsilon)
+          opening-width
+          (+ opening-depth epsilon))
+        (translate 0 0 (- opening-depth .5)))
+      (bbox
+        (translate -.5 -.5 -.5)
+        (scale 2 2 2)
+        (scale middle-radius middle-radius .5))
+      (translate .5 .35 0)
+      (apply insert args))))

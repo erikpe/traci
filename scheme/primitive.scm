@@ -58,6 +58,44 @@
       (error 'vec-z "Not a vactor: `~a'" vec)
       (list-ref vec 3)))
 
+;;; Color primitives
+;;; ----------------
+
+(define (color . args)
+  (cond ((not (= 3 (length args)))
+         (error 'color "Expected 3 arguments, got ~a" (length args)))
+        ((not (number? (list-ref args 0)))
+         (error 'color "Argument 1 not a number: `~a'" (list-ref args 0)))
+        ((not (number? (list-ref args 1)))
+         (error 'color "Argument 2 not a number: `~a'" (list-ref args 1)))
+        ((not (number? (list-ref args 2)))
+         (error 'color "Argument 3 not a number: `~a'" (list-ref args 2)))
+        (#t
+         (cons 'color args))))
+
+(define (color? obj)
+  (and (list? obj)
+       (= 4 (length obj))
+       (eq? 'color (list-ref obj 0))
+       (number? (list-ref obj 1))
+       (number? (list-ref obj 2))
+       (number? (list-ref obj 3))))
+
+(define (color-r color)
+  (if (not (color? color))
+      (error 'color-r "Not a color: `~a'" color)
+      (list-ref vec 1)))
+       
+(define (color-g color)
+  (if (not (color? color))
+      (error 'color-g "Not a color: `~a'" color)
+      (list-ref vec 2)))
+       
+(define (color-b color)
+  (if (not (color? color))
+      (error 'color-b "Not a color: `~a'" color)
+      (list-ref vec 3)))
+       
 ;;; Shape primitives
 ;;; ----------------
 

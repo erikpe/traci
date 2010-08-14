@@ -4,6 +4,7 @@ import traci.math.Transformable;
 import traci.math.TransformableHelper;
 import traci.math.Transformation;
 import traci.math.Vector;
+import traci.model.material.Color;
 import traci.model.material.Material;
 import traci.model.shape.primitive.Primitive;
 import traci.render.IntersectionStack;
@@ -30,10 +31,6 @@ public abstract class Shape extends TransformableHelper implements Transformable
         }
     }
     
-    public abstract int numCsgs();
-    
-    public abstract int numPrimitives();
-    
     @Override
     public void transform(final Transformation transformation)
     {
@@ -59,4 +56,6 @@ public abstract class Shape extends TransformableHelper implements Transformable
         
         return !localStack.isEmpty();
     }
+    
+    public abstract void setColor(final Color color);
 }

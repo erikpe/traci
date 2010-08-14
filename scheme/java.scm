@@ -8,6 +8,7 @@
 
 (define-java-class <traci.math.Vector>)
 (define-java-class <traci.math.Transformations>)
+(define-java-class <traci.model.material.Color>)
 
 (define-java-class <traci.model.shape.csg.Union>)
 (define-java-class <traci.model.shape.csg.Difference>)
@@ -26,6 +27,15 @@
        (->jdouble (vec-x vec))
        (->jdouble (vec-y vec))
        (->jdouble (vec-z vec)))))
+
+(define (->jcolor color)
+  (if (not (color? color))
+      (error '->jcolor "Not a color: `~a'" color)
+      ((generic-java-method '|make|)
+       (java-null <traci.model.material.Color>)
+       (->jdouble (color-r color))
+       (->jdouble (color-g color))
+       (->jdouble (color-b color)))))
 
 (define (transform-get-java-method transform)
   (cond ((not (transform? transform))
@@ -52,13 +62,15 @@
 
 (define (jshape-add-arg jshape arg)
   (cond ((bbox? arg)
-	 ((generic-java-method '|setBoundingBox|) jshape (->jshape arg)))
-	((shape? arg)
-	 ((generic-java-method '|add|) jshape (->jshape arg)))
-	((transform? arg)
-	 ((generic-java-method '|transform|) jshape (->jtransform arg)))
-	(#t
-	 (error 'jshape-add-arg "Unable to add arg to jshape: `~a'" arg))))
+         ((generic-java-method '|setBoundingBox|) jshape (->jshape arg)))
+        ((shape? arg)
+         ((generic-java-method '|add|) jshape (->jshape arg)))
+        ((transform? arg)
+         ((generic-java-method '|transform|) jshape (->jtransform arg)))
+        ((color? arg)
+         (generic-java-method '|setColor|) jshape (->jcolor arg))
+        (#t
+         (error 'jshape-add-arg "Unable to add arg to jshape: `~a'" arg))))
 
 (define (->jshape-class shape)
   (cond ((not (shape? shape))
@@ -86,11 +98,11 @@
   (if (not (shape? shape))
       (error '->jshape2 "Not a shape: `~a'" shape)
       (let* ((cargs (list-of-args (shape-get-constructor-arg-list shape)))
-	     (jshape (apply java-new (->jshape-class shape) (map ->java cargs))))
-	(for-each
-	 (lambda (arg) (jshape-add-arg jshape arg))
-	 (list-of-args (shape-get-arg-list shape)))
-	jshape)))
+             (jshape (apply java-new (->jshape-class shape) (map ->java cargs))))
+        (for-each
+         (lambda (arg) (jshape-add-arg jshape arg))
+         (list-of-args (shape-get-arg-list shape)))
+        jshape)))
 
 (define (->java obj)
   (cond ((transform? obj)
@@ -99,6 +111,8 @@
 	 (->jshape obj))
 	((vec? obj)
 	 (->jvec obj))
+    ((color? obj)
+     (->jcolor obj))
 	((number? obj)
 	 (->jdouble obj))
 	(#t

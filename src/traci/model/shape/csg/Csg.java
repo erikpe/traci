@@ -1,14 +1,16 @@
 package traci.model.shape.csg;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import traci.math.Transformation;
+import traci.model.material.Color;
 import traci.model.material.Material;
 import traci.model.shape.BoundingBox;
 import traci.model.shape.Shape;
 
-public abstract class Csg extends Shape
+public abstract class Csg extends Shape implements Iterable<Shape>
 {
     protected final List<Shape> shapes;
     protected int numShapes;
@@ -23,34 +25,15 @@ public abstract class Csg extends Shape
         this.numShapes = this.shapes.size();
     }
     
-    public int numCsgs()
-    {
-        int num = 1;
-        
-        for (final Shape shape : shapes)
-        {
-            num += shape.numCsgs();
-        }
-        
-        return num;
-    }
-    
-    public int numPrimitives()
-    {
-        int num = 1;
-        
-        for (final Shape shape : shapes)
-        {
-            num += shape.numPrimitives();
-        }
-        
-        return num;
-    }
-    
     public void add(final Shape shape)
     {
         shapes.add(shape);
         numShapes = shapes.size();
+    }
+    
+    public BoundingBox getBoundingBox()
+    {
+        return bBox;
     }
     
     public void setBoundingBox(final BoundingBox bBox)
@@ -71,6 +54,21 @@ public abstract class Csg extends Shape
         for (final Shape shape : shapes)
         {
             shape.transform(tr);
+        }
+    }
+    
+    @Override
+    public Iterator<Shape> iterator()
+    {
+        return shapes.iterator();
+    }
+    
+    @Override
+    public void setColor(final Color color)
+    {
+        for (final Shape shape : shapes)
+        {
+            shape.setColor(color);
         }
     }
 }

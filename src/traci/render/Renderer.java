@@ -12,6 +12,7 @@ import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.material.Color;
 import traci.model.shape.BoundingBox;
+import traci.model.shape.ShapeHelper;
 import traci.render.RenderingThread.BlockRenderer;
 import traci.render.RenderingThread.WorkBlock;
 
@@ -42,8 +43,10 @@ public class Renderer implements BlockRenderer
     private void renderScene()
     {
         System.out.println("> Rendering scene consisting of "
-                + scene.shape.numPrimitives() + " primitive objects and "
-                + scene.shape.numCsgs() + " CSG objects");
+                + ShapeHelper.numPrimitives(scene.shape)
+                + " primitive objects, " + ShapeHelper.numCsgs(scene.shape)
+                + " CSG objects and " + ShapeHelper.numBBoxes(scene.shape)
+                + " bounding boxes");
         
         /**
          * To get determinism, each {@link WorkBlock} gets its own

@@ -43,7 +43,7 @@ public class Sphere extends Primitive
             final double t0 = ma2 - sqrtD;
             final double t1 = ma2 + sqrtD;
             
-            if (t1 > -EPSILON && t1 < t0)
+            if (t1 > -EPSILON && t0 < t1)
             {
                 final Ray2 ray = Ray2.make();
                 

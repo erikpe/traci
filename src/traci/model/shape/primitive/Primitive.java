@@ -3,6 +3,7 @@ package traci.model.shape.primitive;
 import traci.math.Transformation;
 import traci.math.Transformations;
 import traci.math.Vector;
+import traci.model.material.Color;
 import traci.model.material.Material;
 import traci.model.shape.Shape;
 import traci.render.IntersectionStack;
@@ -124,5 +125,11 @@ public abstract class Primitive extends Shape
     {
         super.transform(tr);
         transformation = transformation.compose(tr);
+    }
+    
+    @Override
+    public void setColor(final Color color)
+    {
+        material.setColor(color);
     }
 }

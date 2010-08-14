@@ -1,7 +1,10 @@
 package traci.model.shape.csg;
 
+import java.util.Iterator;
+
 import traci.math.Vector;
 import traci.model.material.Material;
+import traci.model.shape.Shape;
 import traci.model.shape.primitive.Primitive;
 import traci.render.IntersectionStack;
 import traci.render.Ray;

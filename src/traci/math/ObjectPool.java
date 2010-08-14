@@ -62,12 +62,12 @@ abstract public class ObjectPool<T>
             pool[i] = makeNew();
         }
         
-        if (Settings.DEBUG)
-        {
-            System.out.println(Thread.currentThread().getName()
-                    + " increasing " + objClass.getSimpleName()
-                    + " pool size to " + pool.length);
-        }
+//        if (Settings.DEBUG)
+//        {
+//            System.out.println(Thread.currentThread().getName()
+//                    + " increasing " + objClass.getSimpleName()
+//                    + " pool size to " + pool.length);
+//        }
     }
     
     protected abstract T makeNew();
