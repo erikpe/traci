@@ -63,14 +63,14 @@ public class Raytrace
             
             if (ray2 == null)
             {
-                return Color.BLACK;
+                return Color.WHITE.mul(.5);
             }
             
             final Point2 hit2 = ray2.first();
             
             if (hit2 == null)
             {
-                return Color.BLACK;
+                return Color.WHITE.mul(.5);
             }
             
             dist = hit2.dist();

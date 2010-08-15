@@ -6,7 +6,6 @@ import traci.model.material.Material;
 import traci.render.IntersectionStack;
 import traci.render.Interval;
 import traci.render.Point;
-import traci.render.Point2;
 import traci.render.Point2.Type;
 import traci.render.Ray;
 import traci.render.Ray2;

@@ -206,6 +206,11 @@ public class PolynomSolver
             }
         }
         
-        return Arrays.copyOfRange(results, 0, i);
+        if (i > 0)
+        {
+            return Arrays.copyOfRange(results, 0, i);
+        }
+        
+        return null;
     }
 }

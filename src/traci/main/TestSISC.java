@@ -79,7 +79,7 @@ public class TestSISC
         
         start = System.currentTimeMillis();
         //Value val = interpreter.eval("(->java (lego-plate 2 4))");
-        Value val = interpreter.eval("(->java (legopiece-technic-pin))");
+        Value val = interpreter.eval("(->java (legopiece-technic-brick-with-holes 4 (rotx pi)))");
         //Value val = interpreter.eval("(->java (lego-peg))");
         stop = System.currentTimeMillis();
         System.out.println("> Creation of scene: " + (stop - start) + " ms.");
@@ -95,10 +95,10 @@ public class TestSISC
         plane.roty(15.23);
         //union.add(plane);
         
-        final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*55));
+        final PointLight light = new PointLight(Vector.make(2, 35, 15), Color.WHITE.mul(30*55));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
         
-        final Vector camLocation = Vector.make(-1, 10, 15);
+        final Vector camLocation = Vector.make(-2.5, 10, 7.5);
         final Vector camLookAt = Vector.make(0, 0, 0);
         //final Vector camLookAt = Vector.make(.25, .65, .25);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.make(.1, 1, .1));

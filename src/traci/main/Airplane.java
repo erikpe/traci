@@ -83,7 +83,7 @@ public class Airplane
         System.out.println("> Creation of scene: " + (stop - start) + " ms.");
         final Shape shape = (Shape) ((JavaObject) val).get();
         
-        final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*60));
+        final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*55));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
         
         final Vector camLocation = Vector.make(-10, 15, 15);

@@ -9,5 +9,5 @@ public class Settings
     public boolean antialiasEnabled = true;
     public int workBlockWidth = 64;
     public int workBlockHeight = 64;
-    public int aaLevel = 0;
+    public int aaLevel = 2;
 }

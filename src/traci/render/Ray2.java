@@ -327,7 +327,7 @@ public class Ray2
                 
             case LEAVE:
                 assert (insideMask & pointMask) != 0;
-                if (insideMask != 0x03)
+                if (insideMask == 0x03)
                 {
                     newRay.add(pNear);
                 }
