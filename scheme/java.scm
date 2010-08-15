@@ -68,7 +68,7 @@
         ((transform? arg)
          ((generic-java-method '|transform|) jshape (->jtransform arg)))
         ((color? arg)
-         (generic-java-method '|setColor|) jshape (->jcolor arg))
+         ((generic-java-method '|setColor|) jshape (->jcolor arg)))
         (#t
          (error 'jshape-add-arg "Unable to add arg to jshape: `~a'" arg))))
 

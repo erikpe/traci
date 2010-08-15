@@ -92,15 +92,17 @@
 
 (define (shape-add-arg outer-shape arg)
   (cond ((not (shape? outer-shape))
-	 (error 'shape-add-arg "Argument 1 is not a shape: `~a'" outer-shape))
-	((arg-list? arg)
-	 (shape-set-arg-list outer-shape
-			     (arg-list-merge (shape-get-arg-list outer-shape) arg)))
-	((or (transform? arg) (shape? arg))
-	 (shape-set-arg-list outer-shape
-			     (arg-list-add-arg (shape-get-arg-list outer-shape) arg)))
-	(#t
-	 (error 'shape-add-arg "Argument 2 of unknown type: `~a'" arg))))
+         (error 'shape-add-arg "Argument 1 is not a shape: `~a'" outer-shape))
+        ((arg-list? arg)
+         (shape-set-arg-list outer-shape
+                             (arg-list-merge (shape-get-arg-list outer-shape) arg)))
+        ((or (transform? arg)
+             (shape? arg)
+             (color? arg))
+         (shape-set-arg-list outer-shape
+                             (arg-list-add-arg (shape-get-arg-list outer-shape) arg)))
+        (#t
+         (error 'shape-add-arg "Argument 2 of unknown type: `~a'" arg))))
 
 (define (shape-add-constructor-arg outer-shape arg)
   (cond ((not (shape? outer-shape))

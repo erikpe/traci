@@ -55,12 +55,29 @@
   (let ((box-length (* length lu))
         (box-height (* 1.2 lu))
         (box-width lu)
+        (thickness (* .15 lu))
         (peg-height (* .2 lu)))
     (union
      (difference
       (rounded-box box-length box-height box-width lego-rounding)
+      (difference
+       (rounded-box2 (- box-length (* 2 thickness))
+                     (- box-height thickness)
+                     (- box-width (* 2 thickness))
+                     lego-rounding
+                     (translate thickness 0 thickness))
+       (loop i 0 (- length 2)
+             (cylinder (+ (* .3 lu) (* .5 thickness))
+                       (vec lu (* .7 lu) (- thickness epsilon))
+                       (vec lu (* .7 lu) (+ (- box-width thickness) epsilon))
+                       (translate (* i lu) 0 0))))
       (loop i 0 (- length 2)
             (legopart-technic-brick-hole (translate (* i lu) 0 0))))
+     (loop i 0 (- length 2)
+           (rounded-cylinder-0 (* .15 lu) (* .35 lu) lego-rounding
+                               (scale 1 -1 1)
+                               (translate lu (* .35 lu) (* .5 lu))
+                               (translate (* i lu) 0 0)))
      (loop i 0 (- length 1)
            (legopart-peg-hole (translate (* i lu) box-height 0)))
      (bbox (scale box-length (+ box-height peg-height) box-width))

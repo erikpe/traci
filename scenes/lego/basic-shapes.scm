@@ -156,6 +156,33 @@
      (bbox (scale x y z))
      (apply insert args))))
 
+(define (apan x z r . args)
+  (define (corner-helper r . args)
+    (intersection
+     (box (scale 1 2 1)
+          (translate 0 -1 0)
+          (scale (+ (* 3 r) (* 2 epsilon))
+                 (+ r epsilon)
+                 (+ (* 3 r) (* 2 epsilon)))
+          (translate (- epsilon) 0 (- epsilon)))
+     (torus r (+ r r) (rotx pi/2))
+     (apply insert args)))
+  (union
+   (cylinder r (vec r 0 (- r)) (vec (- x r) 0 (- r)))
+   (cylinder r (vec (+ x r) 0 r) (vec (+ x r) 0 (- z r)))
+   (cylinder r (vec (- x r) 0 (+ z r)) (vec r 0 (+ z r)))
+   (cylinder r (vec (- r) 0 (- z r)) (vec (- r) 0 r))
+   (corner-helper r (roty pi) (translate r 0 r))
+   (corner-helper r (roty pi/2) (translate (- x r) 0 r))
+   (corner-helper r (translate (- x r) 0 (- z r)))
+   (corner-helper r (roty (- pi/2)) (translate r 0 (- z r)))
+   (bbox (scale 1 2 1) (translate 0 -1 0)
+         (scale (+ x (* 4 r) (* 2 epsilon))
+                (+ r epsilon)
+                (+ z (* 4 r) (* 2 epsilon)))
+         (translate (- 0.0 r r epsilon) 0 (- 0.0 r r epsilon)))
+   (apply insert args)))
+
 (define (rounded-box2 x y z r . args)
   (let ((r2 (* 2 r))
         (v0 (vec r 0 r))
@@ -188,10 +215,18 @@
      (cylinder r v2 v6)
      (cylinder r v3 v7)
      (difference
-      (box (scale (+ x r2) (+ r epsilon) (+ z r2))
+      (union
+       (box (scale (+ x r2) (+ r epsilon) (- z r2))
+            (translate (- r) (- epsilon) r))
+       (box (scale (- x r2) (+ r epsilon) (+ z r2))
+            (translate r (- epsilon) (- r)))
+       (cylinder r2 (vec r (- epsilon) r) (vec r r r))
+       (cylinder r2 (vec (- x r) (- epsilon) r) (vec (- x r) r r))
+       (cylinder r2 (vec (- x r) (- epsilon) (- z r)) (vec (- x r) r (- z r)))
+       (cylinder r2 (vec r (- epsilon) (- z r)) (vec r r (- z r))))
+      (apan x z r (translate 0 r 0))
+      (bbox (scale (+ x r2) (+ r epsilon) (+ z r2))
+            (translate (- r) (- epsilon) (- r))))
+     (bbox (scale (+ x r2) (+ y epsilon) (+ z r2))
            (translate (- r) (- epsilon) (- r)))
-      (cylinder r
-                (vec (- 0.0 r epsilon) r (+ z r))
-                (vec (+ x r epsilon) r (+ z r)))))))
-     
-           
+     (apply insert args))))

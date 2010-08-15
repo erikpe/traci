@@ -84,17 +84,17 @@
 (define (color-r color)
   (if (not (color? color))
       (error 'color-r "Not a color: `~a'" color)
-      (list-ref vec 1)))
+      (list-ref color 1)))
        
 (define (color-g color)
   (if (not (color? color))
       (error 'color-g "Not a color: `~a'" color)
-      (list-ref vec 2)))
+      (list-ref color 2)))
        
 (define (color-b color)
   (if (not (color? color))
       (error 'color-b "Not a color: `~a'" color)
-      (list-ref vec 3)))
+      (list-ref color 3)))
        
 ;;; Shape primitives
 ;;; ----------------
