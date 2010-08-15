@@ -1,10 +1,10 @@
 ;;; Generic helpers
 ;;; ---------------
 
-(define (add-last l e)
-  (if (null? l)
-      (list e)
-      (cons (car l) (add-last (cdr l) e))))
+;;(define (add-last l e)
+;;  (if (null? l)
+;;      (list e)
+;;      (cons (car l) (add-last (cdr l) e))))
 
 (define (replace-nth n l e)
   (if (= 0 n)
@@ -170,34 +170,60 @@
   '(arg-list))
 
 (define (arg-list? obj)
-  (and (list? obj)
+  (and (not (null? obj))
+       (list? obj)
        (eq? 'arg-list (car obj))))
 
 (define (arg-list-add-arg arg-list arg)
   (cond ((not (arg-list? arg-list))
-	 (error 'arg-list-add-arg "Not an arg-list: `~a'" arg-list))
-	((arg-list? arg)
-	 (error 'arg-list-add-arg "Attempting to insert arg-list into arg-list"))
-	(#t
-	 (add-last arg-list arg))))
+         (error 'arg-list-add-arg "Not an arg-list: `~a'" arg-list))
+        ;((arg-list? arg)
+        ; (error 'arg-list-add-arg "Attempting to insert arg-list into arg-list"))
+        (#t
+         (cons (car arg-list) (cons arg (cdr arg-list))))))
 
 (define (arg-list-empty? arg-list)
   (if (not (arg-list? arg-list))
-      (error 'arg-list-empty? "Argument 1 not an arg-list: `~a'" arg-list)
+      (error 'arg-list-empty? "Not an arg-list: `~a'" arg-list)
       (null? (cdr arg-list))))
 
-(define (arg-list-first arg-list)
-  (cond ((not (arg-list? arg-list))
-	 (error 'arg-list-first "Argument 1 not an arg-list: `~a'" arg-list))
-	((arg-list-empty? arg-list)
-	 (error 'arg-list-first "Arg-list empty"))
-	(#t
-	 (car (cdr arg-list)))))
+(define (arg-list-merge arg-list1 arg-list2)
+  (cond ((not (arg-list? arg-list1))
+         (error 'arg-list-merge "Argument 1 not an arg-list: `~a'" arg-list1))
+        ((not (arg-list? arg-list2))
+         (error 'arg-list-merge "Argument 2 not an arg-list: `~a'" arg-list2))
+        ((arg-list-empty? arg-list2)
+         arg-list1)
+        (#t
+         (arg-list-add-arg arg-list1 arg-list2))))
 
-(define (arg-list-rest arg-list)
-  (cond ((not (arg-list? arg-list))
-	 (error 'arg-list-rest "Argument 1 not an arg-list: `~a'" arg-list))
-	((arg-list-empty? arg-list)
-	 (error 'arg-list-rest "Arg-list empty"))
-	(#t
-	 (cons (car arg-list) (cdr (cdr arg-list))))))
+;;(define (arg-list-merge arg-list1 arg-list2)
+;;  (cond ((not (arg-list? arg-list1))
+;;         (error 'arg-list-merge "Argument 1 not an arg-list: `~a'" arg-list1))
+;;        ((not (arg-list? arg-list2))
+;;         (error 'arg-list-merge "Argument 2 not an arg-list: `~a'" arg-list2))
+;;        ((arg-list-empty? arg-list2)
+;;         arg-list1)
+;;        (#t
+;;         (cons (car arg-list1)
+;;               (append (cdr arg-list2) (cdr arg-list1))))))
+
+(define (list-of-args-helper args res)
+  (cond ((null? args)
+         res)
+        ((arg-list? (car args))
+         (list-of-args-helper (cdr args) (list-of-args-helper (car args) res)))
+        ((eq? 'arg-list (car args))
+         (list-of-args-helper (cdr args) res))
+        (#t
+         (list-of-args-helper (cdr args) (cons (car args) res)))))
+
+(define (list-of-args arg-list)
+  (if (not (arg-list? arg-list))
+      (error 'list-of-args "Not an arg-list: `~a'" arg-list)
+      (list-of-args-helper arg-list '())))
+
+;;(define (list-of-args arg-list)
+;;  (if (not (arg-list? arg-list))
+;;      (error 'list-of-args "Not an arg-list: `~a'" arg-list)
+;;      (reverse (cdr arg-list))))

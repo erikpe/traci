@@ -69,26 +69,26 @@
       (roty? obj)
       (rotz? obj)))
 
-(define (arg-list-merge arg-list1 arg-list2)
-  (cond ((not (arg-list? arg-list1))
-	 (error 'arg-list-merge "Argument 1 not an arg-list: `~a'" arg-list1))
-	((not (arg-list? arg-list2))
-	 (error 'arg-list-merge "Argument 2 not an arg-list: `~a'" arg-list2))
-	((arg-list-empty? arg-list2)
-	 arg-list1)
-	(#t
-	 (arg-list-merge
-	  (arg-list-add-arg arg-list1 (arg-list-first arg-list2))
-	  (arg-list-rest arg-list2)))))
+;;(define (arg-list-merge arg-list1 arg-list2)
+;;  (cond ((not (arg-list? arg-list1))
+;;	 (error 'arg-list-merge "Argument 1 not an arg-list: `~a'" arg-list1))
+;;	((not (arg-list? arg-list2))
+;;	 (error 'arg-list-merge "Argument 2 not an arg-list: `~a'" arg-list2))
+;;	((arg-list-empty? arg-list2)
+;;	 arg-list1)
+;;	(#t
+;;	 (arg-list-merge
+;;	  (arg-list-add-arg arg-list1 (arg-list-first arg-list2))
+;;	  (arg-list-rest arg-list2)))))
 
-(define (list-of-args arg-list)
-  (define (list-of-args-helper arg-list list)
-    (if (arg-list-empty? arg-list) list
-	(list-of-args-helper (arg-list-rest arg-list)
-			     (add-last list (arg-list-first arg-list)))))
-  (if (not (arg-list? arg-list))
-      (error 'list-of-args "Not an arg-list: `~a'" arg-list)
-      (list-of-args-helper arg-list '())))
+;;(define (list-of-args arg-list)
+;;  (define (list-of-args-helper arg-list list)
+;;    (if (arg-list-empty? arg-list) list
+;;	(list-of-args-helper (arg-list-rest arg-list)
+;;			     (add-last list (arg-list-first arg-list)))))
+;;  (if (not (arg-list? arg-list))
+;;      (error 'list-of-args "Not an arg-list: `~a'" arg-list)
+;;      (list-of-args-helper arg-list '())))
 
 (define (shape-add-arg outer-shape arg)
   (cond ((not (shape? outer-shape))
