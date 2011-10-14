@@ -46,16 +46,17 @@ block
     ;
 
 statement
-    : assignable_statement
-    | RETURN assignable_statement        -> ^(RETURN assignable_statement)
-    | GLOBAL ID '=' assignable_statement -> ^(GLOBAL_ASSIGN ID assignable_statement)
-    | ID '=' assignable_statement        -> ^(ASSIGN ID assignable_statement)
+    : IF '(' expr ')' block (ELSE block)?      -> ^(IF expr block block?)
+    | WHILE '(' expr ')' block                 -> ^(WHILE expr block)
+    | assignable_statement
+    | RETURN assignable_statement              -> ^(RETURN assignable_statement)
+    | GLOBAL ID '=' assignable_statement       -> ^(GLOBAL_ASSIGN ID assignable_statement)
+    | ID '=' assignable_statement              -> ^(ASSIGN ID assignable_statement)
     ;
 
 assignable_statement
     : (ID '{')=>id_statement
     | (ID '(')=>function_call_statement
-    | WHILE '(' expr ')' block                          -> ^(WHILE expr block)
     | PRIMITIVE_SHAPE function_call_args? (block | ';') -> ^(PRIMITIVE_SHAPE function_call_args? block?)
     | CSG_SHAPE (block | ';')                           -> ^(CSG_SHAPE block?)
     | MODIFIER expr ';'                                 -> ^(MODIFIER expr)
@@ -126,6 +127,9 @@ DEF : 'def';
 RETURN : 'return';
 GLOBAL : 'global';
 WHILE : 'while';
+IF : 'if';
+ELSE : 'else';
+FOR : 'for';
 
 PRIMITIVE_SHAPE
     :	( 'box' | 'cylinder' | 'plane' | 'sphere' | 'torus' )

@@ -64,6 +64,8 @@ statement returns [TraciNode node]
         { $node = $assignable_statement.node; }
     | ^(RETURN assignable_statement)
         { $node = new ReturnNode($assignable_statement.node); }
+    | ^(IF expr a=block b=block?)
+        { $node = new IfElseNode($expr.node, $a.node, $b.node); }
     | ^(WHILE expr block)
         { $node = new WhileNode($expr.node, $block.node); }
     | ^(GLOBAL_ASSIGN ID assignable_statement)
