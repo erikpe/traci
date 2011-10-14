@@ -44,8 +44,42 @@ public class Torus extends Primitive
         return Vector.make(4 * x * k, 4 * y * k, 4 * z * k + 8 * z);
     }
     
-    public Ray2 primitiveShootRay2(final Vector p, final Vector dir)
+    private Double move(final Vector p, final Vector dir)
     {
+        final double radius = 1 + r;
+        
+        final double c = dir.dot(dir);
+        final double a = 2 * p.dot(dir) / c;
+        final double b = (p.dot(p) - radius * radius) / c;
+        
+        final double d = (a * a) / 4 - b;
+        
+        if (d >= 0)
+        {
+            final double t = -a / 2 - Math.sqrt(d);
+            
+            if (t < 0)
+            {
+                return Double.valueOf(0);
+            }
+            
+            return t;
+        }
+        
+        return null;
+    }
+    
+    public Ray2 primitiveShootRay2(final Vector initP, final Vector dir)
+    {
+        Double move = move(initP, dir);
+        
+        if (move == null)
+        {
+            return null;
+        }
+        
+        final Vector p = initP.add(dir.mul(move));
+        
         final double a = dir.dot(dir);
         final double b = 2 * p.dot(dir);
         final double g = p.dot(p) - r2 - 1;
@@ -77,8 +111,8 @@ public class Torus extends Primitive
         {
             ray = Ray2.make();
             
-            ray.add(roots[0], this, Type.ENTER);
-            ray.add(roots[1], this, Type.LEAVE);
+            ray.add(roots[0] + move, this, Type.ENTER);
+            ray.add(roots[1] + move, this, Type.LEAVE);
         }
         
         if (roots.length == 4 && roots[3] > -0.001)
@@ -88,8 +122,8 @@ public class Torus extends Primitive
                 ray = Ray2.make();
             }
             
-            ray.add(roots[2], this, Type.ENTER);
-            ray.add(roots[3], this, Type.LEAVE);
+            ray.add(roots[2] + move, this, Type.ENTER);
+            ray.add(roots[3] + move, this, Type.LEAVE);
         }
         
         return ray;
