@@ -2,14 +2,14 @@ package traci.lang.interpreter;
 
 import java.util.HashMap;
 
-import traci.lang.interpreter.node.FunctionNode;
-
 @SuppressWarnings("serial")
-public class Functions extends HashMap<String, FunctionNode>
+public class Functions extends HashMap<String, Function>
 {
     public Functions()
     {
         super();
+        
+        put("print", BuiltinFunctions.FUNCTION_PRINT);
     }
     
     public Functions(final Functions other)

@@ -5,6 +5,7 @@ import java.util.List;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entity;
+import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
@@ -25,7 +26,7 @@ public class FunctionCallNode implements TraciNode
     @Override
     public TraciValue eval(Context context) throws FunctionReturnException
     {
-        final FunctionNode functionNode = context.functions.get(id);
+        final Function functionNode = context.functions.get(id);
         final List<TraciValue> args = new ArrayList<TraciValue>();
         
         for (final TraciNode argNode : argNodes)

@@ -88,4 +88,10 @@ public class TraciValue
     {
         return (Csg) value;
     }
+    
+    @Override
+    public String toString()
+    {
+        return value.toString();
+    }
 }

@@ -63,11 +63,11 @@ assignable_statement
     ;
 
 id_statement
-    : ID block? -> ^(REF ID block)
+    : ID block -> ^(REF ID block)
     ;
 
 function_call_statement
-    : ID function_call_args block? -> ^(FUNCALL ID function_call_args block?)
+    : ID function_call_args (block | ';') -> ^(FUNCALL ID function_call_args block?)
     ;
 
 expr

@@ -22,7 +22,7 @@ public class Context
     
     public static Context newRootContext(final Entity rootEntity)
     {
-        return new Context(new Functions(), new HashMap<String, TraciValue>(), new HashMap<String, TraciValue>(), rootEntity);
+        return new Context(null, new HashMap<String, TraciValue>(), new HashMap<String, TraciValue>(), rootEntity);
     }
     
     public Context newLocalMemory()

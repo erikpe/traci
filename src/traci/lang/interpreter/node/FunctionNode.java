@@ -4,10 +4,11 @@ import java.util.List;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entity;
+import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 
-public class FunctionNode implements TraciNode
+public class FunctionNode implements TraciNode, Function
 {
     public final String id;
     public final List<String> argIDs;
