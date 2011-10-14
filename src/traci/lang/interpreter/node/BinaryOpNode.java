@@ -5,13 +5,15 @@ import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.math.Vector;
 
-public abstract class BinaryOpNode implements TraciNode
+public class BinaryOpNode implements TraciNode
 {
+    private final Op op;
     private final TraciNode aNode;
     private final TraciNode bNode;
     
-    BinaryOpNode(final TraciNode aNode, final TraciNode bNode)
+    public BinaryOpNode(final Op op, final TraciNode aNode, final TraciNode bNode)
     {
+        this.op = op;
         this.aNode = aNode;
         this.bNode = bNode;
     }
@@ -29,23 +31,23 @@ public abstract class BinaryOpNode implements TraciNode
         case NUMBER:
             switch (bType)
             {
-            case NUMBER: return eval(a.getNumber(), b.getNumber());
-            case VECTOR: return eval(a.getNumber(), b.getVector());
+            case NUMBER: return calc(a.getNumber(), b.getNumber());
+            case VECTOR: return calc(a.getNumber(), b.getVector());
             default: break;
             }
             
         case VECTOR:
             switch (bType)
             {
-            case NUMBER: return eval(a.getVector(), b.getNumber());
-            case VECTOR: return eval(a.getVector(), b.getVector());
+            case NUMBER: return calc(a.getVector(), b.getNumber());
+            case VECTOR: return calc(a.getVector(), b.getVector());
             default: break;
             }
             
         case BOOLEAN:
             switch (bType)
             {
-            case BOOLEAN: return eval(a.getBoolean(), b.getBoolean());
+            case BOOLEAN: return calc(a.getBoolean(), b.getBoolean());
             default : break;
             }
             
@@ -53,42 +55,82 @@ public abstract class BinaryOpNode implements TraciNode
             break;
         }
         
-        typeError();
-        return null;
-    }
-    
-    protected void typeError()
-    {
         throw new RuntimeException("type error");
     }
     
-    protected TraciValue eval(final Double a, final Double b)
+    private TraciValue calc(final Double a, final Double b)
     {
-        typeError();
-        return null;
+        final Object res;
+        
+        switch (op)
+        {
+        case BINARY_ADD:  res = Double.valueOf(a + b); break;
+        case BINARY_SUB:  res = Double.valueOf(a - b); break;
+        case BINARY_MUL:  res = Double.valueOf(a * b); break;
+        case BINARY_DIV:  res = Double.valueOf(a / b); break;
+        case COMPARE_LT:  res = Boolean.valueOf(a < b); break;
+        case COMPARE_LTE: res = Boolean.valueOf(a <= b); break;
+        case COMPARE_GT:  res = Boolean.valueOf(a > b); break;
+        case COMPARE_GTE: res = Boolean.valueOf(a >= b); break;
+        case COMPARE_EQ:  res = Boolean.valueOf(a == b); break;
+        case COMPARE_NEQ: res = Boolean.valueOf(a != b); break;
+        default: throw new RuntimeException("type error");
+        }
+        
+        return new TraciValue(res);
     }
     
-    protected TraciValue eval(final Double a, final Vector b)
+    private TraciValue calc(final Double a, final Vector b)
     {
-        typeError();
-        return null;
+        final Vector res;
+        
+        switch (op)
+        {
+        case BINARY_MUL: res = b.mul(a); break;
+        default: throw new RuntimeException("type error");
+        }
+        
+        return new TraciValue(res);
     }
     
-    protected TraciValue eval(final Vector a, final Vector b)
+    private TraciValue calc(final Vector a, final Double b)
     {
-        typeError();
-        return null;
+        final Vector res;
+        
+        switch (op)
+        {
+        case BINARY_MUL: res = a.mul(b); break;
+        default: throw new RuntimeException("type error");
+        }
+        
+        return new TraciValue(res);
     }
     
-    protected TraciValue eval(final Vector a, final Double b)
+    private TraciValue calc(final Vector a, final Vector b)
     {
-        typeError();
-        return null;
+        final Vector res;
+        
+        switch (op)
+        {
+        case BINARY_ADD: res = a.add(b); break;
+        case BINARY_SUB: res = a.sub(b); break;
+        default: throw new RuntimeException("type error");
+        }
+        
+        return new TraciValue(res);
     }
     
-    protected TraciValue eval(final Boolean a, final Boolean b)
+    private TraciValue calc(final Boolean a, final Boolean b)
     {
-        typeError();
-        return null;
+        final Boolean res;
+        
+        switch (op)
+        {
+        case COMPARE_EQ:  res = Boolean.valueOf(a == b); break;
+        case COMPARE_NEQ: res = Boolean.valueOf(a != b); break;
+        default: throw new RuntimeException("type error");
+        }
+        
+        return new TraciValue(res);
     }
 }

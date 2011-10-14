@@ -5,12 +5,14 @@ import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.math.Vector;
 
-public abstract class UnaryOpNode implements TraciNode
+public class UnaryOpNode implements TraciNode
 {
+    private final Op op;
     private final TraciNode aNode;
     
-    UnaryOpNode(final TraciNode aNode)
+    public UnaryOpNode(final Op op, final TraciNode aNode)
     {
+        this.op = op;
         this.aNode = aNode;
     }
     
@@ -21,36 +23,53 @@ public abstract class UnaryOpNode implements TraciNode
         
         switch (aType)
         {
-        case NUMBER: return eval(a.getNumber());
-        case BOOLEAN: return eval(a.getBoolean());
-        case VECTOR: return eval(a.getVector());
+        case NUMBER:  return calc(a.getNumber());
+        case BOOLEAN: return calc(a.getBoolean());
+        case VECTOR:  return calc(a.getVector());
         default: break;
         }
         
-        typeError();
-        return null;
-    }
-    
-    protected void typeError()
-    {
         throw new RuntimeException("type error");
     }
     
-    protected TraciValue eval(final Double a)
+    private TraciValue calc(final Double a)
     {
-        typeError();
-        return null;
+        final Double res;
+        
+        switch (op)
+        {
+        case UNARY_PLUS: res = Double.valueOf(a); break;
+        case UNARY_NEG:  res = Double.valueOf(-a); break;
+        default: throw new RuntimeException("type error");
+        }
+        
+        return new TraciValue(res);
     }
     
-    protected TraciValue eval(final Boolean a)
+    private TraciValue calc(final Boolean a)
     {
-        typeError();
-        return null;
+        final Boolean res;
+        
+        switch (op)
+        {
+        case UNARY_NOT: res = Boolean.valueOf(!a); break;
+        default: throw new RuntimeException("type error");
+        }
+        
+        return new TraciValue(res);
     }
     
-    protected TraciValue eval(final Vector a)
+    private TraciValue calc(final Vector a)
     {
-        typeError();
-        return null;
+        final Vector res;
+        
+        switch (op)
+        {
+        case UNARY_PLUS: res = a; break;
+        case UNARY_NEG:  res = a.neg(); break;
+        default: throw new RuntimeException("type error");
+        }
+        
+        return new TraciValue(res);
     }
 }

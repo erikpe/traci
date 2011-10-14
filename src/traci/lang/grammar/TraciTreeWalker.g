@@ -64,6 +64,8 @@ statement returns [TraciNode node]
         { $node = $assignable_statement.node; }
     | ^(RETURN assignable_statement)
         { $node = new ReturnNode($assignable_statement.node); }
+    | ^(WHILE expr block)
+        { $node = new WhileNode($expr.node, $block.node); }
     | ^(GLOBAL_ASSIGN ID assignable_statement)
         { $node = new AssignNode($ID.text, $assignable_statement.node, true); }
     | ^(ASSIGN ID assignable_statement)
@@ -82,13 +84,19 @@ assignable_statement returns [TraciNode node]
     ;
 
 expr returns [TraciNode node]
-    : ^('+' a=expr b=expr)  { $node = new BinaryAddNode($a.node, $b.node); }
-    | ^('-' a=expr b=expr)  { $node = new BinarySubNode($a.node, $b.node); }
-    | ^('*' a=expr b=expr)  { $node = new BinaryMulNode($a.node, $b.node); }
-    | ^('/' a=expr b=expr)  { $node = new BinaryDivNode($a.node, $b.node); }
-    | ^(UNARY_PLUS a=expr)  { $node = new UnaryPlusNode($a.node); }
-    | ^(UNARY_MINUS a=expr) { $node = new UnaryNegNode($a.node); }
-    | ^(UNARY_NOT a=expr)   { $node = new UnaryNotNode($a.node); }
+    : ^('+' a=expr b=expr)  { $node = new BinaryOpNode(Op.BINARY_ADD, $a.node, $b.node); }
+    | ^('-' a=expr b=expr)  { $node = new BinaryOpNode(Op.BINARY_SUB, $a.node, $b.node); }
+    | ^('*' a=expr b=expr)  { $node = new BinaryOpNode(Op.BINARY_MUL, $a.node, $b.node); }
+    | ^('/' a=expr b=expr)  { $node = new BinaryOpNode(Op.BINARY_DIV, $a.node, $b.node); }
+    | ^('<' a=expr b=expr)  { $node = new BinaryOpNode(Op.COMPARE_LT, $a.node, $b.node); }
+    | ^('<=' a=expr b=expr) { $node = new BinaryOpNode(Op.COMPARE_LTE, $a.node, $b.node); }
+    | ^('>' a=expr b=expr)  { $node = new BinaryOpNode(Op.COMPARE_GT, $a.node, $b.node); }
+    | ^('>=' a=expr b=expr) { $node = new BinaryOpNode(Op.COMPARE_GTE, $a.node, $b.node); }
+    | ^('==' a=expr b=expr) { $node = new BinaryOpNode(Op.COMPARE_EQ, $a.node, $b.node); }
+    | ^('!=' a=expr b=expr) { $node = new BinaryOpNode(Op.COMPARE_NEQ, $a.node, $b.node); }
+    | ^(UNARY_PLUS a=expr)  { $node = new UnaryOpNode(Op.UNARY_PLUS, $a.node); }
+    | ^(UNARY_MINUS a=expr) { $node = new UnaryOpNode(Op.UNARY_NEG, $a.node); }
+    | ^(UNARY_NOT a=expr)   { $node = new UnaryOpNode(Op.UNARY_NOT, $a.node); }
     | ^(REF ID block?)      { $node = new RefNode($ID.text, $block.node); }
     | ^(FUNCALL ID function_call_args block?)
         { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node); }

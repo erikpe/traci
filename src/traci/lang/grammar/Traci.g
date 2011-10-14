@@ -55,6 +55,7 @@ statement
 assignable_statement
     : (ID '{')=>id_statement
     | (ID '(')=>function_call_statement
+    | WHILE '(' expr ')' block                          -> ^(WHILE expr block)
     | PRIMITIVE_SHAPE function_call_args? (block | ';') -> ^(PRIMITIVE_SHAPE function_call_args? block?)
     | CSG_SHAPE (block | ';')                           -> ^(CSG_SHAPE block?)
     | MODIFIER expr ';'                                 -> ^(MODIFIER expr)
@@ -124,6 +125,7 @@ vector
 DEF : 'def';
 RETURN : 'return';
 GLOBAL : 'global';
+WHILE : 'while';
 
 PRIMITIVE_SHAPE
     :	( 'box' | 'cylinder' | 'plane' | 'sphere' | 'torus' )
