@@ -3,13 +3,12 @@ package traci.lang.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Context
 {
-    public final Functions functions;
-    public final Map<String, TraciValue> globalMemory;
-    public final Map<String, TraciValue> localMemory;
-    public final Entity entity;
+    private final Functions functions;
+    private final Map<String, TraciValue> globalMemory;
+    private final Map<String, TraciValue> localMemory;
+    private final Entity entity;
     
     private Context(final Functions functions, final Map<String, TraciValue> globalMemory,
             final Map<String, TraciValue> localMemory, final Entity entity)
@@ -40,15 +39,40 @@ public class Context
         return new Context(newFunctions, globalMemory, localMemory, entity);
     }
     
+    public void applyValue(final TraciValue value)
+    {
+        entity.applyValue(value);
+    }
+    
+    public Function getFunction(final String id)
+    {
+        return functions.get(id);
+    }
+    
+    public void putGlobalValue(final String id, final TraciValue value)
+    {
+        globalMemory.put(id, value);
+    }
+    
+    public void putLocalValue(final String id, final TraciValue value)
+    {
+        localMemory.put(id, value);
+    }
+    
     public TraciValue getValue(final String id)
     {
-        final TraciValue localValue = localMemory.get(id);
+        TraciValue value = localMemory.get(id);
         
-        if (localValue != null)
+        if (value == null)
         {
-            return localValue;
+            value = globalMemory.get(id);
         }
         
-        return globalMemory.get(id);
+        if (value == null)
+        {
+            return null;
+        }
+        
+        return (TraciValue) value.clone();
     }
 }

@@ -5,7 +5,7 @@ import traci.model.shape.Shape;
 import traci.model.shape.csg.Csg;
 import traci.model.shape.primitive.Primitive;
 
-public class TraciValue
+public class TraciValue implements Cloneable
 {
     public static enum Type {
         NUMBER,
@@ -93,5 +93,26 @@ public class TraciValue
     public String toString()
     {
         return value.toString();
+    }
+    
+    @Override
+    public Object clone()
+    {
+        switch (type)
+        {
+        case NUMBER:
+        case BOOLEAN:
+        case VECTOR:
+            return new TraciValue(value);
+            
+        case PRIMITIVE_SHAPE:
+            return new TraciValue(getPrimitive().clone());
+            
+        case CSG_SHAPE:
+            return new TraciValue(getCsg().clone());
+            
+        default:
+            return null;
+        }
     }
 }

@@ -30,7 +30,7 @@ public class BlockNode implements TraciNode
             
             if (value != null)
             {
-                context.entity.applyValue(value);
+                context.applyValue(value);
             }
         }
         

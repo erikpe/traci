@@ -24,11 +24,11 @@ public class AssignNode implements TraciNode
         
         if (isGlobal)
         {
-            context.globalMemory.put(id, value);
+            context.putGlobalValue(id, value);
         }
         else
         {
-            context.localMemory.put(id, value);
+            context.putLocalValue(id, value);
         }
         
         return null;

@@ -43,7 +43,7 @@ public class FunctionNode implements TraciNode, Function
         
         for (int i = 0; i < argIDs.size(); ++i)
         {
-            context.localMemory.put(argIDs.get(i), args.get(i));
+            context.putLocalValue(argIDs.get(i), args.get(i));
         }
         
         try

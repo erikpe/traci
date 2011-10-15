@@ -1,8 +1,16 @@
 
 i = 5;
 
+def minus_one(var) {
+  def apa(hej) {
+    return hej + 2;
+  }
+  var = apa(var) - 3;
+  return var;
+}
+
 while (i > 0) {
-  i = i - 1;
+  i = minus_one(i);
   if (i < 3) {
     print(17);
   }

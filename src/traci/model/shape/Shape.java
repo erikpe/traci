@@ -11,13 +11,13 @@ import traci.render.IntersectionStack;
 import traci.render.Ray;
 import traci.render.Ray2;
 
-public abstract class Shape extends TransformableHelper implements Transformable
+public abstract class Shape extends TransformableHelper implements Transformable, Cloneable
 {
     public static final double EPSILON = 0.000001;
     
     protected static final double INSIDE_MARIGIN = 1e-7;
     
-    public final Material material;
+    public Material material;
     
     public Shape(final Material material)
     {
@@ -58,4 +58,21 @@ public abstract class Shape extends TransformableHelper implements Transformable
     }
     
     public abstract void setColor(final Color color);
+    
+    @Override
+    public Object clone()
+    {
+        try
+        {
+            final Shape res = (Shape) super.clone();
+            res.material = (Material) material.clone();
+            
+            return res;
+        }
+        catch (final CloneNotSupportedException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

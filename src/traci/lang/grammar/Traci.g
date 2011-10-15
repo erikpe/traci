@@ -42,21 +42,21 @@ function_def_args
     ;
 
 block
-    : '{' statement* '}' -> ^(BLOCK statement*)
+    : '{' (function | statement)* '}' -> ^(BLOCK function* statement*)
     ;
 
 statement
-    : IF '(' expr ')' block (ELSE block)?      -> ^(IF expr block block?)
-    | WHILE '(' expr ')' block                 -> ^(WHILE expr block)
+    : IF '(' expr ')' block (ELSE block)? -> ^(IF expr block block?)
+    | WHILE '(' expr ')' block            -> ^(WHILE expr block)
     | assignable_statement
-    | RETURN assignable_statement              -> ^(RETURN assignable_statement)
-    | GLOBAL ID '=' assignable_statement       -> ^(GLOBAL_ASSIGN ID assignable_statement)
-    | ID '=' assignable_statement              -> ^(ASSIGN ID assignable_statement)
+    | RETURN assignable_statement         -> ^(RETURN assignable_statement)
+    | GLOBAL ID '=' assignable_statement  -> ^(GLOBAL_ASSIGN ID assignable_statement)
+    | ID '=' assignable_statement         -> ^(ASSIGN ID assignable_statement)
     ;
 
 assignable_statement
     : (ID '{')=>id_statement
-    | (ID '(')=>function_call_statement
+    | (function_call_statement)=>function_call_statement
     | PRIMITIVE_SHAPE function_call_args? (block | ';') -> ^(PRIMITIVE_SHAPE function_call_args? block?)
     | CSG_SHAPE (block | ';')                           -> ^(CSG_SHAPE block?)
     | MODIFIER expr ';'                                 -> ^(MODIFIER expr)
@@ -68,7 +68,7 @@ id_statement
     ;
 
 function_call_statement
-    : ID function_call_args (block | ';') -> ^(FUNCALL ID function_call_args block?)
+    : ID function_call_args block -> ^(FUNCALL ID function_call_args block)
     ;
 
 expr

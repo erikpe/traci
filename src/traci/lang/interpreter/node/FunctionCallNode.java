@@ -26,7 +26,7 @@ public class FunctionCallNode implements TraciNode
     @Override
     public TraciValue eval(Context context) throws FunctionReturnException
     {
-        final Function functionNode = context.functions.get(id);
+        final Function functionNode = context.getFunction(id);
         final List<TraciValue> args = new ArrayList<TraciValue>();
         
         for (final TraciNode argNode : argNodes)

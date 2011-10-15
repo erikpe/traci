@@ -132,4 +132,12 @@ public abstract class Primitive extends Shape
     {
         material.setColor(color);
     }
+    
+    @Override
+    public Object clone()
+    {
+        final Primitive res = (Primitive) super.clone();
+        res.transformation = transformation;
+        return res;
+    }
 }

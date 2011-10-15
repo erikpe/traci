@@ -12,7 +12,7 @@ import traci.model.shape.Shape;
 
 public abstract class Csg extends Shape implements Iterable<Shape>
 {
-    protected final List<Shape> shapes;
+    protected List<Shape> shapes;
     protected int numShapes;
     
     protected BoundingBox bBox;
@@ -70,5 +70,20 @@ public abstract class Csg extends Shape implements Iterable<Shape>
         {
             shape.setColor(color);
         }
+    }
+    
+    @Override
+    public Object clone()
+    {
+        final Csg res = (Csg) super.clone();
+        res.shapes = new ArrayList<Shape>();
+        res.numShapes = res.shapes.size();
+        
+        for (final Shape shape : shapes)
+        {
+            res.add((Shape) shape.clone());
+        }
+        
+        return res;
     }
 }
