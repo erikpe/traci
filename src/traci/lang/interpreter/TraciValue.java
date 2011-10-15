@@ -13,6 +13,7 @@ public class TraciValue implements Cloneable
         VECTOR,
         PRIMITIVE_SHAPE,
         CSG_SHAPE,
+        MODIFIER,
         UNKNOWN
     };
     
@@ -42,6 +43,10 @@ public class TraciValue implements Cloneable
         else if (obj instanceof Csg)
         {
             type = Type.CSG_SHAPE;
+        }
+        else if (obj instanceof ModifierValue)
+        {
+            type = Type.MODIFIER;
         }
         else
         {
@@ -89,6 +94,11 @@ public class TraciValue implements Cloneable
         return (Csg) value;
     }
     
+    public ModifierValue getModifierValue()
+    {
+        return (ModifierValue) value;
+    }
+    
     @Override
     public String toString()
     {
@@ -103,6 +113,7 @@ public class TraciValue implements Cloneable
         case NUMBER:
         case BOOLEAN:
         case VECTOR:
+        case MODIFIER:
             return new TraciValue(value);
             
         case PRIMITIVE_SHAPE:

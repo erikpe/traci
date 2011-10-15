@@ -77,10 +77,12 @@ statement returns [TraciNode node]
 assignable_statement returns [TraciNode node]
     : ^(PRIMITIVE_SHAPE function_call_args? block?)
         { $node = new PrimitiveShapeNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node); }
-    | ^(CSG_SHAPE block?)
-        { $node = new CsgShapeNode($CSG_SHAPE.text, $block.node); }
+    | ^(CSG_SHAPE function_call_args? block?)
+        { $node = new CsgShapeNode($CSG_SHAPE.text, $function_call_args.nodes, $block.node); }
+    | ^(BBOX function_call_args? block?)
+        { $node = new BBoxNode($function_call_args.nodes, $block.node); }
     | ^(MODIFIER expr)
-        //{ $node = new ModifierNode($MODIFIER.text, $expr.node); }
+        { $node = new ModifierNode($MODIFIER.text, $expr.node); }
     | expr
         { $node = $expr.node; }
     ;

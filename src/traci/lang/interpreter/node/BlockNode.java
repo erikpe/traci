@@ -39,6 +39,7 @@ public class BlockNode implements TraciNode
     
     public void addStatement(final TraciNode statement)
     {
+        assert(statement != null);
         statements.add(statement);
     }
 }

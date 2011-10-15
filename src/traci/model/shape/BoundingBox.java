@@ -12,8 +12,6 @@ public class BoundingBox implements Transformable
     public static final AtomicLong miss = new AtomicLong(1);
     public static final AtomicLong hit = new AtomicLong(1);
     
-    protected static final double INSIDE_MARIGIN = 1e-10;
-    
     private Transformation transformation;
     
     public BoundingBox()
@@ -89,31 +87,5 @@ public class BoundingBox implements Transformable
         
         //miss.incrementAndGet();
         return false;
-    }
-    
-    public boolean isInside(final Vector p)
-    {
-        final Vector transP = transformation.pointInv(p);
-        
-        final double x = transP.x();
-        final double y = transP.y();
-        final double z = transP.z();
-        
-        return x > -INSIDE_MARIGIN && x < 1.0 + INSIDE_MARIGIN
-            && y > -INSIDE_MARIGIN && y < 1.0 + INSIDE_MARIGIN
-            && z > -INSIDE_MARIGIN && z < 1.0 + INSIDE_MARIGIN;
-    }
-    
-    public boolean isOutside(final Vector p)
-    {
-        final Vector transP = transformation.pointInv(p);
-        
-        final double x = transP.x();
-        final double y = transP.y();
-        final double z = transP.z();
-        
-        return x < INSIDE_MARIGIN && x > 1.0 - INSIDE_MARIGIN
-            && y < INSIDE_MARIGIN && y > 1.0 - INSIDE_MARIGIN
-            && z < INSIDE_MARIGIN && z > 1.0 - INSIDE_MARIGIN;
     }
 }

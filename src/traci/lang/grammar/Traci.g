@@ -56,9 +56,10 @@ statement
 
 assignable_statement
     : (ID '{')=>id_statement
-    | (function_call_statement)=>function_call_statement
+    | (ID function_call_args '{')=>function_call_statement
     | PRIMITIVE_SHAPE function_call_args? (block | ';') -> ^(PRIMITIVE_SHAPE function_call_args? block?)
-    | CSG_SHAPE (block | ';')                           -> ^(CSG_SHAPE block?)
+    | CSG_SHAPE function_call_args? (block | ';')       -> ^(CSG_SHAPE function_call_args? block?)
+    | BBOX function_call_args? (block | ';')            -> ^(BBOX function_call_args? block?)
     | MODIFIER expr ';'                                 -> ^(MODIFIER expr)
     | expr ';'!
     ;
@@ -130,6 +131,7 @@ WHILE : 'while';
 IF : 'if';
 ELSE : 'else';
 FOR : 'for';
+BBOX : 'bbox';
 
 PRIMITIVE_SHAPE
     :	( 'box' | 'cylinder' | 'plane' | 'sphere' | 'torus' )
@@ -140,8 +142,7 @@ CSG_SHAPE
     ;
 
 MODIFIER
-    :	( 'translate' | 'trx' | 'try' | 'trz' |
-          'rotate' | 'rotx' | 'roty' | 'rotz' | 'color' )
+    :	( 'translate' | 'scale' | 'rotate' | 'rotx' | 'roty' | 'rotz' | 'color' )
     ;
 
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*

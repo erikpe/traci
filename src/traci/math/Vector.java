@@ -130,8 +130,7 @@ public class Vector
     
     public Vector cross(final Vector vec)
     {
-        return make(y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y
-                * vec.x);
+        return make(y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x);
     }
     
     @Override

@@ -1,17 +1,104 @@
 
-i = 5;
+global ORIGO = [0, 0, 0];
 
-def minus_one(var) {
-  def apa(hej) {
-    return hej + 2;
-  }
-  var = apa(var) - 3;
-  return var;
+global X = [1, 0, 0];
+global Y = [0, 1, 0];
+global Z = [0, 0, 1];
+
+global EPSILON = 0.001;
+global PI = 3.14159265358979323846;
+
+def roundedCylinder0 (radius, height, rounding)
+{
+    return union {
+        cylinder (radius, ORIGO, Y*(height-rounding));
+        cylinder (radius-rounding, Y*(height-rounding-EPSILON), Y*height);
+        torus (rounding, radius-rounding) {
+            rotx PI/2;
+            translate Y*(height-rounding);
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius, height, radius];
+        }
+    }
 }
 
-while (i > 0) {
-  i = minus_one(i);
-  if (i < 3) {
-    print(17);
-  }
+def roundedCylinder1 (radius, height, rounding)
+{
+    return union {
+        cylinder (radius, Y*rounding, Y*(height-rounding));
+        cylinder (radius-rounding, ORIGO, Y*height);
+        torus (rounding, radius-rounding) {
+            rotx PI/2;
+            translate Y*rounding;
+        }
+        torus (rounding, radius-rounding) {
+            rotx PI/2;
+            translate Y*(height-rounding);
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [radius, height, radius];
+            scale [radius, height, radius];
+        }
+    }
 }
+
+def roundedBox (x, y, z, r)
+{
+    v0 = [r, r, r];
+    v1 = [x - r, r, r];
+    v2 = [x - r, r, z - r];
+    v3 = [r, r, z - r];
+    v4 = [r, y - r, r];
+    v5 = [x - r, y - r, r];
+    v6 = [x - r, y - r, z - r];
+    v7 = [r, y - r, z - r];
+    return union {
+        box {
+            scale [x, y - 2*r, z - 2*r];
+            translate [0, r, r];
+        }
+        box {
+            scale [x - 2*r, y, z - 2*r];
+            translate [r, 0, r];
+        }
+        box {
+            scale [x - 2*r, y - 2*r, z];
+            translate [r, r, 0];
+        }
+        union {
+            sphere { scale r; translate v0; }
+            sphere { scale r; translate v1; }
+            sphere { scale r; translate v2; }
+            sphere { scale r; translate v3; }
+            cylinder (r, v0, v1);
+            cylinder (r, v1, v2);
+            cylinder (r, v2, v3);
+            cylinder (r, v3, v0);
+            bbox { scale [x, 2*r, z]; }
+        }
+        union {
+            sphere { scale r; translate v4; }
+            sphere { scale r; translate v5; }
+            sphere { scale r; translate v6; }
+            sphere { scale r; translate v7; }
+            cylinder (r, v4, v5);
+            cylinder (r, v5, v6);
+            cylinder (r, v6, v7);
+            cylinder (r, v7, v4);
+            bbox { scale [x, 2*r, z]; translate [0, y - 2*r, 0]; }
+        }
+        cylinder (r, v0, v4);
+        cylinder (r, v1, v5);
+        cylinder (r, v2, v6);
+        cylinder (r, v3, v7);
+        bbox { scale [x, y, z]; }
+    }
+}
+
+roundedCylinder0(1, 1, .1);
+roundedCylinder1(1, 1, .1);
+roundedBox(6, 7, 8, .5);

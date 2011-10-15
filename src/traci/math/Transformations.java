@@ -20,6 +20,11 @@ public class Transformations
         return make(Matrix.translate(vec), Matrix.translate(vec.neg()));
     }
     
+    public static Transformation scale(final double val)
+    {
+        return scale(Vector.make(val, val, val));
+    }
+    
     public static Transformation scale(final Vector vec)
     {
         final Vector invVec = Vector

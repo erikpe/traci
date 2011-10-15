@@ -68,10 +68,7 @@ public class Context
             value = globalMemory.get(id);
         }
         
-        if (value == null)
-        {
-            return null;
-        }
+        assert (value != null);
         
         return (TraciValue) value.clone();
     }

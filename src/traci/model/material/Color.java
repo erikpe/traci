@@ -1,6 +1,7 @@
 package traci.model.material;
 
 import traci.math.ObjectPool;
+import traci.math.Vector;
 import traci.render.RenderingThread;
 
 public class Color
@@ -53,6 +54,11 @@ public class Color
         }
         
         return new Color(r, g, b);
+    }
+    
+    public static Color make(final Vector v)
+    {
+        return make(v.x(), v.y(), v.z());
     }
     
     public double r()
