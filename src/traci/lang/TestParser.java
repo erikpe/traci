@@ -41,7 +41,7 @@ public class TestParser
     
     public static void main(String[] args) throws Exception
     {
-        ANTLRFileStream input = new ANTLRFileStream("src/traci/lang/input.txt");
+        ANTLRFileStream input = new ANTLRFileStream("src/traci/lang/input2.txt");
         TraciLexer lexer = new TraciLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         TraciParser parser = new TraciParser(tokens);

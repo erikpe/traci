@@ -46,12 +46,13 @@ block
     ;
 
 statement
-    : IF '(' expr ')' block (ELSE block)? -> ^(IF expr block block?)
-    | WHILE '(' expr ')' block            -> ^(WHILE expr block)
+    : IF '(' expr ')' block (ELSE block)?    -> ^(IF expr block block?)
+    | WHILE '(' expr ')' block               -> ^(WHILE expr block)
+    | FOR '(' ID IN expr DOTS expr ')' block -> ^(FOR ID expr expr block)
     | assignable_statement
-    | RETURN assignable_statement         -> ^(RETURN assignable_statement)
-    | GLOBAL ID '=' assignable_statement  -> ^(GLOBAL_ASSIGN ID assignable_statement)
-    | ID '=' assignable_statement         -> ^(ASSIGN ID assignable_statement)
+    | RETURN assignable_statement            -> ^(RETURN assignable_statement)
+    | GLOBAL ID '=' assignable_statement     -> ^(GLOBAL_ASSIGN ID assignable_statement)
+    | ID '=' assignable_statement            -> ^(ASSIGN ID assignable_statement)
     ;
 
 assignable_statement
@@ -130,8 +131,10 @@ GLOBAL : 'global';
 WHILE : 'while';
 IF : 'if';
 ELSE : 'else';
-FOR : 'for';
 BBOX : 'bbox';
+FOR : 'for';
+IN : 'in';
+DOTS : '..';
 
 PRIMITIVE_SHAPE
     :	( 'box' | 'cylinder' | 'plane' | 'sphere' | 'torus' )

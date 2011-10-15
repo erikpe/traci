@@ -68,6 +68,8 @@ statement returns [TraciNode node]
         { $node = new IfElseNode($expr.node, $a.node, $b.node); }
     | ^(WHILE expr block)
         { $node = new WhileNode($expr.node, $block.node); }
+    | ^(FOR ID c=expr d=expr block)
+        { $node = new ForNode($ID.text, $c.node, $d.node, $block.node); }
     | ^(GLOBAL_ASSIGN ID assignable_statement)
         { $node = new AssignNode($ID.text, $assignable_statement.node, true); }
     | ^(ASSIGN ID assignable_statement)
