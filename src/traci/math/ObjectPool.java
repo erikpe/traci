@@ -2,8 +2,6 @@ package traci.math;
 
 import java.lang.reflect.Array;
 
-import traci.render.Settings;
-
 abstract public class ObjectPool<T>
 {
     private static final int DEFAULT_INITIAL_SIZE = 16;

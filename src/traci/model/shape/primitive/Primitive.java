@@ -6,8 +6,6 @@ import traci.math.Vector;
 import traci.model.material.Color;
 import traci.model.material.Material;
 import traci.model.shape.Shape;
-import traci.render.IntersectionStack;
-import traci.render.Ray;
 import traci.render.Ray2;
 
 public abstract class Primitive extends Shape
@@ -63,61 +61,6 @@ public abstract class Primitive extends Shape
         final Vector transDir = transformation.dirInv(dir);
         
         return primitiveShootRay2(transP, transDir);
-    }
-    
-    @Deprecated
-    protected abstract Ray primitiveShootRay(final Vector p, final Vector dir);
-    
-    @Deprecated
-    @Override
-    public Ray shootRay(final Vector p, final Vector dir)
-    {
-        final Vector transP = transformation.pointInv(p);
-        final Vector transDir = transformation.dirInv(dir);
-        
-        return primitiveShootRay(transP, transDir);
-    }
-    
-    protected abstract boolean primitiveIsInside(final Vector p);
-    
-    @Override
-    public boolean isInside(final Vector p, final Primitive primitive)
-    {
-        if (primitive == this)
-        {
-            return true;
-        }
-        
-        final Vector transP = transformation.pointInv(p);
-        return primitiveIsInside(transP);
-    }
-    
-    protected abstract boolean primitiveIsOutside(final Vector p);
-    
-    @Override
-    public boolean isOutside(final Vector p, final Primitive primitive)
-    {
-        if (primitive == this)
-        {
-            return true;
-        }
-        
-        final Vector transP = transformation.pointInv(p);
-
-        return primitiveIsOutside(transP);
-    }
-    
-    protected abstract void primitiveAllIntersections(
-            final IntersectionStack iStack, final Vector p, final Vector dir);
-    
-    @Override
-    public void allIntersections(final IntersectionStack iStack,
-            final Vector p, final Vector dir)
-    {
-        final Vector transP = transformation.pointInv(p);
-        final Vector transDir = transformation.dirInv(dir);
-        
-        primitiveAllIntersections(iStack, transP, transDir);
     }
     
     @Override

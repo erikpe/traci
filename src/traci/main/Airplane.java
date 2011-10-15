@@ -3,10 +3,6 @@ package traci.main;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map.Entry;
 
 import sisc.data.Value;
 import sisc.interpreter.AppContext;
@@ -23,10 +19,7 @@ import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
-import traci.model.material.pigment.Checker;
 import traci.model.shape.Shape;
-import traci.model.shape.csg.Union;
-import traci.model.shape.primitive.Plane;
 import traci.render.Renderer;
 import traci.render.Settings;
 

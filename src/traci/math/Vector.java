@@ -1,7 +1,5 @@
 package traci.math;
 
-import traci.render.RenderingThread;
-
 public class Vector
 {
     public static final class VectorPool extends ObjectPool<Vector>

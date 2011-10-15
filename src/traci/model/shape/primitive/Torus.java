@@ -4,12 +4,7 @@ import java.util.Arrays;
 
 import traci.math.PolynomSolver;
 import traci.math.Vector;
-import traci.render.IntersectionStack;
-import traci.render.Interval;
-import traci.render.Point;
-import traci.render.Point2;
 import traci.render.Point2.Type;
-import traci.render.Ray;
 import traci.render.Ray2;
 
 public class Torus extends Primitive
@@ -69,6 +64,13 @@ public class Torus extends Primitive
         return null;
     }
     
+    /**
+     * The torus lies in the xz-plane, has a major radius of {@code 1}, and a
+     * minor radius of {@code r}.
+     * 
+     * It is a special case of a {@link Quartic} surface.
+     */
+    @Override
     public Ray2 primitiveShootRay2(final Vector initP, final Vector dir)
     {
         Double move = move(initP, dir);
@@ -127,100 +129,5 @@ public class Torus extends Primitive
         }
         
         return ray;
-    }
-    
-    /**
-     * The torus lies in the xz-plane, has a major radius of {@code 1}, and a
-     * minor radius of {@code r}.
-     * 
-     * It is a special case of a {@link Quartic} surface.
-     */
-    @Deprecated
-    @Override
-    public Ray primitiveShootRay(final Vector p, final Vector dir)
-    {
-        final double a = dir.dot(dir);
-        final double b = 2 * p.dot(dir);
-        final double g = p.dot(p) - r2 - 1;
-        
-        final double a4 = a * a;
-        final double a3 = 2 * a * b;
-        final double a2 = b * b + 2 * a * g + 4 * dir.z() * dir.z();
-        final double a1 = 2 * b * g + 8 * p.z() * dir.z();
-        final double a0 = g * g + 4 * p.z() * p.z() - 4 * r2;
-        
-        final double[] roots = PolynomSolver.solveQuartic(new double[] { a4,
-                a3, a2, a1, a0 });
-        
-        if (roots == null)
-        {
-            return null;
-        }
-        
-        Ray ray = null;
-        
-        if (roots.length == 2 || roots.length == 4)
-        {
-            final double near = Math.min(roots[0], roots[1]);
-            final double far = Math.max(roots[0], roots[1]);
-            
-            if (near < EPSILON)
-            {
-                return null;
-            }
-            
-            ray = new Ray(Interval.make(Point.make(near, this), Point.make(far, this)));
-        }
-        
-        return ray;
-    }
-    
-    @Override
-    protected boolean primitiveIsInside(final Vector p)
-    {
-        final double a = p.dot(p) - r2 - 1;
-        final double b = a * a + 4 * (p.z() * p.z() - r2);
-        
-        return b < INSIDE_MARIGIN;
-    }
-    
-    @Override
-    protected boolean primitiveIsOutside(final Vector p)
-    {
-        final double a = p.dot(p) - r2 - 1;
-        final double b = a * a + 4 * (p.z() * p.z() - r2);
-        
-        return b > -INSIDE_MARIGIN;
-    }
-    
-    @Override
-    protected void primitiveAllIntersections(final IntersectionStack iStack,
-            final Vector p, final Vector dir)
-    {
-        final double a = dir.dot(dir);
-        final double b = 2 * p.dot(dir);
-        final double g = p.dot(p) - r2 - 1;
-        
-        final double a4 = a * a;
-        final double a3 = 2 * a * b;
-        final double a2 = b * b + 2 * a * g + 4 * dir.z() * dir.z();
-        final double a1 = 2 * b * g + 8 * p.z() * dir.z();
-        final double a0 = g * g + 4 * p.z() * p.z() - 4 * r2;
-        
-        final double[] roots = PolynomSolver.solveQuartic(new double[] { a4,
-                a3, a2, a1, a0 });
-        
-        if (roots == null)
-        {
-            return;
-        }
-        
-        for (int i = 0; i < roots.length; ++i)
-        {
-            if (roots[i] > EPSILON)
-            {
-                iStack.push(roots[i], this);
-            }
-        }
     }
 }
