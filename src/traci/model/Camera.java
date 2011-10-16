@@ -1,12 +1,11 @@
 package traci.model;
 
 import traci.math.Transformable;
-import traci.math.TransformableHelper;
 import traci.math.Transformation;
 import traci.math.Transformations;
 import traci.math.Vector;
 
-public class Camera extends TransformableHelper implements Transformable
+public class Camera implements Transformable
 {
     private final double aspectRatio = 1600.0 / 1200.0;
     private final double fovx = (40 / 360.0) * Math.PI * 2.0;

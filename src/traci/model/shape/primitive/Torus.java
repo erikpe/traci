@@ -3,6 +3,7 @@ package traci.model.shape.primitive;
 import java.util.Arrays;
 
 import traci.math.PolynomSolver;
+import traci.math.Transformations;
 import traci.math.Vector;
 import traci.render.Point2.Type;
 import traci.render.Ray2;
@@ -24,7 +25,7 @@ public class Torus extends Primitive
         this.r = r / R;
         this.r2 = this.r * this.r;
         
-        scale(R);
+        transform(Transformations.scale(R));
     }
     
     @Override

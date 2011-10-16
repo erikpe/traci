@@ -67,7 +67,7 @@ public class PrimitiveShapeNode implements TraciNode
         }
         else if (shapeType.equals("torus"))
         {
-            primitive = new Torus(args.get(0).getNumber(), args.get(0).getNumber());
+            primitive = new Torus(args.get(0).getNumber(), args.get(1).getNumber());
         }
         else
         {

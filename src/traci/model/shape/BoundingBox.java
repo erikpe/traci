@@ -25,12 +25,12 @@ public class BoundingBox implements Transformable
         transformation = transformation.compose(tr);
     }
     
-    private double min(final double val0, final double val1)
+    private final double min(final double val0, final double val1)
     {
         return val0 < val1 ? val0 : val1;
     }
     
-    private double max(final double val0, final double val1)
+    private final double max(final double val0, final double val1)
     {
         return val0 > val1 ? val0 : val1;
     }

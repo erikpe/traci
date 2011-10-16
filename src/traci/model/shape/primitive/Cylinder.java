@@ -24,9 +24,9 @@ public class Cylinder extends Primitive
         
         final double length = v1.sub(v0).length();
         
-        scale(radius, length, radius);
+        transform(Transformations.scale(radius, length, radius));
         transform(Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0)));
-        translate(v0);
+        transform(Transformations.translate(v0));
     }
     
     @Override

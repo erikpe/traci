@@ -8,6 +8,14 @@ global Z = [0, 0, 1];
 global EPSILON = 0.001;
 global PI = 3.14159265358979323846;
 
+/*
+ * Rounded cylinder 0 (from side):
+ *  ___
+ * /   \
+ * |   |
+ * |___|
+ *
+ */
 def roundedCylinder0 (radius, height, rounding)
 {
     return union {
@@ -25,11 +33,19 @@ def roundedCylinder0 (radius, height, rounding)
     }
 }
 
+/*
+ * Rounded cylinder 1 (from side):
+ *  ___
+ * /   \
+ * |   |
+ * \___/
+ *
+ */
 def roundedCylinder1 (radius, height, rounding)
 {
     return union {
-        cylinder (radius, Y*rounding, Y*(height-rounding));
         cylinder (radius-rounding, ORIGO, Y*height);
+        cylinder (radius, Y*rounding, Y*(height-rounding));
         torus (rounding, radius-rounding) {
             rotx PI/2;
             translate Y*rounding;
@@ -46,6 +62,53 @@ def roundedCylinder1 (radius, height, rounding)
     }
 }
 
+/*
+ * Rounded cylinder 2 (from side):
+ *   ___
+ *  /   \
+ *  |   |
+ * /_____\
+ *
+ */
+ def roundedCylinder2 (radius, height, lowerRounding, upperRounding)
+ {
+    return union {
+        cylinder (radius, Y*(lowerRounding*EPSILON), Y*(height-upperRounding));
+        cylinder (radius-upperRounding, Y*(height-upperRounding), Y*height);
+        torus (upperRounding, radius-upperRounding) {
+            rotx PI/2;
+            translate Y*(height-upperRounding);
+        }
+        difference {
+            cylinder (radius+lowerRounding, -Y*EPSILON, Y*lowerRounding);
+            torus (lowerRounding, radius+lowerRounding) {
+                rotx PI/2;
+                translate Y*lowerRounding;
+            }
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius+lowerRounding, height+EPSILON, radius+lowerRounding];
+            translate -Y*EPSILON;
+        }
+    }
+}
+
+/*
+ * Rounded cylinder 3 (from side):
+ * _______
+ * \     /
+ *  |   |
+ * /_____\
+ *
+ */
+// def roundedCylinder3 (radius, height, rounding)
+// {
+//    return union {
+//        cylinder (radius, Y*(rounding-EPSILON), 
+ 
+ 
 def roundedBox (x, y, z, r)
 {
     v0 = [r, r, r];
@@ -99,6 +162,4 @@ def roundedBox (x, y, z, r)
     }
 }
 
-roundedCylinder0(1, 1, .1);
-roundedCylinder1(1, 1, .1);
-roundedBox(6, 7, 8, .5);
+roundedCylinder2(1.5, 2, .2, .3);

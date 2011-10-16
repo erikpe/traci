@@ -164,15 +164,13 @@ public class Renderer implements BlockRenderer
                     double lookX = (x + subX) / (area.width() - 1); // [0.0 .. 1.0]
                     double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
                     
-                    final Color rayColor = Raytrace.raytrace(scene, 5, camera
-                            .getLoc(), camera.getDir(lookX, lookY));
+                    final Color rayColor = Raytrace.raytrace(scene, 5, camera.getLoc(), camera.getDir(lookX, lookY));
                     
                     color.accumulate(rayColor);
                 }
             }
         }
         
-        area.draw(x, y, color.div(settings.focalBlurSamples
-                * (settings.aaLevel * 2 + 1) * (settings.aaLevel * 2 + 1)));
+        area.draw(x, y, color.div(settings.focalBlurSamples * (settings.aaLevel * 2 + 1) * (settings.aaLevel * 2 + 1)));
     }
 }

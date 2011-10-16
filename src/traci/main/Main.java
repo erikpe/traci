@@ -40,32 +40,32 @@ public class Main
         multiDrawArea.add(visibleDrawArea);
         
         final Plane plane = new Plane();
-        plane.translatey(-1);
+        //plane.translatey(-1);
         plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
-        plane.material.getPigment().translate(-.5, 0, -.5);
-        plane.material.getPigment().scale(5);
+        //plane.material.getPigment().translate(-.5, 0, -.5);
+        //plane.material.getPigment().scale(5);
         
         final Sphere origoS = new Sphere();
         origoS.material.setColor(Color.WHITE);
         
         final Sphere left = new Sphere();
-        left.translatex(-5);
+        //left.translatex(-5);
         left.material.setColor(Color.CYAN);
         
         final Sphere right = new Sphere();
-        right.translatex(5);
+        //right.translatex(5);
         right.material.setColor(Color.YELLOW);
         
         final Sphere near = new Sphere();
-        near.translatez(5);
+        //near.translatez(5);
         near.material.setColor(Color.GREEN);
         
         final Sphere far = new Sphere();
-        far.translatez(-5);
+        //far.translatez(-5);
         far.material.setColor(Color.RED);
         
         final Cylinder cyl = new Cylinder();
-        cyl.translatex(-2.5);
+        //cyl.translatex(-2.5);
         
         final Cylinder cyl2 = new Cylinder(.5, Vector.make(-5, 1, 0), Vector.make(5, 1, 0));
         
@@ -75,22 +75,22 @@ public class Main
         spheres.add(right);
         spheres.add(near);
         spheres.add(far);
-        spheres.rotz(Math.PI / 16);
+        //spheres.rotz(Math.PI / 16);
         
         double[] res = PolynomSolver.solveQuartic(new double[] { 1, 2, -3, 4, 5 });
         
         final Sphere sphere = new Sphere();
-        final Torus torus = new Torus(.1); torus.rotx(Math.PI / 2);
-        final Cylinder xcyl = new Cylinder(); xcyl.translatey(-.5); xcyl.scale(.05, 7, .05); xcyl.rotz(Math.PI / 2);
-        final Cylinder ycyl = new Cylinder(); ycyl.translatey(-.5); ycyl.scale(.05, 7, .05);
-        final Cylinder zcyl = new Cylinder(); zcyl.translatey(-.5); zcyl.scale(.05, 7, .05); zcyl.rotx(Math.PI / 2);
+        //final Torus torus = new Torus(.1); torus.rotx(Math.PI / 2);
+        //final Cylinder xcyl = new Cylinder(); xcyl.translatey(-.5); xcyl.scale(.05, 7, .05); xcyl.rotz(Math.PI / 2);
+        //final Cylinder ycyl = new Cylinder(); ycyl.translatey(-.5); ycyl.scale(.05, 7, .05);
+        //final Cylinder zcyl = new Cylinder(); zcyl.translatey(-.5); zcyl.scale(.05, 7, .05); zcyl.rotx(Math.PI / 2);
         
         final Union union = new Union();
         union.add(plane);
-        union.add(torus);
-        union.add(xcyl);
-        union.add(ycyl);
-        union.add(zcyl);
+        //union.add(torus);
+        //union.add(xcyl);
+        //union.add(ycyl);
+        //union.add(zcyl);
         
         final Difference diff = new Difference();
         final Box box = new Box();

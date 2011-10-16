@@ -72,19 +72,19 @@ public interface Entity
             switch (modifier.type)
             {
             case ROTX:
-                shape.rotx(modifier.getNumber());
+                shape.transform(Transformations.rotx(modifier.getNumber()));
                 break;
                 
             case ROTY:
-                shape.roty(modifier.getNumber());
+                shape.transform(Transformations.roty(modifier.getNumber()));
                 break;
                 
             case ROTZ:
-                shape.rotz(modifier.getNumber());
+                shape.transform(Transformations.roty(modifier.getNumber()));
                 break;
                 
             case TRANSLATE:
-                shape.translate(modifier.getVector());
+                shape.transform(Transformations.translate(modifier.getVector()));
                 break;
                 
             case SCALE:
@@ -92,11 +92,11 @@ public interface Entity
                 final Object value = modifier.getValue();
                 if (value instanceof Vector)
                 {
-                    shape.scale((Vector) value);
+                    shape.transform(Transformations.scale((Vector) value));
                 }
                 else
                 {
-                    shape.scale((Double) value);
+                    shape.transform(Transformations.scale((Double) value));
                 }
                 break;
             }
@@ -135,19 +135,19 @@ public interface Entity
             switch (modifier.type)
             {
             case ROTX:
-                shape.rotx(modifier.getNumber());
+                shape.transform(Transformations.rotx(modifier.getNumber()));
                 break;
                 
             case ROTY:
-                shape.roty(modifier.getNumber());
+                shape.transform(Transformations.roty(modifier.getNumber()));
                 break;
                 
             case ROTZ:
-                shape.rotz(modifier.getNumber());
+                shape.transform(Transformations.roty(modifier.getNumber()));
                 break;
                 
             case TRANSLATE:
-                shape.translate(modifier.getVector());
+                shape.transform(Transformations.translate(modifier.getVector()));
                 break;
                 
             case SCALE:
@@ -155,11 +155,11 @@ public interface Entity
                 final Object value = modifier.getValue();
                 if (value instanceof Vector)
                 {
-                    shape.scale((Vector) value);
+                    shape.transform(Transformations.scale((Vector) value));
                 }
                 else
                 {
-                    shape.scale((Double) value);
+                    shape.transform(Transformations.scale((Double) value));
                 }
                 break;
             }

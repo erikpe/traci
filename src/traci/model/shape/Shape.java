@@ -1,14 +1,13 @@
 package traci.model.shape;
 
 import traci.math.Transformable;
-import traci.math.TransformableHelper;
 import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.material.Color;
 import traci.model.material.Material;
 import traci.render.Ray2;
 
-public abstract class Shape extends TransformableHelper implements Transformable, Cloneable
+public abstract class Shape implements Transformable, Cloneable
 {
     public static final double EPSILON = 0.000001;
     

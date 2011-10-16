@@ -87,8 +87,8 @@ public class TestSISC
         
         final Plane plane = new Plane();
         plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
-        plane.material.getPigment().translate(-.5, 0, -.5);
-        plane.roty(15.23);
+        //plane.material.getPigment().translate(-.5, 0, -.5);
+        //plane.roty(15.23);
         //union.add(plane);
         
         final PointLight light = new PointLight(Vector.make(2, 35, 15), Color.WHITE.mul(30*55));

@@ -2,8 +2,7 @@ package traci.math;
 
 public class Transformations
 {
-    private static final Transformation IDENTITY = make(Matrix.eye(), Matrix
-            .eye());
+    private static final Transformation IDENTITY = make(Matrix.eye(), Matrix.eye());
     
     private static Transformation make(final Matrix mat, final Matrix invMat)
     {
@@ -25,10 +24,14 @@ public class Transformations
         return scale(Vector.make(val, val, val));
     }
     
+    public static Transformation scale(final double x, final double y, final double z)
+    {
+        return scale(Vector.make(x, y, z));
+    }
+    
     public static Transformation scale(final Vector vec)
     {
-        final Vector invVec = Vector
-                .make(1.0 / vec.x(), 1.0 / vec.y(), 1.0 / vec.z());
+        final Vector invVec = Vector.make(1.0 / vec.x(), 1.0 / vec.y(), 1.0 / vec.z());
         return make(Matrix.scale(vec), Matrix.scale(invVec));
     }
     
