@@ -1,6 +1,5 @@
 package traci.lang.interpreter;
 
-
 @SuppressWarnings("serial")
 public class FunctionReturnException extends Exception
 {

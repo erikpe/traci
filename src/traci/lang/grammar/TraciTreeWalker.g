@@ -20,7 +20,7 @@ options {
 }
 
 @members {
-    private Functions visibleFunctions = new Functions();
+    private Map<String, Function> visibleFunctions = BuiltinFunctions.getAll();
 }
 
 scene
@@ -29,8 +29,8 @@ scene
 
 block returns [BlockNode node]
 @init {
-    final Functions outerFunctions = visibleFunctions;
-    visibleFunctions = new Functions(outerFunctions);
+    final Map<String, Function> outerFunctions = visibleFunctions;
+    visibleFunctions = new HashMap<String, Function>(outerFunctions);
     node = new BlockNode(visibleFunctions);
 }
 @after {

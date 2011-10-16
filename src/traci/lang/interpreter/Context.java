@@ -5,12 +5,12 @@ import java.util.Map;
 
 public class Context
 {
-    private final Functions functions;
+    private final Map<String, Function> functions;
     private final Map<String, TraciValue> globalMemory;
     private final Map<String, TraciValue> localMemory;
     private final Entity entity;
     
-    private Context(final Functions functions, final Map<String, TraciValue> globalMemory,
+    private Context(final Map<String, Function> functions, final Map<String, TraciValue> globalMemory,
             final Map<String, TraciValue> localMemory, final Entity entity)
     {
         this.functions = functions;
@@ -34,7 +34,7 @@ public class Context
         return new Context(functions, globalMemory, localMemory, newSurroundingEntity);
     }
     
-    public Context newFunctions(final Functions newFunctions)
+    public Context newFunctions(final Map<String, Function> newFunctions)
     {
         return new Context(newFunctions, globalMemory, localMemory, entity);
     }
