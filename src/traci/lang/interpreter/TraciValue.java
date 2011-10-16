@@ -1,6 +1,9 @@
 package traci.lang.interpreter;
 
+import traci.math.Transformation;
 import traci.math.Vector;
+import traci.model.material.Color;
+import traci.model.shape.BoundingBox;
 import traci.model.shape.Shape;
 import traci.model.shape.csg.Csg;
 import traci.model.shape.primitive.Primitive;
@@ -13,7 +16,9 @@ public class TraciValue implements Cloneable
         VECTOR,
         PRIMITIVE_SHAPE,
         CSG_SHAPE,
-        MODIFIER,
+        BOUNDING_BOX,
+        TRANSFORMATION,
+        COLOR,
         UNKNOWN
     };
     
@@ -44,9 +49,17 @@ public class TraciValue implements Cloneable
         {
             type = Type.CSG_SHAPE;
         }
-        else if (obj instanceof ModifierValue)
+        else if (obj instanceof BoundingBox)
         {
-            type = Type.MODIFIER;
+            type = Type.BOUNDING_BOX;
+        }
+        else if (obj instanceof Transformation)
+        {
+            type = Type.TRANSFORMATION;
+        }
+        else if (obj instanceof Color)
+        {
+            type = Type.COLOR;
         }
         else
         {
@@ -94,9 +107,19 @@ public class TraciValue implements Cloneable
         return (Csg) value;
     }
     
-    public ModifierValue getModifierValue()
+    public BoundingBox getBoundingBox()
     {
-        return (ModifierValue) value;
+        return (BoundingBox) value;
+    }
+    
+    public Transformation getTransformation()
+    {
+        return (Transformation) value;
+    }
+    
+    public Color getColor()
+    {
+        return (Color) value;
     }
     
     @Override
@@ -113,7 +136,7 @@ public class TraciValue implements Cloneable
         case NUMBER:
         case BOOLEAN:
         case VECTOR:
-        case MODIFIER:
+        case TRANSFORMATION:
             return new TraciValue(value);
             
         case PRIMITIVE_SHAPE:
@@ -121,6 +144,9 @@ public class TraciValue implements Cloneable
             
         case CSG_SHAPE:
             return new TraciValue(getCsg().clone());
+            
+        case BOUNDING_BOX:
+            return new TraciValue(getBoundingBox());
             
         default:
             return null;

@@ -34,6 +34,10 @@ public class RefNode implements TraciNode
             {
                 entity = new Entity.CsgEntity(value.getCsg());
             }
+            else if (value.getType() == Type.BOUNDING_BOX)
+            {
+                entity = new Entity.BBoxEntity(value.getBoundingBox());
+            }
             else
             {
                 throw new RuntimeException();
