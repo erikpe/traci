@@ -61,7 +61,7 @@ assignable_statement
     | PRIMITIVE_SHAPE function_call_args? (block | ';') -> ^(PRIMITIVE_SHAPE function_call_args? block?)
     | CSG_SHAPE function_call_args? (block | ';')       -> ^(CSG_SHAPE function_call_args? block?)
     | BBOX function_call_args? (block | ';')            -> ^(BBOX function_call_args? block?)
-    | MODIFIER expr ';'                                 -> ^(MODIFIER expr)
+    | TRANSFORMATION expr ';'                           -> ^(TRANSFORMATION expr)
     | expr ';'!
     ;
 
@@ -144,8 +144,8 @@ CSG_SHAPE
     :	( 'union' | 'difference' | 'intersection' )
     ;
 
-MODIFIER
-    :	( 'translate' | 'scale' | 'rotate' | 'rotx' | 'roty' | 'rotz' | 'color' )
+TRANSFORMATION
+    :	( 'translate' | 'scale' | 'rotate' | 'rotx' | 'roty' | 'rotz' )
     ;
 
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*

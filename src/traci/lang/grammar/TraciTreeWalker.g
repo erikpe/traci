@@ -83,8 +83,8 @@ assignable_statement returns [TraciNode node]
         { $node = new CsgShapeNode($CSG_SHAPE.text, $function_call_args.nodes, $block.node); }
     | ^(BBOX function_call_args? block?)
         { $node = new BBoxNode($function_call_args.nodes, $block.node); }
-    | ^(MODIFIER expr)
-        { $node = new ModifierNode($MODIFIER.text, $expr.node); }
+    | ^(TRANSFORMATION expr)
+        { $node = new TransformationNode($TRANSFORMATION.text, $expr.node); }
     | expr
         { $node = $expr.node; }
     ;
