@@ -3,7 +3,7 @@ package traci.lang.interpreter.node;
 import java.util.List;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.Entity.BBoxEntity;
+import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.shape.BoundingBox;
@@ -26,7 +26,7 @@ public class BBoxNode implements TraciNode
         
         if (blockNode != null)
         {
-            blockNode.eval(context.newEntity(new BBoxEntity(bBox)));
+            blockNode.eval(context.newEntity(Entities.makeEntity(bBox)));
         }
         
         return new TraciValue(bBox);

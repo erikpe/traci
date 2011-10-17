@@ -9,12 +9,21 @@ import traci.math.Transformations;
 
 public class TransformationNode implements TraciNode
 {
-    private final String type;
+    private static enum TransformationType
+    {
+        rotx,
+        roty,
+        rotz,
+        translate,
+        scale
+    }
+    
+    private final TransformationType type;
     private final TraciNode exprNode;
     
-    public TransformationNode(final String type, final TraciNode exprNode)
+    public TransformationNode(final String typeStr, final TraciNode exprNode)
     {
-        this.type = type;
+        this.type = TransformationType.valueOf(typeStr);
         this.exprNode = exprNode;
     }
     
@@ -24,32 +33,36 @@ public class TransformationNode implements TraciNode
         final TraciValue exprValue = exprNode.eval(context);
         final Transformation transformation;
         
-        if (type.equals("rotx"))
+        switch (type)
         {
+        case rotx:
             transformation = Transformations.rotx(exprValue.getNumber());
-        }
-        else if (type.equals("roty"))
-        {
+            break;
+            
+        case roty:
             transformation = Transformations.roty(exprValue.getNumber());
-        }
-        else if (type.equals("rotz"))
-        {
+            break;
+            
+        case rotz:
             transformation = Transformations.rotz(exprValue.getNumber());
-        }
-        else if (type.equals("translate"))
-        {
+            break;
+            
+        case translate:
             transformation = Transformations.translate(exprValue.getVector());
-        }
-        else if (type.equals("scale") && exprValue.getType() == Type.NUMBER)
-        {
-            transformation = Transformations.scale(exprValue.getNumber());
-        }
-        else if (type.equals("scale") && exprValue.getType() == Type.VECTOR)
-        {
-            transformation = Transformations.scale(exprValue.getVector());
-        }
-        else
-        {
+            break;
+            
+        case scale:
+            if (exprValue.getType() == Type.NUMBER)
+            {
+                transformation = Transformations.scale(exprValue.getNumber());
+            }
+            else
+            {
+                transformation = Transformations.scale(exprValue.getVector());
+            }
+            break;
+            
+        default:
             throw new RuntimeException();
         }
         

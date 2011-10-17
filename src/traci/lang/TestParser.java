@@ -11,6 +11,7 @@ import traci.gui.MainWindow;
 import traci.gui.MultiDrawArea;
 import traci.gui.PngDrawArea;
 import traci.lang.interpreter.Context;
+import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entity;
 import traci.lang.interpreter.node.BlockNode;
 import traci.lang.parser.TraciLexer;
@@ -21,7 +22,7 @@ import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
-import traci.model.shape.Shape;
+import traci.model.shape.csg.Union;
 import traci.render.Renderer;
 import traci.render.Settings;
 
@@ -88,8 +89,8 @@ public class TestParser
         System.out.println("TreeWalker: " + (stop - start) + " ms.");
         
         start = System.currentTimeMillis();
-        final Entity.SceneEntity entity = new Entity.SceneEntity();
-        final Shape shape = entity.rootUnion;
+        final Union rootUnion = new Union();
+        final Entity entity = Entities.makeEntity(rootUnion);
         bn.eval(Context.newRootContext(entity));
         stop = System.currentTimeMillis();
         System.out.println("Eval: " + (stop - start) + " ms.");
@@ -100,7 +101,7 @@ public class TestParser
         final Vector camLocation = Vector.make(-5, 6, 7);
         final Vector camLookAt = Vector.make(0, 0, 0);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y);
-        final Scene scene = new Scene(shape, cam);
+        final Scene scene = new Scene(rootUnion, cam);
         scene.addLight(light);
         scene.addLight(light2);
         

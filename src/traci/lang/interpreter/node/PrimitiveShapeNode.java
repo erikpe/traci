@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import traci.lang.interpreter.Context;
+import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
-import traci.lang.interpreter.Entity.PrimitiveEntity;
 import traci.model.shape.primitive.Box;
 import traci.model.shape.primitive.Cylinder;
 import traci.model.shape.primitive.Plane;
@@ -16,13 +16,22 @@ import traci.model.shape.primitive.Torus;
 
 public class PrimitiveShapeNode implements TraciNode
 {
-    private final String shapeType;
+    private static enum PrimitiveType
+    {
+        box,
+        cylinder,
+        plane,
+        sphere,
+        torus
+    }
+    
+    private final PrimitiveType type;
     private final List<TraciNode> argNodes;
     private final BlockNode blockNode;
     
     public PrimitiveShapeNode(final String shapeType, final List<TraciNode> argNodes, final BlockNode blockNode)
     {
-        this.shapeType = shapeType;
+        this.type = PrimitiveType.valueOf(shapeType);
         this.argNodes = argNodes;
         this.blockNode = blockNode;
     }
@@ -42,12 +51,13 @@ public class PrimitiveShapeNode implements TraciNode
         
         final Primitive primitive;
         
-        if (shapeType.equals("box"))
+        switch (type)
         {
+        case box:
             primitive = new Box();
-        }
-        else if (shapeType.equals("cylinder"))
-        {
+            break;
+            
+        case cylinder:
             if (args.size() == 3)
             {
                 primitive = new Cylinder(args.get(0).getNumber(), args.get(1).getVector(), args.get(2).getVector());
@@ -56,27 +66,27 @@ public class PrimitiveShapeNode implements TraciNode
             {
                 primitive = new Cylinder();
             }
-        }
-        else if (shapeType.equals("plane"))
-        {
+            break;
+            
+        case plane:
             primitive = new Plane();
-        }
-        else if (shapeType.equals("sphere"))
-        {
+            break;
+            
+        case sphere:
             primitive = new Sphere();
-        }
-        else if (shapeType.equals("torus"))
-        {
+            break;
+            
+        case torus:
             primitive = new Torus(args.get(0).getNumber(), args.get(1).getNumber());
-        }
-        else
-        {
+            break;
+            
+        default:
             throw new RuntimeException();
         }
         
         if (blockNode != null)
         {
-            blockNode.eval(context.newEntity(new PrimitiveEntity(primitive)));
+            blockNode.eval(context.newEntity(Entities.makeEntity(primitive)));
         }
         
         return new TraciValue(primitive);

@@ -3,7 +3,7 @@ package traci.lang.interpreter.node;
 import java.util.List;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.Entity;
+import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
@@ -29,7 +29,7 @@ public class FunctionNode implements TraciNode, Function
     
     public TraciValue invoke(Context context, final List<TraciValue> args)
     {
-        context = context.newLocalMemory().newEntity(Entity.DUMMY_ENTITY);
+        context = context.newLocalMemory().newEntity(Entities.NULL_ENTITY);
         
         if (args.size() < argIDs.size())
         {
