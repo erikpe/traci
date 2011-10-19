@@ -90,20 +90,20 @@ assignable_statement returns [TraciNode node]
     ;
 
 expr returns [TraciNode node]
-    : ^('+' a=expr b=expr)  { $node = new BinaryOpNode(Op.BINARY_ADD, $a.node, $b.node); }
-    | ^('-' a=expr b=expr)  { $node = new BinaryOpNode(Op.BINARY_SUB, $a.node, $b.node); }
-    | ^('*' a=expr b=expr)  { $node = new BinaryOpNode(Op.BINARY_MUL, $a.node, $b.node); }
-    | ^('/' a=expr b=expr)  { $node = new BinaryOpNode(Op.BINARY_DIV, $a.node, $b.node); }
-    | ^('<' a=expr b=expr)  { $node = new BinaryOpNode(Op.COMPARE_LT, $a.node, $b.node); }
-    | ^('<=' a=expr b=expr) { $node = new BinaryOpNode(Op.COMPARE_LTE, $a.node, $b.node); }
-    | ^('>' a=expr b=expr)  { $node = new BinaryOpNode(Op.COMPARE_GT, $a.node, $b.node); }
-    | ^('>=' a=expr b=expr) { $node = new BinaryOpNode(Op.COMPARE_GTE, $a.node, $b.node); }
-    | ^('==' a=expr b=expr) { $node = new BinaryOpNode(Op.COMPARE_EQ, $a.node, $b.node); }
-    | ^('!=' a=expr b=expr) { $node = new BinaryOpNode(Op.COMPARE_NEQ, $a.node, $b.node); }
-    | ^(UNARY_PLUS a=expr)  { $node = new UnaryOpNode(Op.UNARY_PLUS, $a.node); }
-    | ^(UNARY_MINUS a=expr) { $node = new UnaryOpNode(Op.UNARY_NEG, $a.node); }
-    | ^(UNARY_NOT a=expr)   { $node = new UnaryOpNode(Op.UNARY_NOT, $a.node); }
-    | ^(REF ID block?)      { $node = new RefNode($ID.text, $block.node); }
+    : ^(op='+' a=expr b=expr)   { $node = new BinaryOpNode(Op.BINARY_ADD, $a.node, $b.node, $op.token); }
+    | ^(op='-' a=expr b=expr)   { $node = new BinaryOpNode(Op.BINARY_SUB, $a.node, $b.node, $op.token); }
+    | ^(op='*' a=expr b=expr)   { $node = new BinaryOpNode(Op.BINARY_MUL, $a.node, $b.node, $op.token); }
+    | ^(op='/' a=expr b=expr)   { $node = new BinaryOpNode(Op.BINARY_DIV, $a.node, $b.node, $op.token); }
+    | ^(op='<' a=expr b=expr)   { $node = new BinaryOpNode(Op.COMPARE_LT, $a.node, $b.node, $op.token); }
+    | ^(op='<=' a=expr b=expr)  { $node = new BinaryOpNode(Op.COMPARE_LTE, $a.node, $b.node, $op.token); }
+    | ^(op='>' a=expr b=expr)   { $node = new BinaryOpNode(Op.COMPARE_GT, $a.node, $b.node, $op.token); }
+    | ^(op='>=' a=expr b=expr)  { $node = new BinaryOpNode(Op.COMPARE_GTE, $a.node, $b.node, $op.token); }
+    | ^(op='==' a=expr b=expr)  { $node = new BinaryOpNode(Op.COMPARE_EQ, $a.node, $b.node, $op.token); }
+    | ^(op='!=' a=expr b=expr)  { $node = new BinaryOpNode(Op.COMPARE_NEQ, $a.node, $b.node, $op.token); }
+    | ^(UNARY_OP op='+' a=expr) { $node = new UnaryOpNode(Op.UNARY_PLUS, $a.node, $op.token); }
+    | ^(UNARY_OP op='-' a=expr) { $node = new UnaryOpNode(Op.UNARY_NEG, $a.node, $op.token); }
+    | ^(UNARY_OP op='!' a=expr) { $node = new UnaryOpNode(Op.UNARY_NOT, $a.node, $op.token); }
+    | ^(REF ID block?)      { $node = new RefNode($ID.text, $block.node, $ID.token); }
     | ^(FUNCALL ID function_call_args block?)
         { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node); }
     | ^(VECTOR a=expr b=expr c=expr)

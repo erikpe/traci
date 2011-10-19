@@ -1,5 +1,7 @@
 package traci.lang.interpreter.node;
 
+import org.antlr.runtime.Token;
+
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
@@ -9,11 +11,13 @@ public class UnaryOpNode implements TraciNode
 {
     private final Op op;
     private final TraciNode aNode;
+    private final Token token;
     
-    public UnaryOpNode(final Op op, final TraciNode aNode)
+    public UnaryOpNode(final Op op, final TraciNode aNode, final Token token)
     {
         this.op = op;
         this.aNode = aNode;
+        this.token = token;
     }
     
     public TraciValue eval(final Context context) throws FunctionReturnException
@@ -21,55 +25,52 @@ public class UnaryOpNode implements TraciNode
         final TraciValue a = aNode.eval(context);
         final TraciValue.Type aType = a.getType();
         
+        Object res = null;
+        
         switch (aType)
         {
-        case NUMBER:  return calc(a.getNumber());
-        case BOOLEAN: return calc(a.getBoolean());
-        case VECTOR:  return calc(a.getVector());
+        case NUMBER:  res = calc(a.getNumber()); break;
+        case BOOLEAN: res = calc(a.getBoolean()); break;
+        case VECTOR:  res = calc(a.getVector()); break;
         default: break;
         }
         
-        throw new RuntimeException("type error");
-    }
-    
-    private TraciValue calc(final Double a)
-    {
-        final Double res;
-        
-        switch (op)
+        if (res == null)
         {
-        case UNARY_PLUS: res = Double.valueOf(a); break;
-        case UNARY_NEG:  res = Double.valueOf(-a); break;
-        default: throw new RuntimeException("type error");
+            System.out.println("Error: Trying to evaluate expression `" + token.getText() + " " + aType.toString()
+                    + "' at position " + token.getLine() + ":" + token.getCharPositionInLine() + ".");
+            throw new RuntimeException();
         }
         
         return new TraciValue(res);
     }
     
-    private TraciValue calc(final Boolean a)
+    private Object calc(final Double a)
     {
-        final Boolean res;
-        
         switch (op)
         {
-        case UNARY_NOT: res = Boolean.valueOf(!a); break;
-        default: throw new RuntimeException("type error");
+        case UNARY_PLUS: return Double.valueOf(a);
+        case UNARY_NEG:  return Double.valueOf(-a);
+        default: return null;
         }
-        
-        return new TraciValue(res);
     }
     
-    private TraciValue calc(final Vector a)
+    private Object calc(final Boolean a)
     {
-        final Vector res;
-        
         switch (op)
         {
-        case UNARY_PLUS: res = a; break;
-        case UNARY_NEG:  res = a.neg(); break;
-        default: throw new RuntimeException("type error");
+        case UNARY_NOT: return Boolean.valueOf(!a);
+        default: return null;
         }
-        
-        return new TraciValue(res);
+    }
+    
+    private Object calc(final Vector a)
+    {
+        switch (op)
+        {
+        case UNARY_PLUS: return a;
+        case UNARY_NEG:  return a.neg();
+        default: return null;
+        }
     }
 }

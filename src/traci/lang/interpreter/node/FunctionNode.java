@@ -22,7 +22,7 @@ public class FunctionNode implements TraciNode, Function
     }
     
     @Override
-    public TraciValue eval(Context dummy)
+    public TraciValue eval(final Context dummy)
     {
         throw new RuntimeException();
     }

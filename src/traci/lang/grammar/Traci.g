@@ -10,9 +10,7 @@ tokens {
     VECTOR;
     FUNCALL;
     REF;
-    UNARY_MINUS;
-    UNARY_PLUS;
-    UNARY_NOT;
+    UNARY_OP;
     BLOCK;
     ASSIGN;
     GLOBAL_ASSIGN;
@@ -87,9 +85,9 @@ addition_expr
 
 unary_expr
     : primary_expr
-    | '-' unary_expr -> ^(UNARY_MINUS unary_expr)
-    | '+' unary_expr -> ^(UNARY_PLUS unary_expr)
-    | '!' unary_expr -> ^(UNARY_NOT unary_expr)
+    | '-' unary_expr -> ^(UNARY_OP '-' unary_expr)
+    | '+' unary_expr -> ^(UNARY_OP '+' unary_expr)
+    | '!' unary_expr -> ^(UNARY_OP '!' unary_expr)
     ;
 
 multiplication_expr

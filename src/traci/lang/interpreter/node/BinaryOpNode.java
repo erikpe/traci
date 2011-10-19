@@ -1,5 +1,7 @@
 package traci.lang.interpreter.node;
 
+import org.antlr.runtime.Token;
+
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
@@ -10,12 +12,14 @@ public class BinaryOpNode implements TraciNode
     private final Op op;
     private final TraciNode aNode;
     private final TraciNode bNode;
+    private final Token token;
     
-    public BinaryOpNode(final Op op, final TraciNode aNode, final TraciNode bNode)
+    public BinaryOpNode(final Op op, final TraciNode aNode, final TraciNode bNode, final Token token)
     {
         this.op = op;
         this.aNode = aNode;
         this.bNode = bNode;
+        this.token = token;
     }
     
     public TraciValue eval(final Context context) throws FunctionReturnException
@@ -26,111 +30,103 @@ public class BinaryOpNode implements TraciNode
         final TraciValue.Type aType = a.getType();
         final TraciValue.Type bType = b.getType();
         
+        Object res = null;
+        
         switch (aType)
         {
         case NUMBER:
             switch (bType)
             {
-            case NUMBER: return calc(a.getNumber(), b.getNumber());
-            case VECTOR: return calc(a.getNumber(), b.getVector());
+            case NUMBER: res = calc(a.getNumber(), b.getNumber()); break;
+            case VECTOR: res = calc(a.getNumber(), b.getVector()); break;
             default: break;
             }
+            break;
             
         case VECTOR:
             switch (bType)
             {
-            case NUMBER: return calc(a.getVector(), b.getNumber());
-            case VECTOR: return calc(a.getVector(), b.getVector());
+            case NUMBER: res = calc(a.getVector(), b.getNumber()); break;
+            case VECTOR: res = calc(a.getVector(), b.getVector()); break;
             default: break;
             }
+            break;
             
         case BOOLEAN:
             switch (bType)
             {
-            case BOOLEAN: return calc(a.getBoolean(), b.getBoolean());
+            case BOOLEAN: res = calc(a.getBoolean(), b.getBoolean()); break;
             default : break;
             }
+            break;
             
         default:
             break;
         }
         
-        throw new RuntimeException("type error");
-    }
-    
-    private TraciValue calc(final Double a, final Double b)
-    {
-        final Object res;
-        
-        switch (op)
+        if (res == null)
         {
-        case BINARY_ADD:  res = Double.valueOf(a + b); break;
-        case BINARY_SUB:  res = Double.valueOf(a - b); break;
-        case BINARY_MUL:  res = Double.valueOf(a * b); break;
-        case BINARY_DIV:  res = Double.valueOf(a / b); break;
-        case COMPARE_LT:  res = Boolean.valueOf(a < b); break;
-        case COMPARE_LTE: res = Boolean.valueOf(a <= b); break;
-        case COMPARE_GT:  res = Boolean.valueOf(a > b); break;
-        case COMPARE_GTE: res = Boolean.valueOf(a >= b); break;
-        case COMPARE_EQ:  res = Boolean.valueOf(a == b); break;
-        case COMPARE_NEQ: res = Boolean.valueOf(a != b); break;
-        default: throw new RuntimeException("type error");
+            System.out.println("Error: Trying to evaluate expression `" + aType.toString() + " " + token.getText() + " "
+                    + bType.toString() + "' at position " + token.getLine() + ":" + token.getCharPositionInLine() + ".");
+            throw new RuntimeException();
         }
         
         return new TraciValue(res);
     }
     
-    private TraciValue calc(final Double a, final Vector b)
+    private Object calc(final Double a, final Double b)
     {
-        final Vector res;
-        
         switch (op)
         {
-        case BINARY_MUL: res = b.mul(a); break;
-        default: throw new RuntimeException("type error");
+        case BINARY_ADD:  return Double.valueOf(a + b);
+        case BINARY_SUB:  return Double.valueOf(a - b);
+        case BINARY_MUL:  return Double.valueOf(a * b);
+        case BINARY_DIV:  return Double.valueOf(a / b);
+        case COMPARE_LT:  return Boolean.valueOf(a < b);
+        case COMPARE_LTE: return Boolean.valueOf(a <= b);
+        case COMPARE_GT:  return Boolean.valueOf(a > b);
+        case COMPARE_GTE: return Boolean.valueOf(a >= b);
+        case COMPARE_EQ:  return Boolean.valueOf(a == b);
+        case COMPARE_NEQ: return Boolean.valueOf(a != b);
+        default: return null;
         }
-        
-        return new TraciValue(res);
     }
     
-    private TraciValue calc(final Vector a, final Double b)
+    private Object calc(final Double a, final Vector b)
     {
-        final Vector res;
-        
         switch (op)
         {
-        case BINARY_MUL: res = a.mul(b); break;
-        default: throw new RuntimeException("type error");
+        case BINARY_MUL: return b.mul(a);
+        default: return null;
         }
-        
-        return new TraciValue(res);
     }
     
-    private TraciValue calc(final Vector a, final Vector b)
+    private Object calc(final Vector a, final Double b)
     {
-        final Vector res;
-        
         switch (op)
         {
-        case BINARY_ADD: res = a.add(b); break;
-        case BINARY_SUB: res = a.sub(b); break;
-        default: throw new RuntimeException("type error");
+        case BINARY_MUL: return a.mul(b);
+        default: return null;
         }
-        
-        return new TraciValue(res);
     }
     
-    private TraciValue calc(final Boolean a, final Boolean b)
+    private Object calc(final Vector a, final Vector b)
     {
-        final Boolean res;
-        
         switch (op)
         {
-        case COMPARE_EQ:  res = Boolean.valueOf(a == b); break;
-        case COMPARE_NEQ: res = Boolean.valueOf(a != b); break;
-        default: throw new RuntimeException("type error");
+        case BINARY_ADD: return a.add(b);
+        case BINARY_SUB: return a.sub(b);
+        default: return null;
         }
-        
-        return new TraciValue(res);
+    }
+    
+    private Object calc(final Boolean a, final Boolean b)
+    {
+        switch (op)
+        {
+        case COMPARE_EQ:  return Boolean.valueOf(a == b);
+        case COMPARE_NEQ: return Boolean.valueOf(a != b);
+        default: return null;
+        }
     }
 }
