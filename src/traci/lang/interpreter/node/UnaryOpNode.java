@@ -25,14 +25,14 @@ public class UnaryOpNode implements TraciNode
         final TraciValue a = aNode.eval(context);
         final TraciValue.Type aType = a.getType();
         
-        Object res = null;
+        final Object res;
         
         switch (aType)
         {
         case NUMBER:  res = calc(a.getNumber()); break;
         case BOOLEAN: res = calc(a.getBoolean()); break;
         case VECTOR:  res = calc(a.getVector()); break;
-        default: break;
+        default:      res = null;;
         }
         
         if (res == null)

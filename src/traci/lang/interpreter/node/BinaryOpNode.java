@@ -30,7 +30,7 @@ public class BinaryOpNode implements TraciNode
         final TraciValue.Type aType = a.getType();
         final TraciValue.Type bType = b.getType();
         
-        Object res = null;
+        final Object res;
         
         switch (aType)
         {
@@ -39,7 +39,7 @@ public class BinaryOpNode implements TraciNode
             {
             case NUMBER: res = calc(a.getNumber(), b.getNumber()); break;
             case VECTOR: res = calc(a.getNumber(), b.getVector()); break;
-            default: break;
+            default:     res = null; break;
             }
             break;
             
@@ -48,7 +48,7 @@ public class BinaryOpNode implements TraciNode
             {
             case NUMBER: res = calc(a.getVector(), b.getNumber()); break;
             case VECTOR: res = calc(a.getVector(), b.getVector()); break;
-            default: break;
+            default:     res = null; break;
             }
             break;
             
@@ -56,11 +56,12 @@ public class BinaryOpNode implements TraciNode
             switch (bType)
             {
             case BOOLEAN: res = calc(a.getBoolean(), b.getBoolean()); break;
-            default : break;
+            default :     res = null; break;
             }
             break;
             
         default:
+            res = null;
             break;
         }
         
