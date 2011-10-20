@@ -54,8 +54,8 @@ public class TestParser
     
     public static void main(String[] args) throws Exception
     {
-        final int width = 800;
-        final int height = 600;
+        final int width = 1600;
+        final int height = 1200;
         final String filename = "out.png";
         
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
