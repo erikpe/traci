@@ -60,6 +60,7 @@ assignable_statement
     | CSG_SHAPE function_call_args? (block | ';')       -> ^(CSG_SHAPE function_call_args? block?)
     | BBOX function_call_args? (block | ';')            -> ^(BBOX function_call_args? block?)
     | TRANSFORMATION expr ';'                           -> ^(TRANSFORMATION expr)
+    | COLOR expr ';'                                    -> ^(COLOR expr)
     | expr ';'!
     ;
 
@@ -144,6 +145,10 @@ CSG_SHAPE
 
 TRANSFORMATION
     :	( 'translate' | 'scale' | 'rotate' | 'rotx' | 'roty' | 'rotz' )
+    ;
+
+COLOR
+    :	( 'color' )
     ;
 
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*

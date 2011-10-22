@@ -85,6 +85,8 @@ assignable_statement returns [TraciNode node]
         { $node = new BBoxNode($function_call_args.nodes, $block.node); }
     | ^(TRANSFORMATION expr)
         { $node = new TransformationNode($TRANSFORMATION.text, $expr.node); }
+    | ^(COLOR expr)
+        { $node = new ColorNode($expr.node); }
     | expr
         { $node = $expr.node; }
     ;

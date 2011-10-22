@@ -137,6 +137,7 @@ public class TraciValue implements Cloneable
         case BOOLEAN:
         case VECTOR:
         case TRANSFORMATION:
+        case COLOR:
             return new TraciValue(value);
             
         case PRIMITIVE_SHAPE:

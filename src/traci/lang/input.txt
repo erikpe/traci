@@ -443,30 +443,230 @@ def legopieceTechnicBrickWithHoles (length)
     }
 }
 
-legopieceTechnicBrickWithHoles (4) {
-    rotx PI+1;
+def legopiecePlate (width, length)
+{
+    boxLength = length*LU;
+    boxHeight = .4*LU;
+    boxWidth = width*LU;
+    pegHeight = .2*LU;
+    return union {
+        roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING) {
+            for (x in 0 .. length-1) {
+                for (z in 0 .. width-1) {
+                    legopartPeg () {
+                        translate [x*LU, boxHeight, z*LU];
+                    }
+                }
+            }
+            bbox {
+                scale [boxLength, boxHeight+pegHeight, boxWidth];
+            }
+        }
+    }
 }
 
-/*roundedCylinder0(1, 1, .2) {
-    translate -X*2.5;
+def legopieceTechnicPlateWithHoles (length)
+{
+    boxLength = length*LU;
+    boxHeight = .4*LU;
+    boxWidth = 2*LU;
+    pegHeight = .2*LU;
+    return union {
+        difference {
+            roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+            for (x in 0 .. length-2) {
+                legopartTechnicPlateHole () {
+                    translate X*(x*LU);
+                }
+            }
+        }
+        for (x in 0 .. length-1) {
+            legopartPeg () {
+                translate [x*LU, boxHeight, 0];
+            }
+            legopartPeg() {
+                translate [x*LU, boxHeight, LU];
+            }
+        }
+        bbox {
+            scale [boxLength, boxHeight+pegHeight, boxWidth];
+        }
+    }
 }
 
-roundedCylinder1(1, 1, .2) {
-    translate ORIGO;
+def legopieceTechnicPin0 (length)
+{
+    radius = LU*.3;
+    outerStopperRadius = LU*.04;
+    openingWidth = LU*.1;
+    openingDepth = LU*.4;
+    return difference {
+        union {
+            roundedCylinder4 (radius, length, LEGO_ROUNDING) {
+                rotx PI/2;
+            }
+            torus (outerStopperRadius, radius) {
+                translate Z*(length-outerStopperRadius);
+            }
+        }
+        cylinder (.5*openingWidth, [-radius-EPSILON, 0, length-openingDepth], [radius+EPSILON, 0, length-openingDepth]);
+        box {
+            translate [-.5, -.5, 0];
+            scale [2*(radius+outerStopperRadius+EPSILON), openingWidth, openingDepth+EPSILON];
+            translate Z*(length-openingDepth);
+        }
+    }
 }
 
-roundedCylinder2(1, 1, .2, .3) {
-    translate X*2.5;
+def legopieceTechnicPin ()
+{
+    middleStopperRadius = .38*LU;
+    middleStopperLength = .15*LU;
+    innerRadius = .22*LU;
+    return difference {
+        union {
+            legopieceTechnicPin0 (LU-.5*middleStopperLength) {
+                translate Z*.5*middleStopperLength;
+            }
+            legopieceTechnicPin0 (LU-.5*middleStopperLength) {
+                rotx PI;
+                translate -Z*.5*middleStopperLength;
+            }
+            roundedCylinder1 (middleStopperRadius, middleStopperLength, LEGO_ROUNDING) {
+                rotx PI/2;
+                translate -Z*.5*middleStopperLength;
+            }
+        }
+        roundedCylinder3 (innerRadius, 2*LU, LEGO_ROUNDING) {
+            translate -Y*LU;
+            rotx PI/2;
+        }
+        bbox {
+            scale 2;
+            translate [-1, -1, -1];
+            scale [middleStopperRadius, middleStopperRadius, LU];
+        }
+        translate [LU, .7*LU, 0];
+    }
 }
 
-roundedCylinder3(1, 1, .2) {
-    translate Z*2.5;
+def rotHole (obj, theta)
+{
+    return obj {
+        translate [-1, .7, 0];
+        rotz theta;
+        translate [1, .7, 0];
+    }
 }
 
-roundedCylinder4(1, 1, .2) {
-    translate -Z*2.5;
+global BLACK = color [.15, .15, .15];
+global BLACK_LIGHT = color [.2, .2, .2];
+global GRAY = color [.85, .85, .85];
+global YELLOW = color [1, 1, 0];
+
+def pieces1 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (4) { BLACK; }
+        legopieceTechnicBrickWithHoles (6) { BLACK; translate [2, 0, 1]; }
+        legopieceTechnicBrickWithHoles (10) { BLACK; translate [5, 0, 2]; }
+        legopieceTechnicBrickWithHoles (4) { BLACK; translate [12, 0, 1]; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.2, 0]; }
+        legopiecePlate (2, 2) { YELLOW; translate [2, 1.2, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [2, 1.6, 0]; }
+        legopiecePlate (2, 1) { YELLOW; translate [3, 1.6, 0]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [2, 0, 1]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [5, 0, 2]; }
+        legopieceTechnicPin () { GRAY; translate [6, 0, 2]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [8, 0, 2]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [10, 0, 2]; }
+        legopieceTechnicPin () { GRAY; translate [12, 0, 2]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [13, 0, 2]; }
+        bbox { scale [16, 2.2, 3]; }
+    }
 }
 
-roundedBox(1, 1, 1, .2) {
-    translate Y*1;
-}*/
+def pieces2 (theta)
+{
+    return union {
+        legopieceTechnicBrickWithHoles (6) { YELLOW; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.2, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.6, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [4, 1.2, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [4, 1.6, 0]; }
+        legopieceTechnicBrickWithHoles (8) { YELLOW; translate [0, 2, 0]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [4, 2, 1]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [6, 2, 1]; }
+        bbox { scale [8, 3.4, 2]; }
+        translate [-1, -.7, 0];
+        rotz theta;
+        translate [1, .7, 0];
+    }
+}
+
+def pieces3 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (2) { BLACK; }
+        legopieceTechnicBrickWithHoles (2) { BLACK; translate [0, 0, 3]; }
+        legopieceTechnicBrickWithHoles (2) { BLACK; roty PI/2; translate [0, 0, 3]; }
+        legopieceTechnicBrickWithHoles (2) { BLACK; roty PI/2; translate [1, 0, 3]; }
+        legopieceTechnicPlateWithHoles (4) { BLACK; roty PI/2; translate [0, -.4, 4]; }
+        legopieceTechnicPlateWithHoles (4) { BLACK; roty PI/2; translate [0, 1.2, 4]; }
+        legopieceTechnicPin () { GRAY; }
+        legopieceTechnicPin () { GRAY; translate [0, 0, 4]; }
+        legopieceTechnicPin () { GRAY; roty PI/2; translate [0, 0, 3]; }
+        legopieceTechnicPin () { GRAY; roty PI/2; translate [2, 0, 3]; }
+        bbox { scale [4, 2.2, 6]; translate [-1, -.4, -1]; }
+    }
+}
+
+def pieces4 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (4) { YELLOW; roty PI/2; translate [0, .4, 2]; }
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [0, 1.6, 1]; }
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [0, 1.6, -2]; }
+        legopieceTechnicPlateWithHoles (4) { YELLOW; roty PI/2; translate [0, 0, 2]; }
+        bbox { translate [0, 0, -.5]; scale [6, 3, 4]; }
+    }
+}
+
+def pieces5 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (2) { YELLOW; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.2, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.6, 0]; }
+        legopiecePlate (2, 1) { YELLOW; translate [0, 1.6, 0]; }
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [-2, 2, 0]; }
+        legopieceTechnicPin () { GRAY; translate [-2, 2, 0]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [2, 2, 0]; }
+        bbox { scale [6, 3.4, 3]; translate [-2, 0, -1]; }
+    }
+}
+
+def pieces6 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [0, 0, 2]; }
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [0, 0, -3]; }
+    }
+}
+
+def airplane ()
+{
+    return union {
+        pieces1 ()     { translate [0, 0, 1]; }
+        pieces2 (PI/2) { translate [10, 0, 2]; }
+        pieces1 ()     { scale [1, 1, -1]; translate [0, 0, -1]; }
+        pieces2 (PI/2) { scale [1, 1, -1]; translate [10, 0, -2]; } 
+        pieces4 ()     { translate [-1, 1.6, 0]; }
+        pieces3 ()     { translate [10, 2, -2]; }
+        pieces5 ()     { translate [8, 4, 3]; }
+        pieces5 ()     { scale [1, 1, -1]; translate [8, 4, -3]; }
+        pieces6 ()     { translate [-5, -.7, 0]; rotz .7509279107; translate [7, 6.7, 0]; }
+    }
+}
+
+airplane();

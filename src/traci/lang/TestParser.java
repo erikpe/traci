@@ -98,8 +98,8 @@ public class TestParser
         final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*50));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
         
-        final Vector camLocation = Vector.make(-5, 6, 7);
-        final Vector camLookAt = Vector.make(0, 0, 0);
+        final Vector camLocation = Vector.make(-10, 15, 15);
+        final Vector camLookAt = Vector.make(8, 2, 0);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y);
         final Scene scene = new Scene(rootUnion, cam);
         scene.addLight(light);
