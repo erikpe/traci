@@ -1,22 +1,11 @@
 package traci.model.shape.primitive;
 
 import traci.math.Vector;
-import traci.model.material.Material;
 import traci.render.Point2.Type;
 import traci.render.Ray2;
 
 public class Plane extends Primitive
 {
-    public Plane()
-    {
-        this(null);
-    }
-    
-    public Plane(final Material material)
-    {
-        super(material);
-    }
-    
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {

@@ -6,7 +6,6 @@ import java.util.List;
 
 import traci.math.Transformation;
 import traci.model.material.Color;
-import traci.model.material.Material;
 import traci.model.shape.BoundingBox;
 import traci.model.shape.Shape;
 
@@ -17,10 +16,8 @@ public abstract class Csg extends Shape implements Iterable<Shape>
     
     protected BoundingBox bBox;
     
-    public Csg(final Material material)
+    public Csg()
     {
-        super(material);
-        
         this.shapes = new ArrayList<Shape>();
         this.numShapes = this.shapes.size();
     }
@@ -44,8 +41,6 @@ public abstract class Csg extends Shape implements Iterable<Shape>
     @Override
     public void transform(final Transformation tr)
     {
-        super.transform(tr);
-        
         if (bBox != null)
         {
             bBox.transform(tr);

@@ -1,22 +1,11 @@
 package traci.model.shape.primitive;
 
 import traci.math.Vector;
-import traci.model.material.Material;
 import traci.render.Point2.Type;
 import traci.render.Ray2;
 
 public class Sphere extends Primitive
 {
-    public Sphere()
-    {
-        this(null);
-    }
-    
-    public Sphere(final Material material)
-    {
-        super(material);
-    }
-    
     public Vector primitiveGetNormalAt(final Vector p)
     {
         return p;

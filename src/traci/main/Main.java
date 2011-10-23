@@ -41,30 +41,30 @@ public class Main
         
         final Plane plane = new Plane();
         //plane.translatey(-1);
-        plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
+        //plane.material.setPigment(new Checker(Color.BLACK, Color.WHITE));
         //plane.material.getPigment().translate(-.5, 0, -.5);
         //plane.material.getPigment().scale(5);
         
         final Sphere origoS = new Sphere();
-        origoS.material.setColor(Color.WHITE);
+        //origoS.material.setColor(Color.WHITE);
         
         final Sphere left = new Sphere();
         //left.translatex(-5);
-        left.material.setColor(Color.CYAN);
+        //left.material.setColor(Color.CYAN);
         
         final Sphere right = new Sphere();
         //right.translatex(5);
-        right.material.setColor(Color.YELLOW);
+        //right.material.setColor(Color.YELLOW);
         
         final Sphere near = new Sphere();
         //near.translatez(5);
-        near.material.setColor(Color.GREEN);
+        //near.material.setColor(Color.GREEN);
         
         final Sphere far = new Sphere();
         //far.translatez(-5);
-        far.material.setColor(Color.RED);
+        //far.material.setColor(Color.RED);
         
-        final Cylinder cyl = new Cylinder();
+        //final Cylinder cyl = new Cylinder();
         //cyl.translatex(-2.5);
         
         final Cylinder cyl2 = new Cylinder(.5, Vector.make(-5, 1, 0), Vector.make(5, 1, 0));

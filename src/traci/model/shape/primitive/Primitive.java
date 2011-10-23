@@ -11,11 +11,12 @@ import traci.render.Ray2;
 public abstract class Primitive extends Shape
 {
     private Transformation transformation;
+    private Material material;
     
-    public Primitive(final Material material)
+    protected Primitive()
     {
-        super(material);
-        transformation = Transformations.identity();
+        this.transformation = Transformations.identity();
+        this.material = Material.newDefault();
     }
     
     protected final static double min(final double val0, final double val1)
@@ -66,8 +67,8 @@ public abstract class Primitive extends Shape
     @Override
     public void transform(final Transformation tr)
     {
-        super.transform(tr);
         transformation = transformation.compose(tr);
+        material.getPigment().transform(tr);
     }
     
     @Override
@@ -76,11 +77,17 @@ public abstract class Primitive extends Shape
         material.setColor(color);
     }
     
+    public Material getMaterial()
+    {
+        return material;
+    }
+    
     @Override
     public Object clone()
     {
         final Primitive res = (Primitive) super.clone();
         res.transformation = transformation;
+        res.material = (Material) material.clone();
         return res;
     }
 }

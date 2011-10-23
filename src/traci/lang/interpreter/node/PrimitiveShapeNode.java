@@ -58,14 +58,7 @@ public class PrimitiveShapeNode implements TraciNode
             break;
             
         case cylinder:
-            if (args.size() == 3)
-            {
-                primitive = new Cylinder(args.get(0).getNumber(), args.get(1).getVector(), args.get(2).getVector());
-            }
-            else
-            {
-                primitive = new Cylinder();
-            }
+            primitive = new Cylinder(args.get(0).getNumber(), args.get(1).getVector(), args.get(2).getVector());
             break;
             
         case plane:

@@ -1,22 +1,11 @@
 package traci.model.shape.primitive;
 
 import traci.math.Vector;
-import traci.model.material.Material;
 import traci.render.Point2.Type;
 import traci.render.Ray2;
 
 public class Box extends Primitive
 {
-    public Box()
-    {
-        this(null);
-    }
-    
-    public Box(final Material material)
-    {
-        super(material);
-    }
-    
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {

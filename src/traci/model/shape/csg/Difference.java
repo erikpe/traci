@@ -1,21 +1,10 @@
 package traci.model.shape.csg;
 
 import traci.math.Vector;
-import traci.model.material.Material;
 import traci.render.Ray2;
 
 public class Difference extends Csg
 {
-    public Difference()
-    {
-        this(null);
-    }
-    
-    public Difference(final Material material)
-    {
-        super(material);
-    }
-    
     public Ray2 shootRay2(final Vector p, final Vector dir)
     {
         if ((bBox != null && !bBox.test(p, dir)) || numShapes == 0)

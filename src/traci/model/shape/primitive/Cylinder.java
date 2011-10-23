@@ -2,26 +2,13 @@ package traci.model.shape.primitive;
 
 import traci.math.Transformations;
 import traci.math.Vector;
-import traci.model.material.Material;
 import traci.render.Point2.Type;
 import traci.render.Ray2;
 
 public class Cylinder extends Primitive
 {
-    public Cylinder()
-    {
-        this(null);
-    }
-    
-    public Cylinder(final Material material)
-    {
-        super(material);
-    }
-    
     public Cylinder(final double radius, final Vector v0, final Vector v1)
     {
-        this();
-        
         final double length = v1.sub(v0).length();
         
         transform(Transformations.scale(radius, length, radius));
