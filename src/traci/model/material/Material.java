@@ -3,7 +3,7 @@ package traci.model.material;
 import traci.model.material.pigment.Pigment;
 import traci.model.material.pigment.Solid;
 
-public class Material
+public class Material implements Cloneable
 {
     private Texture texture;
     
@@ -43,11 +43,6 @@ public class Material
         getTexture().setPigment(pigment);
     }
     
-//    public Color getColor()
-//    {
-//        return getPigment().getColor();
-//    }
-    
     public void setColor(final Color color)
     {
         setPigment(new Solid(color));
@@ -63,7 +58,7 @@ public class Material
             
             return res;
         }
-        catch (CloneNotSupportedException e)
+        catch (final CloneNotSupportedException e)
         {
             e.printStackTrace();
         }

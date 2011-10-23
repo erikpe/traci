@@ -27,9 +27,9 @@ public class Union extends Csg
         
         for (int i = 0; i < numShapes; ++i)
         {
-            assert Ray2.checkRay(ray);
+            //assert Ray2.checkRay(ray);
             ray = Ray2.union(ray, shapes.get(i).shootRay2(p, dir));
-            assert Ray2.checkRay(ray);
+            //assert Ray2.checkRay(ray);
         }
         
         return ray;

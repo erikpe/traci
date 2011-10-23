@@ -7,7 +7,7 @@ import traci.math.Transformation;
 import traci.math.Transformations;
 import traci.math.Vector;
 
-public class BoundingBox implements Transformable
+public class BoundingBox implements Transformable, Cloneable
 {
     public static final AtomicLong miss = new AtomicLong(1);
     public static final AtomicLong hit = new AtomicLong(1);
@@ -87,5 +87,22 @@ public class BoundingBox implements Transformable
         
         //miss.incrementAndGet();
         return false;
+    }
+    
+    @Override
+    public Object clone()
+    {
+        try
+        {
+            final BoundingBox res = (BoundingBox) super.clone();
+            res.transformation = transformation;
+            
+            return res;
+        }
+        catch (final CloneNotSupportedException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -10,7 +10,7 @@ import traci.render.Ray2;
 
 public abstract class Primitive extends Shape
 {
-    public Transformation transformation;
+    private Transformation transformation;
     
     public Primitive(final Material material)
     {
