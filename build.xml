@@ -1,13 +1,18 @@
-<project default="standalone-jar">
+<project default="jar">
   
   <property name="version" value="0.0.1" />
   <property name="src" value="src" />
   <property name="bin" value="bin" />
   <property name="lib" value="lib" />
   <property name="tmp" value="tmp" />
-  <property name="sisc" value="sisc-1.16.6" />
+
   <property name="antlr-dir" value="antlr-3.4" />
   <property name="antlr-jar" value="antlr-3.4-complete-no-antlrv2.jar" />
+  <property name="java-getopt-dir" value="java-getopt-1.0.13" />
+  <property name="java-getopt-jar" value="java-getopt-1.0.13.jar" />
+  <property name="anarres-cpp-dir" value="anarres-cpp-bin-1.2.6" />
+  <property name="anarres-cpp-jar" value="anarres-cpp-bin-1.2.6.jar" />
+
   <property name="jarfile" value="traci-${version}.jar" />
   <property name="src-distfile" value="traci-${version}.tar.gz" />
   
@@ -23,7 +28,7 @@
     <delete file="${src-distfile}" />
   </target>
 
-  <target name="antlr-generate-parser">
+  <target name="generate-parser">
     <java jar="${lib}/${antlr-dir}/${antlr-jar}" fork="true">
       <arg value="-fo" />
       <arg value="${src}/traci/lang/parser" />
@@ -37,42 +42,38 @@
     <javac srcdir="${src}" destdir="${bin}" includeantruntime="false">
       <classpath>
         <pathelement location="${lib}/${antlr-dir}/${antlr-jar}" />
-	<pathelement location="${lib}/${sisc}/sisc.jar" />
-	<pathelement location="${lib}/${sisc}/sisc-opt.jar" />
       </classpath>
     </javac>
   </target>
   
-  <target name="unpack-lib-jars">
+  <target name="unpack-libs">
     <mkdir dir="${tmp}/${antlr-dir}" />
     <unjar src="${lib}/${antlr-dir}/${antlr-jar}" dest="${tmp}/${antlr-dir}">
       <patternset>
-        <exclude name="META-INF/" />
+        <include name="org/antlr/runtime/**" />
       </patternset>
     </unjar>
-    <mkdir dir="${tmp}/${sisc}" />
-    <unjar src="${lib}/${sisc}/sisc.jar" dest="${tmp}/${sisc}">
+    <unjar src="${lib}/${java-getopt-dir}/${java-getopt-jar}" dest="${tmp}/${java-getopt-dir}">
       <patternset>
-	<exclude name="META-INF/" />
+        <include name="gnu/getopt/**" />
       </patternset>
     </unjar>
-    <unjar src="${lib}/${sisc}/sisc-opt.jar" dest="${tmp}/${sisc}">
+    <unjar src="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" dest="${tmp}/${anarres-cpp-dir}">
       <patternset>
-	<exclude name="META-INF/" />
+        <include name="org/anarres/**" />
       </patternset>
     </unjar>
   </target>
   
-  <target name="standalone-jar" depends="compile, unpack-lib-jars">
+  <target name="jar" depends="compile, unpack-libs">
     <jar destfile="${jarfile}">
       <fileset dir="${bin}" />
       <fileset dir="${src}" />
-      <fileset dir="." includes="scheme/" />
-      <fileset dir="." includes="images/" />
-      <fileset dir="${tmp}/${sisc}" />
       <fileset dir="${tmp}/${antlr-dir}" />
+      <fileset dir="${tmp}/${java-getopt-dir}" />
+      <fileset dir="${tmp}/${anarres-cpp-dir}" />
       <manifest>
-        <attribute name="Main-Class" value="traci.main.Airplane" />
+        <attribute name="Main-Class" value="traci.lang.TestParser" />
       </manifest>
     </jar>
   </target>
