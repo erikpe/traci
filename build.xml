@@ -81,7 +81,7 @@
   <target name="src-dist">
     <tar destfile="${src-distfile}" compression="gzip">
       <tarfileset dir="." prefix="traci-${version}"
-		  includes="src/, images/, scheme/, lib/, build.xml, README, COPYING" />
+		  includes="src/, images/, lib/, build.xml, README, COPYING" />
     </tar>
   </target>
   
