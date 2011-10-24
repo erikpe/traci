@@ -3,14 +3,22 @@ package traci.model.material.pigment;
 import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.material.Color;
+import traci.util.WeakCache;
 
 public class Solid extends Pigment
 {
-    protected Color color;
+    private static final WeakCache<Solid> cache = new WeakCache<Solid>();
     
-    public Solid(Color color)
+    public final Color color;
+    
+    private Solid(final Color color)
     {
         this.color = color;
+    }
+    
+    public static Solid make(final Color color)
+    {
+        return cache.get(new Solid(color));
     }
     
     @Override
@@ -19,24 +27,36 @@ public class Solid extends Pigment
         return color;
     }
     
-    public void setColor(final Color color)
+    @Override
+    public Solid transform(final Transformation transformation)
     {
-        this.color = color;
+        return this;
     }
     
     @Override
-    public void transform(final Transformation transformation)
+    public int hashCode()
     {
-    	// Nothing to be done
+        return color.hashCode();
     }
     
     @Override
-    public Object clone() throws CloneNotSupportedException
+    public boolean equals(final Object other)
     {
-        final Solid res = (Solid) super.clone();
+        if (other == null)
+        {
+            return false;
+        }
+        else if (other == this)
+        {
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
+        }
         
-        res.color = color;
+        final Solid otherSolid = (Solid) other;
         
-        return res;
+        return color.equals(otherSolid.color);
     }
 }

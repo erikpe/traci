@@ -16,7 +16,7 @@ public abstract class Primitive extends Shape
     protected Primitive()
     {
         this.transformation = Transformations.identity();
-        this.material = Material.newDefault();
+        this.material = Material.getDefault();
     }
     
     protected final static double min(final double val0, final double val1)
@@ -58,13 +58,13 @@ public abstract class Primitive extends Shape
     public void transform(final Transformation tr)
     {
         transformation = transformation.compose(tr);
-        material.getPigment().transform(tr);
+        material = material.transform(tr);
     }
     
     @Override
     public void setColor(final Color color)
     {
-        material.setColor(color);
+        material = material.setColor(color);
     }
     
     public Material getMaterial()
@@ -77,7 +77,7 @@ public abstract class Primitive extends Shape
     {
         final Primitive res = (Primitive) super.clone();
         res.transformation = transformation;
-        res.material = (Material) material.clone();
+        res.material = material;
         return res;
     }
 }

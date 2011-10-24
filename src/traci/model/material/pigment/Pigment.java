@@ -1,17 +1,17 @@
 package traci.model.material.pigment;
 
-import traci.math.Transformable;
+import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.material.Color;
 
 public abstract class Pigment
-        implements Transformable, Cloneable
 {
-    public abstract Color getColor(final Vector p);
-    
-    @Override
-    public Object clone() throws CloneNotSupportedException
+    public static Pigment getDefault()
     {
-        return super.clone();
+        return Solid.make(Color.WHITE);
     }
+    
+    public abstract Pigment transform(final Transformation transformation);
+    
+    public abstract Color getColor(final Vector p);
 }

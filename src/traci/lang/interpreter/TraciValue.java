@@ -2,7 +2,10 @@ package traci.lang.interpreter;
 
 import traci.math.Transformation;
 import traci.math.Vector;
-import traci.model.material.Color;
+import traci.model.material.Finish;
+import traci.model.material.Material;
+import traci.model.material.Texture;
+import traci.model.material.pigment.Pigment;
 import traci.model.shape.BoundingBox;
 import traci.model.shape.Shape;
 import traci.model.shape.csg.Csg;
@@ -18,8 +21,10 @@ public class TraciValue implements Cloneable
         CSG_SHAPE,
         BOUNDING_BOX,
         TRANSFORMATION,
-        COLOR,
-        UNKNOWN
+        MATERIAL,
+        TEXTURE,
+        FINISH,
+        PIGMENT
     };
     
     private final Object value;
@@ -57,9 +62,21 @@ public class TraciValue implements Cloneable
         {
             type = Type.TRANSFORMATION;
         }
-        else if (obj instanceof Color)
+        else if (obj instanceof Material)
         {
-            type = Type.COLOR;
+            type = Type.MATERIAL;
+        }
+        else if (obj instanceof Texture)
+        {
+            type = Type.TEXTURE;
+        }
+        else if (obj instanceof Finish)
+        {
+            type = Type.FINISH;
+        }
+        else if (obj instanceof Pigment)
+        {
+            type = Type.PIGMENT;
         }
         else
         {
@@ -117,9 +134,24 @@ public class TraciValue implements Cloneable
         return (Transformation) value;
     }
     
-    public Color getColor()
+    public Material getMaterial()
     {
-        return (Color) value;
+        return (Material) value;
+    }
+    
+    public Texture getTexture()
+    {
+        return (Texture) value;
+    }
+    
+    public Finish getFinish()
+    {
+        return (Finish) value;
+    }
+    
+    public Pigment getPigment()
+    {
+        return (Pigment) value;
     }
     
     @Override
@@ -137,8 +169,11 @@ public class TraciValue implements Cloneable
         case BOOLEAN:
         case VECTOR:
         case TRANSFORMATION:
-        case COLOR:
-            return new TraciValue(value);
+        case MATERIAL:
+        case TEXTURE:
+        case FINISH:
+        case PIGMENT:
+            return this;
             
         case PRIMITIVE_SHAPE:
             return new TraciValue(getPrimitive().clone());
@@ -147,7 +182,7 @@ public class TraciValue implements Cloneable
             return new TraciValue(getCsg().clone());
             
         case BOUNDING_BOX:
-            return new TraciValue(getBoundingBox());
+            return new TraciValue(getBoundingBox().clone());
             
         default:
             return null;

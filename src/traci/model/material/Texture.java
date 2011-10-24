@@ -1,52 +1,56 @@
 package traci.model.material;
 
 import traci.model.material.pigment.Pigment;
+import traci.util.WeakCache;
 
 
-public class Texture implements Cloneable
+public class Texture
 {
-    protected Pigment pigment;
-    protected Finish finish;
+    private static WeakCache<Texture> cache = new WeakCache<Texture>();
     
-    public Pigment getPigment()
-    {
-        return pigment;
-    }
+    public final Pigment pigment;
+    public final Finish finish;
     
-    public Finish getFinish()
-    {
-        return finish;
-    }
-    
-    public void setPigment(final Pigment pigment)
+    private Texture(final Pigment pigment, final Finish finish)
     {
         this.pigment = pigment;
+        this.finish = finish;
+    }
+    
+    public static Texture make(final Pigment pigment, final Finish finish)
+    {
+        return cache.get(new Texture(pigment, finish));
+    }
+    
+    public static Texture getDefault()
+    {
+        return make(Pigment.getDefault(), Finish.getDefault());
     }
     
     @Override
-    protected Object clone() throws CloneNotSupportedException
+    public int hashCode()
     {
-        Texture res = (Texture) super.clone();
+        return pigment.hashCode() ^ finish.hashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        else if (other == this)
+        {
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
+        }
         
-        res.pigment = (Pigment) pigment.clone();
-        res.finish = (Finish) finish.clone();
+        final Texture otherTexture = (Texture) other;
         
-        return res;
-        
-//        Texture res = null;
-//        
-//        try
-//        {
-//            res = (Texture) super.clone();
-//            
-//            res.pigment = (Pigment) res.pigment.clone();
-//            res.finish = (Finish) res.finish.clone();
-//        }
-//        catch (final CloneNotSupportedException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        
-//        return res;
+        return pigment.equals(otherTexture.pigment) && finish.equals(otherTexture.finish);
     }
 }

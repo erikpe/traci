@@ -36,8 +36,8 @@ public class Raytrace
         final Vector hitPoint = p.add(dir.mul(dist));
         final Vector normal = obj.getNormalAt(hitPoint, dir);
         
-        final Pigment pigment = obj.getMaterial().getPigment();
-        final Finish finish = obj.getMaterial().getFinish();
+        final Pigment pigment = obj.getMaterial().texture.pigment;
+        final Finish finish = obj.getMaterial().texture.finish;
         
         /**
          * Ambient light
@@ -65,7 +65,7 @@ public class Raytrace
              */
             final double c = Math.max(dirToLight.dot(normal), 0.0);
             final Color colorDiff = pigment.getColor(hitPoint).mul(
-                    lightAtPoint.mul(c * finish.getDiffCoeff()));
+                    lightAtPoint.mul(c * finish.diffCoeff));
             
             colorTotal = colorTotal.add(colorDiff);
             
@@ -77,8 +77,8 @@ public class Raytrace
             
             if (cosTheta > 0)
             {
-                final double shininess = finish.getShininess();
-                final double specCoeff = finish.getSpecCoeff();
+                final double shininess = finish.shininess;
+                final double specCoeff = finish.specCoeff;
                 
                 final Color colorSpec = light.color.mul(Math.pow(cosTheta,
                         shininess) * specCoeff * distCoeff);
@@ -93,7 +93,7 @@ public class Raytrace
         {
             final Vector rr = dir.sub(normal.mul(dir.mul(2).dot(normal)));
             final Color colorReflect = raytrace(scene, depth - 1, hitPoint, rr.normalize());
-            colorTotal = colorTotal.add(colorReflect.mul(finish.getReflectivness()));
+            colorTotal = colorTotal.add(colorReflect.mul(finish.reflectiveness));
         }
         
         return colorTotal;

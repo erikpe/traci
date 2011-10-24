@@ -1,61 +1,65 @@
 package traci.model.material;
 
-public class Finish implements Cloneable
+import traci.util.WeakCache;
+
+public class Finish
 {
-    protected double specCoeff;
-    protected double diffCoeff;
-    protected double shininess;
-    protected double reflectiveness;
+    private static final WeakCache<Finish> cache = new WeakCache<Finish>();
     
-    public double getSpecCoeff()
-    {
-        return specCoeff;
-    }
+    public final double specCoeff;
+    public final double diffCoeff;
+    public final double shininess;
+    public final double reflectiveness;
     
-    public void setSpecCoeff(final double specCoeff)
+    private Finish(final double specCoeff, final double diffCoeff, final double shininess, final double reflectiveness)
     {
         this.specCoeff = specCoeff;
-    }
-    
-    public double getDiffCoeff()
-    {
-        return diffCoeff;
-    }
-    
-    public void setDiffCoeff(final double diffCoeff)
-    {
         this.diffCoeff = diffCoeff;
-    }
-    
-    public double getShininess()
-    {
-        return shininess;
-    }
-    
-    public void setShininess(final double shininess)
-    {
         this.shininess = shininess;
+        this.reflectiveness = reflectiveness;
     }
     
-    public double getReflectivness()
+    public static Finish make(final double specCoeff, final double diffCoeff, final double shininess,
+            final double reflectiveness)
     {
-        return reflectiveness;
+        return cache.get(new Finish(specCoeff, diffCoeff, shininess, reflectiveness));
     }
     
-    public void setReflectivness(final double reflectivness)
+    public static Finish getDefault()
     {
-        this.reflectiveness = reflectivness;
+        return make(0.3, 0.3, 50, 0.1);
     }
     
     @Override
-    protected Object clone() throws CloneNotSupportedException
+    public int hashCode()
     {
-        final Finish res = (Finish) super.clone();
+        return Double.valueOf(specCoeff).hashCode() ^
+               Double.valueOf(diffCoeff).hashCode() ^
+               Double.valueOf(shininess).hashCode() ^
+               Double.valueOf(reflectiveness).hashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        else if (other == this)
+        {
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
+        }
         
-        res.specCoeff = specCoeff;
-        res.diffCoeff = diffCoeff;
-        res.shininess = shininess;
+        final Finish otherFinish = (Finish) other;
         
-        return res;
+        return specCoeff == otherFinish.specCoeff &&
+               diffCoeff == otherFinish.diffCoeff &&
+               shininess == otherFinish.shininess &&
+               reflectiveness == otherFinish.reflectiveness;
     }
 }

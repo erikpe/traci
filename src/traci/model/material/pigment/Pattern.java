@@ -1,6 +1,8 @@
 package traci.model.material.pigment;
 
-public abstract class Pattern extends NonUniform
+import traci.model.material.pigment.NonUniform.NonUniformPigment;
+
+public abstract class Pattern implements NonUniformPigment
 {
 	// TODO: implement
 }

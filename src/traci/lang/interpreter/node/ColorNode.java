@@ -4,6 +4,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.material.Color;
+import traci.model.material.pigment.Solid;
 
 public class ColorNode implements TraciNode
 {
@@ -20,6 +21,6 @@ public class ColorNode implements TraciNode
         final TraciValue exprValue = exprNode.eval(context);
         final Color color = Color.make(exprValue.getVector());
         
-        return new TraciValue(color);
+        return new TraciValue(Solid.make(color));
     }
 }

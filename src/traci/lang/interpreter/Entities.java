@@ -3,6 +3,11 @@ package traci.lang.interpreter;
 import traci.math.Transformable;
 import traci.math.Transformation;
 import traci.model.material.Color;
+import traci.model.material.Finish;
+import traci.model.material.Material;
+import traci.model.material.Texture;
+import traci.model.material.pigment.Pigment;
+import traci.model.material.pigment.Solid;
 import traci.model.shape.BoundingBox;
 import traci.model.shape.Shape;
 import traci.model.shape.csg.Csg;
@@ -31,9 +36,21 @@ public class Entities
         {
             entity = new TransformableEntity();
         }
+        else if (object instanceof Transformation)
+        {
+            entity = new TransformationEntity();
+        }
+        else if (object instanceof Material)
+        {
+            entity = null;//new MaterialEntity();
+        }
+        else if (object instanceof Texture)
+        {
+            entity = null;//new TextureEntity();
+        }
         else
         {
-            return null;
+            throw new RuntimeException();
         }
         
         entity.object = object;
@@ -64,8 +81,8 @@ public class Entities
                 apply(value.getBoundingBox());
                 break;
                 
-            case COLOR:
-                apply(value.getColor());
+            case PIGMENT:
+                apply(value.getPigment());
                 break;
             }
         }
@@ -73,7 +90,7 @@ public class Entities
         protected void apply(final Transformation transformation) { }
         protected void apply(final Shape shape) { }
         protected void apply(final BoundingBox bBox) { }
-        protected void apply(final Color color) { }
+        protected void apply(final Pigment pigment) { }
     }
     
     private static class TransformableEntity extends EntityHelper
@@ -85,12 +102,21 @@ public class Entities
         }
     }
     
+    private static class TransformationEntity extends EntityHelper
+    {
+        @Override
+        protected void apply(final Transformation transformation)
+        {
+            object = ((Transformation) object).compose(transformation);
+        }
+    }
+    
     private static class ShapeEntity extends TransformableEntity
     {
         @Override
-        protected void apply(final Color color)
+        protected void apply(final Pigment pigment)
         {
-            ((Shape) object).setColor(color);
+            ((Shape) object).setColor(((Solid) pigment).color);
         }
     }
     

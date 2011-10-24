@@ -1,68 +1,67 @@
 package traci.model.material;
 
+import traci.math.Transformation;
 import traci.model.material.pigment.Pigment;
 import traci.model.material.pigment.Solid;
+import traci.util.WeakCache;
 
-public class Material implements Cloneable
+public class Material
 {
-    private Texture texture;
+    private static final WeakCache<Material> cache = new WeakCache<Material>();
     
-    public static Material newDefault()
+    public final Texture texture;
+    
+    private Material(final Texture texture)
     {
-        final Material mat = new Material();
-        
-        mat.texture = new Texture();
-        mat.getTexture().finish = new Finish();
-        mat.setPigment(new Solid(Color.WHITE));
-        
-        mat.getFinish().setDiffCoeff(0.3);
-        mat.getFinish().setSpecCoeff(0.3);
-        mat.getFinish().setShininess(50);
-        mat.getFinish().setReflectivness(0.1);
-        
-        return mat;
+        this.texture = texture;
     }
     
-    public Texture getTexture()
+    public static Material make(final Texture texture)
     {
-        return texture;
+        return cache.get(new Material(texture));
     }
     
-    public Finish getFinish()
+    public static Material getDefault()
     {
-        return getTexture().getFinish();
+        return make(Texture.getDefault());
     }
     
-    public Pigment getPigment()
+    public Material transform(final Transformation transformation)
     {
-        return getTexture().getPigment();
+        final Pigment newPigment = texture.pigment.transform(transformation);
+        return make(Texture.make(newPigment, texture.finish));
     }
     
-    public void setPigment(final Pigment pigment)
+    public Material setColor(final Color newColor)
     {
-        getTexture().setPigment(pigment);
-    }
-    
-    public void setColor(final Color color)
-    {
-        setPigment(new Solid(color));
+        final Solid newPigment = Solid.make(newColor);
+        return Material.make(Texture.make(newPigment, texture.finish));
     }
     
     @Override
-    public Object clone()
+    public int hashCode()
     {
-        try
+        return texture.hashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object other)
+    {
+        if (other == null)
         {
-            final Material res = (Material) super.clone();
-            res.texture = (Texture) texture.clone();
-            
-            return res;
+            return false;
         }
-        catch (final CloneNotSupportedException e)
+        else if (other == this)
         {
-            e.printStackTrace();
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
         }
         
-        return null;
+        final Material otherMaterial = (Material) other;
+        
+        return texture.equals(otherMaterial.texture);
     }
 }

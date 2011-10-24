@@ -1,12 +1,10 @@
 package traci.model.material;
 
-import traci.math.ObjectPool;
 import traci.math.Vector;
-import traci.render.RenderingThread;
 
 public class Color
 {
-    public static final class ColorPool extends ObjectPool<Color>
+    /*public static final class ColorPool extends ObjectPool<Color>
     {
         @Override
         protected Color makeNew()
@@ -24,9 +22,9 @@ public class Color
             
             return color;
         }
-    }
+    }*/
     
-    private double r, g, b;
+    public final double r, g, b;
     
     public static final Color BLACK = Color.make(0, 0, 0);
     public static final Color WHITE = Color.make(1, 1, 1);
@@ -46,12 +44,12 @@ public class Color
     
     public static Color make(final double r, final double g, final double b)
     {
-        final Thread thisThread = Thread.currentThread();
+        /*final Thread thisThread = Thread.currentThread();
         
         if (thisThread instanceof RenderingThread)
         {
             return ((RenderingThread) thisThread).colorPool.make(r, g, b);
-        }
+        }*/
         
         return new Color(r, g, b);
     }
@@ -59,26 +57,6 @@ public class Color
     public static Color make(final Vector v)
     {
         return make(v.x(), v.y(), v.z());
-    }
-    
-    public double r()
-    {
-        return r;
-    }
-    
-    public double g()
-    {
-        return g;
-    }
-    
-    public double b()
-    {
-        return b;
-    }
-    
-    public static Color makeCopy(final Color other)
-    {
-        return new Color(other.r, other.g, other.b);
     }
     
     public static Color makeRGB(final int rgb)
@@ -110,11 +88,35 @@ public class Color
         return make(r + color.r, g + color.g, b + color.b);
     }
     
-    public void accumulate(final Color color)
+    @Override
+    public int hashCode()
     {
-        r += color.r;
-        g += color.g;
-        b += color.b;
+        return Double.valueOf(r).hashCode() ^
+               Double.valueOf(g).hashCode() ^
+               Double.valueOf(b).hashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        else if (other == this)
+        {
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
+        }
+        
+        final Color otherColor = (Color) other;
+        
+        return r == otherColor.r &&
+               g == otherColor.g &&
+               b == otherColor.b;
     }
     
     @Override

@@ -5,7 +5,6 @@ import java.util.Random;
 
 import traci.math.Vector.VectorPool;
 import traci.math.Vector2D.Vector2DPool;
-import traci.model.material.Color.ColorPool;
 import traci.render.Point2.Point2Pool;
 import traci.render.Ray2.Ray2Pool;
 
@@ -44,7 +43,7 @@ public class RenderingThread extends Thread
     private final BlockRenderer renderer;
     
     public final VectorPool vectorPool;
-    public final ColorPool colorPool;
+    //public final ColorPool colorPool;
     public final Vector2DPool vector2DPool;
     public final Point2Pool point2Pool;
     public final Ray2Pool ray2Pool;
@@ -58,7 +57,7 @@ public class RenderingThread extends Thread
         this.workQueue = workQueue;
         
         this.vectorPool = new VectorPool();
-        this.colorPool = new ColorPool();
+        //this.colorPool = new ColorPool();
         this.vector2DPool = new Vector2DPool();
         this.point2Pool = new Point2Pool();
         this.ray2Pool = new Ray2Pool();
@@ -78,7 +77,7 @@ public class RenderingThread extends Thread
     public void resetPools()
     {
         vectorPool.reset();
-        colorPool.reset();
+        //colorPool.reset();
         vector2DPool.reset();
         point2Pool.reset();
         ray2Pool.reset();

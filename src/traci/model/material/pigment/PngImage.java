@@ -1,5 +1,6 @@
 package traci.model.material.pigment;
 
+import traci.model.material.pigment.NonUniform.NonUniformPigment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import traci.math.Vector;
 import traci.math.Vector2D;
 import traci.model.material.Color;
 
-public class PngImage extends NonUniform implements Interpolatable
+public class PngImage implements NonUniformPigment, Interpolatable
 {
     public enum RepeatPolicy { REPEAT, BORDER, STRETCH }
     
@@ -69,8 +70,7 @@ public class PngImage extends NonUniform implements Interpolatable
         return tmpImage;
     }
     
-    @Override
-    protected Color getColorTransformed(final Vector p)
+    public Color getColorTransformed(final Vector p)
     {
         final Vector2D projected = projection.project(p);
         

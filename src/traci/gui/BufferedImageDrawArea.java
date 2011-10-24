@@ -17,9 +17,9 @@ public class BufferedImageDrawArea extends AbstractDrawArea
     @Override
     public void draw(final long x, final long y, final Color color)
     {
-        long r = (long) (color.r() * 255);
-        long g = (long) (color.g() * 255);
-        long b = (long) (color.b() * 255);
+        long r = (long) (color.r * 255);
+        long g = (long) (color.g * 255);
+        long b = (long) (color.b * 255);
         
         r = (r > 255 ? 255 : r);
         g = (g > 255 ? 255 : g);
