@@ -12,11 +12,18 @@ public class Entities
     public interface Entity
     {
         public void applyValue(final TraciValue value);
+        
+        public TraciValue getValue();
     }
     
     public static final Entity NULL_ENTITY = new Entity()
     {
         public void applyValue(final TraciValue value) { }
+        
+        public TraciValue getValue()
+        {
+            throw new RuntimeException();
+        }
     };
     
     public static Entity makeEntity(final Object object)
@@ -49,13 +56,26 @@ public class Entities
         throw new RuntimeException();
     }
     
-    private static class PrimitiveEntity implements Entity
+    private static abstract class EntityHelper<T> implements Entity
     {
-        private final Primitive primitive;
+        protected T obj;
         
+        private EntityHelper(T obj)
+        {
+            this.obj = obj;
+        }
+        
+        public TraciValue getValue()
+        {
+            return new TraciValue(obj);
+        }
+    }
+    
+    private static class PrimitiveEntity extends EntityHelper<Primitive>
+    {
         private PrimitiveEntity(final Primitive primitive)
         {
-            this.primitive = primitive;
+            super(primitive);
         }
         
         public void applyValue(final TraciValue value)
@@ -63,23 +83,23 @@ public class Entities
             switch (value.getType())
             {
             case MATERIAL:
-                primitive.setMaterial(value.getMaterial());
+                obj.setMaterial(value.getMaterial());
                 break;
                 
             case TEXTURE:
-                primitive.setTexture(value.getTexture());
+                obj.setTexture(value.getTexture());
                 break;
                 
             case FINISH:
-                primitive.setFinish(value.getFinish());
+                obj.setFinish(value.getFinish());
                 break;
                 
             case PIGMENT:
-                primitive.setPigment(value.getPigment());
+                obj.setPigment(value.getPigment());
                 break;
                 
             case TRANSFORMATION:
-                primitive.transform(value.getTransformation());
+                obj.transform(value.getTransformation());
                 break;
                 
             default:
@@ -88,13 +108,11 @@ public class Entities
         }
     }
     
-    private static class CsgEntity implements Entity
+    private static class CsgEntity extends EntityHelper<Csg>
     {
-        private final Csg csg;
-        
         private CsgEntity(final Csg csg)
         {
-            this.csg = csg;
+            super(csg);
         }
         
         public void applyValue(final TraciValue value)
@@ -103,31 +121,31 @@ public class Entities
             {
             case PRIMITIVE_SHAPE:
             case CSG_SHAPE:
-                csg.add(value.getShape());
+                obj.add(value.getShape());
                 break;
                 
             case BOUNDING_BOX:
-                csg.setBoundingBox(value.getBoundingBox());
+                obj.setBoundingBox(value.getBoundingBox());
                 break;
                 
             case MATERIAL:
-                csg.setMaterial(value.getMaterial());
+                obj.setMaterial(value.getMaterial());
                 break;
                 
             case TEXTURE:
-                csg.setTexture(value.getTexture());
+                obj.setTexture(value.getTexture());
                 break;
                 
             case FINISH:
-                csg.setFinish(value.getFinish());
+                obj.setFinish(value.getFinish());
                 break;
                 
             case PIGMENT:
-                csg.setPigment(value.getPigment());
+                obj.setPigment(value.getPigment());
                 break;
                 
             case TRANSFORMATION:
-                csg.transform(value.getTransformation());
+                obj.transform(value.getTransformation());
                 break;
                 
             default:
@@ -136,13 +154,11 @@ public class Entities
         }
     }
     
-    private static class TransformationEntity implements Entity
+    private static class TransformationEntity extends EntityHelper<Transformation>
     {
-        private Transformation transformation;
-        
         private TransformationEntity(final Transformation transformation)
         {
-            this.transformation = transformation;
+            super(transformation);
         }
         
         public void applyValue(final TraciValue value)
@@ -150,7 +166,7 @@ public class Entities
             switch (value.getType())
             {
             case TRANSFORMATION:
-                transformation = transformation.compose(value.getTransformation());
+                obj = obj.compose(value.getTransformation());
                 break;
                 
             default:
@@ -159,13 +175,11 @@ public class Entities
         }
     }
     
-    private static class TextureEntity implements Entity
+    private static class TextureEntity extends EntityHelper<Texture>
     {
-        private Texture texture;
-        
         private TextureEntity(final Texture texture)
         {
-            this.texture = texture;
+            super(texture);
         }
         
         public void applyValue(final TraciValue value)
@@ -173,15 +187,15 @@ public class Entities
             switch (value.getType())
             {
             case TRANSFORMATION:
-                texture = texture.transform(value.getTransformation());
+                obj = obj.transform(value.getTransformation());
                 break;
                 
             case FINISH:
-                texture = texture.setFinish(value.getFinish());
+                obj = obj.setFinish(value.getFinish());
                 break;
                 
             case PIGMENT:
-                texture = texture.setPigment(value.getPigment());
+                obj = obj.setPigment(value.getPigment());
                 break;
                 
             default:
@@ -190,13 +204,11 @@ public class Entities
         }
     }
     
-    private static class MaterialEntity implements Entity
+    private static class MaterialEntity extends EntityHelper<Material>
     {
-        private Material material;
-        
         private MaterialEntity(final Material material)
         {
-            this.material = material;
+            super(material);
         }
         
         public void applyValue(final TraciValue value)
@@ -204,19 +216,19 @@ public class Entities
             switch (value.getType())
             {
             case TRANSFORMATION:
-                material = material.transform(value.getTransformation());
+                obj = obj.transform(value.getTransformation());
                 break;
                 
             case FINISH:
-                material = material.setFinish(value.getFinish());
+                obj = obj.setFinish(value.getFinish());
                 break;
                 
             case PIGMENT:
-                material = material.setPigment(value.getPigment());
+                obj = obj.setPigment(value.getPigment());
                 break;
                 
             case TEXTURE:
-                material = material.setTexture(value.getTexture());
+                obj = obj.setTexture(value.getTexture());
                 break;
                 
             default:
@@ -225,13 +237,11 @@ public class Entities
         }
     }
     
-    private static class BoundingBoxEntity implements Entity
+    private static class BoundingBoxEntity extends EntityHelper<BoundingBox>
     {
-        private final BoundingBox bbox;
-        
-        private BoundingBoxEntity(final BoundingBox bbox)
+        private BoundingBoxEntity(final BoundingBox bBox)
         {
-            this.bbox = bbox;
+            super(bBox);
         }
         
         public void applyValue(final TraciValue value)
@@ -239,7 +249,7 @@ public class Entities
             switch (value.getType())
             {
             case TRANSFORMATION:
-                bbox.transform(value.getTransformation());
+                obj.transform(value.getTransformation());
                 break;
                 
             default:

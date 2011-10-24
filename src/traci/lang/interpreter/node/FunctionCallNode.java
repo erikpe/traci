@@ -5,6 +5,7 @@ import java.util.List;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
+import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
@@ -33,11 +34,13 @@ public class FunctionCallNode implements TraciNode
             args.add(argNode.eval(context));
         }
         
-        final TraciValue value = functionNode.invoke(context, args);
+        TraciValue value = functionNode.invoke(context, args);
         
         if (blockNode != null)
         {
-            blockNode.eval(context.newEntity(Entities.makeEntity(value.getValue())));
+            final Entity entity = Entities.makeEntity(value.getObject());
+            blockNode.eval(context.newEntity(entity));
+            value = entity.getValue();
         }
         
         return value;

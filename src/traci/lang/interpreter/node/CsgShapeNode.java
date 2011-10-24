@@ -4,6 +4,7 @@ import java.util.List;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
+import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.shape.csg.Csg;
@@ -21,13 +22,11 @@ public class CsgShapeNode implements TraciNode
     }
     
     private final CsgType type;
-    private final List<TraciNode> argNodes;
     private final BlockNode blockNode;
     
     public CsgShapeNode(final String shapeType, final List<TraciNode> argNodes, final BlockNode blockNode)
     {
         this.type = CsgType.valueOf(shapeType);
-        this.argNodes = argNodes;
         this.blockNode = blockNode;
     }
     
@@ -54,11 +53,16 @@ public class CsgShapeNode implements TraciNode
             throw new RuntimeException();
         }
         
+        TraciValue value = new TraciValue(csg);
+        
         if (blockNode != null)
         {
+            final Entity entity = Entities.makeEntity(csg);
             blockNode.eval(context.newEntity(Entities.makeEntity(csg)));
+            value = entity.getValue();
+            assert csg == value.getObject();
         }
         
-        return new TraciValue(csg);
+        return value;
     }
 }

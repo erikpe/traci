@@ -4,6 +4,7 @@ import org.antlr.runtime.Token;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
+import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 
@@ -23,7 +24,7 @@ public class RefNode implements TraciNode
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException
     {
-        final TraciValue value = context.getValue(id);
+        TraciValue value = context.getValue(id);
         
         if (value == null)
         {
@@ -34,7 +35,9 @@ public class RefNode implements TraciNode
         
         if (blockNode != null)
         {
-            blockNode.eval(context.newEntity(Entities.makeEntity(value.getValue())));
+            final Entity entity = Entities.makeEntity(value.getObject());
+            blockNode.eval(context.newEntity(entity));
+            value = entity.getValue();
         }
         
         return value;

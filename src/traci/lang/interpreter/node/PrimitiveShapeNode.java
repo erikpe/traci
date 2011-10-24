@@ -5,6 +5,7 @@ import java.util.List;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
+import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.shape.primitive.Box;
@@ -77,12 +78,17 @@ public class PrimitiveShapeNode implements TraciNode
             throw new RuntimeException();
         }
         
+        TraciValue value = new TraciValue(primitive);
+        
         if (blockNode != null)
         {
+            final Entity entity = Entities.makeEntity(value.getObject());
             blockNode.eval(context.newEntity(Entities.makeEntity(primitive)));
+            value = entity.getValue();
+            assert primitive == value.getObject();
         }
         
-        return new TraciValue(primitive);
+        return value;
     }
 
 }

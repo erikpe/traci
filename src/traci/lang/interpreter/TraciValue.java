@@ -89,7 +89,7 @@ public class TraciValue implements Cloneable
         return type;
     }
     
-    public Object getValue()
+    public Object getObject()
     {
         return value;
     }

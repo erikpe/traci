@@ -4,18 +4,17 @@ import java.util.List;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
+import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.shape.BoundingBox;
 
 public class BBoxNode implements TraciNode
 {
-    private final List<TraciNode> argNodes;
     private final BlockNode blockNode;
     
     public BBoxNode(final List<TraciNode> argNodes, final BlockNode blockNode)
     {
-        this.argNodes = argNodes;
         this.blockNode = blockNode;
     }
     
@@ -24,11 +23,16 @@ public class BBoxNode implements TraciNode
     {
         final BoundingBox bBox = new BoundingBox();
         
+        TraciValue value = new TraciValue(bBox);
+        
         if (blockNode != null)
         {
-            blockNode.eval(context.newEntity(Entities.makeEntity(bBox)));
+            final Entity entity = Entities.makeEntity(bBox);
+            blockNode.eval(context.newEntity(entity));
+            value = entity.getValue();
+            assert bBox == value.getObject();
         }
         
-        return new TraciValue(bBox);
+        return value;
     }
 }
