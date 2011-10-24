@@ -2,7 +2,6 @@ package traci.model.material;
 
 import traci.math.Transformation;
 import traci.model.material.pigment.Pigment;
-import traci.model.material.pigment.Solid;
 import traci.util.WeakCache;
 
 public class Material
@@ -28,14 +27,22 @@ public class Material
     
     public Material transform(final Transformation transformation)
     {
-        final Pigment newPigment = texture.pigment.transform(transformation);
-        return make(Texture.make(newPigment, texture.finish));
+        return Material.make(texture.transform(transformation));
     }
     
-    public Material setColor(final Color newColor)
+    public Material setTexture(final Texture newTexture)
     {
-        final Solid newPigment = Solid.make(newColor);
-        return Material.make(Texture.make(newPigment, texture.finish));
+        return Material.make(texture);
+    }
+    
+    public Material setPigment(final Pigment newPigment)
+    {
+        return Material.make(texture.setPigment(newPigment));
+    }
+    
+    public Material setFinish(final Finish newFinish)
+    {
+        return Material.make(texture.setFinish(newFinish));
     }
     
     @Override

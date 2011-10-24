@@ -12,7 +12,7 @@ import traci.gui.MultiDrawArea;
 import traci.gui.PngDrawArea;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
-import traci.lang.interpreter.Entity;
+import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.node.BlockNode;
 import traci.lang.parser.TraciLexer;
 import traci.lang.parser.TraciParser;

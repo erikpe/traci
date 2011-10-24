@@ -3,8 +3,10 @@ package traci.model.shape.primitive;
 import traci.math.Transformation;
 import traci.math.Transformations;
 import traci.math.Vector;
-import traci.model.material.Color;
+import traci.model.material.Finish;
 import traci.model.material.Material;
+import traci.model.material.Texture;
+import traci.model.material.pigment.Pigment;
 import traci.model.shape.Shape;
 import traci.render.Ray2;
 
@@ -62,9 +64,27 @@ public abstract class Primitive extends Shape
     }
     
     @Override
-    public void setColor(final Color color)
+    public void setMaterial(final Material newMaterial)
     {
-        material = material.setColor(color);
+        material = newMaterial;
+    }
+    
+    @Override
+    public void setTexture(final Texture texture)
+    {
+        material = material.setTexture(texture);
+    }
+    
+    @Override
+    public void setPigment(final Pigment pigment)
+    {
+        material = material.setPigment(pigment);
+    }
+    
+    @Override
+    public void setFinish(final Finish finish)
+    {
+        material = material.setFinish(finish);
     }
     
     public Material getMaterial()

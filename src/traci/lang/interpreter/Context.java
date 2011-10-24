@@ -3,6 +3,8 @@ package traci.lang.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
+import traci.lang.interpreter.Entities.Entity;
+
 public class Context
 {
     private final Map<String, Function> functions;

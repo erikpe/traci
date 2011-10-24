@@ -5,7 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import traci.math.Transformation;
-import traci.model.material.Color;
+import traci.model.material.Finish;
+import traci.model.material.Material;
+import traci.model.material.Texture;
+import traci.model.material.pigment.Pigment;
 import traci.model.shape.BoundingBox;
 import traci.model.shape.Shape;
 
@@ -59,11 +62,38 @@ public abstract class Csg extends Shape implements Iterable<Shape>
     }
     
     @Override
-    public void setColor(final Color color)
+    public void setMaterial(final Material material)
     {
         for (final Shape shape : shapes)
         {
-            shape.setColor(color);
+            shape.setMaterial(material);
+        }
+    }
+    
+    @Override
+    public void setTexture(final Texture texture)
+    {
+        for (final Shape shape : shapes)
+        {
+            shape.setTexture(texture);
+        }
+    }
+    
+    @Override
+    public void setPigment(final Pigment pigment)
+    {
+        for (final Shape shape : shapes)
+        {
+            shape.setPigment(pigment);
+        }
+    }
+    
+    @Override
+    public void setFinish(final Finish finish)
+    {
+        for (final Shape shape : shapes)
+        {
+            shape.setFinish(finish);
         }
     }
     

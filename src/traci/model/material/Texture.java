@@ -1,8 +1,8 @@
 package traci.model.material;
 
+import traci.math.Transformation;
 import traci.model.material.pigment.Pigment;
 import traci.util.WeakCache;
-
 
 public class Texture
 {
@@ -24,7 +24,22 @@ public class Texture
     
     public static Texture getDefault()
     {
-        return make(Pigment.getDefault(), Finish.getDefault());
+        return Texture.make(Pigment.getDefault(), Finish.getDefault());
+    }
+    
+    public Texture transform(final Transformation transformation)
+    {
+        return Texture.make(pigment.transform(transformation), finish);
+    }
+    
+    public Texture setPigment(final Pigment newPigment)
+    {
+        return Texture.make(newPigment, finish);
+    }
+    
+    public Texture setFinish(final Finish newFinish)
+    {
+        return Texture.make(pigment, newFinish);
     }
     
     @Override
