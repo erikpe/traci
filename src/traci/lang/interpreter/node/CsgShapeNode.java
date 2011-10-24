@@ -58,7 +58,7 @@ public class CsgShapeNode implements TraciNode
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(csg);
-            blockNode.eval(context.newEntity(Entities.makeEntity(csg)));
+            blockNode.eval(context.newEntity(entity));
             value = entity.getValue();
             assert csg == value.getObject();
         }

@@ -83,7 +83,7 @@ public class PrimitiveShapeNode implements TraciNode
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(value.getObject());
-            blockNode.eval(context.newEntity(Entities.makeEntity(primitive)));
+            blockNode.eval(context.newEntity(entity));
             value = entity.getValue();
             assert primitive == value.getObject();
         }
