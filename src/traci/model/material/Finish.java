@@ -33,10 +33,14 @@ public class Finish
     @Override
     public int hashCode()
     {
-        return Double.valueOf(specCoeff).hashCode() ^
-               Double.valueOf(diffCoeff).hashCode() ^
-               Double.valueOf(shininess).hashCode() ^
-               Double.valueOf(reflectiveness).hashCode();
+        int hash = 0;
+        
+        hash = 31 * hash + Double.valueOf(specCoeff).hashCode();
+        hash = 31 * hash + Double.valueOf(diffCoeff).hashCode();
+        hash = 31 * hash + Double.valueOf(shininess).hashCode();
+        hash = 31 * hash + Double.valueOf(reflectiveness).hashCode();
+        
+        return hash;
     }
     
     @Override
@@ -57,9 +61,9 @@ public class Finish
         
         final Finish otherFinish = (Finish) other;
         
-        return specCoeff == otherFinish.specCoeff &&
-               diffCoeff == otherFinish.diffCoeff &&
-               shininess == otherFinish.shininess &&
-               reflectiveness == otherFinish.reflectiveness;
+        return Double.valueOf(specCoeff).equals(Double.valueOf(otherFinish.specCoeff)) &&
+               Double.valueOf(diffCoeff).equals(Double.valueOf(otherFinish.diffCoeff)) &&
+               Double.valueOf(shininess).equals(Double.valueOf(otherFinish.shininess)) &&
+               Double.valueOf(reflectiveness).equals(Double.valueOf(otherFinish.reflectiveness));
     }
 }

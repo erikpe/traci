@@ -59,4 +59,31 @@ public class Transformation
     {
         return mat.mulNormal(vec);
     }
+    
+    @Override
+    public int hashCode()
+    {
+        return 31 * mat.hashCode() + invMat.hashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        else if (other == this)
+        {
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
+        }
+        
+        final Transformation otherTransformation = (Transformation) other;
+        
+        return mat.equals(otherTransformation.mat) && invMat.equals(otherTransformation.invMat);
+    }
 }

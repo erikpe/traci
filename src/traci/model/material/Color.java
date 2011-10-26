@@ -91,9 +91,13 @@ public class Color
     @Override
     public int hashCode()
     {
-        return Double.valueOf(r).hashCode() ^
-               Double.valueOf(g).hashCode() ^
-               Double.valueOf(b).hashCode();
+        int hash = 0;
+        
+        hash = 31 * hash + Double.valueOf(r).hashCode();
+        hash = 31 * hash + Double.valueOf(g).hashCode();
+        hash = 31 * hash + Double.valueOf(b).hashCode();
+        
+        return hash;
     }
     
     @Override
@@ -114,9 +118,9 @@ public class Color
         
         final Color otherColor = (Color) other;
         
-        return r == otherColor.r &&
-               g == otherColor.g &&
-               b == otherColor.b;
+        return Double.valueOf(r).equals(Double.valueOf(otherColor.r)) &&
+               Double.valueOf(g).equals(Double.valueOf(otherColor.g)) &&
+               Double.valueOf(b).equals(Double.valueOf(otherColor.b));
     }
     
     @Override

@@ -220,6 +220,48 @@ public class Matrix
     }
     
     @Override
+    public int hashCode()
+    {
+        int hash = 0;
+        
+        for (int i = 0; i < data.length; ++i)
+        {
+            hash = 31 * hash + Double.valueOf(data[i]).hashCode();
+        }
+        
+        return hash;
+    }
+    
+    @Override
+    public boolean equals(final Object other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        else if (other == this)
+        {
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
+        }
+        
+        final Matrix otherMatrix = (Matrix) other;
+        
+        for (int i = 0; i < data.length; ++i)
+        {
+            if (!Double.valueOf(data[i]).equals(Double.valueOf(otherMatrix.data[i])))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    @Override
     public String toString()
     {
         final StringBuilder buf = new StringBuilder();
