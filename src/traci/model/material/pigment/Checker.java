@@ -6,7 +6,6 @@ import traci.model.material.Color;
 public class Checker extends Pattern
 {
     private final Color color1;
-
     private final Color color2;
 
     public Checker(final Color color1, final Color color2)

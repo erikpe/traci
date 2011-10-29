@@ -12,6 +12,5 @@ public abstract class Pigment
     }
 
     public abstract Pigment transform(final Transformation transformation);
-
     public abstract Color getColor(final Vector p);
 }

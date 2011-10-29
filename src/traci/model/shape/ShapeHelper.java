@@ -14,18 +14,18 @@ public class ShapeHelper
         else if (shape instanceof Csg)
         {
             int numPrimitives = 0;
-            
+
             for (final Shape subShape : ((Csg) shape))
             {
                 numPrimitives += numPrimitives(subShape);
             }
-            
+
             return numPrimitives;
         }
-        
+
         return 0;
     }
-    
+
     public static int numCsgs(final Shape shape)
     {
         if (shape instanceof Primitive)
@@ -35,18 +35,18 @@ public class ShapeHelper
         else if (shape instanceof Csg)
         {
             int numCsgs = 1;
-            
+
             for (final Shape subShape : ((Csg) shape))
             {
                 numCsgs += numCsgs(subShape);
             }
-            
+
             return numCsgs;
         }
-        
+
         return 0;
     }
-    
+
     public static int numBBoxes(final Shape shape)
     {
         if (shape instanceof Primitive)
@@ -57,15 +57,15 @@ public class ShapeHelper
         {
             final Csg csg = (Csg) shape;
             int numBBoxes = csg.getBoundingBox() == null ? 0 : 1;
-            
+
             for (final Shape subShape : csg)
             {
                 numBBoxes += numBBoxes(subShape);
             }
-            
+
             return numBBoxes;
         }
-        
+
         return 0;
     }
 }

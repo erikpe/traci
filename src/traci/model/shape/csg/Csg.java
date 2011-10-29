@@ -16,31 +16,31 @@ public abstract class Csg extends Shape implements Iterable<Shape>
 {
     protected List<Shape> shapes;
     protected int numShapes;
-    
+
     protected BoundingBox bBox;
-    
+
     public Csg()
     {
         this.shapes = new ArrayList<Shape>();
         this.numShapes = this.shapes.size();
     }
-    
+
     public void add(final Shape shape)
     {
         shapes.add(shape);
         numShapes = shapes.size();
     }
-    
+
     public BoundingBox getBoundingBox()
     {
         return bBox;
     }
-    
+
     public void setBoundingBox(final BoundingBox bBox)
     {
         this.bBox = bBox;
     }
-    
+
     @Override
     public void transform(final Transformation tr)
     {
@@ -48,19 +48,19 @@ public abstract class Csg extends Shape implements Iterable<Shape>
         {
             bBox.transform(tr);
         }
-        
+
         for (final Shape shape : shapes)
         {
             shape.transform(tr);
         }
     }
-    
+
     @Override
     public Iterator<Shape> iterator()
     {
         return shapes.iterator();
     }
-    
+
     @Override
     public void setMaterial(final Material material)
     {
@@ -69,7 +69,7 @@ public abstract class Csg extends Shape implements Iterable<Shape>
             shape.setMaterial(material);
         }
     }
-    
+
     @Override
     public void setTexture(final Texture texture)
     {
@@ -78,7 +78,7 @@ public abstract class Csg extends Shape implements Iterable<Shape>
             shape.setTexture(texture);
         }
     }
-    
+
     @Override
     public void setPigment(final Pigment pigment)
     {
@@ -87,7 +87,7 @@ public abstract class Csg extends Shape implements Iterable<Shape>
             shape.setPigment(pigment);
         }
     }
-    
+
     @Override
     public void setFinish(final Finish finish)
     {
@@ -96,19 +96,19 @@ public abstract class Csg extends Shape implements Iterable<Shape>
             shape.setFinish(finish);
         }
     }
-    
+
     @Override
     public Object clone()
     {
         final Csg res = (Csg) super.clone();
         res.shapes = new ArrayList<Shape>();
         res.numShapes = res.shapes.size();
-        
+
         for (final Shape shape : shapes)
         {
             res.add((Shape) shape.clone());
         }
-        
+
         return res;
     }
 }

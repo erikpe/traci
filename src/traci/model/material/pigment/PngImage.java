@@ -94,8 +94,7 @@ public class PngImage implements NonUniformPigment, Interpolatable
 
         y = 1.0 - y;
 
-        return interpolator.interpolate(this, x * (getWidth() - 1),
-                y * (getHeight() - 1));
+        return interpolator.interpolate(this, x * (getWidth() - 1), y * (getHeight() - 1));
     }
 
     @Override

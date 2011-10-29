@@ -11,21 +11,20 @@ import traci.render.Ray2;
 public abstract class Shape implements Transformable, Cloneable
 {
     public static final double EPSILON = 0.000001;
-    
+
     public abstract Ray2 shootRay2(final Vector p, final Vector dir);
-    
+
     public abstract void setMaterial(final Material material);
     public abstract void setTexture(final Texture texture);
     public abstract void setPigment(final Pigment pigment);
     public abstract void setFinish(final Finish finish);
-    
+
     @Override
     public Object clone()
     {
         try
         {
-            final Shape res = (Shape) super.clone();
-            return res;
+            return super.clone();
         }
         catch (final CloneNotSupportedException e)
         {

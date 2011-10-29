@@ -63,15 +63,13 @@ public class Transformations
             final double cosAlpha = vecNorm.z() / yzLen;
             final double sinAlpha = vecNorm.y() / yzLen;
 
-            res = res.compose(make(Matrix.rotx(sinAlpha, cosAlpha), Matrix
-                    .rotx(-sinAlpha, cosAlpha)));
+            res = res.compose(make(Matrix.rotx(sinAlpha, cosAlpha), Matrix.rotx(-sinAlpha, cosAlpha)));
         }
 
         final double cosBeta = yzLen;
         final double sinBeta = -vecNorm.x();
 
-        res = res.compose(make(Matrix.roty(sinBeta, cosBeta), Matrix.roty(
-                -sinBeta, cosBeta)));
+        res = res.compose(make(Matrix.roty(sinBeta, cosBeta), Matrix.roty(-sinBeta, cosBeta)));
 
         return res;
     }

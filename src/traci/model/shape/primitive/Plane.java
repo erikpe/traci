@@ -11,7 +11,7 @@ public class Plane extends Primitive
     {
         return Vector.UNIT_Y;
     }
-    
+
     /**
      * The plane is defined by the equation y = 0.
      */
@@ -19,14 +19,14 @@ public class Plane extends Primitive
     public Ray2 primitiveShootRay2(final Vector p, final Vector dir)
     {
         final double t = -p.y() / dir.y();
-        
+
         if (t > -EPSILON)
         {
             final Ray2 ray = Ray2.make();
             ray.add(t, this, Type.INTERSECT);
             return ray;
         }
-        
+
         return null;
     }
 }

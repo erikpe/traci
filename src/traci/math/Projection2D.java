@@ -39,8 +39,7 @@ public abstract class Projection2D
             final double d = Math.sqrt(p.x() * p.x() + p.z() * p.z());
             final double cosAlpha = p.x() / d;
 
-            final double alpha = (p.z() > 0.0 ? Math.acos(cosAlpha)
-                    : PI2 - Math.acos(cosAlpha));
+            final double alpha = (p.z() > 0.0 ? Math.acos(cosAlpha) : PI2 - Math.acos(cosAlpha));
 
             return Vector2D.make(alpha / PI2, p.y());
         }

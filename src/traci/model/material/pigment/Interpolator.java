@@ -7,8 +7,7 @@ public abstract class Interpolator
     public static Interpolator NEAREST_NEIGHBOUR = new Interpolator()
     {
         @Override
-        public Color interpolate(final Interpolatable image, final double x,
-                final double y)
+        public Color interpolate(final Interpolatable image, final double x, final double y)
         {
             return image.getAt(Math.round(x), Math.round(y));
         }
@@ -55,6 +54,5 @@ public abstract class Interpolator
         }
     };
 
-    public abstract Color interpolate(final Interpolatable image,
-            final double x, final double y);
+    public abstract Color interpolate(final Interpolatable image, final double x, final double y);
 }

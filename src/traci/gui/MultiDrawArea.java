@@ -25,7 +25,6 @@ public class MultiDrawArea extends AbstractDrawArea
     {
         assert width() == area.width();
         assert height() == area.height();
-
         areas.add(area);
     }
 

@@ -12,6 +12,6 @@ public class NullDrawArea extends AbstractDrawArea
     @Override
     public void draw(final long x, final long y, final Color color)
     {
-    	// Do nothing by default
+        // Do nothing by default
     }
 }

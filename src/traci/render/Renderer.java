@@ -23,9 +23,8 @@ public class Renderer implements BlockRenderer
     private final Settings settings;
     private final DrawArea area;
     private final int numThreads;
-    
-    private Renderer(final Scene scene, final Settings settings,
-            final DrawArea area, final int numThreads)
+
+    private Renderer(final Scene scene, final Settings settings, final DrawArea area, final int numThreads)
     {
         this.scene = scene;
         this.camera = scene.camera;
@@ -33,13 +32,12 @@ public class Renderer implements BlockRenderer
         this.area = area;
         this.numThreads = numThreads;
     }
-    
-    public static void renderScene(final Scene scene, final Settings settings,
-            final DrawArea area, final int numThreads)
+
+    public static void renderScene(final Scene scene, final Settings settings, final DrawArea area, final int numThreads)
     {
         new Renderer(scene, settings, area, numThreads).renderScene();
     }
-    
+
     private void renderScene()
     {
         System.out.println("> Rendering scene consisting of "
@@ -47,7 +45,7 @@ public class Renderer implements BlockRenderer
                 + " primitive objects, " + ShapeHelper.numCsgs(scene.shape)
                 + " CSG objects and " + ShapeHelper.numBBoxes(scene.shape)
                 + " bounding boxes");
-        
+
         /**
          * To get determinism, each {@link WorkBlock} gets its own
          * {@link Random} source, each block with a deterministic seed. In this
@@ -55,7 +53,7 @@ public class Renderer implements BlockRenderer
          * deterministic result.
          */
         final Random seedSource = new Random(0);
-        
+
         /**
          * Divide the area into work blocks and put them on a work queue
          */
@@ -66,27 +64,24 @@ public class Renderer implements BlockRenderer
             {
                 final int width = Math.min(settings.workBlockWidth, area.width() - x);
                 final int height = Math.min(settings.workBlockHeight, area.height() - y);
-                
-                workQueue.add(new WorkBlock(x, y, width, height, new Random(
-                        seedSource.nextLong())));
+
+                workQueue.add(new WorkBlock(x, y, width, height, new Random(seedSource.nextLong())));
             }
         }
-        
+
         /**
          * Create all rendering threads
          */
-        final List<RenderingThread> renderingThreads =
-                new ArrayList<RenderingThread>();
+        final List<RenderingThread> renderingThreads = new ArrayList<RenderingThread>();
+
         for (int i = 0; i < numThreads; ++i)
         {
             renderingThreads.add(new RenderingThread(this, workQueue));
         }
-        
-        System.out.println("> Spawning " + numThreads
-                + " rendering thread" + (numThreads == 1 ? "" : "s")
-                + " working on " + workQueue.size()
-                + " blocks ...");
-        
+
+        System.out.println("> Spawning " + numThreads + " rendering thread" + (numThreads == 1 ? "" : "s")
+                + " working on " + workQueue.size() + " blocks ...");
+
         /**
          * Start the threads
          */
@@ -96,7 +91,7 @@ public class Renderer implements BlockRenderer
         {
             thread.start();
         }
-        
+
         /**
          * Wait for all threads to finish
          */
@@ -112,22 +107,22 @@ public class Renderer implements BlockRenderer
                 System.exit(-1);
             }
         }
-        
+
         final long stopTime = System.currentTimeMillis();
         area.finish();
-        
+
         System.out.println("> Successfully rendered scene in "
                 + ((stopTime - startTime) / 1000.0)
                 + " seconds.");
-        
+
         final long hit = BoundingBox.hit.get();
         final long miss = BoundingBox.miss.get();
-        
+
         System.out.println("> Bounding-Box discard ratio: "
-                + ((100 * miss) / (miss + hit)) + "% (" + miss + "/"
-                + (miss + hit) + ")");
+                + ((100 * miss) / (miss + hit)) + "% (" + miss + "/" + (miss + hit) + ")");
     }
-    
+
+    @Override
     public void renderBlock(final WorkBlock block)
     {
         for (long y = block.y; y < block.y + block.height; ++y)
@@ -138,11 +133,11 @@ public class Renderer implements BlockRenderer
             }
         }
     }
-    
+
     private void renderPixel(final long x, final long y, final WorkBlock block)
     {
         Color color = Color.BLACK;
-        
+
         for (int aay = -settings.aaLevel; aay <= settings.aaLevel; ++aay)
         {
             for (int aax = -settings.aaLevel; aax <= settings.aaLevel; ++aax)
@@ -151,19 +146,17 @@ public class Renderer implements BlockRenderer
                 {
                     final double subX = aax / (settings.aaLevel * 2.0 + 1);
                     final double subY = aay / (settings.aaLevel * 2.0 + 1);
-                    
-                    double lookX = (x + subX) / (area.width() - 1); // [0.0 .. 1.0]
-                    double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
-                    
+
+                    final double lookX = (x + subX) / (area.width() - 1); // [0.0 .. 1.0]
+                    final double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
+
                     final Vector[] cam = camera.getLocAndDir(lookX, lookY, settings, block.randomSource);
-                    
                     final Color rayColor = Raytrace.raytrace(scene, 5, cam[0], cam[1]);
-                    
                     color = color.add(rayColor);
                 }
             }
         }
-        
+
         area.draw(x, y, color.div(settings.focalBlurSamples * (settings.aaLevel * 2 + 1) * (settings.aaLevel * 2 + 1)));
     }
 }
