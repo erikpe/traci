@@ -8,7 +8,7 @@ public class NullDrawArea extends AbstractDrawArea
     {
         super(width, height);
     }
-    
+
     @Override
     public void draw(final long x, final long y, final Color color)
     {

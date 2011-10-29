@@ -9,49 +9,48 @@ import javax.swing.JPanel;
 
 import traci.model.material.Color;
 
+@SuppressWarnings("serial")
 public class DynamicJPanelDrawArea extends JPanel implements DrawArea
 {
-    private static final long serialVersionUID = 7195706708596046785L;
-    
     /**
      * Redraw period in milliseconds.
      */
-    private static final long REDRAW_PERIOD = 100;
-    
+    private static final long REDRAW_PERIOD_MS = 250;
+
     private final BufferedImageDrawArea area;
-    
+
     private Timer redrawTimer = null;
-    
+
     public DynamicJPanelDrawArea(final int width, final int height)
     {
         area = new BufferedImageDrawArea(width, height);
     }
-    
+
     @Override
     public void draw(final long x, final long y, final Color color)
     {
         area.draw(x, y, color);
     }
-    
+
     @Override
     public int width()
     {
         return area.width();
     }
-    
+
     @Override
     public int height()
     {
         return area.height();
     }
-    
+
     @Override
     public void start()
     {
         assert redrawTimer == null;
-        
+
         area.start();
-        
+
         final TimerTask task = new TimerTask()
         {
             @Override
@@ -60,11 +59,11 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
                 repaint();
             }
         };
-        
+
         redrawTimer = new Timer();
-        redrawTimer.schedule(task, 0, REDRAW_PERIOD);
+        redrawTimer.schedule(task, 0, REDRAW_PERIOD_MS);
     }
-    
+
     @Override
     public void finish()
     {
@@ -73,12 +72,12 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
             redrawTimer.cancel();
             redrawTimer = null;
         }
-        
+
         area.finish();
-        
+
         repaint();
     }
-    
+
     @Override
     public void paintComponent(final Graphics g)
     {
