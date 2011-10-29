@@ -6,15 +6,15 @@ import traci.model.material.Color;
 public class Checker extends Pattern
 {
     private final Color color1;
-    
+
     private final Color color2;
-    
+
     public Checker(final Color color1, final Color color2)
     {
         this.color1 = color1;
         this.color2 = color2;
     }
-    
+
     @Override
     public Color getColorTransformed(final Vector p)
     {
@@ -22,7 +22,7 @@ public class Checker extends Pattern
         {
             return color1;
         }
-        
+
         return color2;
     }
 }

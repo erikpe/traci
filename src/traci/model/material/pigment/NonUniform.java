@@ -10,22 +10,22 @@ public class NonUniform extends Pigment
     {
         public Color getColorTransformed(final Vector p);
     }
-    
+
     private final NonUniformPigment nonUniformPigment;
     private final Transformation transformation;
-    
+
     public NonUniform(final Transformation transformation, final NonUniformPigment nonUniformPigment)
     {
         this.nonUniformPigment = nonUniformPigment;
         this.transformation = transformation;
     }
-    
+
     @Override
-    public NonUniform transform(Transformation tr)
+    public NonUniform transform(final Transformation tr)
     {
         return new NonUniform(transformation.compose(tr), nonUniformPigment);
     }
-    
+
     @Override
     public Color getColor(final Vector p)
     {

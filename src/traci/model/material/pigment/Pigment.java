@@ -10,8 +10,8 @@ public abstract class Pigment
     {
         return Solid.make(Color.WHITE);
     }
-    
+
     public abstract Pigment transform(final Transformation transformation);
-    
+
     public abstract Color getColor(final Vector p);
 }

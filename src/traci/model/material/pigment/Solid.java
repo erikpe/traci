@@ -8,37 +8,37 @@ import traci.util.WeakCache;
 public class Solid extends Pigment
 {
     private static final WeakCache<Solid> cache = new WeakCache<Solid>();
-    
+
     public final Color color;
-    
+
     private Solid(final Color color)
     {
         this.color = color;
     }
-    
+
     public static Solid make(final Color color)
     {
         return cache.get(new Solid(color));
     }
-    
+
     @Override
     public Color getColor(final Vector p)
     {
         return color;
     }
-    
+
     @Override
     public Solid transform(final Transformation transformation)
     {
         return this;
     }
-    
+
     @Override
     public int hashCode()
     {
         return color.hashCode();
     }
-    
+
     @Override
     public boolean equals(final Object other)
     {
@@ -54,9 +54,9 @@ public class Solid extends Pigment
         {
             return false;
         }
-        
+
         final Solid otherSolid = (Solid) other;
-        
+
         return color.equals(otherSolid.color);
     }
 }
