@@ -20,41 +20,41 @@ public class CsgShapeNode implements TraciNode
         difference,
         intersection
     }
-    
+
     private final CsgType type;
     private final BlockNode blockNode;
-    
+
     public CsgShapeNode(final String shapeType, final List<TraciNode> argNodes, final BlockNode blockNode)
     {
         this.type = CsgType.valueOf(shapeType);
         this.blockNode = blockNode;
     }
-    
+
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException
     {
         final Csg csg;
-        
+
         switch (type)
         {
         case union:
             csg = new Union();
             break;
-            
+
         case difference:
             csg = new Difference();
             break;
-            
+
         case intersection:
             csg = new Intersection();
             break;
-            
+
         default:
             throw new RuntimeException();
         }
-        
+
         TraciValue value = new TraciValue(csg);
-        
+
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(csg);
@@ -62,7 +62,7 @@ public class CsgShapeNode implements TraciNode
             value = entity.getValue();
             assert csg == value.getObject();
         }
-        
+
         return value;
     }
 }

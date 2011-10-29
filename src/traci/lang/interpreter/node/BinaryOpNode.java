@@ -13,7 +13,7 @@ public class BinaryOpNode implements TraciNode
     private final TraciNode aNode;
     private final TraciNode bNode;
     private final Token token;
-    
+
     public BinaryOpNode(final Op op, final TraciNode aNode, final TraciNode bNode, final Token token)
     {
         this.op = op;
@@ -21,17 +21,18 @@ public class BinaryOpNode implements TraciNode
         this.bNode = bNode;
         this.token = token;
     }
-    
+
+    @Override
     public TraciValue eval(final Context context) throws FunctionReturnException
     {
         final TraciValue a = aNode.eval(context);
         final TraciValue b = bNode.eval(context);
-        
+
         final TraciValue.Type aType = a.getType();
         final TraciValue.Type bType = b.getType();
-        
+
         final Object res;
-        
+
         switch (aType)
         {
         case NUMBER:
@@ -42,7 +43,7 @@ public class BinaryOpNode implements TraciNode
             default:     res = null; break;
             }
             break;
-            
+
         case VECTOR:
             switch (bType)
             {
@@ -51,7 +52,7 @@ public class BinaryOpNode implements TraciNode
             default:     res = null; break;
             }
             break;
-            
+
         case BOOLEAN:
             switch (bType)
             {
@@ -59,22 +60,22 @@ public class BinaryOpNode implements TraciNode
             default :     res = null; break;
             }
             break;
-            
+
         default:
             res = null;
             break;
         }
-        
+
         if (res == null)
         {
             System.out.println("Error: Trying to evaluate expression `" + aType.toString() + " " + token.getText() + " "
                     + bType.toString() + "' at position " + token.getLine() + ":" + token.getCharPositionInLine() + ".");
             throw new RuntimeException();
         }
-        
+
         return new TraciValue(res);
     }
-    
+
     private Object calc(final Double a, final Double b)
     {
         switch (op)
@@ -92,7 +93,7 @@ public class BinaryOpNode implements TraciNode
         default: return null;
         }
     }
-    
+
     private Object calc(final Double a, final Vector b)
     {
         switch (op)
@@ -101,7 +102,7 @@ public class BinaryOpNode implements TraciNode
         default: return null;
         }
     }
-    
+
     private Object calc(final Vector a, final Double b)
     {
         switch (op)
@@ -110,7 +111,7 @@ public class BinaryOpNode implements TraciNode
         default: return null;
         }
     }
-    
+
     private Object calc(final Vector a, final Vector b)
     {
         switch (op)
@@ -120,7 +121,7 @@ public class BinaryOpNode implements TraciNode
         default: return null;
         }
     }
-    
+
     private Object calc(final Boolean a, final Boolean b)
     {
         switch (op)

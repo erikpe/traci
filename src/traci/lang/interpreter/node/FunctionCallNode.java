@@ -15,34 +15,34 @@ public class FunctionCallNode implements TraciNode
     private final String id;
     private final List<TraciNode> argNodes;
     private final BlockNode blockNode;
-    
+
     public FunctionCallNode(final String id, final List<TraciNode> argNodes, final BlockNode blockNode)
     {
         this.id = id;
         this.argNodes = argNodes;
         this.blockNode = blockNode;
     }
-    
+
     @Override
-    public TraciValue eval(Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException
     {
         final Function functionNode = context.getFunction(id);
         final List<TraciValue> args = new ArrayList<TraciValue>();
-        
+
         for (final TraciNode argNode : argNodes)
         {
             args.add(argNode.eval(context));
         }
-        
+
         TraciValue value = functionNode.invoke(context, args);
-        
+
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(value.getObject());
             blockNode.eval(context.newEntity(entity));
             value = entity.getValue();
         }
-        
+
         return value;
     }
 }

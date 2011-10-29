@@ -35,7 +35,7 @@ public class TestParser
         {
             sb.append("    ");
         }
-        
+
         if (tree.getChildCount() > 0)
         {
             sb.append('(');
@@ -51,60 +51,60 @@ public class TestParser
             sb.append(tree.getText());
         }
     }
-    
-    public static void main(String[] args) throws Exception
+
+    public static void main(final String[] args) throws Exception
     {
         final int width = 1600;
         final int height = 1200;
         final String filename = "out.png";
-        
+
         final DynamicJPanelDrawArea visibleDrawArea = new DynamicJPanelDrawArea(width, height);
         final MainWindow window = new MainWindow(visibleDrawArea);
         window.setVisible(true);
-        
+
         final PngDrawArea pngDrawArea = new PngDrawArea(width, height, filename);
         final MultiDrawArea multiDrawArea = new MultiDrawArea(pngDrawArea);
         multiDrawArea.add(visibleDrawArea);
-        
+
         double start = System.currentTimeMillis();
-        ANTLRFileStream input = new ANTLRFileStream("src/traci/lang/input.txt");
-        TraciLexer lexer = new TraciLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        TraciParser parser = new TraciParser(tokens);
-        CommonTree tree = (CommonTree) parser.scene().getTree();
+        final ANTLRFileStream input = new ANTLRFileStream("src/traci/lang/input.txt");
+        final TraciLexer lexer = new TraciLexer(input);
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final TraciParser parser = new TraciParser(tokens);
+        final CommonTree tree = (CommonTree) parser.scene().getTree();
         double stop = System.currentTimeMillis();
-        
+
         System.out.println("Parsing: " + (stop - start) + " ms.");
-        
+
         System.out.println(tree.toStringTree());
         final StringBuilder sb = new StringBuilder();
         //prettyPrint(tree, 0, sb);
         //System.out.println(sb.toString());
-        
+
         start = System.currentTimeMillis();
-        CommonTreeNodeStream nodes = new CommonTreeNodeStream(tree);
-        TraciTreeWalker walker = new TraciTreeWalker(nodes);
-        BlockNode bn = walker.block();
+        final CommonTreeNodeStream nodes = new CommonTreeNodeStream(tree);
+        final TraciTreeWalker walker = new TraciTreeWalker(nodes);
+        final BlockNode bn = walker.block();
         stop = System.currentTimeMillis();
         System.out.println("TreeWalker: " + (stop - start) + " ms.");
-        
+
         start = System.currentTimeMillis();
         final Union rootUnion = new Union();
         final Entity entity = Entities.makeEntity(rootUnion);
         bn.eval(Context.newRootContext(entity));
         stop = System.currentTimeMillis();
         System.out.println("Eval: " + (stop - start) + " ms.");
-        
+
         final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*50));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
-        
+
         final Vector camLocation = Vector.make(-10, 15, 15);
         final Vector camLookAt = Vector.make(8, 2, 0);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y);
         final Scene scene = new Scene(rootUnion, cam);
         scene.addLight(light);
         scene.addLight(light2);
-        
+
         Renderer.renderScene(scene, new Settings(), multiDrawArea, 8);
 
     }

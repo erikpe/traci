@@ -12,19 +12,19 @@ import traci.model.shape.BoundingBox;
 public class BBoxNode implements TraciNode
 {
     private final BlockNode blockNode;
-    
+
     public BBoxNode(final List<TraciNode> argNodes, final BlockNode blockNode)
     {
         this.blockNode = blockNode;
     }
-    
+
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException
     {
         final BoundingBox bBox = new BoundingBox();
-        
+
         TraciValue value = new TraciValue(bBox);
-        
+
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(bBox);
@@ -32,7 +32,7 @@ public class BBoxNode implements TraciNode
             value = entity.getValue();
             assert bBox == value.getObject();
         }
-        
+
         return value;
     }
 }

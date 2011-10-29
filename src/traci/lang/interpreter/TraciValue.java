@@ -26,14 +26,14 @@ public class TraciValue implements Cloneable
         FINISH,
         PIGMENT
     };
-    
+
     private final Object value;
     private final Type type;
-    
+
     public TraciValue(final Object obj)
     {
         this.value = obj;
-        
+
         if (obj instanceof Double)
         {
             type = Type.NUMBER;
@@ -83,83 +83,83 @@ public class TraciValue implements Cloneable
             throw new RuntimeException();
         }
     }
-    
+
     public Type getType()
     {
         return type;
     }
-    
+
     public Object getObject()
     {
         return value;
     }
-    
+
     public Double getNumber()
     {
         return (Double) value;
     }
-    
+
     public Boolean getBoolean()
     {
         return (Boolean) value;
     }
-    
+
     public Vector getVector()
     {
         return (Vector) value;
     }
-    
+
     public Shape getShape()
     {
         return (Shape) value;
     }
-    
+
     public Primitive getPrimitive()
     {
         return (Primitive) value;
     }
-    
+
     public Csg getCsg()
     {
         return (Csg) value;
     }
-    
+
     public BoundingBox getBoundingBox()
     {
         return (BoundingBox) value;
     }
-    
+
     public Transformation getTransformation()
     {
         return (Transformation) value;
     }
-    
+
     public Material getMaterial()
     {
         return (Material) value;
     }
-    
+
     public Texture getTexture()
     {
         return (Texture) value;
     }
-    
+
     public Finish getFinish()
     {
         return (Finish) value;
     }
-    
+
     public Pigment getPigment()
     {
         return (Pigment) value;
     }
-    
+
     @Override
     public String toString()
     {
         return value.toString();
     }
-    
+
     @Override
     public Object clone()
     {
@@ -174,16 +174,16 @@ public class TraciValue implements Cloneable
         case FINISH:
         case PIGMENT:
             return this;
-            
+
         case PRIMITIVE_SHAPE:
             return new TraciValue(getPrimitive().clone());
-            
+
         case CSG_SHAPE:
             return new TraciValue(getCsg().clone());
-            
+
         case BOUNDING_BOX:
             return new TraciValue(getBoundingBox().clone());
-            
+
         default:
             return null;
         }

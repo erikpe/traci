@@ -9,18 +9,18 @@ import traci.model.material.pigment.Solid;
 public class ColorNode implements TraciNode
 {
     private final TraciNode exprNode;
-    
+
     public ColorNode(final TraciNode exprNode)
     {
         this.exprNode = exprNode;
     }
-    
+
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException
     {
         final TraciValue exprValue = exprNode.eval(context);
         final Color color = Color.make(exprValue.getVector());
-        
+
         return new TraciValue(Solid.make(color));
     }
 }
