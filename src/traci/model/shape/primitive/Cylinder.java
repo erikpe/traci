@@ -2,8 +2,8 @@ package traci.model.shape.primitive;
 
 import traci.math.Transformations;
 import traci.math.Vector;
-import traci.render.Point2.Type;
-import traci.render.Ray2;
+import traci.render.Point.Type;
+import traci.render.Ray;
 
 public class Cylinder extends Primitive
 {
@@ -39,7 +39,7 @@ public class Cylinder extends Primitive
      * cylinder x^2 + z^2 = 1.
      */
     @Override
-    public Ray2 primitiveShootRay2(final Vector p, final Vector dir)
+    public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
         final double px = p.x();
         final double py = p.y();
@@ -72,7 +72,7 @@ public class Cylinder extends Primitive
 
             if (far > -EPSILON && near < far)
             {
-                final Ray2 ray = Ray2.make();
+                final Ray ray = Ray.make();
 
                 ray.add(near, this, Type.ENTER);
                 ray.add(far, this, Type.LEAVE);

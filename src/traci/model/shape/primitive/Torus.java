@@ -5,8 +5,8 @@ import java.util.Arrays;
 import traci.math.PolynomSolver;
 import traci.math.Transformations;
 import traci.math.Vector;
-import traci.render.Point2.Type;
-import traci.render.Ray2;
+import traci.render.Point.Type;
+import traci.render.Ray;
 
 public class Torus extends Primitive
 {
@@ -65,7 +65,7 @@ public class Torus extends Primitive
      * It is a special case of a {@link Quartic} surface.
      */
     @Override
-    public Ray2 primitiveShootRay2(final Vector initP, final Vector dir)
+    public Ray primitiveShootRay(final Vector initP, final Vector dir)
     {
         final Double move = move(initP, dir);
 
@@ -99,13 +99,13 @@ public class Torus extends Primitive
             return null;
         }
 
-        Ray2 ray = null;
+        Ray ray = null;
 
         Arrays.sort(roots);
 
         if (roots[1] > -0.001)
         {
-            ray = Ray2.make();
+            ray = Ray.make();
 
             ray.add(roots[0] + move, this, Type.ENTER);
             ray.add(roots[1] + move, this, Type.LEAVE);
@@ -115,7 +115,7 @@ public class Torus extends Primitive
         {
             if (ray == null)
             {
-                ray = Ray2.make();
+                ray = Ray.make();
             }
 
             ray.add(roots[2] + move, this, Type.ENTER);

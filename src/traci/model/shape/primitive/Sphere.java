@@ -1,8 +1,8 @@
 package traci.model.shape.primitive;
 
 import traci.math.Vector;
-import traci.render.Point2.Type;
-import traci.render.Ray2;
+import traci.render.Point.Type;
+import traci.render.Ray;
 
 public class Sphere extends Primitive
 {
@@ -18,7 +18,7 @@ public class Sphere extends Primitive
      * x^2 + y^2 + z^2 = 1
      */
     @Override
-    public Ray2 primitiveShootRay2(final Vector p, final Vector dir)
+    public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
         final double c = dir.dot(dir);
         final double a = 2 * p.dot(dir) / c;
@@ -36,7 +36,7 @@ public class Sphere extends Primitive
 
             if (t1 > -EPSILON && t0 < t1)
             {
-                final Ray2 ray = Ray2.make();
+                final Ray ray = Ray.make();
 
                 ray.add(t0, this, Type.ENTER);
                 ray.add(t1, this, Type.LEAVE);

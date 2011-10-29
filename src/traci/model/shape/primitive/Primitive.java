@@ -8,7 +8,7 @@ import traci.model.material.Material;
 import traci.model.material.Texture;
 import traci.model.material.pigment.Pigment;
 import traci.model.shape.Shape;
-import traci.render.Ray2;
+import traci.render.Ray;
 
 public abstract class Primitive extends Shape
 {
@@ -46,15 +46,15 @@ public abstract class Primitive extends Shape
         return normal;
     }
 
-    protected abstract Ray2 primitiveShootRay2(final Vector p, final Vector dir);
+    protected abstract Ray primitiveShootRay(final Vector p, final Vector dir);
 
     @Override
-    public Ray2 shootRay2(final Vector p, final Vector dir)
+    public Ray shootRay(final Vector p, final Vector dir)
     {
         final Vector transP = transformation.pointInv(p);
         final Vector transDir = transformation.dirInv(dir);
 
-        return primitiveShootRay2(transP, transDir);
+        return primitiveShootRay(transP, transDir);
     }
 
     @Override

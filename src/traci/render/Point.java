@@ -2,7 +2,7 @@ package traci.render;
 
 import traci.model.shape.primitive.Primitive;
 
-public class Point2
+public class Point
 {
     public static enum Type
     {
@@ -15,19 +15,19 @@ public class Point2
     public final Primitive obj;
     public final Type type;
 
-    private Point2(final double dist, final Primitive obj, final Type type)
+    private Point(final double dist, final Primitive obj, final Type type)
     {
         this.dist = dist;
         this.obj = obj;
         this.type = type;
     }
 
-    public static Point2 make(final double dist, final Primitive obj, final Type type)
+    public static Point make(final double dist, final Primitive obj, final Type type)
     {
-        return new Point2(dist, obj, type);
+        return new Point(dist, obj, type);
     }
 
-    public Point2 invert()
+    public Point invert()
     {
         Type newType = null;
 
@@ -38,7 +38,7 @@ public class Point2
         default: assert false;
         }
 
-        return Point2.make(dist, obj, newType);
+        return Point.make(dist, obj, newType);
     }
 
     @Override

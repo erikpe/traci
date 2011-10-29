@@ -15,22 +15,22 @@ public class Raytrace
         double dist = 0;
         Primitive obj = null;
 
-        final Ray2 ray2 = scene.shape.shootRay2(p, dir);
+        final Ray ray = scene.shape.shootRay(p, dir);
 
-        if (ray2 == null)
+        if (ray == null)
         {
             return Color.WHITE.mul(.5);
         }
 
-        final Point2 hit2 = ray2.first();
+        final Point hit = ray.first();
 
-        if (hit2 == null)
+        if (hit == null)
         {
             return Color.WHITE.mul(.5);
         }
 
-        dist = hit2.dist;
-        obj = hit2.obj;
+        dist = hit.dist;
+        obj = hit.obj;
 
         final Vector hitPoint = p.add(dir.mul(dist));
         final Vector normal = obj.getNormalAt(hitPoint, dir);
@@ -49,7 +49,7 @@ public class Raytrace
             final Vector toLight = light.location.sub(hitPoint);
             final Vector dirToLight = toLight.normalize();
 
-            final Ray2 lightRay2 = scene.shape.shootRay2(hitPoint, dirToLight);
+            final Ray lightRay2 = scene.shape.shootRay(hitPoint, dirToLight);
             if (lightRay2 != null && lightRay2.first() != null)
             {
                 continue;
@@ -78,8 +78,7 @@ public class Raytrace
                 final double shininess = finish.shininess;
                 final double specCoeff = finish.specCoeff;
 
-                final Color colorSpec = light.color.mul(Math.pow(cosTheta,
-                        shininess) * specCoeff * distCoeff);
+                final Color colorSpec = light.color.mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
                 colorTotal = colorTotal.add(colorSpec);
             }
         }

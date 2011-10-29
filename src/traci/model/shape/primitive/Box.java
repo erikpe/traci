@@ -1,8 +1,8 @@
 package traci.model.shape.primitive;
 
 import traci.math.Vector;
-import traci.render.Point2.Type;
-import traci.render.Ray2;
+import traci.render.Point.Type;
+import traci.render.Ray;
 
 public class Box extends Primitive
 {
@@ -34,7 +34,7 @@ public class Box extends Primitive
      * The box is bounded by the planes x = 0, x = 1, y = 0, y = 1, z = 0 and z = 1.
      */
     @Override
-    public Ray2 primitiveShootRay2(final Vector p, final Vector dir)
+    public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
         final double px = p.x();
         final double py = p.y();
@@ -64,7 +64,7 @@ public class Box extends Primitive
 
         if (far > -EPSILON && near < far)
         {
-            final Ray2 ray = Ray2.make();
+            final Ray ray = Ray.make();
 
             ray.add(near, this, Type.ENTER);
             ray.add(far, this, Type.LEAVE);

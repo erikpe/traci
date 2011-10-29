@@ -2,43 +2,43 @@ package traci.render;
 
 import traci.model.shape.Shape;
 import traci.model.shape.primitive.Primitive;
-import traci.render.Point2.Type;
+import traci.render.Point.Type;
 
-public class Ray2
+public class Ray
 {
     private static final int INITIAL_SIZE = 32;
 
-    private Point2[] points;
+    private Point[] points;
     private int size;
     private int maxSize;
 
-    private Ray2()
+    private Ray()
     {
-        points = new Point2[INITIAL_SIZE];
+        points = new Point[INITIAL_SIZE];
         size = 0;
         maxSize = points.length;
     }
 
-    public static Ray2 make()
+    public static Ray make()
     {
-        return new Ray2();
+        return new Ray();
     }
 
     private void increaseSize()
     {
-        final Point2[] oldPoints = points;
-        points = new Point2[oldPoints.length * 2];
+        final Point[] oldPoints = points;
+        points = new Point[oldPoints.length * 2];
         System.arraycopy(oldPoints, 0, points, 0, oldPoints.length);
         maxSize = points.length;
     }
 
-    public Point2 first()
+    public Point first()
     {
         assert size > 0;
 
         for (int i = 0; i < size; ++i)
         {
-            final Point2 p = points[i];
+            final Point p = points[i];
 
             if (p.dist > Shape.EPSILON)
             {
@@ -49,7 +49,7 @@ public class Ray2
         return null;
     }
 
-    public static boolean checkRay(final Ray2 ray)
+    public static boolean checkRay(final Ray ray)
     {
         if (ray == null)
         {
@@ -66,8 +66,8 @@ public class Ray2
 
         for (int i = 1; i < ray.size; ++i)
         {
-            final Point2 pPrev = ray.points[i - 1];
-            final Point2 pThis = ray.points[i];
+            final Point pPrev = ray.points[i - 1];
+            final Point pThis = ray.points[i];
 
             if (pPrev.dist >= pThis.dist)
             {
@@ -115,10 +115,10 @@ public class Ray2
             increaseSize();
         }
 
-        points[size++] = Point2.make(dist, obj, type);
+        points[size++] = Point.make(dist, obj, type);
     }
 
-    private void add(final Point2 p)
+    private void add(final Point p)
     {
         if (size == 0)
         {
@@ -128,7 +128,7 @@ public class Ray2
             return;
         }
 
-        final Point2 pLast = points[size - 1];
+        final Point pLast = points[size - 1];
 
         if (p.dist == pLast.dist)
         {
@@ -163,7 +163,7 @@ public class Ray2
         points[size++] = p;
     }
 
-    public static Ray2 union(final Ray2 ray0, final Ray2 ray1)
+    public static Ray union(final Ray ray0, final Ray ray1)
     {
         assert checkRay(ray0);
         assert checkRay(ray1);
@@ -203,7 +203,7 @@ public class Ray2
             return ray1;
         }
 
-        final Ray2 newRay = Ray2.make();
+        final Ray newRay = Ray.make();
         assert newRay.size == 0;
 
         int i0 = 0;
@@ -212,10 +212,10 @@ public class Ray2
 
         while (i0 < ray0.size && i1 < ray1.size)
         {
-            final Point2 p0 = ray0.points[i0];
-            final Point2 p1 = ray1.points[i1];
+            final Point p0 = ray0.points[i0];
+            final Point p1 = ray1.points[i1];
 
-            final Point2 pNear;
+            final Point pNear;
             final int pointMask;
 
             if (p0.dist < p1.dist)
@@ -280,14 +280,14 @@ public class Ray2
         return newRay;
     }
 
-    public static Ray2 intersect(final Ray2 ray0, final Ray2 ray1)
+    public static Ray intersect(final Ray ray0, final Ray ray1)
     {
         if (ray0 == null || ray1 == null || ray0.farest() < ray1.nearest() || ray1.farest() < ray0.nearest())
         {
             return null;
         }
 
-        final Ray2 newRay = Ray2.make();
+        final Ray newRay = Ray.make();
 
         int i0 = 0;
         int i1 = 0;
@@ -295,10 +295,10 @@ public class Ray2
 
         while (i0 < ray0.size && i1 < ray1.size)
         {
-            final Point2 p0 = ray0.points[i0];
-            final Point2 p1 = ray1.points[i1];
+            final Point p0 = ray0.points[i0];
+            final Point p1 = ray1.points[i1];
 
-            final Point2 pNear;
+            final Point pNear;
             final int pointMask;
 
             if (p0.dist < p1.dist)
@@ -353,7 +353,7 @@ public class Ray2
         return newRay;
     }
 
-    public static Ray2 difference(final Ray2 ray0, final Ray2 ray1)
+    public static Ray difference(final Ray ray0, final Ray ray1)
     {
         if (ray0 == null)
         {
@@ -364,7 +364,7 @@ public class Ray2
             return ray0;
         }
 
-        final Ray2 newRay = Ray2.make();
+        final Ray newRay = Ray.make();
 
         int i0 = 0;
         int i1 = 0;
@@ -372,8 +372,8 @@ public class Ray2
 
         while (i0 < ray0.size && i1 < ray1.size)
         {
-            final Point2 p0 = ray0.points[i0];
-            final Point2 p1 = ray1.points[i1];
+            final Point p0 = ray0.points[i0];
+            final Point p1 = ray1.points[i1];
 
             if (p1.type == Type.INTERSECT)
             {
@@ -381,7 +381,7 @@ public class Ray2
                 continue;
             }
 
-            final Point2 pNear;
+            final Point pNear;
             final int pointMask;
 
             if (p0.dist < p1.dist)

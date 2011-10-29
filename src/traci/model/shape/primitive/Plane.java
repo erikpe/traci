@@ -1,8 +1,8 @@
 package traci.model.shape.primitive;
 
 import traci.math.Vector;
-import traci.render.Point2.Type;
-import traci.render.Ray2;
+import traci.render.Point.Type;
+import traci.render.Ray;
 
 public class Plane extends Primitive
 {
@@ -16,13 +16,13 @@ public class Plane extends Primitive
      * The plane is defined by the equation y = 0.
      */
     @Override
-    public Ray2 primitiveShootRay2(final Vector p, final Vector dir)
+    public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
         final double t = -p.y() / dir.y();
 
         if (t > -EPSILON)
         {
-            final Ray2 ray = Ray2.make();
+            final Ray ray = Ray.make();
             ray.add(t, this, Type.INTERSECT);
             return ray;
         }
