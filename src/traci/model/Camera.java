@@ -1,9 +1,12 @@
 package traci.model;
 
+import java.util.Random;
+
 import traci.math.Transformable;
 import traci.math.Transformation;
 import traci.math.Transformations;
 import traci.math.Vector;
+import traci.render.Settings;
 
 public class Camera implements Transformable
 {
@@ -11,11 +14,11 @@ public class Camera implements Transformable
     private final double fovx = (40 / 360.0) * Math.PI * 2.0;
     private final double fovy = fovx / aspectRatio;
     
-    private Transformation transformation;
+    public Transformation transformation;
     
-    //private final double focalDist = 4.8;
+    public final double focalDist = 25;
     
-    //private final double aperture = 0.15;
+    public final double aperture = 1;
     
     private final double xx;
     private final double yy;
@@ -34,35 +37,35 @@ public class Camera implements Transformable
         transformation = transformation.compose(tr);
     }
     
-    public Vector getLoc()
+    public Vector[] getLocAndDir(final double lookX, final double lookY, final Settings settings, final Random randomSource)
     {
-        return transformation.point(Vector.ORIGO);
-    }
-    
-    public Vector getDir(final double lookX, final double lookY)
-    {
+        final Vector[] res = new Vector[2];
+        final Vector location;
+        
+        if (settings.focalBlurEnabled)
+        {
+            final double r = Math.sqrt(randomSource.nextDouble()) / 2.0; 
+            final double phi = randomSource.nextDouble() * Math.PI * 2.0; 
+            
+            final double apertureX = r * Math.cos(phi); 
+            final double apertureY = r * Math.sin(phi); 
+            
+            location = Vector.make(aperture * apertureX, aperture * apertureY, 0); 
+        }
+        else
+        {
+            location = Vector.ORIGO;
+        }
+        
         final double x = (lookX - 0.5) * xx;
         final double y = (0.5 - lookY) * yy;
         
-        final Vector lookAt = Vector.make(x, y, 1);
-        final Vector location = Vector.ORIGO;
+        final Vector lookAt = Vector.make(x, y, 1).mul(focalDist);
         final Vector dir = lookAt.sub(location).normalize();
         
-        return transformation.dir(dir);
-    }
-    
-    public Vector getDir2(final double lookX, final double lookY)
-    {
-        final double xAngle = (lookX - 0.5) * fovx;
-        final double yAngle = (0.5 - lookY) * fovy;
+        res[0] = transformation.point(location);
+        res[1] = transformation.dir(dir);
         
-        Transformation tr = Transformations.roty(yAngle);
-        tr = tr.compose(Transformations.rotx(-xAngle));
-        
-        final Vector lookAt = tr.dir(Vector.UNIT_Z);
-        final Vector location = Vector.ORIGO;
-        final Vector dir = lookAt.sub(location).normalize();
-        
-        return transformation.dir(dir);
+        return res;
     }
 }

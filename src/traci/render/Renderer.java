@@ -141,7 +141,6 @@ public class Renderer implements BlockRenderer
     
     private void renderPixel(final long x, final long y, final WorkBlock block)
     {
-        //final Color color = Color.makeCopy(Color.BLACK);
         Color color = Color.BLACK;
         
         for (int aay = -settings.aaLevel; aay <= settings.aaLevel; ++aay)
@@ -150,25 +149,17 @@ public class Renderer implements BlockRenderer
             {
                 for (int i = 0; i < settings.focalBlurSamples; ++i)
                 {
-                    final Thread thisThread = Thread.currentThread();
-                    
-                    if (thisThread instanceof RenderingThread)
-                    {
-                        ((RenderingThread) thisThread).resetPools();
-                    }
-                    
-                    Vector.reset();
-                    
                     final double subX = aax / (settings.aaLevel * 2.0 + 1);
                     final double subY = aay / (settings.aaLevel * 2.0 + 1);
                     
                     double lookX = (x + subX) / (area.width() - 1); // [0.0 .. 1.0]
                     double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
                     
-                    final Color rayColor = Raytrace.raytrace(scene, 5, camera.getLoc(), camera.getDir(lookX, lookY));
+                    final Vector[] cam = camera.getLocAndDir(lookX, lookY, settings, block.randomSource);
+                    
+                    final Color rayColor = Raytrace.raytrace(scene, 5, cam[0], cam[1]);
                     
                     color = color.add(rayColor);
-                    //color.accumulate(rayColor);
                 }
             }
         }

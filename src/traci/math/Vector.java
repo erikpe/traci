@@ -2,26 +2,6 @@ package traci.math;
 
 public class Vector
 {
-    public static final class VectorPool extends ObjectPool<Vector>
-    {
-        @Override
-        protected final Vector makeNew()
-        {
-            return new Vector(0, 0, 0);
-        }
-        
-        private final Vector make(final double x, final double y, final double z)
-        {
-            final Vector vec = getFree();
-            
-            vec.x = x;
-            vec.y = y;
-            vec.z = z;
-            
-            return vec;
-        }
-    }
-    
     private double x, y, z;
     
     public static final Vector ORIGO = new Vector(0, 0, 0);
@@ -34,22 +14,6 @@ public class Vector
     public static final Vector UNIT_NEG_Y = new Vector(0, -1, 0);
     public static final Vector UNIT_NEG_Z = new Vector(0, 0, -1);
     
-    private static class ThreadLocalVectorPool extends ThreadLocal<VectorPool>
-    {
-        @Override
-        public VectorPool initialValue()
-        {
-            return new VectorPool();
-        }
-    }
-    
-    private static final ThreadLocalVectorPool vectorPool = new ThreadLocalVectorPool();
-    
-    public static void reset()
-    {
-        vectorPool.get().reset();
-    }
-    
     private Vector(final double x, final double y, final double z)
     {
         this.x = x;
@@ -57,19 +21,8 @@ public class Vector
         this.z = z;
     }
     
-    //public static Map<String, Long> locMap = new HashMap<String, Long>();
-    
     public static Vector make(final double x, final double y, final double z)
     {
-//        return vectorPool.get().make(x, y, z);
-//        
-//        final Thread thisThread = Thread.currentThread();
-//        
-//        if (thisThread instanceof RenderingThread)
-//        {
-//            return ((RenderingThread) thisThread).vectorPool.make(x, y, z);
-//        }
-        
         return new Vector(x, y, z);
     }
     

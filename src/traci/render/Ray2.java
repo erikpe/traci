@@ -1,37 +1,35 @@
 package traci.render;
 
-import traci.math.ObjectPool;
 import traci.model.shape.Shape;
 import traci.model.shape.primitive.Primitive;
 import traci.render.Point2.Type;
 
 public class Ray2
 {
-    private static final int INITIAL_SIZE = 128;
+    private static final int INITIAL_SIZE = 32;
     
-    public Point2[] points;
-    public int size;
-    
-    public static final class Ray2Pool extends ObjectPool<Ray2>
-    {
-        @Override
-        protected final Ray2 makeNew()
-        {
-            return new Ray2();
-        }
-        
-        private final Ray2 make()
-        {
-            final Ray2 ray = getFree();
-            ray.size = 0;
-            return ray;
-        }
-    }
+    private Point2[] points;
+    private int size;
+    private int maxSize;
     
     private Ray2()
     {
         points = new Point2[INITIAL_SIZE];
         size = 0;
+        maxSize = points.length;
+    }
+    
+    public static Ray2 make()
+    {
+        return new Ray2();
+    }
+    
+    private void increaseSize()
+    {
+        final Point2[] oldPoints = points;
+        points = new Point2[oldPoints.length * 2];
+        System.arraycopy(oldPoints, 0, points, 0, oldPoints.length);
+        maxSize = points.length;
     }
     
     public Point2 first()
@@ -49,18 +47,6 @@ public class Ray2
         }
         
         return null;
-    }
-    
-    public static Ray2 make()
-    {
-        final Thread thisThread = Thread.currentThread();
-        
-        if (thisThread instanceof RenderingThread)
-        {
-            return ((RenderingThread) thisThread).ray2Pool.make();
-        }
-        
-        return new Ray2();
     }
     
     public static boolean checkRay(final Ray2 ray)
@@ -127,6 +113,11 @@ public class Ray2
     
     public void add(final double dist, final Primitive obj, final Type type)
     {
+        if (size == maxSize)
+        {
+            increaseSize();
+        }
+        
         points[size++] = Point2.make(dist, obj, type);
     }
     
@@ -167,6 +158,11 @@ public class Ray2
         case INTERSECT: assert pLast.type != Type.ENTER; break;
         }
         
+        if (size == maxSize)
+        {
+            increaseSize();
+        }
+        
         points[size++] = p;
     }
     
@@ -185,6 +181,11 @@ public class Ray2
         }
         else if (ray0.farest() < ray1.nearest())
         {
+            while (ray0.maxSize < ray0.size + ray1.size)
+            {
+                ray0.increaseSize();
+            }
+            
             System.arraycopy(ray1.points, 0, ray0.points, ray0.size, ray1.size);
             ray0.size += ray1.size;
             
@@ -193,6 +194,11 @@ public class Ray2
         }
         else if (ray1.farest() < ray0.nearest())
         {
+            while (ray1.maxSize < ray0.size + ray1.size)
+            {
+                ray1.increaseSize();
+            }
+            
             System.arraycopy(ray0.points, 0, ray1.points, ray1.size, ray0.size);
             ray1.size += ray0.size;
             

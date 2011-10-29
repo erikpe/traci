@@ -30,8 +30,8 @@ public class Raytrace
             return Color.WHITE.mul(.5);
         }
         
-        dist = hit2.dist();
-        obj = hit2.obj();
+        dist = hit2.dist;
+        obj = hit2.obj;
         
         final Vector hitPoint = p.add(dir.mul(dist));
         final Vector normal = obj.getNormalAt(hitPoint, dir);
