@@ -42,6 +42,8 @@
     <javac srcdir="${src}" destdir="${bin}" includeantruntime="false">
       <classpath>
         <pathelement location="${lib}/${antlr-dir}/${antlr-jar}" />
+        <pathelement location="${lib}/${java-getopt-dir}/${java-getopt-jar}" />
+        <pathelement location="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" />
       </classpath>
     </javac>
   </target>
@@ -73,7 +75,7 @@
       <fileset dir="${tmp}/${java-getopt-dir}" />
       <fileset dir="${tmp}/${anarres-cpp-dir}" />
       <manifest>
-        <attribute name="Main-Class" value="traci.lang.TestParser" />
+        <attribute name="Main-Class" value="traci.main.Main" />
       </manifest>
     </jar>
   </target>
