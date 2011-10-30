@@ -13,36 +13,37 @@ import traci.lang.interpreter.node.BlockNode;
 import traci.lang.parser.TraciLexer;
 import traci.lang.parser.TraciParser;
 import traci.lang.parser.TraciTreeWalker;
+import traci.main.Settings;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
 import traci.model.shape.csg.Union;
-import traci.util.Utilities;
 import traci.util.Log;
+import traci.util.Utilities;
 
 public class Interpreter
 {
-    private final String filename;
+    private final Settings settings;
 
-    public Interpreter(final String filename)
+    public Interpreter(final Settings settings)
     {
-        this.filename = filename;
+        this.settings = settings;
     }
 
     public Scene run()
     {
-        Log.INFO("Parsing input file: " + filename);
+        Log.INFO("Parsing input file: " + settings.inputFilename);
         long start = System.currentTimeMillis();
         ANTLRFileStream input = null;
         try
         {
-            input = new ANTLRFileStream(filename);
+            input = new ANTLRFileStream(settings.inputFilename);
         }
         catch (final IOException e)
         {
-            Log.ERROR("Unable to open input file: " + filename + ":");
+            Log.ERROR("Unable to open input file: " + settings.inputFilename + ":");
             Log.ERROR(e.getMessage());
             System.exit(-1);
         }
@@ -102,7 +103,7 @@ public class Interpreter
 
         final Vector camLocation = Vector.make(-10, 15, 15);
         final Vector camLookAt = Vector.make(8, 2, 0);
-        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y);
+        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y, settings);
         final Scene scene = new Scene(rootUnion, cam);
         scene.addLight(light);
         scene.addLight(light2);

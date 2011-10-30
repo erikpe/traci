@@ -15,7 +15,7 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
     /**
      * Redraw period in milliseconds.
      */
-    private static final long REDRAW_PERIOD_MS = 250;
+    private static final long REDRAW_PERIOD_MS = 500;
 
     private final BufferedImageDrawArea area;
 

@@ -12,9 +12,6 @@ public class Raytrace
 {
     protected static Color raytrace(final Scene scene, final int depth, final Vector p, final Vector dir)
     {
-        double dist = 0;
-        Primitive obj = null;
-
         final Ray ray = scene.shape.shootRay(p, dir);
 
         if (ray == null)
@@ -29,8 +26,8 @@ public class Raytrace
             return Color.WHITE.mul(.5);
         }
 
-        dist = hit.dist;
-        obj = hit.obj;
+        final double dist = hit.dist;
+        final Primitive obj = hit.obj;
 
         final Vector hitPoint = p.add(dir.mul(dist));
         final Vector normal = obj.getNormalAt(hitPoint, dir);

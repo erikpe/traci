@@ -9,12 +9,6 @@ public class MultiDrawArea extends AbstractDrawArea
 {
     private final Collection<DrawArea> areas;
 
-    public MultiDrawArea(final DrawArea area)
-    {
-        this(area.width(), area.height());
-        areas.add(area);
-    }
-
     public MultiDrawArea(final int width, final int height)
     {
         super(width, height);

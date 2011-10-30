@@ -1,0 +1,672 @@
+
+global ORIGO = [0, 0, 0];
+
+global X = [1, 0, 0];
+global Y = [0, 1, 0];
+global Z = [0, 0, 1];
+
+global EPSILON = 0.01;
+global PI = 3.14159265358979323846;
+
+/*
+ * Rounded cylinder 0 (from side):
+ *  ___
+ * /   \
+ * |   |
+ * |___|
+ *
+ */
+def roundedCylinder0 (radius, height, rounding)
+{
+    return union {
+        cylinder (radius, ORIGO, Y*(height-rounding));
+        cylinder (radius-rounding, Y*(height-rounding-EPSILON), Y*height);
+        torus (rounding, radius-rounding) {
+            rotx PI/2;
+            translate Y*(height-rounding);
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius, height, radius];
+        }
+    }
+}
+
+/*
+ * Rounded cylinder 1 (from side):
+ *  ___
+ * /   \
+ * |   |
+ * \___/
+ *
+ */
+def roundedCylinder1 (radius, height, rounding)
+{
+    return union {
+        cylinder (radius-rounding, ORIGO, Y*height);
+        cylinder (radius, Y*rounding, Y*(height-rounding));
+        torus (rounding, radius-rounding) {
+            rotx PI/2;
+            translate Y*rounding;
+        }
+        torus (rounding, radius-rounding) {
+            rotx PI/2;
+            translate Y*(height-rounding);
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius, height, radius];
+        }
+    }
+}
+
+/*
+ * Rounded cylinder 2 (from side):
+ *   ___
+ *  /   \
+ *  |   |
+ * /_____\
+ *
+ */
+ def roundedCylinder2 (radius, height, lowerRounding, upperRounding)
+ {
+    return union {
+        cylinder (radius, Y*(lowerRounding-EPSILON), Y*(height-upperRounding));
+        cylinder (radius-upperRounding, Y*(height-upperRounding-EPSILON), Y*height);
+        torus (upperRounding, radius-upperRounding) {
+            rotx PI/2;
+            translate Y*(height-upperRounding);
+        }
+        difference {
+            cylinder (radius+lowerRounding, -Y*EPSILON, Y*lowerRounding);
+            torus (lowerRounding, radius+lowerRounding) {
+                rotx PI/2;
+                translate Y*lowerRounding;
+            }
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius+lowerRounding, height+EPSILON, radius+lowerRounding];
+            translate -Y*EPSILON;
+        }
+    }
+}
+
+/*
+ * Rounded cylinder 3 (from side):
+ * _______
+ * \     /
+ *  |   |
+ * /_____\
+ *
+ */
+def roundedCylinder3 (radius, height, rounding)
+{
+    return union {
+        cylinder (radius, Y*(rounding-EPSILON), Y*(height-rounding+EPSILON));
+        difference {
+            cylinder (radius+rounding, -Y*EPSILON, Y*rounding);
+            torus (rounding, radius+rounding) {
+                rotx PI/2;
+                translate Y*rounding;
+            }
+        }
+        difference {
+            cylinder (radius+rounding, Y*(height-rounding), Y*(height+EPSILON));
+            torus (rounding, radius+rounding) {
+                rotx PI/2;
+                translate Y*(height-rounding);
+            }
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius+rounding, height+EPSILON+EPSILON, radius+rounding];
+            translate -Y*EPSILON;
+       }
+    }
+}
+
+/*
+ * Rounded cylinder 4 (from side):
+ *   ___
+ *  |   |
+ *  |   |
+ * /_____\
+ *
+ */
+def roundedCylinder4 (radius, height, rounding)
+{
+    return union {
+        cylinder (radius, Y*(rounding-EPSILON), Y*height);
+        difference {
+            cylinder (radius+rounding, -Y*EPSILON, Y*rounding);
+            torus (rounding, radius+rounding) {
+                rotx PI/2;
+                translate Y*rounding;
+            }
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius+rounding, height+EPSILON, radius+rounding];
+            translate -Y*EPSILON;
+        }
+    }
+}
+
+def roundedBox (x, y, z, r)
+{
+    v0 = [r, r, r];
+    v1 = [x - r, r, r];
+    v2 = [x - r, r, z - r];
+    v3 = [r, r, z - r];
+    v4 = [r, y - r, r];
+    v5 = [x - r, y - r, r];
+    v6 = [x - r, y - r, z - r];
+    v7 = [r, y - r, z - r];
+    return union {
+        box {
+            scale [x, y - 2*r, z - 2*r];
+            translate [0, r, r];
+        }
+        box {
+            scale [x - 2*r, y, z - 2*r];
+            translate [r, 0, r];
+        }
+        box {
+            scale [x - 2*r, y - 2*r, z];
+            translate [r, r, 0];
+        }
+        union {
+            sphere { scale r; translate v0; }
+            sphere { scale r; translate v1; }
+            sphere { scale r; translate v2; }
+            sphere { scale r; translate v3; }
+            cylinder (r, v0, v1);
+            cylinder (r, v1, v2);
+            cylinder (r, v2, v3);
+            cylinder (r, v3, v0);
+            bbox { scale [x, 2*r, z]; }
+        }
+        union {
+            sphere { scale r; translate v4; }
+            sphere { scale r; translate v5; }
+            sphere { scale r; translate v6; }
+            sphere { scale r; translate v7; }
+            cylinder (r, v4, v5);
+            cylinder (r, v5, v6);
+            cylinder (r, v6, v7);
+            cylinder (r, v7, v4);
+            bbox { scale [x, 2*r, z]; translate [0, y - 2*r, 0]; }
+        }
+        cylinder (r, v0, v4);
+        cylinder (r, v1, v5);
+        cylinder (r, v2, v6);
+        cylinder (r, v3, v7);
+        bbox { scale [x, y, z]; }
+    }
+}
+
+def roundedBox2Helper (x, z, r)
+{
+    def cornerHelper (r)
+    {
+        return intersection {
+            box {
+                scale [1, 2, 1];
+                translate -Y;
+                scale [3*r+2*EPSILON, r+EPSILON, 3*r+2*EPSILON];
+                translate [-EPSILON, 0, -EPSILON];
+            }
+            torus (r, r+r) {
+                rotx PI/2;
+            }
+        }
+    }
+    return union {
+        cylinder (r, [r, 0, -r], [x-r, 0, -r]);
+        cylinder (r, [r+x, 0, r], [x+r, 0, z-r]);
+        cylinder (r, [x-r, 0, z+r], [r, 0, z+r]);
+        cylinder (r, [-r, 0, z-r], [-r, 0, r]);
+        cornerHelper (r) {
+            roty PI;
+            translate [r, 0, r];
+        }
+        cornerHelper (r) {
+            roty PI/2;
+            translate [x-r, 0, r];
+        }
+        cornerHelper (r) {
+            translate [x-r, 0, z-r];
+        }
+        cornerHelper (r) {
+            roty -PI/2;
+            translate [r, 0, z-r];
+        }
+        bbox {
+            scale [1, 2, 1];
+            translate -Y;
+            scale [x+4*r+2*EPSILON, r+EPSILON, z+4*r+2*EPSILON];
+            translate [-r-r-EPSILON, 0, -r-r-EPSILON];
+        }
+    }
+}
+
+def roundedBox2 (x, y, z, r)
+{
+    r2 = 2*r;
+    v0 = [r, 0, r];
+    v1 = [x-r, 0, r];
+    v2 = [x-r, 0, z-r];
+    v3 = [r, 0, z-r];
+    v4 = [r, y-r, r];
+    v5 = [x-r, y-r, r];
+    v6 = [x-r, y-r, z-r];
+    v7 = [r, y-r, z-r];
+    return union {
+        box {
+            scale [x, y-r, z-r2];
+            translate Z*r;
+        }
+        box {
+            scale [x-r2, y-r, z];
+            translate X*r;
+        }
+        union {
+            box {
+                scale [x-r2, r+EPSILON, z-r2];
+                translate [r, y-r-EPSILON, r];
+            }
+            sphere { scale r; translate v4; }
+            sphere { scale r; translate v5; }
+            sphere { scale r; translate v6; }
+            sphere { scale r; translate v7; }
+            cylinder (r, v4, v5);
+            cylinder (r, v5, v6);
+            cylinder (r, v6, v7);
+            cylinder (r, v7, v4);
+            bbox {
+                scale [x, r2, z];
+                translate Y*(y-r2);
+            }
+        }
+        cylinder (r, v0, v4);
+        cylinder (r, v1, v5);
+        cylinder (r, v2, v6);
+        cylinder (r, v3, v7);
+        difference {
+            union {
+                box {
+                    scale [x+r2, r+EPSILON, z-r2];
+                    translate [-r, -EPSILON, r];
+                }
+                box {
+                    scale [x-r2, r+EPSILON, z+r2];
+                    translate [r, -EPSILON, -r];
+                }
+                cylinder (r2, [r, -EPSILON, r], [r, r, r]);
+                cylinder (r2, [x-r, -EPSILON, r], [x-r, r, r]);
+                cylinder (r2, [x-r, -EPSILON, z-r], [x-r, r, z-r]);
+                cylinder (r2, [r, -EPSILON, z-r], [r, r, z-r]);
+            }
+            roundedBox2Helper (x, z, r) {
+                translate Y*r;
+            }
+            bbox {
+                scale [x+r2, r+EPSILON, z+r2];
+                translate [-r, -EPSILON, -r];
+            }
+        }
+        bbox {
+            scale [x+r2, y+EPSILON, z+r2];
+            translate [-r, -EPSILON, -r];
+        }
+    }
+}
+
+global LU = 1.0;      // Lego-Unit: distance between two pegs
+global BH = LU * 1.2; // Brick-Height
+global PH = LU * .4;  // Plate-Height
+global PEG_HEIGHT = LU * .2;
+global LEGO_ROUNDING = .03;
+
+def legopartPeg ()
+{
+    height = LU * .2;
+    radius = LU * .3;
+    lowerRounding = LEGO_ROUNDING;
+    upperRounding = 2 * LEGO_ROUNDING;
+    return roundedCylinder2 (radius, height, lowerRounding, upperRounding) {
+        translate [LU/2, 0, LU/2];
+    }
+}
+
+def legopartPegHole ()
+{
+    height = LU * .2;
+    radius = LU * .3;
+    innerRadius = LU * .2;
+    lowerRounding = LEGO_ROUNDING;
+    upperRounding = 2 * LEGO_ROUNDING;
+    return difference {
+        roundedCylinder2 (radius, height, lowerRounding, upperRounding);
+        roundedCylinder2 (innerRadius, height - EPSILON, upperRounding, lowerRounding) {
+            rotx PI;
+            translate Y*height;
+        }
+        translate [LU/2, 0, LU/2];
+    }
+}
+
+def legopartTechnicBrickHole ()
+{
+    radius = LU * .3;
+    length = LU;
+    rounding = .5 * LEGO_ROUNDING;
+    cw = LU * .08;
+    cd = LU * .08;
+    height = LU * .7;
+    return union {
+        roundedCylinder3 (radius, length-2*cd, rounding) {
+            translate Y*cd;
+        }
+        roundedCylinder2 (radius+cw, cd, rounding, rounding);
+        roundedCylinder2 (radius+cw, cd, rounding, rounding) {
+            rotx PI;
+            translate Y*length;
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius+cw+rounding, length+EPSILON+EPSILON, radius+cw+rounding];
+            translate -Y*EPSILON;
+        }
+        rotx PI/2;
+        translate [LU, height, 0];
+    }
+}
+
+def legopartTechnicPlateHole ()
+{
+    radius = LU * .3;
+    height = LU * .4;
+    return roundedCylinder3 (radius, height, LEGO_ROUNDING) {
+        translate [LU, 0, LU];
+    }
+}
+
+def legopieceTechnicBrickWithHoles (length)
+{
+    boxLength = LU * length;
+    boxHeight = LU * 1.2;
+    boxWidth = LU;
+    thickness = LU * .15;
+    pegHeight = LU * .2;
+    return union {
+        difference {
+            roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+            difference {
+                roundedBox2 (boxLength-2*thickness, boxHeight-thickness, boxWidth-2*thickness, LEGO_ROUNDING) {
+                    translate [thickness, 0, thickness];
+                }
+                for (i in 0 .. length-2) {
+                    cylinder (LU*.3+thickness*.5, [LU, LU*.7, thickness-EPSILON], [LU, LU*.7, boxWidth-thickness+EPSILON]) {
+                        translate X*LU*i;
+                    }
+                }
+            }
+            for (i in 0 .. length-2) {
+                legopartTechnicBrickHole () {
+                    translate X*i*LU;
+                }
+            }
+        }
+        for (i in 0 .. length-2) {
+            roundedCylinder0 (LU*.15, LU*.35, LEGO_ROUNDING) {
+                scale [1, -1, 1];
+                translate [LU, LU*.35, LU*.5];
+                translate X*LU*i;
+            }
+        }
+        for (i in 0 .. length-1) {
+            legopartPegHole () {
+                translate [LU*i, boxHeight, 0];
+            }
+        }
+        bbox {
+            scale [boxLength, boxHeight+pegHeight, boxWidth];
+        }
+    }
+}
+
+def legopiecePlate (width, length)
+{
+    boxLength = length*LU;
+    boxHeight = .4*LU;
+    boxWidth = width*LU;
+    pegHeight = .2*LU;
+    return union {
+        roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING) {
+            for (x in 0 .. length-1) {
+                for (z in 0 .. width-1) {
+                    legopartPeg () {
+                        translate [x*LU, boxHeight, z*LU];
+                    }
+                }
+            }
+            bbox {
+                scale [boxLength, boxHeight+pegHeight, boxWidth];
+            }
+        }
+    }
+}
+
+def legopieceTechnicPlateWithHoles (length)
+{
+    boxLength = length*LU;
+    boxHeight = .4*LU;
+    boxWidth = 2*LU;
+    pegHeight = .2*LU;
+    return union {
+        difference {
+            roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+            for (x in 0 .. length-2) {
+                legopartTechnicPlateHole () {
+                    translate X*(x*LU);
+                }
+            }
+        }
+        for (x in 0 .. length-1) {
+            legopartPeg () {
+                translate [x*LU, boxHeight, 0];
+            }
+            legopartPeg() {
+                translate [x*LU, boxHeight, LU];
+            }
+        }
+        bbox {
+            scale [boxLength, boxHeight+pegHeight, boxWidth];
+        }
+    }
+}
+
+def legopieceTechnicPin0 (length)
+{
+    radius = LU*.3;
+    outerStopperRadius = LU*.04;
+    openingWidth = LU*.1;
+    openingDepth = LU*.4;
+    return difference {
+        union {
+            roundedCylinder4 (radius, length, LEGO_ROUNDING) {
+                rotx PI/2;
+            }
+            torus (outerStopperRadius, radius) {
+                translate Z*(length-outerStopperRadius);
+            }
+        }
+        cylinder (.5*openingWidth, [-radius-EPSILON, 0, length-openingDepth], [radius+EPSILON, 0, length-openingDepth]);
+        box {
+            translate [-.5, -.5, 0];
+            scale [2*(radius+outerStopperRadius+EPSILON), openingWidth, openingDepth+EPSILON];
+            translate Z*(length-openingDepth);
+        }
+    }
+}
+
+def legopieceTechnicPin ()
+{
+    middleStopperRadius = .38*LU;
+    middleStopperLength = .15*LU;
+    innerRadius = .22*LU;
+    return difference {
+        union {
+            legopieceTechnicPin0 (LU-.5*middleStopperLength) {
+                translate Z*.5*middleStopperLength;
+            }
+            legopieceTechnicPin0 (LU-.5*middleStopperLength) {
+                rotx PI;
+                translate -Z*.5*middleStopperLength;
+            }
+            roundedCylinder1 (middleStopperRadius, middleStopperLength, LEGO_ROUNDING) {
+                rotx PI/2;
+                translate -Z*.5*middleStopperLength;
+            }
+        }
+        roundedCylinder3 (innerRadius, 2*LU, LEGO_ROUNDING) {
+            translate -Y*LU;
+            rotx PI/2;
+        }
+        bbox {
+            scale 2;
+            translate [-1, -1, -1];
+            scale [middleStopperRadius, middleStopperRadius, LU];
+        }
+        translate [LU, .7*LU, 0];
+    }
+}
+
+def rotHole (obj, theta)
+{
+    return obj {
+        translate [-1, .7, 0];
+        rotz theta;
+        translate [1, .7, 0];
+    }
+}
+
+global BLACK = color [.15, .15, .15];
+global BLACK_LIGHT = color [.2, .2, .2];
+global GRAY = color [.85, .85, .85];
+global YELLOW = color [1, 1, 0];
+
+def pieces1 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (4) { BLACK; }
+        legopieceTechnicBrickWithHoles (6) { BLACK; translate [2, 0, 1]; }
+        legopieceTechnicBrickWithHoles (10) { BLACK; translate [5, 0, 2]; }
+        legopieceTechnicBrickWithHoles (4) { BLACK; translate [12, 0, 1]; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.2, 0]; }
+        legopiecePlate (2, 2) { YELLOW; translate [2, 1.2, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [2, 1.6, 0]; }
+        legopiecePlate (2, 1) { YELLOW; translate [3, 1.6, 0]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [2, 0, 1]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [5, 0, 2]; }
+        legopieceTechnicPin () { GRAY; translate [6, 0, 2]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [8, 0, 2]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [10, 0, 2]; }
+        legopieceTechnicPin () { GRAY; translate [12, 0, 2]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [13, 0, 2]; }
+        bbox { scale [16, 2.2, 3]; }
+    }
+}
+
+def pieces2 (theta)
+{
+    return union {
+        legopieceTechnicBrickWithHoles (6) { YELLOW; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.2, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.6, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [4, 1.2, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [4, 1.6, 0]; }
+        legopieceTechnicBrickWithHoles (8) { YELLOW; translate [0, 2, 0]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [4, 2, 1]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [6, 2, 1]; }
+        bbox { scale [8, 3.4, 2]; }
+        translate [-1, -.7, 0];
+        rotz theta;
+        translate [1, .7, 0];
+    }
+}
+
+def pieces3 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (2) { BLACK; }
+        legopieceTechnicBrickWithHoles (2) { BLACK; translate [0, 0, 3]; }
+        legopieceTechnicBrickWithHoles (2) { BLACK; roty PI/2; translate [0, 0, 3]; }
+        legopieceTechnicBrickWithHoles (2) { BLACK; roty PI/2; translate [1, 0, 3]; }
+        legopieceTechnicPlateWithHoles (4) { BLACK; roty PI/2; translate [0, -.4, 4]; }
+        legopieceTechnicPlateWithHoles (4) { BLACK; roty PI/2; translate [0, 1.2, 4]; }
+        legopieceTechnicPin () { GRAY; }
+        legopieceTechnicPin () { GRAY; translate [0, 0, 4]; }
+        legopieceTechnicPin () { GRAY; roty PI/2; translate [0, 0, 3]; }
+        legopieceTechnicPin () { GRAY; roty PI/2; translate [2, 0, 3]; }
+        bbox { scale [4, 2.2, 6]; translate [-1, -.4, -1]; }
+    }
+}
+
+def pieces4 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (4) { YELLOW; roty PI/2; translate [0, .4, 2]; }
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [0, 1.6, 1]; }
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [0, 1.6, -2]; }
+        legopieceTechnicPlateWithHoles (4) { YELLOW; roty PI/2; translate [0, 0, 2]; }
+        bbox { translate [0, 0, -.5]; scale [6, 3, 4]; }
+    }
+}
+
+def pieces5 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (2) { YELLOW; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.2, 0]; }
+        legopiecePlate (1, 2) { YELLOW; translate [0, 1.6, 0]; }
+        legopiecePlate (2, 1) { YELLOW; translate [0, 1.6, 0]; }
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [-2, 2, 0]; }
+        legopieceTechnicPin () { GRAY; translate [-2, 2, 0]; }
+        legopieceTechnicPin () { BLACK_LIGHT; translate [2, 2, 0]; }
+        bbox { scale [6, 3.4, 3]; translate [-2, 0, -1]; }
+    }
+}
+
+def pieces6 ()
+{
+    return union {
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [0, 0, 2]; }
+        legopieceTechnicBrickWithHoles (6) { YELLOW; translate [0, 0, -3]; }
+    }
+}
+
+def airplane ()
+{
+    return union {
+        pieces1 ()     { translate [0, 0, 1]; }
+        pieces2 (PI/2) { translate [10, 0, 2]; }
+        pieces1 ()     { scale [1, 1, -1]; translate [0, 0, -1]; }
+        pieces2 (PI/2) { scale [1, 1, -1]; translate [10, 0, -2]; } 
+        pieces4 ()     { translate [-1, 1.6, 0]; }
+        pieces3 ()     { translate [10, 2, -2]; }
+        pieces5 ()     { translate [8, 4, 3]; }
+        pieces5 ()     { scale [1, 1, -1]; translate [8, 4, -3]; }
+        pieces6 ()     { translate [-5, -.7, 0]; rotz .7509279107; translate [7, 6.7, 0]; }
+    }
+}
+
+airplane();

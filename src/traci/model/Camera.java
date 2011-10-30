@@ -2,17 +2,17 @@ package traci.model;
 
 import java.util.Random;
 
+import traci.main.Settings;
 import traci.math.Transformable;
 import traci.math.Transformation;
 import traci.math.Transformations;
 import traci.math.Vector;
-import traci.render.Settings;
 
 public class Camera implements Transformable
 {
-    private final double aspectRatio = 2560.0 / 1440.0;
-    private final double fovx = (50 / 360.0) * Math.PI * 2.0;
-    private final double fovy = fovx / aspectRatio;
+    private final double aspectRatio;
+    private final double fovx;
+    private final double fovy;
 
     private Transformation transformation;
     public final double focalDist = 21;
@@ -21,10 +21,13 @@ public class Camera implements Transformable
     private final double xx;
     private final double yy;
 
-    public Camera(final Vector location, final Vector lookAt, final Vector up)
+    public Camera(final Vector location, final Vector lookAt, final Vector up, final Settings settings)
     {
-        transformation = Transformations.camera(location, lookAt, up);
+        this.transformation = Transformations.camera(location, lookAt, up);
 
+        this.aspectRatio = ((double) settings.width) / settings.height;
+        this.fovx = (settings.fov / 360.0) * Math.PI * 2.0;
+        this.fovy = fovx / aspectRatio;
         this.xx = 2.0 * Math.tan(fovx / 2.0);
         this.yy = 2.0 * Math.tan(fovy / 2.0);
     }

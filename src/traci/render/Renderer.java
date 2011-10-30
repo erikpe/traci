@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import traci.gui.DrawArea;
+import traci.main.Settings;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
