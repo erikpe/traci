@@ -15,6 +15,7 @@ import traci.model.shape.BoundingBox;
 import traci.model.shape.ShapeHelper;
 import traci.render.RenderingThread.BlockRenderer;
 import traci.render.RenderingThread.WorkBlock;
+import traci.util.Log;
 
 public class Renderer implements BlockRenderer
 {
@@ -40,11 +41,13 @@ public class Renderer implements BlockRenderer
 
     private void renderScene()
     {
-        System.out.println("> Rendering scene consisting of "
-                + ShapeHelper.numPrimitives(scene.shape)
-                + " primitive objects, " + ShapeHelper.numCsgs(scene.shape)
-                + " CSG objects and " + ShapeHelper.numBBoxes(scene.shape)
-                + " bounding boxes");
+        final int numPrim = ShapeHelper.numPrimitives(scene.shape);
+        final int numCsg = ShapeHelper.numCsgs(scene.shape);
+        final int numBBox = ShapeHelper.numBBoxes(scene.shape);
+
+        Log.INFO("Number of primitive objects: " + numPrim);
+        Log.INFO("Number of csg objects: " + numCsg);
+        Log.INFO("Number of bounding boxes: " + numBBox);
 
         /**
          * To get determinism, each {@link WorkBlock} gets its own
@@ -79,8 +82,8 @@ public class Renderer implements BlockRenderer
             renderingThreads.add(new RenderingThread(this, workQueue));
         }
 
-        System.out.println("> Spawning " + numThreads + " rendering thread" + (numThreads == 1 ? "" : "s")
-                + " working on " + workQueue.size() + " blocks ...");
+        Log.INFO("Spawning " + numThreads + " rendering thread" + (numThreads == 1 ? "" : "s") + " wokning on " +
+                workQueue.size() + " block");
 
         /**
          * Start the threads
@@ -111,15 +114,12 @@ public class Renderer implements BlockRenderer
         final long stopTime = System.currentTimeMillis();
         area.finish();
 
-        System.out.println("> Successfully rendered scene in "
-                + ((stopTime - startTime) / 1000.0)
-                + " seconds.");
+        Log.INFO("Successfully rendered scene in " + ((stopTime - startTime) / 1000.0) + " seconds.");
 
         final long hit = BoundingBox.hit.get();
         final long miss = BoundingBox.miss.get();
 
-        System.out.println("> Bounding-Box discard ratio: "
-                + ((100 * miss) / (miss + hit)) + "% (" + miss + "/" + (miss + hit) + ")");
+        Log.INFO("Bounding-Box discard ratio: " + ((100 * miss) / (miss + hit)) + "% (" + miss + "/" + (miss + hit) + ")");
     }
 
     @Override

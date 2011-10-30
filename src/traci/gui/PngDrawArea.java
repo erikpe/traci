@@ -1,9 +1,10 @@
 package traci.gui;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import traci.util.Log;
 
 public class PngDrawArea extends BufferedImageDrawArea
 {
@@ -31,12 +32,14 @@ public class PngDrawArea extends BufferedImageDrawArea
 
             if (!outputFile.canWrite())
             {
-                throw new IOException("Can't write to file.");
+                Log.ERROR("Unable to write to file: " + outputFile);
+                System.exit(-1);
             }
         }
         catch (final Exception e)
         {
-            System.err.println(" *** ERROR: Failed to open file for writing: " + outputFile);
+            Log.ERROR("Failed to open file for writing: " + outputFile);
+            Log.ERROR(e.getMessage());
             System.exit(-1);
         }
 
@@ -54,10 +57,11 @@ public class PngDrawArea extends BufferedImageDrawArea
         }
         catch (final Exception e)
         {
-            System.err.println(" *** ERROR: Failed to write image: " + outputFile + ": " + e.getMessage());
+            Log.ERROR("Failed to write image file: " + outputFile);
+            Log.ERROR(e.getMessage());
             System.exit(-1);
         }
 
-        System.out.println("> Wrote image to file: " + outputFile);
+        Log.INFO("Wrote output image to file: " + outputFile);
     }
 }

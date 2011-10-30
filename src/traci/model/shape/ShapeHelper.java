@@ -1,17 +1,12 @@
 package traci.model.shape;
 
 import traci.model.shape.csg.Csg;
-import traci.model.shape.primitive.Primitive;
 
 public class ShapeHelper
 {
     public static int numPrimitives(final Shape shape)
     {
-        if (shape instanceof Primitive)
-        {
-            return 1;
-        }
-        else if (shape instanceof Csg)
+        if (shape instanceof Csg)
         {
             int numPrimitives = 0;
 
@@ -23,16 +18,12 @@ public class ShapeHelper
             return numPrimitives;
         }
 
-        return 0;
+        return 1;
     }
 
     public static int numCsgs(final Shape shape)
     {
-        if (shape instanceof Primitive)
-        {
-            return 0;
-        }
-        else if (shape instanceof Csg)
+        if (shape instanceof Csg)
         {
             int numCsgs = 1;
 
@@ -49,11 +40,7 @@ public class ShapeHelper
 
     public static int numBBoxes(final Shape shape)
     {
-        if (shape instanceof Primitive)
-        {
-            return 0;
-        }
-        else if (shape instanceof Csg)
+        if (shape instanceof Csg)
         {
             final Csg csg = (Csg) shape;
             int numBBoxes = csg.getBoundingBox() == null ? 0 : 1;
