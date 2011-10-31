@@ -1,5 +1,5 @@
 <project default="jar">
-  
+
   <property name="version" value="0.0.1" />
   <property name="src" value="src" />
   <property name="bin" value="bin" />
@@ -15,7 +15,7 @@
 
   <property name="jarfile" value="traci-${version}.jar" />
   <property name="src-distfile" value="traci-${version}.tar.gz" />
-  
+
   <target name="clean">
     <delete file="${src}/traci/lang/parser/TraciLexer.java" />
     <delete file="${src}/traci/lang/parser/TraciParser.java" />
@@ -36,7 +36,7 @@
       <arg value="${src}/traci/lang/grammar/TraciTreeWalker.g" />
     </java>
   </target>
-  
+
   <target name="compile" depends="generate-parser">
     <mkdir dir="${bin}" />
     <javac srcdir="${src}" destdir="${bin}" includeantruntime="false">
@@ -47,9 +47,9 @@
       </classpath>
     </javac>
   </target>
-  
+
   <target name="unpack-libs">
-    <mkdir dir="${tmp}/${antlr-dir}" />
+    <delete dir="${tmp}" />
     <unjar src="${lib}/${antlr-dir}/${antlr-jar}" dest="${tmp}/${antlr-dir}">
       <patternset>
         <include name="org/antlr/runtime/**" />
@@ -66,7 +66,7 @@
       </patternset>
     </unjar>
   </target>
-  
+
   <target name="jar" depends="compile, unpack-libs">
     <jar destfile="${jarfile}">
       <fileset dir="${bin}" />
@@ -79,12 +79,19 @@
       </manifest>
     </jar>
   </target>
-  
+
   <target name="src-dist">
     <tar destfile="${src-distfile}" compression="gzip">
-      <tarfileset dir="." prefix="traci-${version}"
-		  includes="src/, images/, lib/, build.xml, README, COPYING" />
+      <tarfileset dir="." prefix="traci-${version}">
+        <include name="src/" />
+        <include name="scenes/" />
+        <include name="images/" />
+        <include name="lib/" />
+        <include name="build.xml" />
+        <include name="README" />
+        <include name="COPYING" />
+      </tarfileset>
     </tar>
   </target>
-  
+
 </project>
