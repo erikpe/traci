@@ -17,7 +17,7 @@ public class Union extends Csg
 
         for (int i = 0; i < numShapes; ++i)
         {
-            ray = Ray.union(ray, shapes.get(i).shootRay(p, dir));
+            ray = Ray.union(ray, shapes[i].shootRay(p, dir));
         }
 
         return ray;

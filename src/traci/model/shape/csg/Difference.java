@@ -13,7 +13,7 @@ public class Difference extends Csg
             return null;
         }
 
-        Ray ray = shapes.get(0).shootRay(p, dir);
+        Ray ray = shapes[0].shootRay(p, dir);
 
         if (ray == null)
         {
@@ -22,7 +22,7 @@ public class Difference extends Csg
 
         for (int i = 1; i < numShapes; ++i)
         {
-            ray = Ray.difference(ray, shapes.get(i).shootRay(p, dir));
+            ray = Ray.difference(ray, shapes[i].shootRay(p, dir));
 
             if (ray == null)
             {

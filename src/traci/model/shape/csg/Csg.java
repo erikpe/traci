@@ -1,6 +1,7 @@
 package traci.model.shape.csg;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,21 +15,22 @@ import traci.model.shape.Shape;
 
 public abstract class Csg extends Shape implements Iterable<Shape>
 {
-    protected List<Shape> shapes;
+    protected Shape[] shapes;
     protected int numShapes;
-
     protected BoundingBox bBox;
 
     public Csg()
     {
-        this.shapes = new ArrayList<Shape>();
-        this.numShapes = this.shapes.size();
+        this.shapes = new Shape[0];
+        this.numShapes = 0;
     }
 
     public void add(final Shape shape)
     {
-        shapes.add(shape);
-        numShapes = shapes.size();
+        final Shape[] oldShapes = shapes;
+        shapes = new Shape[++numShapes];
+        System.arraycopy(oldShapes, 0, shapes, 0, numShapes - 1);
+        shapes[numShapes - 1] = shape;
     }
 
     public BoundingBox getBoundingBox()
@@ -58,7 +60,7 @@ public abstract class Csg extends Shape implements Iterable<Shape>
     @Override
     public Iterator<Shape> iterator()
     {
-        return shapes.iterator();
+        return Arrays.asList(shapes).iterator();
     }
 
     @Override
@@ -101,12 +103,12 @@ public abstract class Csg extends Shape implements Iterable<Shape>
     public Object clone()
     {
         final Csg res = (Csg) super.clone();
-        res.shapes = new ArrayList<Shape>();
-        res.numShapes = res.shapes.size();
+        res.shapes = new Shape[numShapes];
+        res.numShapes = numShapes;
 
-        for (final Shape shape : shapes)
+        for (int i = 0; i < numShapes; ++i)
         {
-            res.add((Shape) shape.clone());
+            res.shapes[i] = (Shape) shapes[i].clone();
         }
 
         return res;
