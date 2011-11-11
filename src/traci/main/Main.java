@@ -31,6 +31,6 @@ public class Main
             drawAreas.add(new PngDrawArea(settings.width, settings.height, settings.outputFilename));
         }
 
-        Renderer.renderScene(scene, new Settings(), drawAreas, 8);
+        Renderer.renderScene(scene, settings, drawAreas);
     }
 }

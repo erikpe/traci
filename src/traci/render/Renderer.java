@@ -24,20 +24,18 @@ public class Renderer implements BlockRenderer
     private final Camera camera;
     private final Settings settings;
     private final DrawArea area;
-    private final int numThreads;
 
-    private Renderer(final Scene scene, final Settings settings, final DrawArea area, final int numThreads)
+    private Renderer(final Scene scene, final Settings settings, final DrawArea area)
     {
         this.scene = scene;
         this.camera = scene.camera;
         this.settings = settings;
         this.area = area;
-        this.numThreads = numThreads;
     }
 
-    public static void renderScene(final Scene scene, final Settings settings, final DrawArea area, final int numThreads)
+    public static void renderScene(final Scene scene, final Settings settings, final DrawArea area)
     {
-        new Renderer(scene, settings, area, numThreads).renderScene();
+        new Renderer(scene, settings, area).renderScene();
     }
 
     private void renderScene()
@@ -78,12 +76,12 @@ public class Renderer implements BlockRenderer
          */
         final List<RenderingThread> renderingThreads = new ArrayList<RenderingThread>();
 
-        for (int i = 0; i < numThreads; ++i)
+        for (int i = 0; i < settings.numThreads; ++i)
         {
             renderingThreads.add(new RenderingThread(this, workQueue));
         }
 
-        Log.INFO("Spawning " + numThreads + " rendering thread" + (numThreads == 1 ? "" : "s") + " wokning on " +
+        Log.INFO("Spawning " + settings.numThreads + " rendering thread" + (settings.numThreads == 1 ? "" : "s") + " wokning on " +
                 workQueue.size() + " block");
 
         /**

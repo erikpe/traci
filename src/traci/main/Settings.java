@@ -8,7 +8,7 @@ public class Settings
     public String outputFilename = null;
     public boolean display = false;
 
-    public int numThreads = 8;
+    public int numThreads = Runtime.getRuntime().availableProcessors();
 
     public int width = 800;
     public int height = 600;
