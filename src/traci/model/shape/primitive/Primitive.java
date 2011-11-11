@@ -58,6 +58,12 @@ public abstract class Primitive extends Shape
     }
 
     @Override
+    public Shape optimize()
+    {
+        return this;
+    }
+
+    @Override
     public void transform(final Transformation tr)
     {
         transformation = transformation.compose(tr);

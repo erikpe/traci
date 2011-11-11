@@ -71,7 +71,7 @@ public class Options
     public Settings parse(final String[] argv)
     {
         final Getopt g = new Getopt("traci", argv, opts, longOpts);
-        final Settings settings = new Settings();
+        final Settings settings = Settings.getDefault();
 
         int c;
         while ((c = g.getopt()) != -1)

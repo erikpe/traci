@@ -100,6 +100,35 @@ public abstract class Csg extends Shape implements Iterable<Shape>
     }
 
     @Override
+    public Shape optimize()
+    {
+        final List<Shape> tmpShapes = new ArrayList<Shape>();
+
+        for (final Shape shape : shapes)
+        {
+            final Shape optShape = shape.optimize();
+            if (optShape != null)
+            {
+                tmpShapes.add(optShape);
+            }
+        }
+
+        numShapes = tmpShapes.size();
+
+        if (numShapes == 0)
+        {
+            return null;
+        }
+        else if (numShapes == 1)
+        {
+            return tmpShapes.get(0);
+        }
+
+        shapes = tmpShapes.toArray(new Shape[numShapes]);
+        return this;
+    }
+
+    @Override
     public Object clone()
     {
         final Csg res = (Csg) super.clone();

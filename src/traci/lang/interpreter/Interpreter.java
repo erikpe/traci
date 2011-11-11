@@ -19,6 +19,7 @@ import traci.model.Camera;
 import traci.model.Scene;
 import traci.model.light.PointLight;
 import traci.model.material.Color;
+import traci.model.shape.Shape;
 import traci.model.shape.csg.Union;
 import traci.util.Log;
 import traci.util.Utilities;
@@ -94,9 +95,14 @@ public class Interpreter
         {
             // Ignore
         }
+        Shape optimizedRoot = rootUnion.optimize();
+        if (optimizedRoot == null)
+        {
+            optimizedRoot = new Union();
+        }
         stop = System.currentTimeMillis();
-
         Log.INFO("Scene constructed in " + Utilities.millisecondsToString(stop - start));
+
 
         final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*50));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
@@ -104,7 +110,7 @@ public class Interpreter
         final Vector camLocation = Vector.make(-10, 15, 15);
         final Vector camLookAt = Vector.make(8, 2, 0);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y, settings);
-        final Scene scene = new Scene(rootUnion, cam);
+        final Scene scene = new Scene(optimizedRoot, cam);
         scene.addLight(light);
         scene.addLight(light2);
 

@@ -17,6 +17,7 @@ public abstract class Shape implements Transformable, Cloneable
     public abstract void setTexture(final Texture texture);
     public abstract void setPigment(final Pigment pigment);
     public abstract void setFinish(final Finish finish);
+    public abstract Shape optimize();
 
     @Override
     public Object clone()
