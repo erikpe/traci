@@ -9,6 +9,7 @@ import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
+import traci.util.Log;
 
 public class FunctionCallNode implements TraciNode
 {
@@ -28,6 +29,11 @@ public class FunctionCallNode implements TraciNode
     {
         final Function functionNode = context.getFunction(id);
         final List<TraciValue> args = new ArrayList<TraciValue>();
+
+        if (functionNode == null)
+        {
+            Log.ERROR("No such function defined: '" + id + "'");
+        }
 
         for (final TraciNode argNode : argNodes)
         {
