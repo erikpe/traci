@@ -1,0 +1,19 @@
+#ifndef LEGO_UNITS_TRACI
+#define LEGO_UNITS_TRACI
+
+global ORIGO = [0, 0, 0];
+
+global X = [1, 0, 0];
+global Y = [0, 1, 0];
+global Z = [0, 0, 1];
+
+global EPSILON = 0.01;
+global PI = 3.14159265358979323846;
+
+global LU = 1.0;      // Lego-Unit: distance between two pegs
+global BH = LU * 1.2; // Brick-Height
+global PH = LU * .4;  // Plate-Height
+global PEG_HEIGHT = LU * .2;
+global LEGO_ROUNDING = .03;
+
+#endif // LEGO_UNITS_TRACI

@@ -1,0 +1,87 @@
+#ifndef LEGO_PRIMITIVES_TRACI
+#define LEGO_PRIMITIVES_TRACI
+
+#include "lego-units.traci"
+#include "basic-shapes.traci"
+
+def fastLegopartPeg ()
+{
+    height = LU * .2;
+    radius = LU * .3;
+    return cylinder (radius, [LU/2, -EPSILON, LU/2], [LU/2, height, LU/2]);
+}
+
+def legopartPeg ()
+{
+    height = LU * .2;
+    radius = LU * .3;
+    lowerRounding = LEGO_ROUNDING;
+    upperRounding = 2 * LEGO_ROUNDING;
+    return roundedCylinder2 (radius, height, lowerRounding, upperRounding) {
+        translate [LU/2, 0, LU/2];
+    }
+}
+
+def legopartPegHole ()
+{
+    height = LU * .2;
+    radius = LU * .3;
+    innerRadius = LU * .2;
+    lowerRounding = LEGO_ROUNDING;
+    upperRounding = 2 * LEGO_ROUNDING;
+    return difference {
+        roundedCylinder2 (radius, height, lowerRounding, upperRounding);
+        roundedCylinder2 (innerRadius, height - EPSILON, upperRounding, lowerRounding) {
+            rotx PI;
+            translate Y*height;
+        }
+        translate [LU/2, 0, LU/2];
+    }
+}
+
+def fastLegopartTechnicBrickHole ()
+{
+    radius = LU * .3;
+    length = LU;
+    height = LU * .7;
+    return cylinder (radius, [LU, height, -EPSILON], [LU, height, LU+EPSILON]);
+}
+
+def legopartTechnicBrickHole ()
+{
+    radius = LU * .3;
+    length = LU;
+    rounding = .5 * LEGO_ROUNDING;
+    cw = LU * .08;
+    cd = LU * .08;
+    height = LU * .7;
+    return union {
+        roundedCylinder3 (radius, length-2*cd, rounding) {
+            translate Y*cd;
+        }
+        roundedCylinder2 (radius+cw, cd, rounding, rounding);
+        roundedCylinder2 (radius+cw, cd, rounding, rounding) {
+            rotx PI;
+            translate Y*length;
+        }
+        bbox {
+            scale [2, 1, 2];
+            translate [-1, 0, -1];
+            scale [radius+cw+rounding, length+EPSILON+EPSILON, radius+cw+rounding];
+            translate -Y*EPSILON;
+        }
+        rotx PI/2;
+        translate [LU, height, 0];
+    }
+}
+
+def legopartTechnicPlateHole ()
+{
+    radius = LU * .3;
+    height = LU * .4;
+    return roundedCylinder3 (radius, height, LEGO_ROUNDING) {
+        translate [LU, 0, LU];
+    }
+}
+
+#endif // LEGO_PRIMITIVES_TRACI
