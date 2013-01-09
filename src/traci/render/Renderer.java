@@ -115,10 +115,12 @@ public class Renderer implements BlockRenderer
 
         Log.INFO("Successfully rendered scene in " + ((stopTime - startTime) / 1000.0) + " seconds.");
 
-        final long hit = BoundingBox.hit.get();
-        final long miss = BoundingBox.miss.get();
-
-        Log.INFO("Bounding-Box discard ratio: " + ((100 * miss) / (miss + hit)) + "% (" + miss + "/" + (miss + hit) + ")");
+        if (settings.debug)
+        {
+            final long hit = BoundingBox.hit.get();
+            final long miss = BoundingBox.miss.get();
+            Log.INFO("Bounding-Box discard ratio: " + ((100 * miss) / (miss + hit)) + "% (" + miss + "/" + (miss + hit) + ")");
+        }
     }
 
     @Override

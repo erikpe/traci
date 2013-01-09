@@ -5,6 +5,7 @@ import traci.gui.MainWindow;
 import traci.gui.MultiDrawArea;
 import traci.gui.PngDrawArea;
 import traci.lang.interpreter.Interpreter;
+import traci.lang.preprocessor.TraciPreprocessor;
 import traci.model.Scene;
 import traci.render.Renderer;
 
@@ -14,7 +15,11 @@ public class Main
     {
         final Options options = new Options();
         final Settings settings = options.parse(argv);
-        final Interpreter interpreter = new Interpreter(settings);
+
+        final TraciPreprocessor pp = new TraciPreprocessor(settings);
+        final String code = pp.run();
+
+        final Interpreter interpreter = new Interpreter(settings, code);
         final Scene scene = interpreter.run();
 
         final MultiDrawArea drawAreas = new MultiDrawArea(settings.width, settings.height);

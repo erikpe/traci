@@ -3,6 +3,8 @@ package traci.lang.interpreter;
 import java.io.IOException;
 
 import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
@@ -27,27 +29,38 @@ import traci.util.Utilities;
 public class Interpreter
 {
     private final Settings settings;
+    private final String code;
 
-    public Interpreter(final Settings settings)
+    public Interpreter(final Settings settings, final String code)
     {
         this.settings = settings;
+        this.code = code;
     }
 
     public Scene run()
     {
-        Log.INFO("Parsing input file: " + settings.inputFilename);
+        Log.INFO("Parsing input file: '" + settings.inputFilename + "'");
         long start = System.currentTimeMillis();
-        ANTLRFileStream input = null;
-        try
+
+        CharStream input = null;
+        if (code == null)
         {
-            input = new ANTLRFileStream(settings.inputFilename);
+            try
+            {
+                input = new ANTLRFileStream(settings.inputFilename);
+            }
+            catch (final IOException e)
+            {
+                Log.ERROR("Unable to open input file: '" + settings.inputFilename + "':");
+                Log.ERROR(e.getMessage());
+                System.exit(-1);
+            }
         }
-        catch (final IOException e)
+        else
         {
-            Log.ERROR("Unable to open input file: " + settings.inputFilename + ":");
-            Log.ERROR(e.getMessage());
-            System.exit(-1);
+            input = new ANTLRStringStream(code);
         }
+
         final TraciLexer lexer = new TraciLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final TraciParser parser = new TraciParser(tokens);
