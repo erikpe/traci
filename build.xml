@@ -10,8 +10,8 @@
   <property name="antlr-jar" value="antlr-3.4-complete-no-antlrv2.jar" />
   <property name="java-getopt-dir" value="java-getopt-1.0.13" />
   <property name="java-getopt-jar" value="java-getopt-1.0.13.jar" />
-  <property name="anarres-cpp-dir" value="anarres-cpp-bin-1.2.8" />
-  <property name="anarres-cpp-jar" value="anarres-cpp-bin-1.2.8.jar" />
+  <property name="anarres-cpp-dir" value="anarres-cpp-bin-1.2.6" />
+  <property name="anarres-cpp-jar" value="anarres-cpp-bin-1.2.6.jar" />
 
   <property name="jarfile" value="traci-${version}.jar" />
   <property name="src-distfile" value="traci-${version}.tar.gz" />
