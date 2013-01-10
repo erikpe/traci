@@ -4,21 +4,18 @@
 #include "lego-units.traci"
 #include "basic-shapes.traci"
 
-def fastLegopartPeg ()
-{
-    height = LU * .2;
-    radius = LU * .3;
-    return cylinder (radius, [LU/2, -EPSILON, LU/2], [LU/2, height, LU/2]);
-}
-
 def legopartPeg ()
 {
     height = LU * .2;
     radius = LU * .3;
     lowerRounding = LEGO_ROUNDING;
     upperRounding = 2 * LEGO_ROUNDING;
+#ifdef FAST_LEGO
+    return cylinder (radius, [LU/2, -EPSILON, LU/2], [LU/2, height, LU/2]);
+#else
     return roundedCylinder2 (radius, height, lowerRounding, upperRounding) {
         translate [LU/2, 0, LU/2];
+#endif // FAST_LEGO
     }
 }
 

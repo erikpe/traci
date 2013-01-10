@@ -1,0 +1,120 @@
+#ifndef TECHNIC_BRICK_WITH_HOLES_TRACI
+#define TECHNIC_BRICK_WITH_HOLES_TRACI
+
+#include "../primitives/lego-units.traci"
+#include "../primitives/lego-primitives.traci"
+
+def technicBrickWithHoles_fast (length)
+{
+    boxLength = LU * length;
+    boxHeight = LU * 1.2;
+    boxWidth = LU;
+    pegHeight = LU * .2;
+    shrink = LU*.01;
+    return union {
+        difference {
+            box {
+                scale [boxLength-2*shrink, boxHeight-2*shrink, boxWidth-2*shrink];
+                translate [1, 1, 1] * shrink;
+            }
+            for (i in 0 .. length-2) {
+                fastLegopartTechnicBrickHole() {
+                    translate X*i*LU;
+                }
+            }
+        }
+        for (i in 0 .. length-1) {
+            fastLegopartPeg () {
+                translate [LU*i, boxHeight, 0];
+            }
+        }
+        bbox {
+            scale [boxLength, boxHeight+pegHeight, boxWidth];
+        }
+    }
+}
+
+def technicBrickWithHoles_accurate (length)
+{
+    boxLength = LU * length;
+    boxHeight = LU * 1.2;
+    boxWidth = LU;
+    thickness = LU * .15;
+    pegHeight = LU * .2;
+    return union {
+        difference {
+            roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+            difference {
+                roundedBox2 (boxLength-2*thickness, boxHeight-thickness, boxWidth-2*thickness, LEGO_ROUNDING) {
+                    translate [thickness, 0, thickness];
+                }
+                for (i in 0 .. length-2) {
+                    cylinder (LU*.3+thickness*.5, [LU, LU*.7, thickness-EPSILON], [LU, LU*.7, boxWidth-thickness+EPSILON]) {
+                        translate X*LU*i;
+                    }
+                }
+            }
+            for (i in 0 .. length-2) {
+                legopartTechnicBrickHole () {
+                    translate X*i*LU;
+                }
+            }
+        }
+        for (i in 0 .. length-2) {
+            roundedCylinder0 (LU*.15, LU*.35, LEGO_ROUNDING) {
+                scale [1, -1, 1];
+                translate [LU, LU*.35, LU*.5];
+                translate X*LU*i;
+            }
+        }
+        for (i in 0 .. length-1) {
+            legopartPegHole () {
+                translate [LU*i, boxHeight, 0];
+            }
+        }
+        bbox {
+            scale [boxLength, boxHeight+pegHeight, boxWidth];
+        }
+    }
+}
+
+def technicBrickWithHoles (length)
+{
+#ifdef FAST_LEGO
+    return technicBrickWithHoles_fast (length);
+#else
+    return technicBrickWithHoles_accurate (length);
+#endif // FAST_LEGO
+}
+
+def technicBrick1x2WithHoles ()
+{
+    return technicBrickWithHoles (2);
+}
+
+def technicBrick1x4WithHoles ()
+{
+    return technicBrickWithHoles (4);
+}
+
+def technicBrick1x6WithHoles ()
+{
+    return technicBrickWithHoles (6);
+}
+
+def technicBrick1x8WithHoles ()
+{
+    return technicBrickWithHoles (8);
+}
+
+def technicBrick1x8WithHoles ()
+{
+    return technicBrickWithHoles (8);
+}
+
+def technicBrick1x10WithHoles ()
+{
+    return technicBrickWithHoles (10);
+}
+
+#endif // TECHNIC_BRICK_WITH_HOLES
