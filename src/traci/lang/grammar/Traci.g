@@ -17,14 +17,47 @@ tokens {
 }
 
 @parser::header {
-    package traci.lang.parser;
-    
-    import java.util.HashMap;
-    import java.util.Map;
+package traci.lang.parser;
+
+import java.util.HashMap;
+import java.util.Map;
 }
 
 @lexer::header {
-    package traci.lang.parser;
+package traci.lang.parser;
+
+import traci.lang.grammar.TraciToken;
+import traci.lang.grammar.Location;
+}
+
+@lexer::members {
+private String currentFilename = null;
+private final Stack<Location> includeStack = new Stack<Location>();
+
+public Token emit() {
+    TraciToken tok = new TraciToken(input, state.type, state.channel, state.tokenStartCharIndex, getCharIndex() - 1, currentFilename, includeStack);
+    tok.setLine(state.tokenStartLine);
+    tok.setText(state.text);
+    tok.setCharPositionInLine(state.tokenStartCharPositionInLine);
+    emit(tok);
+    return tok;
+}
+
+public void ppLine(String rowStr, String filename, String actionStr) {
+    final int row = Integer.parseInt(rowStr);
+    final int action = Integer.parseInt(actionStr);
+    if (action == 1) {
+        if (currentFilename != null) {
+            includeStack.push(new Location(currentFilename, input.getLine(), 0));
+        }
+        input.setLine(0);
+    }
+    else if (action == 2) {
+        final Location location = includeStack.pop();
+        input.setLine(location.row);
+    }
+    currentFilename = filename;
+}
 }
 
 scene
@@ -168,13 +201,17 @@ COMMENT
     |   '/*' ( options {greedy=false;} : . )* '*/' {$channel=HIDDEN;}
     ;
 
-WS  :   ( ' '
-        | '\t'
-        | '\r'
-        | '\n'
-        ) {$channel=HIDDEN;}
+WS  :   ( ' ' | '\t' | '\r' | '\n' ) {$channel=HIDDEN;}
     ;
 
 fragment
-EXPONENT : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
+EXPONENT
+    :	('e'|'E') ('+'|'-')? ('0'..'9')+ ;
 
+QSTRING
+    :	'"' ( ~( '"' | '\\' ) | '\\' . )* '"'
+    ;
+
+PPLINE
+    : '#line' WS+ row=INT WS+ QSTRING WS+ action=INT {$channel=HIDDEN; ppLine($row.text, $QSTRING.text, $action.text);}
+    ;

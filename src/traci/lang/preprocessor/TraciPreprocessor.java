@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 import org.anarres.cpp.CppReader;
+import org.anarres.cpp.Feature;
 import org.anarres.cpp.Preprocessor;
 
 import traci.main.Settings;
@@ -31,6 +32,8 @@ public class TraciPreprocessor
         try
         {
             pp = new Preprocessor(inputFile);
+            pp.addFeature(Feature.LINEMARKERS);
+            pp.addFeature(Feature.KEEPCOMMENTS);
         }
         catch (final IOException e)
         {
@@ -61,7 +64,7 @@ public class TraciPreprocessor
 
         final long stop = System.currentTimeMillis();
         Log.INFO("Preprocessing finished in " + Utilities.millisecondsToString(stop - start));
-
+        //System.out.println(sb.toString());
         return sb.toString();
     }
 }
