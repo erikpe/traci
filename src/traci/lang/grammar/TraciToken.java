@@ -13,6 +13,14 @@ public class TraciToken extends CommonToken
     public final String filename;
     public final List<Location> includePath;
 
+    public TraciToken(final CharStream input, final int type, final int channel, final int start, final int stop,
+            final String filename, final List<Location> includeStack)
+    {
+        super(input, type, channel, start, stop);
+        this.filename = unquote(filename);
+        this.includePath = Collections.unmodifiableList(new ArrayList<Location>(includeStack));
+    }
+
     static String unquote(String str)
     {
         if (str == null)
@@ -24,11 +32,39 @@ public class TraciToken extends CommonToken
         return str;
     }
 
-    public TraciToken(final CharStream input, final int type, final int channel, final int start, final int stop,
-            final String filename, final List<Location> includeStack)
+    public String getFormattedIncludePath()
     {
-        super(input, type, channel, start, stop);
-        this.filename = unquote(filename);
-        this.includePath = Collections.unmodifiableList(new ArrayList<Location>(includeStack));
+        final StringBuilder sb = new StringBuilder();
+
+        for (int i = includePath.size() - 1; i >= 0; --i)
+        {
+            if (i == (includePath.size() - 1))
+            {
+                sb.append("In file included from ");
+            }
+            else
+            {
+                sb.append("                 from ");
+            }
+
+            sb.append(includePath.get(i).filename);
+            sb.append(':');
+            sb.append(includePath.get(i).row);
+
+            if (i < includePath.size() - 1)
+            {
+                sb.append(",\n");
+            }
+            else
+            {
+                sb.append(":\n");
+            }
+        }
+
+        sb.append(filename).append(':');
+        sb.append(getLine()).append(':');
+        sb.append(getCharPositionInLine()).append(':');
+
+        return sb.toString();
     }
 }

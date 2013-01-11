@@ -107,7 +107,7 @@ expr returns [TraciNode node]
     | ^(UNARY_OP op='!' a=expr) { $node = new UnaryOpNode(Op.UNARY_NOT, $a.node, $op.token); }
     | ^(REF ID block?)      { $node = new RefNode($ID.text, $block.node, $ID.token); }
     | ^(FUNCALL ID function_call_args block?)
-        { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node); }
+        { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node, $ID.token); }
     | ^(VECTOR a=expr b=expr c=expr)
         { $node = new VectorNode($a.node, $b.node, $c.node); }
     | INT                   { $node = new ConstNode(new TraciValue(Double.valueOf($INT.text))); }

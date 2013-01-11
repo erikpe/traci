@@ -15,7 +15,18 @@ public class Log
     {
         if (logLevel.compareTo(LogLevel.ERROR) >= 0)
         {
-            System.out.println("[ERROR] " + msg);
+            final String[] lines = msg.split("\n");
+            for (int i = 0; i < lines.length; ++i)
+            {
+                if (i == 0)
+                {
+                    System.out.println("[ERROR] " + lines[i]);
+                }
+                else
+                {
+                    System.out.println("        " + lines[i]);
+                }
+            }
         }
     }
 

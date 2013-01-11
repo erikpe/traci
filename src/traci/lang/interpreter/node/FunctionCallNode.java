@@ -3,6 +3,9 @@ package traci.lang.interpreter.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.runtime.Token;
+
+import traci.lang.grammar.TraciToken;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
@@ -16,12 +19,14 @@ public class FunctionCallNode implements TraciNode
     private final String id;
     private final List<TraciNode> argNodes;
     private final BlockNode blockNode;
+    private final TraciToken token;
 
-    public FunctionCallNode(final String id, final List<TraciNode> argNodes, final BlockNode blockNode)
+    public FunctionCallNode(final String id, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
         this.id = id;
         this.argNodes = argNodes;
         this.blockNode = blockNode;
+        this.token = (TraciToken) token;
     }
 
     @Override
@@ -32,6 +37,7 @@ public class FunctionCallNode implements TraciNode
 
         if (functionNode == null)
         {
+            Log.ERROR(token.getFormattedIncludePath());
             Log.ERROR("No such function defined: '" + id + "'");
         }
 
