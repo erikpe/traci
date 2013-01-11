@@ -20,11 +20,11 @@ public class Log
             {
                 if (i == 0)
                 {
-                    System.out.println("[ERROR] " + lines[i]);
+                    System.err.println("[ERROR] " + lines[i]);
                 }
                 else
                 {
-                    System.out.println("        " + lines[i]);
+                    System.err.println("        " + lines[i]);
                 }
             }
         }

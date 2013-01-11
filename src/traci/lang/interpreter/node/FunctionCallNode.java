@@ -37,8 +37,9 @@ public class FunctionCallNode implements TraciNode
 
         if (functionNode == null)
         {
-            Log.ERROR(token.getFormattedIncludePath());
-            Log.ERROR("No such function defined: '" + id + "'");
+            Log.ERROR(token.location.toString());
+            Log.ERROR("No such function defined: '" + id + "()'");
+            System.exit(-1);
         }
 
         for (final TraciNode argNode : argNodes)

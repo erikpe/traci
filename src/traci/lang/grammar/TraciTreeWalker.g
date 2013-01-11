@@ -6,21 +6,27 @@ options {
 }
 
 @header {
-    package traci.lang.parser;
+package traci.lang.parser;
 
-    import java.util.HashMap;
-    import java.util.Map;
-    import traci.math.Vector;
-    import traci.model.shape.csg.*;
-    import traci.model.shape.*;
-    import traci.lang.*;
-    import traci.lang.interpreter.*;
-    import traci.lang.interpreter.node.*;
-    import traci.lang.parser.*;
+import java.util.HashMap;
+import java.util.Map;
+import traci.math.Vector;
+import traci.model.shape.csg.*;
+import traci.model.shape.*;
+import traci.lang.*;
+import traci.lang.interpreter.*;
+import traci.lang.interpreter.node.*;
+import traci.lang.parser.*;
 }
 
 @members {
-    private Map<String, Function> visibleFunctions = BuiltinFunctions.getAll();
+private Map<String, Function> visibleFunctions = BuiltinFunctions.getAll();
+
+public void displayRecognitionError(String[] tokenNames,
+                                    RecognitionException e) {
+    String hdr = getErrorHeader(e);
+    String msg = getErrorMessage(e, tokenNames);
+}
 }
 
 scene
@@ -29,12 +35,12 @@ scene
 
 block returns [BlockNode node]
 @init {
-    final Map<String, Function> outerFunctions = visibleFunctions;
-    visibleFunctions = new HashMap<String, Function>(outerFunctions);
-    node = new BlockNode(visibleFunctions);
+final Map<String, Function> outerFunctions = visibleFunctions;
+visibleFunctions = new HashMap<String, Function>(outerFunctions);
+node = new BlockNode(visibleFunctions);
 }
 @after {
-    visibleFunctions = outerFunctions;
+visibleFunctions = outerFunctions;
 }
     : ^(BLOCK ( statement    { $node.addStatement($statement.node); }
               | function_def { visibleFunctions.put($function_def.node.id, $function_def.node); } )*)
@@ -47,14 +53,14 @@ function_def returns [FunctionNode node]
 
 function_def_args returns [List<String> argIDs]
 @init {
-    argIDs = new ArrayList<String>();
+argIDs = new ArrayList<String>();
 }
     : ^(ARGS ( ID { $argIDs.add($ID.text); } )*)
     ;
 
 function_call_args returns [List<TraciNode> nodes]
 @init {
-    nodes = new ArrayList<TraciNode>();
+nodes = new ArrayList<TraciNode>();
 }
     : ^(ARGS ( expr { $nodes.add($expr.node); } )*)
     ;

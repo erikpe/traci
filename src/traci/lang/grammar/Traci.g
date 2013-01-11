@@ -21,21 +21,40 @@ package traci.lang.parser;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import traci.lang.grammar.TraciToken;
+import traci.lang.grammar.TraciLocation;
+import traci.lang.grammar.TraciLocation.FileLocation;
+import traci.util.Log;
+}
+
+@parser::members {
+public void displayRecognitionError(String[] tokenNames,
+                                    RecognitionException e) {
+    String hdr = getErrorHeader(e);
+    String msg = getErrorMessage(e, tokenNames);
+    Log.ERROR(((TraciToken) e.token).location.toString());
+    Log.ERROR("Parse error: " + msg);
+    System.exit(-1);
+}
 }
 
 @lexer::header {
 package traci.lang.parser;
 
+import traci.lang.grammar.TraciLocation;
+import traci.lang.grammar.TraciLocation.FileLocation;
 import traci.lang.grammar.TraciToken;
-import traci.lang.grammar.Location;
+import traci.util.Log;
 }
 
 @lexer::members {
 private String currentFilename = null;
-private final Stack<Location> includeStack = new Stack<Location>();
+private final Stack<FileLocation> includeStack = new Stack<FileLocation>();
 
 public Token emit() {
-    TraciToken tok = new TraciToken(input, state.type, state.channel, state.tokenStartCharIndex, getCharIndex() - 1, currentFilename, includeStack);
+    final TraciToken tok = new TraciToken(input, state.type, state.channel, state.tokenStartCharIndex, getCharIndex() - 1,
+            new FileLocation(currentFilename, state.tokenStartLine, state.tokenStartCharPositionInLine), includeStack);
     tok.setLine(state.tokenStartLine);
     tok.setText(state.text);
     tok.setCharPositionInLine(state.tokenStartCharPositionInLine);
@@ -48,15 +67,33 @@ public void ppLine(String rowStr, String filename, String actionStr) {
     final int action = Integer.parseInt(actionStr);
     if (action == 1) {
         if (currentFilename != null) {
-            includeStack.push(new Location(currentFilename, input.getLine(), 0));
+            includeStack.push(new FileLocation(currentFilename, input.getLine(), 0));
         }
         input.setLine(0);
     }
     else if (action == 2) {
-        final Location location = includeStack.pop();
+        final FileLocation location = includeStack.pop();
         input.setLine(location.row);
     }
     currentFilename = filename;
+}
+
+public void displayRecognitionError(String[] tokenNames,
+                                    RecognitionException e) {
+        final String hdr = getErrorHeader(e);
+        final String msg = getErrorMessage(e, tokenNames);
+        final TraciLocation location;
+        if (e.token != null)
+        {
+            location = ((TraciToken) e.token).location;
+        }
+        else
+        {
+            location = new TraciLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
+        }
+        Log.ERROR(location.toString());
+        Log.ERROR("Lexer error: " + msg);
+        System.exit(-1);
 }
 }
 
