@@ -47,7 +47,7 @@ public class FunctionCallNode implements TraciNode
             args.add(argNode.eval(context));
         }
 
-        TraciValue value = functionNode.invoke(context, args);
+        TraciValue value = functionNode.invoke(context.newFuncallContext(token.location.fileLocation, id), args);
 
         if (blockNode != null)
         {

@@ -30,7 +30,7 @@ public class FunctionNode implements TraciNode, Function
     @Override
     public TraciValue invoke(Context context, final List<TraciValue> args)
     {
-        context = context.newLocalMemory().newEntity(Entities.NULL_ENTITY);
+        context = context.newEntity(Entities.NULL_ENTITY);
 
         if (args.size() < argIDs.size())
         {

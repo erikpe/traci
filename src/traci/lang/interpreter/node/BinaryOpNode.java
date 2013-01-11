@@ -2,24 +2,26 @@ package traci.lang.interpreter.node;
 
 import org.antlr.runtime.Token;
 
+import traci.lang.grammar.TraciToken;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
 import traci.math.Vector;
+import traci.util.Log;
 
 public class BinaryOpNode implements TraciNode
 {
     private final Op op;
     private final TraciNode aNode;
     private final TraciNode bNode;
-    private final Token token;
+    private final TraciToken token;
 
     public BinaryOpNode(final Op op, final TraciNode aNode, final TraciNode bNode, final Token token)
     {
         this.op = op;
         this.aNode = aNode;
         this.bNode = bNode;
-        this.token = token;
+        this.token = (TraciToken) token;
     }
 
     @Override
@@ -68,9 +70,10 @@ public class BinaryOpNode implements TraciNode
 
         if (res == null)
         {
-            System.out.println("Error: Trying to evaluate expression `" + aType.toString() + " " + token.getText() + " "
-                    + bType.toString() + "' at position " + token.getLine() + ":" + token.getCharPositionInLine() + ".");
-            throw new RuntimeException();
+            Log.ERROR(token.location.toString());
+            Log.ERROR("Runtime error: Trying to evaluate expression `" + aType.toString() + " " + token.getText() + " "
+                    + bType.toString() + "'");
+            System.exit(-1);
         }
 
         return new TraciValue(res);

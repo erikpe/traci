@@ -2,23 +2,25 @@ package traci.lang.interpreter.node;
 
 import org.antlr.runtime.Token;
 
+import traci.lang.grammar.TraciToken;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
+import traci.util.Log;
 
 public class RefNode implements TraciNode
 {
     private final String id;
     private final BlockNode blockNode;
-    private final Token token;
+    private final TraciToken token;
 
     public RefNode(final String id, final BlockNode blockNode, final Token token)
     {
         this.id = id;
         this.blockNode = blockNode;
-        this.token = token;
+        this.token = (TraciToken) token;
     }
 
     @Override
@@ -28,9 +30,10 @@ public class RefNode implements TraciNode
 
         if (value == null)
         {
-            System.out.println("Error: Undefined variable `" + id + "' at position " + token.getLine() + ":"
-                    + token.getCharPositionInLine() + ".");
-            throw new RuntimeException();
+            Log.ERROR(token.location.toString());
+            Log.ERROR("Runtime error: Undefined variable '" + id + "'\n"
+                    + context.callStack.print(token.location.fileLocation));
+            System.exit(-1);
         }
 
         if (blockNode != null)

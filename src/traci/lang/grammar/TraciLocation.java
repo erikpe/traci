@@ -29,6 +29,12 @@ public class TraciLocation
             str = str.replace("\\\\", "\\");
             return str;
         }
+
+        @Override
+        public String toString()
+        {
+            return filename + ":" + row + ":" + col;
+        }
     }
 
     public final FileLocation fileLocation;
@@ -70,6 +76,7 @@ public class TraciLocation
             }
         }
 
+        sb.append("    ");
         sb.append(fileLocation.filename).append(':');
         sb.append(fileLocation.row).append(':');
         sb.append(fileLocation.col).append(':');

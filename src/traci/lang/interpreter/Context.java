@@ -3,6 +3,8 @@ package traci.lang.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
+import traci.lang.grammar.TraciCallStack;
+import traci.lang.grammar.TraciLocation.FileLocation;
 import traci.lang.interpreter.Entities.Entity;
 
 public class Context
@@ -11,34 +13,37 @@ public class Context
     private final Map<String, TraciValue> globalMemory;
     private final Map<String, TraciValue> localMemory;
     private final Entity entity;
+    public final TraciCallStack callStack;
 
     private Context(final Map<String, Function> functions, final Map<String, TraciValue> globalMemory,
-            final Map<String, TraciValue> localMemory, final Entity entity)
+            final Map<String, TraciValue> localMemory, final Entity entity, final TraciCallStack callStack)
     {
         this.functions = functions;
         this.globalMemory = globalMemory;
         this.localMemory = localMemory;
         this.entity = entity;
+        this.callStack = callStack;
     }
 
     public static Context newRootContext(final Entity rootEntity)
     {
-        return new Context(null, new HashMap<String, TraciValue>(), new HashMap<String, TraciValue>(), rootEntity);
+        return new Context(null, new HashMap<String, TraciValue>(), new HashMap<String, TraciValue>(), rootEntity,
+                TraciCallStack.empty());
     }
 
-    public Context newLocalMemory()
+    public Context newFuncallContext(final FileLocation location, final String function)
     {
-        return new Context(functions, globalMemory, new HashMap<String, TraciValue>(), entity);
+        return new Context(null, globalMemory, new HashMap<String, TraciValue>(), entity, callStack.push(location, function));
     }
 
     public Context newEntity(final Entity newSurroundingEntity)
     {
-        return new Context(functions, globalMemory, localMemory, newSurroundingEntity);
+        return new Context(functions, globalMemory, localMemory, newSurroundingEntity, callStack);
     }
 
     public Context newFunctions(final Map<String, Function> newFunctions)
     {
-        return new Context(newFunctions, globalMemory, localMemory, entity);
+        return new Context(newFunctions, globalMemory, localMemory, entity, callStack);
     }
 
     public void applyValue(final TraciValue value)
