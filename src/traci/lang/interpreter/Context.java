@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import traci.lang.interpreter.Entities.Entity;
-import traci.lang.parser.TraciCallStack;
-import traci.lang.parser.TraciLocation.FileLocation;
+import traci.lang.parser.CallStack;
+import traci.lang.parser.IncludeLocation.FileLocation;
 
 public class Context
 {
@@ -13,10 +13,10 @@ public class Context
     private final Map<String, TraciValue> globalMemory;
     private final Map<String, TraciValue> localMemory;
     private final Entity entity;
-    public final TraciCallStack callStack;
+    public final CallStack callStack;
 
     private Context(final Map<String, Function> functions, final Map<String, TraciValue> globalMemory,
-            final Map<String, TraciValue> localMemory, final Entity entity, final TraciCallStack callStack)
+            final Map<String, TraciValue> localMemory, final Entity entity, final CallStack callStack)
     {
         this.functions = functions;
         this.globalMemory = globalMemory;
@@ -28,7 +28,7 @@ public class Context
     public static Context newRootContext(final Entity rootEntity)
     {
         return new Context(null, new HashMap<String, TraciValue>(), new HashMap<String, TraciValue>(), rootEntity,
-                TraciCallStack.empty());
+                CallStack.empty());
     }
 
     public Context newFuncallContext(final FileLocation location, final String function)

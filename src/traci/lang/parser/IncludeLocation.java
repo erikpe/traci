@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TraciLocation
+public class IncludeLocation
 {
     public static class FileLocation
     {
@@ -40,7 +40,7 @@ public class TraciLocation
     public final FileLocation fileLocation;
     public final List<FileLocation> includePath;
 
-    public TraciLocation(final FileLocation fileLocation, final List<FileLocation> includePath)
+    public IncludeLocation(final FileLocation fileLocation, final List<FileLocation> includePath)
     {
         this.fileLocation = fileLocation;
         this.includePath = Collections.unmodifiableList(new ArrayList<FileLocation>(includePath));

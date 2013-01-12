@@ -36,7 +36,7 @@ public void displayRecognitionError(String[] tokenNames,
 @lexer::header {
 package traci.lang.parser;
 
-import traci.lang.parser.TraciLocation.FileLocation;
+import traci.lang.parser.IncludeLocation.FileLocation;
 import traci.util.Log;
 }
 
@@ -74,14 +74,14 @@ public void displayRecognitionError(String[] tokenNames,
                                     RecognitionException e) {
         final String hdr = getErrorHeader(e);
         final String msg = getErrorMessage(e, tokenNames);
-        final TraciLocation location;
+        final IncludeLocation location;
         if (e.token != null)
         {
             location = ((TraciToken) e.token).location;
         }
         else
         {
-            location = new TraciLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
+            location = new IncludeLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
         }
         Log.ERROR(location.toString());
         Log.ERROR("Lexer error: " + msg);

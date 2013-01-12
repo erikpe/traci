@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import traci.lang.parser.TraciLocation.FileLocation;
+import traci.lang.parser.IncludeLocation.FileLocation;
 
-public class TraciCallStack
+public class CallStack
 {
     private final List<FileLocation> fileLocations;
     private final List<String> functions;
 
-    private TraciCallStack(final List<FileLocation> fileLocations, final List<String> functions)
+    private CallStack(final List<FileLocation> fileLocations, final List<String> functions)
     {
         this.fileLocations = fileLocations;
         this.functions = functions;
     }
 
-    public TraciCallStack push(final FileLocation location, final String function)
+    public CallStack push(final FileLocation location, final String function)
     {
         final List<FileLocation> newFileLocations = new ArrayList<FileLocation>(fileLocations);
         final List<String> newFunctions = new ArrayList<String>(functions);
@@ -25,12 +25,12 @@ public class TraciCallStack
         newFileLocations.add(location);
         newFunctions.add(function);
 
-        return new TraciCallStack(newFileLocations, newFunctions);
+        return new CallStack(newFileLocations, newFunctions);
     }
 
-    public static TraciCallStack empty()
+    public static CallStack empty()
     {
-        return new TraciCallStack(Collections.<FileLocation>emptyList(), Collections.<String>singletonList("<root>"));
+        return new CallStack(Collections.<FileLocation>emptyList(), Collections.<String>singletonList("<root>"));
     }
 
     public String print(final FileLocation bottomLocation)
