@@ -2,10 +2,10 @@ package traci.lang.interpreter.node;
 
 import org.antlr.runtime.Token;
 
-import traci.lang.grammar.TraciToken;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.parser.TraciToken;
 import traci.math.Vector;
 import traci.util.Log;
 

@@ -1,10 +1,10 @@
-package traci.lang.grammar;
+package traci.lang.parser;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import traci.lang.grammar.TraciLocation.FileLocation;
+import traci.lang.parser.TraciLocation.FileLocation;
 
 public class TraciCallStack
 {
@@ -51,7 +51,7 @@ public class TraciCallStack
             }
 
             sb.append("    at ").append(functions.get(i));
-            sb.append("(").append(location.toString()).append(")");
+            sb.append(" (").append(location.toString()).append(")");
 
             if (i >= 1)
             {

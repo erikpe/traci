@@ -3,9 +3,9 @@ package traci.lang.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
-import traci.lang.grammar.TraciCallStack;
-import traci.lang.grammar.TraciLocation.FileLocation;
 import traci.lang.interpreter.Entities.Entity;
+import traci.lang.parser.TraciCallStack;
+import traci.lang.parser.TraciLocation.FileLocation;
 
 public class Context
 {

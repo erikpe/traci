@@ -19,12 +19,6 @@ tokens {
 @parser::header {
 package traci.lang.parser;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import traci.lang.grammar.TraciToken;
-import traci.lang.grammar.TraciLocation;
-import traci.lang.grammar.TraciLocation.FileLocation;
 import traci.util.Log;
 }
 
@@ -42,9 +36,7 @@ public void displayRecognitionError(String[] tokenNames,
 @lexer::header {
 package traci.lang.parser;
 
-import traci.lang.grammar.TraciLocation;
-import traci.lang.grammar.TraciLocation.FileLocation;
-import traci.lang.grammar.TraciToken;
+import traci.lang.parser.TraciLocation.FileLocation;
 import traci.util.Log;
 }
 

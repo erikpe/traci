@@ -2,12 +2,12 @@ package traci.lang.interpreter.node;
 
 import org.antlr.runtime.Token;
 
-import traci.lang.grammar.TraciToken;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.parser.TraciToken;
 import traci.util.Log;
 
 public class RefNode implements TraciNode

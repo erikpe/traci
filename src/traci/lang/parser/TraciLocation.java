@@ -1,4 +1,4 @@
-package traci.lang.grammar;
+package traci.lang.parser;
 
 import java.util.ArrayList;
 import java.util.Collections;

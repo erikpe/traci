@@ -10,13 +10,30 @@ package traci.lang.parser;
 
 import java.util.HashMap;
 import java.util.Map;
-import traci.math.Vector;
-import traci.model.shape.csg.*;
-import traci.model.shape.*;
-import traci.lang.*;
-import traci.lang.interpreter.*;
-import traci.lang.interpreter.node.*;
-import traci.lang.parser.*;
+
+import traci.lang.interpreter.BuiltinFunctions;
+import traci.lang.interpreter.Function;
+import traci.lang.interpreter.TraciValue;
+import traci.lang.interpreter.node.AssignNode;
+import traci.lang.interpreter.node.BBoxNode;
+import traci.lang.interpreter.node.BinaryOpNode;
+import traci.lang.interpreter.node.BlockNode;
+import traci.lang.interpreter.node.ColorNode;
+import traci.lang.interpreter.node.ConstNode;
+import traci.lang.interpreter.node.CsgShapeNode;
+import traci.lang.interpreter.node.ForNode;
+import traci.lang.interpreter.node.FunctionCallNode;
+import traci.lang.interpreter.node.FunctionNode;
+import traci.lang.interpreter.node.IfElseNode;
+import traci.lang.interpreter.node.Op;
+import traci.lang.interpreter.node.PrimitiveShapeNode;
+import traci.lang.interpreter.node.RefNode;
+import traci.lang.interpreter.node.ReturnNode;
+import traci.lang.interpreter.node.TraciNode;
+import traci.lang.interpreter.node.TransformationNode;
+import traci.lang.interpreter.node.UnaryOpNode;
+import traci.lang.interpreter.node.VectorNode;
+import traci.lang.interpreter.node.WhileNode;
 }
 
 @members {

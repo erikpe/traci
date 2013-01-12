@@ -1,11 +1,11 @@
-package traci.lang.grammar;
+package traci.lang.parser;
 
 import java.util.List;
 
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
 
-import traci.lang.grammar.TraciLocation.FileLocation;
+import traci.lang.parser.TraciLocation.FileLocation;
 
 @SuppressWarnings("serial")
 public class TraciToken extends CommonToken
