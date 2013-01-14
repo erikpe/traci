@@ -24,7 +24,7 @@ def technicBrickWithHoles_fast (length)
             }
         }
         for (i in 0 .. length-1) {
-            fastLegopartPeg () {
+            legopartPeg () {
                 translate [LU*i, boxHeight, 0];
             }
         }

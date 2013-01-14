@@ -15,8 +15,8 @@ def legopartPeg ()
 #else
     return roundedCylinder2 (radius, height, lowerRounding, upperRounding) {
         translate [LU/2, 0, LU/2];
-#endif // FAST_LEGO
     }
+#endif // FAST_LEGO
 }
 
 def legopartPegHole ()

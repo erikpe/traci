@@ -3,6 +3,7 @@
 
 #include "technic-brick-with-holes.traci"
 #include "technic-plate-with-holes.traci"
+#include "technic-pin.traci"
 #include "lego-pieces.traci"
 
 #endif // ALL_BRICKS_TRACI
