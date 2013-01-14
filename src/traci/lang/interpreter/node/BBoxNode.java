@@ -6,6 +6,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.shape.BoundingBox;
 
@@ -19,7 +20,7 @@ public class BBoxNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final BoundingBox bBox = new BoundingBox();
 

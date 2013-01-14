@@ -7,6 +7,7 @@ import java.util.Map;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 
 public class BlockNode implements TraciNode
@@ -21,7 +22,7 @@ public class BlockNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(Context context) throws FunctionReturnException
+    public TraciValue eval(Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         context = context.newFunctions(functions);
 

@@ -71,12 +71,14 @@ public class ParserRunner
         catch (final RecognitionException e)
         {
             encounteredErrors = true;
+            final StringBuilder sb = new StringBuilder();
             if (e.token != null)
             {
                 final IncludeLocation location = ((TraciToken) e.token).location;
-                Log.ERROR(location.toString());
+                sb.append(location.toString()).append('\n');
             }
-            Log.ERROR("Parse error: " + e.getMessage());
+            sb.append("Parse error: ").append(e.getMessage());
+            Log.ERROR(sb.toString());
         }
 
         for (final ParseError error : lexer.getLexerErrors())
@@ -111,12 +113,23 @@ public class ParserRunner
         }
         catch (final RecognitionException e)
         {
-            Log.ERROR("Parse error: " + e.getMessage());
-            System.exit(-1);
+            encounteredErrors = true;
+            final StringBuilder sb = new StringBuilder();
+            if (e.token != null)
+            {
+                final IncludeLocation location = ((TraciToken) e.token).location;
+                sb.append(location.toString()).append('\n');
+            }
+            sb.append("Parse error: ").append(e.getMessage());
+            Log.ERROR(sb.toString());
         }
+        interpreter = new Interpreter(settings, blockNode);
         stop = System.currentTimeMillis();
 
-        interpreter = new Interpreter(settings, blockNode);
+        if (encounteredErrors)
+        {
+            return Result.PARSE_ERROR;
+        }
 
         Log.INFO("Interpreter built in " + Utilities.millisecondsToString(stop - start));
 

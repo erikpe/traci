@@ -7,6 +7,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.shape.primitive.Box;
 import traci.model.shape.primitive.Cylinder;
@@ -38,7 +39,7 @@ public class PrimitiveShapeNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final List<TraciValue> args = new ArrayList<TraciValue>();
 

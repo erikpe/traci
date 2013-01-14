@@ -6,9 +6,9 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.parser.TraciToken;
-import traci.util.Log;
 
 public class RefNode implements TraciNode
 {
@@ -24,16 +24,14 @@ public class RefNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         TraciValue value = context.getValue(id);
 
         if (value == null)
         {
-            Log.ERROR(token.location.toString());
-            Log.ERROR("Runtime error: Undefined variable '" + id + "'\n"
-                    + context.callStack.print(token.location.fileLocation));
-            System.exit(-1);
+            final String msg = "Undefined variable '" + id + "'";
+            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
         }
 
         if (blockNode != null)

@@ -4,10 +4,10 @@ import org.antlr.runtime.Token;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.parser.TraciToken;
 import traci.math.Vector;
-import traci.util.Log;
 
 public class BinaryOpNode implements TraciNode
 {
@@ -25,7 +25,7 @@ public class BinaryOpNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final TraciValue a = aNode.eval(context);
         final TraciValue b = bNode.eval(context);
@@ -70,10 +70,9 @@ public class BinaryOpNode implements TraciNode
 
         if (res == null)
         {
-            Log.ERROR(token.location.toString());
-            Log.ERROR("Runtime error: Trying to evaluate expression `" + aType.toString() + " " + token.getText() + " "
-                    + bType.toString() + "'");
-            System.exit(-1);
+            final String msg = "Unable to evaluate expression '" + aType.toString() + " " + token.getText() + " "
+                    + bType.toString() + "'";
+            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
         }
 
         return new TraciValue(res);

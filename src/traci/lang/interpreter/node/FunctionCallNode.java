@@ -10,9 +10,9 @@ import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.parser.TraciToken;
-import traci.util.Log;
 
 public class FunctionCallNode implements TraciNode
 {
@@ -30,33 +30,23 @@ public class FunctionCallNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final Function function = context.getFunction(id);
         final List<TraciValue> args = new ArrayList<TraciValue>();
 
         if (function == null)
         {
-            Log.ERROR(token.location.toString());
-            Log.ERROR("Runtime error: No such function: '" + id + "()'\n"
-                    + context.callStack.print(token.location.fileLocation));
-            System.exit(-1);
+            final String msg = "No such function: '" + id + "()'";
+            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
         }
         else if (argNodes.size() != function.numArgs())
         {
-            final boolean tooFew = args.size() < function.numArgs();
+            final boolean tooFew = argNodes.size() < function.numArgs();
             final String amount = (tooFew ? "few" : "many");
-            Log.ERROR(token.location.toString());
-            Log.ERROR("Runtime error: Too " +  amount + " argumentssuch function: '" + id + "()'\n"
-                    + context.callStack.print(token.location.fileLocation));
-            System.exit(-1);
-        }
-
-        if (function == null)
-        {
-            Log.ERROR(token.location.toString());
-            Log.ERROR("No such function defined: '" + id + "()'");
-            System.exit(-1);
+            final String msg = "Function '" + id + "()': Too " + amount + " aruments. Excepted " + function.numArgs()
+                    + " arguments, got " + argNodes.size() + ".";
+           throw new InterpreterRuntimeException(token.location, msg, context.callStack);
         }
 
         for (final TraciNode argNode : argNodes)

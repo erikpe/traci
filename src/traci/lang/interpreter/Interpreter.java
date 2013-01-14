@@ -42,10 +42,26 @@ public class Interpreter
         {
             blockNode.eval(Context.newRootContext(entity));
         }
+        catch (final InterpreterRuntimeException e)
+        {
+            final StringBuilder sb = new StringBuilder();
+            if (e.includeLocation != null)
+            {
+                sb.append(e.includeLocation.toString()).append('\n');
+            }
+            sb.append("Runtime error: ").append(e.msg).append('\n');
+            if (e.callStack != null)
+            {
+                sb.append(e.callStack.print(e.includeLocation.fileLocation));
+            }
+            Log.ERROR(sb.toString());
+            return Result.RUNTIME_ERROR;
+        }
         catch (final FunctionReturnException e)
         {
             // Ignore
         }
+
         Shape optimizedRoot = rootUnion.optimize();
         if (optimizedRoot == null)
         {

@@ -2,6 +2,7 @@ package traci.lang.interpreter.node;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.material.Color;
 import traci.model.material.pigment.Solid;
@@ -16,7 +17,7 @@ public class ColorNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final TraciValue exprValue = exprNode.eval(context);
         final Color color = Color.make(exprValue.getVector());

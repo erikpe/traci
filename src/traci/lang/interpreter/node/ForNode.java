@@ -2,6 +2,7 @@ package traci.lang.interpreter.node;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 
 public class ForNode implements TraciNode
@@ -20,7 +21,7 @@ public class ForNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final TraciValue startValue = startNode.eval(context);
         final TraciValue endValue = endNode.eval(context);

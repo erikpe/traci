@@ -16,7 +16,7 @@ import traci.util.Utilities;
 public class PreprocessorRunner
 {
     private final Settings settings;
-    private StringBuilder sb;
+    private StringBuilder sb = null;
 
     public PreprocessorRunner(final Settings settings)
     {

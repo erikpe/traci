@@ -4,6 +4,7 @@ import org.antlr.runtime.Token;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.math.Vector;
 
@@ -21,7 +22,7 @@ public class UnaryOpNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException
+    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final TraciValue a = aNode.eval(context);
         final TraciValue.Type aType = a.getType();

@@ -6,6 +6,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 
 public class FunctionNode implements TraciNode, Function
@@ -28,7 +29,7 @@ public class FunctionNode implements TraciNode, Function
     }
 
     @Override
-    public TraciValue invoke(Context context, final List<TraciValue> args)
+    public TraciValue invoke(Context context, final List<TraciValue> args) throws InterpreterRuntimeException
     {
         context = context.newEntity(Entities.NULL_ENTITY);
 
@@ -59,6 +60,7 @@ public class FunctionNode implements TraciNode, Function
         return null;
     }
 
+    @Override
     public int numArgs()
     {
         return argIDs.size();
