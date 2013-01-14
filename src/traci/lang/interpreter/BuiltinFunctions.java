@@ -14,6 +14,12 @@ public class BuiltinFunctions
         {
             this.id = id;
         }
+
+        @Override
+        public int numArgs()
+        {
+            return 1;
+        }
     }
 
     private static final BuiltinFunction PRINT = new BuiltinFunction("print")

@@ -58,4 +58,9 @@ public class FunctionNode implements TraciNode, Function
 
         return null;
     }
+
+    public int numArgs()
+    {
+        return argIDs.size();
+    }
 }

@@ -32,10 +32,27 @@ public class FunctionCallNode implements TraciNode
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException
     {
-        final Function functionNode = context.getFunction(id);
+        final Function function = context.getFunction(id);
         final List<TraciValue> args = new ArrayList<TraciValue>();
 
-        if (functionNode == null)
+        if (function == null)
+        {
+            Log.ERROR(token.location.toString());
+            Log.ERROR("Runtime error: No such function: '" + id + "()'\n"
+                    + context.callStack.print(token.location.fileLocation));
+            System.exit(-1);
+        }
+        else if (argNodes.size() != function.numArgs())
+        {
+            final boolean tooFew = args.size() < function.numArgs();
+            final String amount = (tooFew ? "few" : "many");
+            Log.ERROR(token.location.toString());
+            Log.ERROR("Runtime error: Too " +  amount + " argumentssuch function: '" + id + "()'\n"
+                    + context.callStack.print(token.location.fileLocation));
+            System.exit(-1);
+        }
+
+        if (function == null)
         {
             Log.ERROR(token.location.toString());
             Log.ERROR("No such function defined: '" + id + "()'");
@@ -47,7 +64,7 @@ public class FunctionCallNode implements TraciNode
             args.add(argNode.eval(context));
         }
 
-        TraciValue value = functionNode.invoke(context.newFuncallContext(token.location.fileLocation, id), args);
+        TraciValue value = function.invoke(context.newFuncallContext(token.location.fileLocation, id), args);
 
         if (blockNode != null)
         {

@@ -23,13 +23,18 @@ import traci.util.Log;
 }
 
 @parser::members {
+private final List<ParseError> parseErrors = new ArrayList<ParseError>();
+
 public void displayRecognitionError(String[] tokenNames,
                                     RecognitionException e) {
-    String hdr = getErrorHeader(e);
     String msg = getErrorMessage(e, tokenNames);
-    Log.ERROR(((TraciToken) e.token).location.toString());
-    Log.ERROR("Parse error: " + msg);
-    System.exit(-1);
+    final IncludeLocation location = ((TraciToken) e.token).location;
+    parseErrors.add(new ParseError(location, msg));
+}
+
+public Iterable<ParseError> getParseErrors()
+{
+    return parseErrors;
 }
 }
 
@@ -43,6 +48,7 @@ import traci.util.Log;
 @lexer::members {
 private String currentFilename = null;
 private final Stack<FileLocation> includeStack = new Stack<FileLocation>();
+private final List<ParseError> lexerErrors = new ArrayList<ParseError>();
 
 public Token emit() {
     final TraciToken tok = new TraciToken(input, state.type, state.channel, state.tokenStartCharIndex, getCharIndex() - 1,
@@ -72,20 +78,22 @@ public void ppLine(String rowStr, String filename, String actionStr) {
 
 public void displayRecognitionError(String[] tokenNames,
                                     RecognitionException e) {
-        final String hdr = getErrorHeader(e);
-        final String msg = getErrorMessage(e, tokenNames);
-        final IncludeLocation location;
-        if (e.token != null)
-        {
-            location = ((TraciToken) e.token).location;
-        }
-        else
-        {
-            location = new IncludeLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
-        }
-        Log.ERROR(location.toString());
-        Log.ERROR("Lexer error: " + msg);
-        System.exit(-1);
+    final String msg = getErrorMessage(e, tokenNames);
+    final IncludeLocation location;
+    if (e.token != null)
+    {
+        location = ((TraciToken) e.token).location;
+    }
+    else
+    {
+        location = new IncludeLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
+    }
+    lexerErrors.add(new ParseError(location, msg));
+}
+
+public Iterable<ParseError> getLexerErrors()
+{
+    return lexerErrors;
 }
 }
 

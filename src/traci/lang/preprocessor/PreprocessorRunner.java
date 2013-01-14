@@ -8,23 +8,32 @@ import org.anarres.cpp.CppReader;
 import org.anarres.cpp.Feature;
 import org.anarres.cpp.Preprocessor;
 
+import traci.main.Result;
 import traci.main.Settings;
 import traci.util.Log;
 import traci.util.Utilities;
 
-public class TraciPreprocessor
+public class PreprocessorRunner
 {
-    final Settings settings;
+    private final Settings settings;
+    private StringBuilder sb;
 
-    public TraciPreprocessor(final Settings settings)
+    public PreprocessorRunner(final Settings settings)
     {
         this.settings = settings;
     }
 
-    public String run()
+    public String getProcessedCode()
+    {
+        return sb.toString();
+    }
+
+    public Result run()
     {
         Log.INFO("Preprocessing input file: '" + settings.inputFilename + "'");
         final long start = System.currentTimeMillis();
+
+        sb = new StringBuilder();
 
         Preprocessor pp = null;
         final File inputFile = new File(settings.inputFilename);
@@ -39,12 +48,10 @@ public class TraciPreprocessor
         {
             Log.ERROR("Unable to open input file: '" + settings.inputFilename + "':");
             Log.ERROR(e.getMessage());
-            System.exit(-1);
+            return Result.IO_ERROR;
         }
 
         final Reader reader = new CppReader(pp);
-        final StringBuilder sb = new StringBuilder();
-
         try
         {
             int c;
@@ -59,12 +66,12 @@ public class TraciPreprocessor
         {
             Log.ERROR("Error while reading preprocessed file:");
             Log.ERROR(e.getMessage());
-            System.exit(-1);
+            return Result.IO_ERROR;
         }
 
         final long stop = System.currentTimeMillis();
         Log.INFO("Preprocessing finished in " + Utilities.millisecondsToString(stop - start));
-        //System.out.println(sb.toString());
-        return sb.toString();
+
+        return Result.SUCCESS;
     }
 }
