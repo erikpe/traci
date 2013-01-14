@@ -6,19 +6,20 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.parser.TraciToken;
 import traci.math.Vector;
 
 public class UnaryOpNode implements TraciNode
 {
     private final Op op;
     private final TraciNode aNode;
-    private final Token token;
+    private final TraciToken token;
 
     public UnaryOpNode(final Op op, final TraciNode aNode, final Token token)
     {
         this.op = op;
         this.aNode = aNode;
-        this.token = token;
+        this.token = (TraciToken) token;
     }
 
     @Override
@@ -39,9 +40,8 @@ public class UnaryOpNode implements TraciNode
 
         if (res == null)
         {
-            System.out.println("Error: Trying to evaluate expression `" + token.getText() + " " + aType.toString()
-                    + "' at position " + token.getLine() + ":" + token.getCharPositionInLine() + ".");
-            throw new RuntimeException();
+            final String msg = "Unable to evaluate expression '" + token.getText() + " " + aType.toString() + "'";
+            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
         }
 
         return new TraciValue(res);

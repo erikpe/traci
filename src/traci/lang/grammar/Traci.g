@@ -191,7 +191,7 @@ variable_reference
     ;
 
 vector 
-    : '[' expr ',' expr ',' expr ']' -> ^(VECTOR expr*)
+    : VECTOR expr ',' expr ',' expr ']' -> ^(VECTOR expr*)
     ;
 
 DEF : 'def';
@@ -204,6 +204,7 @@ BBOX : 'bbox';
 FOR : 'for';
 IN : 'in';
 DOTS : '..';
+VECTOR : '[';
 
 PRIMITIVE_SHAPE
     :	( 'box' | 'cylinder' | 'plane' | 'sphere' | 'torus' )

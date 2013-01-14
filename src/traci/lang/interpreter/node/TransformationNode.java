@@ -2,6 +2,7 @@ package traci.lang.interpreter.node;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterInternalException;
 import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
@@ -64,7 +65,7 @@ public class TransformationNode implements TraciNode
             break;
 
         default:
-            throw new RuntimeException();
+            throw new InterpreterInternalException("Unknown transformation type: " + type.toString());
         }
 
         return new TraciValue(transformation);

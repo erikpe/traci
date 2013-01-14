@@ -7,6 +7,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterInternalException;
 import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.shape.primitive.Box;
@@ -76,7 +77,7 @@ public class PrimitiveShapeNode implements TraciNode
             break;
 
         default:
-            throw new RuntimeException();
+            throw new InterpreterInternalException("Unknown primitive type: " + type.toString());
         }
 
         TraciValue value = new TraciValue(primitive);

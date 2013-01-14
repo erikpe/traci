@@ -1,22 +1,27 @@
 package traci.lang.interpreter.node;
 
+import org.antlr.runtime.Token;
+
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
+import traci.lang.parser.TraciToken;
 
 public class IfElseNode implements TraciNode
 {
     private final TraciNode condNode;
     private final BlockNode ifBlock;
     private final BlockNode elseBlock;
+    private final TraciToken token;
 
-    public IfElseNode(final TraciNode condNode, final BlockNode ifBlock, final BlockNode elseBlock)
+    public IfElseNode(final TraciNode condNode, final BlockNode ifBlock, final BlockNode elseBlock, final Token token)
     {
         this.condNode = condNode;
         this.ifBlock = ifBlock;
         this.elseBlock = elseBlock;
+        this.token = (TraciToken) token;
     }
 
     @Override
@@ -26,7 +31,9 @@ public class IfElseNode implements TraciNode
 
         if (condValue.getType() != Type.BOOLEAN)
         {
-            throw new RuntimeException("must be bool");
+            final String msg = "Argument to if()-statement must be " + Type.BOOLEAN.toString() + ", got "
+                    + condValue.getType().toString();
+            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
         }
 
         if (condValue.getBoolean())

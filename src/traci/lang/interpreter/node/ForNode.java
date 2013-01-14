@@ -1,9 +1,13 @@
 package traci.lang.interpreter.node;
 
+import org.antlr.runtime.Token;
+
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.FunctionReturnException;
 import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.interpreter.TraciValue.Type;
+import traci.lang.parser.TraciToken;
 
 public class ForNode implements TraciNode
 {
@@ -11,20 +15,38 @@ public class ForNode implements TraciNode
     private final TraciNode startNode;
     private final TraciNode endNode;
     private final BlockNode blockNode;
+    private final TraciToken token;
 
-    public ForNode(final String counterId, final TraciNode startNode, final TraciNode endNode, final BlockNode blockNode)
+    public ForNode(final String counterId, final TraciNode startNode, final TraciNode endNode,
+            final BlockNode blockNode, final Token token)
     {
         this.counterId = counterId;
         this.startNode = startNode;
         this.endNode = endNode;
         this.blockNode = blockNode;
+        this.token = (TraciToken) token;
     }
 
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final TraciValue startValue = startNode.eval(context);
+
+        if (startValue.getType() != Type.NUMBER)
+        {
+            final String msg = "Start-range of for-statement must be " + Type.NUMBER.toString() + ", got "
+                    + startValue.getType().toString();
+            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
+        }
+
         final TraciValue endValue = endNode.eval(context);
+
+        if (endValue.getType() != Type.NUMBER)
+        {
+            final String msg = "End-range of for-statement must be " + Type.NUMBER.toString() + ", got "
+                    + startValue.getType().toString();
+            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
+        }
 
         Double counter = startValue.getNumber();
         final Double end = endValue.getNumber();

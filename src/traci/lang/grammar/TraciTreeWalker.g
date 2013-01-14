@@ -88,11 +88,11 @@ statement returns [TraciNode node]
     | ^(RETURN assignable_statement)
         { $node = new ReturnNode($assignable_statement.node); }
     | ^(IF expr a=block b=block?)
-        { $node = new IfElseNode($expr.node, $a.node, $b.node); }
+        { $node = new IfElseNode($expr.node, $a.node, $b.node, $IF.token); }
     | ^(WHILE expr block)
-        { $node = new WhileNode($expr.node, $block.node); }
+        { $node = new WhileNode($expr.node, $block.node, $WHILE.token); }
     | ^(FOR ID c=expr d=expr block)
-        { $node = new ForNode($ID.text, $c.node, $d.node, $block.node); }
+        { $node = new ForNode($ID.text, $c.node, $d.node, $block.node, $FOR.token); }
     | ^(GLOBAL_ASSIGN ID assignable_statement)
         { $node = new AssignNode($ID.text, $assignable_statement.node, true); }
     | ^(ASSIGN ID assignable_statement)
@@ -109,7 +109,7 @@ assignable_statement returns [TraciNode node]
     | ^(TRANSFORMATION expr)
         { $node = new TransformationNode($TRANSFORMATION.text, $expr.node); }
     | ^(COLOR expr)
-        { $node = new ColorNode($expr.node); }
+        { $node = new ColorNode($expr.node, $COLOR.token); }
     | expr
         { $node = $expr.node; }
     ;
@@ -132,7 +132,7 @@ expr returns [TraciNode node]
     | ^(FUNCALL ID function_call_args block?)
         { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node, $ID.token); }
     | ^(VECTOR a=expr b=expr c=expr)
-        { $node = new VectorNode($a.node, $b.node, $c.node); }
+        { $node = new VectorNode($a.node, $b.node, $c.node, $VECTOR.token); }
     | INT                   { $node = new ConstNode(new TraciValue(Double.valueOf($INT.text))); }
     | FLOAT                 { $node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text))); }
     ;

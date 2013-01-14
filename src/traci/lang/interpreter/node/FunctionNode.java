@@ -6,6 +6,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.FunctionReturnException;
+import traci.lang.interpreter.InterpreterInternalException;
 import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 
@@ -25,23 +26,15 @@ public class FunctionNode implements TraciNode, Function
     @Override
     public TraciValue eval(final Context dummy)
     {
-        throw new RuntimeException();
+        throw new InterpreterInternalException("FunctionNode.eval() should never be called.");
     }
 
     @Override
     public TraciValue invoke(Context context, final List<TraciValue> args) throws InterpreterRuntimeException
     {
+        assert argIDs.size() == args.size();
+
         context = context.newEntity(Entities.NULL_ENTITY);
-
-        if (args.size() < argIDs.size())
-        {
-            throw new RuntimeException("too few arguments");
-        }
-
-        if (args.size() > argIDs.size())
-        {
-            throw new RuntimeException("too many arguments");
-        }
 
         for (int i = 0; i < argIDs.size(); ++i)
         {
