@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import traci.gui.DrawArea;
+import traci.main.Result;
 import traci.main.Settings;
 import traci.math.Vector;
 import traci.model.Camera;
@@ -33,12 +34,12 @@ public class Renderer implements BlockRenderer
         this.area = area;
     }
 
-    public static void renderScene(final Scene scene, final Settings settings, final DrawArea area)
+    public static Result renderScene(final Scene scene, final Settings settings, final DrawArea area)
     {
-        new Renderer(scene, settings, area).renderScene();
+        return new Renderer(scene, settings, area).renderScene();
     }
 
-    private void renderScene()
+    private Result renderScene()
     {
         final int numPrim = ShapeHelper.numPrimitives(scene.shape);
         final int numCsg = ShapeHelper.numCsgs(scene.shape);
@@ -87,7 +88,11 @@ public class Renderer implements BlockRenderer
         /**
          * Start the threads
          */
-        area.start();
+        Result result = area.start();
+        if (result != Result.SUCCESS)
+        {
+            return result;
+        }
         final long startTime = System.currentTimeMillis();
         for (final Thread thread : renderingThreads)
         {
@@ -111,7 +116,11 @@ public class Renderer implements BlockRenderer
         }
 
         final long stopTime = System.currentTimeMillis();
-        area.finish();
+        result = area.finish();
+        if (result != Result.SUCCESS)
+        {
+            return result;
+        }
 
         Log.INFO("Successfully rendered scene in " + ((stopTime - startTime) / 1000.0) + " seconds.");
 
@@ -121,6 +130,8 @@ public class Renderer implements BlockRenderer
             final long miss = BoundingBox.miss.get();
             Log.INFO("Bounding-Box discard ratio: " + ((100 * miss) / (miss + hit)) + "% (" + miss + "/" + (miss + hit) + ")");
         }
+
+        return Result.SUCCESS;
     }
 
     @Override

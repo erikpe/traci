@@ -7,6 +7,7 @@ import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
+import traci.main.Result;
 import traci.model.material.Color;
 
 @SuppressWarnings("serial")
@@ -45,7 +46,7 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
     }
 
     @Override
-    public void start()
+    public Result start()
     {
         assert redrawTimer == null;
 
@@ -62,10 +63,12 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
 
         redrawTimer = new Timer();
         redrawTimer.schedule(task, 0, REDRAW_PERIOD_MS);
+
+        return Result.SUCCESS;
     }
 
     @Override
-    public void finish()
+    public Result finish()
     {
         if (redrawTimer != null)
         {
@@ -76,6 +79,8 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
         area.finish();
 
         repaint();
+
+        return Result.SUCCESS;
     }
 
     @Override

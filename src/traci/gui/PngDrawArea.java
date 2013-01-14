@@ -1,9 +1,11 @@
 package traci.gui;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import traci.main.Result;
 import traci.util.Log;
 
 public class PngDrawArea extends BufferedImageDrawArea
@@ -18,7 +20,7 @@ public class PngDrawArea extends BufferedImageDrawArea
     }
 
     @Override
-    public void start()
+    public Result start()
     {
         assert outputFile == null;
         outputFile = new File(filename);
@@ -32,22 +34,28 @@ public class PngDrawArea extends BufferedImageDrawArea
 
             if (!outputFile.canWrite())
             {
-                Log.ERROR("Unable to write to file: " + outputFile);
+                Log.ERROR("Unable to open file for writing: " + outputFile);
                 System.exit(-1);
             }
         }
-        catch (final Exception e)
+        catch (final IOException e)
         {
-            Log.ERROR("Failed to open file for writing: " + outputFile);
-            Log.ERROR(e.getMessage());
-            System.exit(-1);
+            Log.ERROR("Unable to open file for writing: " + outputFile + "\n" + e.getMessage());
+            return Result.IO_ERROR;
+        }
+        catch (final SecurityException e)
+        {
+            Log.ERROR("Unable to open file for writing: " + outputFile + "\n" + e.getMessage());
+            return Result.IO_ERROR;
         }
 
         super.start();
+
+        return Result.SUCCESS;
     }
 
     @Override
-    public void finish()
+    public Result finish()
     {
         super.finish();
 
@@ -55,13 +63,19 @@ public class PngDrawArea extends BufferedImageDrawArea
         {
             ImageIO.write(getBufferedImage(), "png", outputFile);
         }
-        catch (final Exception e)
+        catch (final IOException e)
         {
-            Log.ERROR("Failed to write image file: " + outputFile);
-            Log.ERROR(e.getMessage());
-            System.exit(-1);
+            Log.ERROR("Unable to write image file: " + outputFile + "\n" + e.getMessage());
+            return Result.IO_ERROR;
+        }
+        catch (final SecurityException e)
+        {
+            Log.ERROR("Unable to write image file: " + outputFile + "\n" + e.getMessage());
+            return Result.IO_ERROR;
         }
 
         Log.INFO("Wrote output image to file: " + outputFile);
+
+        return Result.SUCCESS;
     }
 }

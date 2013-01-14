@@ -56,7 +56,11 @@ public class Main
             drawAreas.add(new PngDrawArea(settings.width, settings.height, settings.outputFilename));
         }
 
-        Renderer.renderScene(scene, settings, drawAreas);
+        result = Renderer.renderScene(scene, settings, drawAreas);
+        if (result != Result.SUCCESS)
+        {
+            return result;
+        }
 
         return Result.SUCCESS;
     }
@@ -73,7 +77,5 @@ public class Main
         {
             Log.ERROR("Aborting due to errors");
         }
-
-        //System.exit(result.code);
     }
 }

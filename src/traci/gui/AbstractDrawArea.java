@@ -1,5 +1,7 @@
 package traci.gui;
 
+import traci.main.Result;
+
 public abstract class AbstractDrawArea implements DrawArea
 {
     private final int width;
@@ -24,14 +26,14 @@ public abstract class AbstractDrawArea implements DrawArea
     }
 
     @Override
-    public void start()
+    public Result start()
     {
-        // Do nothing by default
+        return Result.SUCCESS;
     }
 
     @Override
-    public void finish()
+    public Result finish()
     {
-        // Do nothing by default
+        return Result.SUCCESS;
     }
 }

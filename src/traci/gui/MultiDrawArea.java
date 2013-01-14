@@ -3,6 +3,7 @@ package traci.gui;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import traci.main.Result;
 import traci.model.material.Color;
 
 public class MultiDrawArea extends AbstractDrawArea
@@ -32,20 +33,34 @@ public class MultiDrawArea extends AbstractDrawArea
     }
 
     @Override
-    public void start()
+    public Result start()
     {
         for (final DrawArea area : areas)
         {
-            area.start();
+            final Result result = area.start();
+
+            if (result != Result.SUCCESS)
+            {
+                return result;
+            }
         }
+
+        return Result.SUCCESS;
     }
 
     @Override
-    public void finish()
+    public Result finish()
     {
         for (final DrawArea area : areas)
         {
-            area.finish();
+            final Result result = area.finish();
+
+            if (result != Result.SUCCESS)
+            {
+                return result;
+            }
         }
+
+        return Result.SUCCESS;
     }
 }
