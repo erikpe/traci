@@ -44,7 +44,7 @@ public class FunctionCallNode implements TraciNode
         else if (argNodes.size() != function.numArgs())
         {
             throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack, id + "()",
-                    argNodes.size(), function.numArgs());
+                    function.numArgs(), argNodes.size());
         }
 
         for (final TraciNode argNode : argNodes)

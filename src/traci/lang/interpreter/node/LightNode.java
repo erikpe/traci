@@ -41,7 +41,7 @@ public class LightNode implements TraciNode
         if (numArgs != 2)
         {
             throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack,
-                    LightType.pointlight.toString(), numArgs, 2);
+                    LightType.pointlight.toString(), 2, numArgs);
         }
 
         return new PointLight(null, null);

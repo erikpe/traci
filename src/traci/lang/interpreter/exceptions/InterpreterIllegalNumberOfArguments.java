@@ -7,15 +7,15 @@ import traci.lang.parser.IncludeLocation;
 public class InterpreterIllegalNumberOfArguments extends InterpreterRuntimeException
 {
     public final String function;
-    public final int numArgs;
     public final int expectedNumArgs;
+    public final int gotNumArgs;
 
-    private static String makeMsg(final String function, final int numArgs, final int expectedNumArgs)
+    private static String makeMsg(final String function, final int expectedNumArgs, final int gotNumArgs)
     {
-        assert numArgs != expectedNumArgs;
+        assert gotNumArgs != expectedNumArgs;
 
         final String amount;
-        if (numArgs < expectedNumArgs)
+        if (gotNumArgs < expectedNumArgs)
         {
             amount = "few";
         }
@@ -24,16 +24,17 @@ public class InterpreterIllegalNumberOfArguments extends InterpreterRuntimeExcep
             amount = "many";
         }
 
-        return "Too " + amount + " arguments for '" + function + "': got " + numArgs + " arguments, expected "
-                + expectedNumArgs;
+        return "Too " + amount + " arguments for '" + function + "': expected " + expectedNumArgs + " arguments, got "
+                + gotNumArgs;
     }
 
-    public InterpreterIllegalNumberOfArguments(final IncludeLocation location, final CallStack callStack, final String function, final int numArgs, final int expectedNumArgs)
+    public InterpreterIllegalNumberOfArguments(final IncludeLocation location, final CallStack callStack,
+            final String function, final int expectedNumArgs, final int gotNumArgs)
     {
-        super(location, callStack, makeMsg(function, numArgs, expectedNumArgs));
+        super(location, callStack, makeMsg(function, expectedNumArgs, gotNumArgs));
 
         this.function = function;
-        this.numArgs = numArgs;
         this.expectedNumArgs = expectedNumArgs;
+        this.gotNumArgs = gotNumArgs;
     }
 }

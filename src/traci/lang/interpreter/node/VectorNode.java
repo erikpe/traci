@@ -1,60 +1,51 @@
 package traci.lang.interpreter.node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.antlr.runtime.Token;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 import traci.math.Vector;
 
 public class VectorNode implements TraciNode
 {
-    private final TraciNode aNode;
-    private final TraciNode bNode;
-    private final TraciNode cNode;
+    private final List<TraciNode> nodes;
     private final TraciToken token;
 
     public VectorNode(final TraciNode aNode, final TraciNode bNode, final TraciNode cNode, final Token token)
     {
-        this.aNode = aNode;
-        this.bNode = bNode;
-        this.cNode = cNode;
+        this.nodes = new ArrayList<TraciNode>(3);
         this.token = (TraciToken) token;
+
+        nodes.add(aNode);
+        nodes.add(bNode);
+        nodes.add(cNode);
     }
 
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        final TraciValue a = aNode.eval(context);
+        final List<TraciValue> values = new ArrayList<TraciValue>(3);
 
-        if (a.getType() != Type.NUMBER)
+        for (int i = 0; i < 3; ++i)
         {
-            final String msg = "First argument to vector-expression must be " + Type.NUMBER.toString() + ", got "
-                    + a.getType().toString();
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
+            final TraciValue value = nodes.get(i).eval(context);
+            values.add(value);
+
+            if (value.getType() != Type.NUMBER)
+            {
+                throw new InterpreterIllegalArgumentType(token.location, context.callStack,
+                        "vector", Type.NUMBER, value.getType(), i + 1);
+            }
         }
 
-        final TraciValue b = bNode.eval(context);
-
-        if (b.getType() != Type.NUMBER)
-        {
-            final String msg = "Second argument to vector-expression must be " + Type.NUMBER.toString() + ", got "
-                    + b.getType().toString();
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
-        }
-
-        final TraciValue c = cNode.eval(context);
-
-        if (c.getType() != Type.NUMBER)
-        {
-            final String msg = "Third argument to vector-expression must be " + Type.NUMBER.toString() + ", got "
-                    + c.getType().toString();
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
-        }
-
-        return new TraciValue(Vector.make(a.getNumber(), b.getNumber(), c.getNumber()));
+        return new TraciValue(Vector.make(values.get(0).getNumber(), values.get(1).getNumber(), values.get(2).getNumber()));
     }
 }

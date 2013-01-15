@@ -8,25 +8,25 @@ import traci.lang.parser.IncludeLocation;
 public class InterpreterIllegalArgumentType extends InterpreterRuntimeException
 {
     public final String function;
-    public final Type argType;
     public final Type expectedArgType;
+    public final Type gotArgType;
     public final int argIndex;
 
-    private static String makeMsg(final String function, final Type argType, final Type expectedArgType,
+    private static String makeMsg(final String function, final Type expectedArgType, final Type gotArgType,
             final int argIndex)
     {
-        return "Incorrect type for argument " + argIndex + " of '" + function + "': got " + argType.toString()
-                + " expected " + expectedArgType.toString();
+        return "Incorrect type for argument " + argIndex + " of '" + function + "': expected '"
+                + expectedArgType.toString() + "' got '" + gotArgType.toString() + "'";
     }
 
     public InterpreterIllegalArgumentType(final IncludeLocation location, final CallStack callStack,
-            final String function, final Type argType, final Type expectedArgType, final int argIndex)
+            final String function, final Type expectedArgType, final Type gotArgType, final int argIndex)
     {
-        super(location, callStack, makeMsg(function, argType, expectedArgType, argIndex));
+        super(location, callStack, makeMsg(function, expectedArgType, gotArgType, argIndex));
 
         this.function = function;
-        this.argType = argType;
         this.expectedArgType = expectedArgType;
+        this.gotArgType = gotArgType;
         this.argIndex = argIndex;
     }
 }

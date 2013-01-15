@@ -6,6 +6,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 
@@ -31,9 +32,8 @@ public class IfElseNode implements TraciNode
 
         if (condValue.getType() != Type.BOOLEAN)
         {
-            final String msg = "Argument to if()-statement must be " + Type.BOOLEAN.toString() + ", got "
-                    + condValue.getType().toString();
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
+            throw new InterpreterIllegalArgumentType(token.location, context.callStack, "if-statement",
+                    Type.BOOLEAN, condValue.getType(), 1);
         }
 
         if (condValue.getBoolean())

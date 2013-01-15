@@ -6,6 +6,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 import traci.model.material.Color;
@@ -29,9 +30,8 @@ public class ColorNode implements TraciNode
 
         if (exprValue.getType() != Type.VECTOR)
         {
-            final String msg = "Argument to color-statement must be " + Type.VECTOR.toString() + ", got "
-                    + exprValue.getType().toString();
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
+            throw new InterpreterIllegalArgumentType(token.location, context.callStack, "color", Type.VECTOR,
+                    exprValue.getType(), 1);
         }
 
         final Color color = Color.make(exprValue.getVector());

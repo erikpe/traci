@@ -103,7 +103,7 @@ public class PrimitiveShapeNode implements TraciNode
         if (expectedNumArgs != argNodes.size())
         {
             throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack, type.toString(),
-                    argNodes.size(), expectedNumArgs);
+                    expectedNumArgs, argNodes.size());
         }
     }
 
@@ -118,7 +118,7 @@ public class PrimitiveShapeNode implements TraciNode
             if (argType != expectedArgType)
             {
                 throw new InterpreterIllegalArgumentType(token.location, context.callStack, type.toString(),
-                        argType, expectedArgType, i + 1);
+                        expectedArgType, argType, i + 1);
             }
         }
     }
