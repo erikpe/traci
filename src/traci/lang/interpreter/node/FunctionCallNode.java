@@ -9,9 +9,10 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.Function;
-import traci.lang.interpreter.FunctionReturnException;
-import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterIllegalNumberOfArguments;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 
 public class FunctionCallNode implements TraciNode
@@ -38,15 +39,12 @@ public class FunctionCallNode implements TraciNode
         if (function == null)
         {
             final String msg = "No such function: '" + id + "()'";
-            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
+            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
         }
         else if (argNodes.size() != function.numArgs())
         {
-            final boolean tooFew = argNodes.size() < function.numArgs();
-            final String amount = (tooFew ? "few" : "many");
-            final String msg = "Function '" + id + "()': Too " + amount + " aruments. Excepted " + function.numArgs()
-                    + " arguments, got " + argNodes.size() + ".";
-           throw new InterpreterRuntimeException(token.location, msg, context.callStack);
+            throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack, id + "()",
+                    argNodes.size(), function.numArgs());
         }
 
         for (final TraciNode argNode : argNodes)

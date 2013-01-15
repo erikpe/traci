@@ -131,6 +131,7 @@ assignable_statement
     | BBOX function_call_args? (block | ';')            -> ^(BBOX function_call_args? block?)
     | TRANSFORMATION expr ';'                           -> ^(TRANSFORMATION expr)
     | COLOR expr ';'                                    -> ^(COLOR expr)
+    | LIGHT function_call_args? (block | ';')           -> ^(LIGHT function_call_args? block?)
     | expr ';'!
     ;
 
@@ -220,6 +221,10 @@ TRANSFORMATION
 
 COLOR
     :	( 'color' )
+    ;
+
+LIGHT
+    :	( 'pointlight' )
     ;
 
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*

@@ -5,9 +5,9 @@ import org.antlr.runtime.Token;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
-import traci.lang.interpreter.FunctionReturnException;
-import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 
 public class RefNode implements TraciNode
@@ -31,7 +31,7 @@ public class RefNode implements TraciNode
         if (value == null)
         {
             final String msg = "Undefined variable '" + id + "'";
-            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
+            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
         }
 
         if (blockNode != null)

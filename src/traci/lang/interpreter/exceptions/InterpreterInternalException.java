@@ -1,4 +1,4 @@
-package traci.lang.interpreter;
+package traci.lang.interpreter.exceptions;
 
 @SuppressWarnings("serial")
 public class InterpreterInternalException extends RuntimeException

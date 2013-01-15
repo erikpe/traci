@@ -6,9 +6,9 @@ import java.util.Map;
 
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Function;
-import traci.lang.interpreter.FunctionReturnException;
-import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 
 public class BlockNode implements TraciNode
 {

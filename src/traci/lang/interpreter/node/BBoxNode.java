@@ -5,8 +5,8 @@ import java.util.List;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
-import traci.lang.interpreter.FunctionReturnException;
-import traci.lang.interpreter.InterpreterRuntimeException;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.model.shape.BoundingBox;
 

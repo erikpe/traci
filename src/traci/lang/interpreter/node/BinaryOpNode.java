@@ -3,9 +3,9 @@ package traci.lang.interpreter.node;
 import org.antlr.runtime.Token;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.FunctionReturnException;
-import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 import traci.math.Vector;
 
@@ -72,7 +72,7 @@ public class BinaryOpNode implements TraciNode
         {
             final String msg = "Unable to evaluate expression '" + aType.toString() + " " + token.getText() + " "
                     + bType.toString() + "'";
-            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
+            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
         }
 
         return new TraciValue(res);

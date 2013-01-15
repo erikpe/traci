@@ -86,13 +86,7 @@ public class Torus extends Primitive
         final double a1 = 2 * b * g + 8 * p.z() * dir.z();
         final double a0 = g * g + 4 * p.z() * p.z() - 4 * r2;
 
-        final double[] roots = PolynomSolver.solveQuartic(new double[] { a4,
-                a3, a2, a1, a0 });
-
-        if (roots != null && roots.length != 2 && roots.length != 4)
-        {
-            throw new RuntimeException();
-        }
+        final double[] roots = PolynomSolver.solveQuartic(new double[] { a4, a3, a2, a1, a0 });
 
         if (roots == null || (roots.length != 2 && roots.length != 4))
         {

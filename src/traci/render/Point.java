@@ -1,5 +1,6 @@
 package traci.render;
 
+import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.model.shape.primitive.Primitive;
 
 public class Point
@@ -35,7 +36,9 @@ public class Point
         {
         case ENTER: newType = Type.LEAVE; break;
         case LEAVE: newType = Type.ENTER; break;
-        default: assert false;
+        case INTERSECT: break;
+        default:
+            throw new InterpreterInternalException("Unknown point type: " + type.toString());
         }
 
         return Point.make(dist, obj, newType);
@@ -51,7 +54,8 @@ public class Point
         case ENTER: strType = "E"; break;
         case LEAVE: strType  = "L"; break;
         case INTERSECT: strType = "I"; break;
-        default: throw new RuntimeException();
+        default:
+            throw new InterpreterInternalException("Unknown point type: " + type.toString());
         }
 
         return "[" + strType + ": " + dist + "]";

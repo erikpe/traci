@@ -25,6 +25,7 @@ import traci.lang.interpreter.node.ForNode;
 import traci.lang.interpreter.node.FunctionCallNode;
 import traci.lang.interpreter.node.FunctionNode;
 import traci.lang.interpreter.node.IfElseNode;
+import traci.lang.interpreter.node.LightNode;
 import traci.lang.interpreter.node.Op;
 import traci.lang.interpreter.node.PrimitiveShapeNode;
 import traci.lang.interpreter.node.RefNode;
@@ -110,6 +111,8 @@ assignable_statement returns [TraciNode node]
         { $node = new TransformationNode($TRANSFORMATION.text, $expr.node); }
     | ^(COLOR expr)
         { $node = new ColorNode($expr.node, $COLOR.token); }
+    | ^(LIGHT function_call_args? block?)
+        { $node = new LightNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
     | expr
         { $node = $expr.node; }
     ;

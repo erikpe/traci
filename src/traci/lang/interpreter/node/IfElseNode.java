@@ -3,10 +3,10 @@ package traci.lang.interpreter.node;
 import org.antlr.runtime.Token;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.FunctionReturnException;
-import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 
 public class IfElseNode implements TraciNode
@@ -33,7 +33,7 @@ public class IfElseNode implements TraciNode
         {
             final String msg = "Argument to if()-statement must be " + Type.BOOLEAN.toString() + ", got "
                     + condValue.getType().toString();
-            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
+            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
         }
 
         if (condValue.getBoolean())

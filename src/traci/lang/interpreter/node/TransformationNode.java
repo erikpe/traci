@@ -1,11 +1,11 @@
 package traci.lang.interpreter.node;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.FunctionReturnException;
-import traci.lang.interpreter.InterpreterInternalException;
-import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterInternalException;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.math.Transformation;
 import traci.math.Transformations;
 

@@ -18,6 +18,7 @@ import traci.model.shape.ShapeHelper;
 import traci.render.RenderingThread.BlockRenderer;
 import traci.render.RenderingThread.WorkBlock;
 import traci.util.Log;
+import traci.util.Utilities;
 
 public class Renderer implements BlockRenderer
 {
@@ -93,7 +94,7 @@ public class Renderer implements BlockRenderer
         {
             return result;
         }
-        final long startTime = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         for (final Thread thread : renderingThreads)
         {
             thread.start();
@@ -115,14 +116,14 @@ public class Renderer implements BlockRenderer
             }
         }
 
-        final long stopTime = System.currentTimeMillis();
+        final long stop = System.currentTimeMillis();
         result = area.finish();
         if (result != Result.SUCCESS)
         {
             return result;
         }
 
-        Log.INFO("Successfully rendered scene in " + ((stopTime - startTime) / 1000.0) + " seconds.");
+        Log.INFO("Successfully rendered scene in " + Utilities.millisecondsToString(stop - start));
 
         if (settings.debug)
         {

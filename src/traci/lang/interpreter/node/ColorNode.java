@@ -3,10 +3,10 @@ package traci.lang.interpreter.node;
 import org.antlr.runtime.Token;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.FunctionReturnException;
-import traci.lang.interpreter.InterpreterRuntimeException;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 import traci.model.material.Color;
 import traci.model.material.pigment.Solid;
@@ -31,7 +31,7 @@ public class ColorNode implements TraciNode
         {
             final String msg = "Argument to color-statement must be " + Type.VECTOR.toString() + ", got "
                     + exprValue.getType().toString();
-            throw new InterpreterRuntimeException(token.location, msg, context.callStack);
+            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
         }
 
         final Color color = Color.make(exprValue.getVector());

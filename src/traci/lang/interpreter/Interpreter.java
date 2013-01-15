@@ -1,6 +1,8 @@
 package traci.lang.interpreter;
 
 import traci.lang.interpreter.Entities.Entity;
+import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.interpreter.node.BlockNode;
 import traci.main.Result;
 import traci.main.Settings;

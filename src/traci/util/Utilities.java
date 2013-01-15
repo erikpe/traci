@@ -6,11 +6,11 @@ public class Utilities
     {
         if (ms < 100)
         {
-            return ms + "ms";
+            return ms + " ms";
         }
         else
         {
-            return (ms / 1000.0) + "s";
+            return (ms / 1000.0) + " s";
         }
     }
 }
