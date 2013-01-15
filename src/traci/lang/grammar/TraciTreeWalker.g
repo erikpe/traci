@@ -102,7 +102,7 @@ statement returns [TraciNode node]
 
 assignable_statement returns [TraciNode node]
     : ^(PRIMITIVE_SHAPE function_call_args? block?)
-        { $node = new PrimitiveShapeNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node); }
+        { $node = new PrimitiveShapeNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
     | ^(CSG_SHAPE function_call_args? block?)
         { $node = new CsgShapeNode($CSG_SHAPE.text, $function_call_args.nodes, $block.node); }
     | ^(BBOX function_call_args? block?)
