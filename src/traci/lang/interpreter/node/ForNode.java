@@ -6,6 +6,7 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 
@@ -34,18 +35,16 @@ public class ForNode implements TraciNode
 
         if (startValue.getType() != Type.NUMBER)
         {
-            final String msg = "Start-range of for-statement must be " + Type.NUMBER.toString() + ", got "
-                    + startValue.getType().toString();
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
+            throw new InterpreterIllegalArgumentType(token.location, context.callStack, "for-statement",
+                    Type.NUMBER, startValue.getType(), 1);
         }
 
         final TraciValue endValue = endNode.eval(context);
 
         if (endValue.getType() != Type.NUMBER)
         {
-            final String msg = "End-range of for-statement must be " + Type.NUMBER.toString() + ", got "
-                    + startValue.getType().toString();
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
+            throw new InterpreterIllegalArgumentType(token.location, context.callStack, "for-statement",
+                    Type.NUMBER, endValue.getType(), 2);
         }
 
         Double counter = startValue.getNumber();

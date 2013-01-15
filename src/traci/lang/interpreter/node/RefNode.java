@@ -8,6 +8,7 @@ import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
+import traci.lang.interpreter.exceptions.InterpreterUndefinedIdentifier;
 import traci.lang.parser.TraciToken;
 
 public class RefNode implements TraciNode
@@ -30,8 +31,7 @@ public class RefNode implements TraciNode
 
         if (value == null)
         {
-            final String msg = "Undefined variable '" + id + "'";
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
+            throw new InterpreterUndefinedIdentifier(token.location, context.callStack, "variable", id);
         }
 
         if (blockNode != null)

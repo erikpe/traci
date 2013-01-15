@@ -13,6 +13,7 @@ import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
 import traci.lang.interpreter.exceptions.InterpreterIllegalNumberOfArguments;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
+import traci.lang.interpreter.exceptions.InterpreterUndefinedIdentifier;
 import traci.lang.parser.TraciToken;
 
 public class FunctionCallNode implements TraciNode
@@ -38,13 +39,12 @@ public class FunctionCallNode implements TraciNode
 
         if (function == null)
         {
-            final String msg = "No such function: '" + id + "()'";
-            throw new InterpreterRuntimeException(token.location, context.callStack, msg);
+            throw new InterpreterUndefinedIdentifier(token.location, context.callStack, "function", id);
         }
         else if (argNodes.size() != function.numArgs())
         {
-            throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack, id + "()",
-                    function.numArgs(), argNodes.size());
+            throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack, id, function.numArgs(),
+                    argNodes.size());
         }
 
         for (final TraciNode argNode : argNodes)
