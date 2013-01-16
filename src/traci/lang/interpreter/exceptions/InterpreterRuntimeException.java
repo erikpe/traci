@@ -4,7 +4,7 @@ import traci.lang.interpreter.CallStack;
 import traci.lang.parser.IncludeLocation;
 
 @SuppressWarnings("serial")
-public class InterpreterRuntimeException extends Exception
+public abstract class InterpreterRuntimeException extends Exception
 {
     public final IncludeLocation includeLocation;
     public final CallStack callStack;
