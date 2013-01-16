@@ -35,7 +35,7 @@ public class PngDrawArea extends BufferedImageDrawArea
             if (!outputFile.canWrite())
             {
                 Log.ERROR("Unable to open file for writing: " + outputFile);
-                System.exit(-1);
+                return Result.IO_ERROR;
             }
         }
         catch (final IOException e)
@@ -49,15 +49,18 @@ public class PngDrawArea extends BufferedImageDrawArea
             return Result.IO_ERROR;
         }
 
-        super.start();
-
-        return Result.SUCCESS;
+        return super.start();
     }
 
     @Override
     public Result finish()
     {
-        super.finish();
+        final Result result = super.finish();
+
+        if (result != Result.SUCCESS)
+        {
+            return result;
+        }
 
         try
         {
