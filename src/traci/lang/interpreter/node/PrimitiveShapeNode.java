@@ -82,7 +82,7 @@ public class PrimitiveShapeNode implements TraciNode
         }
     }
 
-    private final PrimitiveType type;
+    private final PrimitiveType primitiveType;
     private final List<TraciNode> argNodes;
     private final BlockNode blockNode;
     private final TraciToken token;
@@ -90,7 +90,7 @@ public class PrimitiveShapeNode implements TraciNode
     public PrimitiveShapeNode(final String shapeType, final List<TraciNode> argNodes, final BlockNode blockNode,
             final Token token)
     {
-        this.type = PrimitiveType.valueOf(shapeType);
+        this.primitiveType = PrimitiveType.valueOf(shapeType);
         this.argNodes = (argNodes == null ? Collections.<TraciNode> emptyList() : argNodes);
         this.blockNode = blockNode;
         this.token = (TraciToken) token;
@@ -98,11 +98,11 @@ public class PrimitiveShapeNode implements TraciNode
 
     private void verifyNumberOfArgs(final Context context) throws InterpreterIllegalNumberOfArguments
     {
-        final int expectedNumArgs = type.expectedArgTypes.length;
+        final int expectedNumArgs = primitiveType.expectedArgTypes.length;
 
         if (expectedNumArgs != argNodes.size())
         {
-            throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack, type.toString(),
+            throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack, primitiveType.toString(),
                     expectedNumArgs, argNodes.size());
         }
     }
@@ -113,11 +113,11 @@ public class PrimitiveShapeNode implements TraciNode
         for (int i = 0; i < args.size(); ++i)
         {
             final Type argType = args.get(i).getType();
-            final Type expectedArgType = type.expectedArgTypes[i];
+            final Type expectedArgType = primitiveType.expectedArgTypes[i];
 
             if (argType != expectedArgType)
             {
-                throw new InterpreterIllegalArgumentType(token.location, context.callStack, type.toString(),
+                throw new InterpreterIllegalArgumentType(token.location, context.callStack, primitiveType.toString(),
                         expectedArgType, argType, i + 1);
             }
         }
@@ -136,7 +136,7 @@ public class PrimitiveShapeNode implements TraciNode
 
         verifyArgumentTypes(context, args);
 
-        final Primitive primitive = type.make(args);
+        final Primitive primitive = primitiveType.make(args);
         TraciValue value = new TraciValue(primitive);
 
         if (blockNode != null)

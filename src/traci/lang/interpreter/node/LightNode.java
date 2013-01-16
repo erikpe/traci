@@ -1,5 +1,6 @@
 package traci.lang.interpreter.node;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.antlr.runtime.Token;
@@ -29,7 +30,7 @@ public class LightNode implements TraciNode
     public LightNode(final String lightType, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
         this.type = LightType.valueOf(lightType);
-        this.argNodes = argNodes;
+        this.argNodes = (argNodes == null ? Collections.<TraciNode>emptyList() : argNodes);
         this.blockNode = blockNode;
         this.token = (TraciToken) token;
     }
