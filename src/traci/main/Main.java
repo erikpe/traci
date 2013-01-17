@@ -7,6 +7,7 @@ import traci.gui.PngDrawArea;
 import traci.lang.interpreter.Interpreter;
 import traci.lang.parser.ParserRunner;
 import traci.lang.preprocessor.PreprocessorRunner;
+import traci.main.options.Options;
 import traci.model.Scene;
 import traci.render.Renderer;
 import traci.util.Log;
@@ -16,8 +17,12 @@ public class Main
     private static Result run(final String[] argv)
     {
         final Options options = new Options();
-        final Settings settings = options.parse(argv);
-        Result result;
+        Result result = options.parse(argv);
+        if (result != Result.SUCCESS)
+        {
+            return result;
+        }
+        final Settings settings = options.getSettings();
 
         final PreprocessorRunner pp = new PreprocessorRunner(settings);
         result = pp.run();
@@ -69,13 +74,19 @@ public class Main
     {
         final Result result = run(argv);
 
-        if (result == Result.SUCCESS)
+        switch (result)
         {
+        case SUCCESS:
             Log.INFO("Exiting");
-        }
-        else
-        {
+            break;
+
+        case ABORT:
+            break;
+
+        default:
             Log.ERROR("Aborting due to errors");
+            System.exit(result.code);
+            break;
         }
     }
 }
