@@ -13,6 +13,7 @@
   <property name="commons-cli-sources-jar" value="commons-cli-1.2-sources.jar" />
   <property name="anarres-cpp-dir" value="anarres-cpp-bin-1.2.6" />
   <property name="anarres-cpp-jar" value="anarres-cpp-bin-1.2.6.jar" />
+  <property name="anarres-cpp-sources-jar" value="anarres-cpp-sources-1.2.6.jar" />
 
   <property name="jarfile" value="traci-${version}.jar" />
   <property name="src-distfile" value="traci-${version}.tar.gz" />
@@ -67,6 +68,11 @@
       </patternset>
     </unjar>
     <unjar src="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" dest="${tmp}/${anarres-cpp-dir}">
+      <patternset>
+        <include name="org/anarres/**" />
+      </patternset>
+    </unjar>
+    <unjar src="${lib}/${anarres-cpp-dir}/${anarres-cpp-sources-jar}" dest="${tmp}/${anarres-cpp-dir}">
       <patternset>
         <include name="org/anarres/**" />
       </patternset>
