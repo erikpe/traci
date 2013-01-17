@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/antlr-3.4/antlr-3.4-complete-no-antlrv2.jar"/>
-	<classpathentry kind="lib" path="lib/java-getopt-1.0.13/java-getopt-1.0.13.jar"/>
 	<classpathentry kind="lib" path="lib/anarres-cpp-bin-1.2.6/anarres-cpp-bin-1.2.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.2/commons-cli-1.2.jar" sourcepath="lib/commons-cli-1.2/commons-cli-1.2-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
