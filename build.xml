@@ -6,8 +6,10 @@
   <property name="lib" value="lib" />
   <property name="tmp" value="tmp" />
 
-  <property name="antlr-dir" value="antlr-3.4" />
-  <property name="antlr-jar" value="antlr-3.4-complete-no-antlrv2.jar" />
+  <property name="antlr-dir" value="antlr-3.5" />
+  <property name="antlr-jar" value="antlr-3.5-complete-no-st3.jar" />
+  <property name="antlr-runtime-jar" value="antlr-runtime-3.5.jar" />
+  <property name="antlr-runtime-sources-jar" value="antlr-runtime-sources-3.5.jar" />
   <property name="commons-cli-dir" value="commons-cli-1.2" />
   <property name="commons-cli-jar" value="commons-cli-1.2.jar" />
   <property name="commons-cli-sources-jar" value="commons-cli-1.2-sources.jar" />
@@ -43,7 +45,7 @@
     <mkdir dir="${bin}" />
     <javac srcdir="${src}" destdir="${bin}" includeantruntime="false">
       <classpath>
-        <pathelement location="${lib}/${antlr-dir}/${antlr-jar}" />
+        <pathelement location="${lib}/${antlr-dir}/${antlr-runtime-jar}" />
         <pathelement location="${lib}/${commons-cli-dir}/${commons-cli-jar}" />
         <pathelement location="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" />
       </classpath>
@@ -52,7 +54,12 @@
 
   <target name="unpack-libs">
     <delete dir="${tmp}" />
-    <unjar src="${lib}/${antlr-dir}/${antlr-jar}" dest="${tmp}/${antlr-dir}">
+    <unjar src="${lib}/${antlr-dir}/${antlr-runtime-jar}" dest="${tmp}/${antlr-dir}">
+      <patternset>
+        <include name="org/antlr/runtime/**" />
+      </patternset>
+    </unjar>
+    <unjar src="${lib}/${antlr-dir}/${antlr-runtime-sources-jar}" dest="${tmp}/${antlr-dir}">
       <patternset>
         <include name="org/antlr/runtime/**" />
       </patternset>
