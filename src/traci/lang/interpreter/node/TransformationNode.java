@@ -42,7 +42,7 @@ public class TransformationNode implements TraciNode
             @Override
             protected Transformation make(final TraciValue value)
             {
-                return Transformations.roty(value.getNumber());
+                return Transformations.rotz(value.getNumber());
             }
         },
 
