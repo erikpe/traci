@@ -10,7 +10,7 @@ public abstract class FloatOption extends TraciOption
 {
     public FloatOption(final Character shortOpt, final String longOpt, final String desc, final String argName)
     {
-        super(shortOpt, longOpt, desc, true, argName);
+        super(shortOpt, longOpt, desc, argName);
     }
 
     @Override

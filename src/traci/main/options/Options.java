@@ -14,7 +14,7 @@ import traci.util.Log;
 
 public class Options
 {
-    private static final String progname = "traci";
+    private static final String PROGNAME = "traci";
     private final org.apache.commons.cli.Options allOptions;
     private Settings settings;
 
@@ -219,10 +219,23 @@ public class Options
                 return Result.ABORT;
             }
         });
+
+        final TraciOption macroOption = new TraciOption('D', null, "define macro for preprocessor", "NAME=VALUE")
+        {
+            @Override
+            public Result handleOption(final CommandLine cmd)
+            {
+                // final String[] options = cmd.getOptionValues(optName);
+                return Result.SUCCESS;
+            }
+        };
+        macroOption.setArgs(2);
+        macroOption.setValueSeparator('=');
+        addOption(macroOption);
     }
 
     static String getHelp()
     {
-        return "run '" + progname + " --help' for help";
+        return "run '" + PROGNAME + " --help' for help";
     }
 }

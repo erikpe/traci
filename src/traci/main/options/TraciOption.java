@@ -23,8 +23,7 @@ public abstract class TraciOption extends Option
         return "-" + getOpt() + "/--" + getLongOpt();
     }
 
-    public TraciOption(final Character shortOpt, final String longOpt, final String desc, final boolean hasArg,
-            final String argName)
+    public TraciOption(final Character shortOpt, final String longOpt, final String desc, final String argName)
     {
         super(shortOpt == null ? null : String.valueOf(shortOpt), longOpt, argName != null, desc);
 

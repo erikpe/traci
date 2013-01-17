@@ -9,7 +9,7 @@ public abstract class FlagOption extends TraciOption
 {
     public FlagOption(final Character shortOpt, final String longOpt, final String desc)
     {
-        super(shortOpt, longOpt, desc, false, null);
+        super(shortOpt, longOpt, desc, null);
     }
 
     @Override

@@ -46,8 +46,7 @@ public class PreprocessorRunner
         }
         catch (final IOException e)
         {
-            Log.ERROR("Unable to open input file: '" + settings.inputFilename + "':");
-            Log.ERROR(e.getMessage());
+            Log.ERROR("Unable to open input file: '" + settings.inputFilename + "':\n" + e.getMessage());
             return Result.IO_ERROR;
         }
 
@@ -64,8 +63,7 @@ public class PreprocessorRunner
         }
         catch (final IOException e)
         {
-            Log.ERROR("Error while reading preprocessed file:");
-            Log.ERROR(e.getMessage());
+            Log.ERROR("Error while reading preprocessed file:\n" + e.getMessage());
             return Result.IO_ERROR;
         }
 
