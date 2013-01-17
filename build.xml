@@ -10,6 +10,9 @@
   <property name="antlr-jar" value="antlr-3.4-complete-no-antlrv2.jar" />
   <property name="java-getopt-dir" value="java-getopt-1.0.13" />
   <property name="java-getopt-jar" value="java-getopt-1.0.13.jar" />
+  <property name="commons-cli-dir" value="commons-cli-1.2" />
+  <property name="commons-cli-jar" value="commons-cli-1.2.jar" />
+  <property name="commons-cli-sources-jar" value="commons-cli-1.2-sources.jar" />
   <property name="anarres-cpp-dir" value="anarres-cpp-bin-1.2.6" />
   <property name="anarres-cpp-jar" value="anarres-cpp-bin-1.2.6.jar" />
 
@@ -43,6 +46,7 @@
       <classpath>
         <pathelement location="${lib}/${antlr-dir}/${antlr-jar}" />
         <pathelement location="${lib}/${java-getopt-dir}/${java-getopt-jar}" />
+        <pathelement location="${lib}/${commons-cli-dir}/${commons-cli-jar}" />
         <pathelement location="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" />
       </classpath>
     </javac>
@@ -60,6 +64,16 @@
         <include name="gnu/getopt/**" />
       </patternset>
     </unjar>
+    <unjar src="${lib}/${commons-cli-dir}/${commons-cli-jar}" dest="${tmp}/${commons-cli-dir}">
+      <patternset>
+        <include name="org/apache/commons/cli/**" />
+      </patternset>
+    </unjar>
+    <unjar src="${lib}/${commons-cli-dir}/${commons-cli-sources-jar}" dest="${tmp}/${commons-cli-dir}">
+      <patternset>
+        <include name="org/apache/commons/cli/**" />
+      </patternset>
+    </unjar>
     <unjar src="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" dest="${tmp}/${anarres-cpp-dir}">
       <patternset>
         <include name="org/anarres/**" />
@@ -73,6 +87,7 @@
       <fileset dir="${src}" />
       <fileset dir="${tmp}/${antlr-dir}" />
       <fileset dir="${tmp}/${java-getopt-dir}" />
+      <fileset dir="${tmp}/${commons-cli-dir}" />
       <fileset dir="${tmp}/${anarres-cpp-dir}" />
       <manifest>
         <attribute name="Main-Class" value="traci.main.Main" />
