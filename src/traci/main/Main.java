@@ -8,6 +8,7 @@ import traci.lang.interpreter.Interpreter;
 import traci.lang.parser.ParserRunner;
 import traci.lang.preprocessor.PreprocessorRunner;
 import traci.main.options.Options;
+import traci.main.options.Settings;
 import traci.model.Scene;
 import traci.render.Renderer;
 import traci.util.Log;
@@ -47,18 +48,18 @@ public class Main
         }
         final Scene scene = interpreter.getScene();
 
-        final MultiDrawArea drawAreas = new MultiDrawArea(settings.width, settings.height);
+        final MultiDrawArea drawAreas = new MultiDrawArea(settings.getWidth(), settings.getHeight());
 
-        if (settings.display)
+        if (settings.getDisplay())
         {
-            final DynamicJPanelDrawArea visibleArea = new DynamicJPanelDrawArea(settings.width, settings.height);
+            final DynamicJPanelDrawArea visibleArea = new DynamicJPanelDrawArea(settings.getWidth(), settings.getHeight());
             drawAreas.add(visibleArea);
             new MainWindow(visibleArea).setVisible(true);
         }
 
-        if (settings.outputFilename != null)
+        if (settings.getOutputFilename() != null)
         {
-            drawAreas.add(new PngDrawArea(settings.width, settings.height, settings.outputFilename));
+            drawAreas.add(new PngDrawArea(settings.getWidth(), settings.getHeight(), settings.getOutputFilename()));
         }
 
         result = Renderer.renderScene(scene, settings, drawAreas);

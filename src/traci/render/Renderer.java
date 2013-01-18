@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import traci.gui.DrawArea;
 import traci.main.Result;
-import traci.main.Settings;
+import traci.main.options.Settings;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
@@ -62,12 +62,12 @@ public class Renderer implements BlockRenderer
          * Divide the area into work blocks and put them on a work queue
          */
         final Queue<WorkBlock> workQueue = new ConcurrentLinkedQueue<WorkBlock>();
-        for (int y = 0; y < area.height(); y += settings.workBlockHeight)
+        for (int y = 0; y < area.height(); y += settings.getWorkBlockHeight())
         {
-            for (int x = 0; x < area.width(); x += settings.workBlockWidth)
+            for (int x = 0; x < area.width(); x += settings.getWorkBlockWidth())
             {
-                final int width = Math.min(settings.workBlockWidth, area.width() - x);
-                final int height = Math.min(settings.workBlockHeight, area.height() - y);
+                final int width = Math.min(settings.getWorkBlockWidth(), area.width() - x);
+                final int height = Math.min(settings.getWorkBlockHeight(), area.height() - y);
 
                 workQueue.add(new WorkBlock(x, y, width, height, new Random(seedSource.nextLong())));
             }
@@ -77,13 +77,14 @@ public class Renderer implements BlockRenderer
          * Create all rendering threads
          */
         final List<RenderingThread> renderingThreads = new ArrayList<RenderingThread>();
+        final int numThreads = settings.getNumThreads();
 
-        for (int i = 0; i < settings.numThreads; ++i)
+        for (int i = 0; i < numThreads; ++i)
         {
             renderingThreads.add(new RenderingThread(this, workQueue));
         }
 
-        Log.INFO("Spawning " + settings.numThreads + " rendering thread" + (settings.numThreads == 1 ? "" : "s") + " wokning on " +
+        Log.INFO("Spawning " + numThreads + " rendering thread" + (numThreads == 1 ? "" : "s") + " wokning on " +
                 workQueue.size() + " block");
 
         /**
@@ -125,7 +126,7 @@ public class Renderer implements BlockRenderer
 
         Log.INFO("Successfully rendered scene in " + Utilities.millisecondsToString(stop - start));
 
-        if (settings.debug)
+        if (settings.getDebug())
         {
             final long hit = BoundingBox.hit.get();
             final long miss = BoundingBox.miss.get();
@@ -149,16 +150,27 @@ public class Renderer implements BlockRenderer
 
     private void renderPixel(final long x, final long y, final WorkBlock block)
     {
+        final int aaLevel = settings.getAaLevel();
+        final int focalBlurSamples;
+        if (settings.getFocalBlurEnabled())
+        {
+            focalBlurSamples = settings.getFocalBlurSamples();
+        }
+        else
+        {
+            focalBlurSamples = 1;
+        }
+
         Color color = Color.BLACK;
 
-        for (int aay = -settings.aaLevel; aay <= settings.aaLevel; ++aay)
+        for (int aay = -aaLevel; aay <= aaLevel; ++aay)
         {
-            for (int aax = -settings.aaLevel; aax <= settings.aaLevel; ++aax)
+            for (int aax = -aaLevel; aax <= aaLevel; ++aax)
             {
-                for (int i = 0; i < settings.focalBlurSamples; ++i)
+                for (int i = 0; i < focalBlurSamples; ++i)
                 {
-                    final double subX = aax / (settings.aaLevel * 2.0 + 1);
-                    final double subY = aay / (settings.aaLevel * 2.0 + 1);
+                    final double subX = aax / (aaLevel * 2.0 + 1);
+                    final double subY = aay / (aaLevel * 2.0 + 1);
 
                     final double lookX = (x + subX) / (area.width() - 1); // [0.0 .. 1.0]
                     final double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
@@ -170,6 +182,6 @@ public class Renderer implements BlockRenderer
             }
         }
 
-        area.draw(x, y, color.div(settings.focalBlurSamples * (settings.aaLevel * 2 + 1) * (settings.aaLevel * 2 + 1)));
+        area.draw(x, y, color.div(focalBlurSamples * (aaLevel * 2 + 1) * (aaLevel * 2 + 1)));
     }
 }

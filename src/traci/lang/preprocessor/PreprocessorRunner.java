@@ -9,7 +9,7 @@ import org.anarres.cpp.Feature;
 import org.anarres.cpp.Preprocessor;
 
 import traci.main.Result;
-import traci.main.Settings;
+import traci.main.options.Settings;
 import traci.util.Log;
 import traci.util.Utilities;
 
@@ -30,13 +30,15 @@ public class PreprocessorRunner
 
     public Result run()
     {
-        Log.INFO("Preprocessing input file: '" + settings.inputFilename + "'");
+        final String inputFilename = settings.getInputFilename();
+
+        Log.INFO("Preprocessing input file: '" + inputFilename + "'");
         final long start = System.currentTimeMillis();
 
         sb = new StringBuilder();
 
         Preprocessor pp = null;
-        final File inputFile = new File(settings.inputFilename);
+        final File inputFile = new File(inputFilename);
 
         try
         {
@@ -46,7 +48,7 @@ public class PreprocessorRunner
         }
         catch (final IOException e)
         {
-            Log.ERROR("Unable to open input file: '" + settings.inputFilename + "':\n" + e.getMessage());
+            Log.ERROR("Unable to open input file: '" + inputFilename + "':\n" + e.getMessage());
             return Result.IO_ERROR;
         }
 

@@ -13,7 +13,7 @@ import org.antlr.runtime.tree.CommonTreeNodeStream;
 import traci.lang.interpreter.Interpreter;
 import traci.lang.interpreter.node.BlockNode;
 import traci.main.Result;
-import traci.main.Settings;
+import traci.main.options.Settings;
 import traci.util.Log;
 import traci.util.Utilities;
 
@@ -36,7 +36,9 @@ public class ParserRunner
 
     public Result run()
     {
-        Log.INFO("Parsing input file: '" + settings.inputFilename + "'");
+        final String inputFilename = settings.getInputFilename();
+
+        Log.INFO("Parsing input file: '" + inputFilename + "'");
         long start = System.currentTimeMillis();
 
         CharStream input = null;
@@ -44,11 +46,11 @@ public class ParserRunner
         {
             try
             {
-                input = new ANTLRFileStream(settings.inputFilename);
+                input = new ANTLRFileStream(inputFilename);
             }
             catch (final IOException e)
             {
-                Log.ERROR("Unable to open input file: '" + settings.inputFilename + "':");
+                Log.ERROR("Unable to open input file: '" + inputFilename + "':");
                 Log.ERROR(e.getMessage());
                 return Result.IO_ERROR;
             }

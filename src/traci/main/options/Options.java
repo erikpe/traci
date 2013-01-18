@@ -9,7 +9,6 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 
 import traci.main.Result;
-import traci.main.Settings;
 import traci.util.Log;
 
 public class Options
@@ -31,7 +30,7 @@ public class Options
 
     public Result parse(final String[] argv)
     {
-        settings = Settings.getDefault();
+        settings = new Settings();
 
         final CommandLineParser parser = new PosixParser();
         final CommandLine cmd;
@@ -91,100 +90,104 @@ public class Options
         return Result.SUCCESS;
     }
 
+    private int sortingIdx = 0;
     private void addOption(final TraciOption option)
     {
+        option.sortingIdx = sortingIdx++;
         allOptions.addOption(option);
     }
 
     @SuppressWarnings("serial")
     private void initialize()
     {
-        addOption(new IntOption('w', "width", "image width in pixels", "SIZE")
+        addOption(new IntOption('w', "width", "image width in pixels", "SIZE", 800)
         {
             @Override
-            public Result handleIntOption(final long value)
+            public Result handleOption(final int value, final boolean userSupplied)
             {
-                settings.width = (int) value;
+                settings.width = value;
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new IntOption('h', "height", "image height in pixels", "SIZE")
+        addOption(new IntOption('h', "height", "image height in pixels", "SIZE", 600)
         {
             @Override
-            public Result handleIntOption(final long value)
+            public Result handleOption(final int value, final boolean userSupplied)
             {
-                settings.height = (int) value;
+                settings.height = value;
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new IntOption('a', "aa-level", "level of antialiasing", "LEVEL")
+        addOption(new IntOption('a', "aa-level", "level of antialiasing (0: no antialiasing, 3: a lot)", "LEVEL", 0)
         {
             @Override
-            public Result handleIntOption(final long value)
+            public Result handleOption(final int value, final boolean userSupplied)
             {
-                settings.aaLevel = (int) value;
+                settings.aaLevel = value;
+                settings.aaEnabled = (value > 0);
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new StringOption('o', "output", "output file", "FILE")
+        addOption(new StringOption('o', "output", "output file", "FILE", null)
         {
             @Override
-            public Result handleStringOption(final String value)
+            public Result handleOption(final String value, final boolean userSupplied)
             {
                 settings.outputFilename = value;
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new FlagOption('d', "display", "display image")
+        addOption(new FlagOption('d', "display", "display image during rendering")
         {
             @Override
-            public Result handleFlagOption()
+            public Result handleOption()
             {
                 settings.display = true;
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new FloatOption(null, "fov", "field of view in degrees", "DEGREES")
+        addOption(new FloatOption(null, "fov", "field of view in degrees", "DEGREES", 40.0)
         {
             @Override
-            public Result handleFloatOption(final double value)
+            public Result handleOption(final double value, final boolean userSupplied)
             {
                 settings.fov = (int) value;
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new IntOption(null, "focal-blur-samples", "number of samples per pixel for focal blur", "NUM")
+        addOption(new IntOption(null, "focal-blur-samples", "number of samples per pixel for focal blur", "NUM", 0)
         {
             @Override
-            public Result handleIntOption(final long value)
+            public Result handleOption(final int value, final boolean userSupplied)
             {
-                settings.focalBlurSamples = (int) value;
+                settings.focalBlurSamples = value;
+                settings.focalBlurEnabled = (value > 0);
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new IntOption(null, "workblock-width", "workblock width in pixels", "SIZE")
+        addOption(new IntOption(null, "workblock-width", "workblock width in pixels", "SIZE", 16)
         {
             @Override
-            public Result handleIntOption(final long value)
+            public Result handleOption(final int value, final boolean userSupplied)
             {
-                settings.workBlockWidth = (int) value;
+                settings.workBlockWidth = value;
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new IntOption(null, "workblock-height", "workblock height in pixels", "SIZE")
+        addOption(new IntOption(null, "workblock-height", "workblock height in pixels", "SIZE", 16)
         {
             @Override
-            public Result handleIntOption(final long value)
+            public Result handleOption(final int value, final boolean userSupplied)
             {
-                settings.workBlockHeight = (int) value;
+                settings.workBlockHeight = value;
                 return Result.SUCCESS;
             }
         });
@@ -192,19 +195,19 @@ public class Options
         addOption(new FlagOption(null, "debug", "enable debug messages")
         {
             @Override
-            public Result handleFlagOption()
+            public Result handleOption()
             {
                 settings.debug = true;
                 return Result.SUCCESS;
             }
         });
 
-        addOption(new IntOption(null, "threads", "number of worker threads", "NUM")
+        addOption(new IntOption(null, "threads", "number of worker threads", "NUM", 0)
         {
             @Override
-            public Result handleIntOption(final long value)
+            public Result handleOption(final int value, final boolean userSupplied)
             {
-                settings.numThreads = (int) value;
+                settings.numThreads = (value > 0 ? value : Runtime.getRuntime().availableProcessors());
                 return Result.SUCCESS;
             }
         });
@@ -212,26 +215,32 @@ public class Options
         addOption(new FlagOption(null, "help", "show help")
         {
             @Override
-            public Result handleFlagOption()
+            public Result handleOption()
             {
                 final HelpFormatter formatter = new HelpFormatter();
-                formatter.printHelp("traci [options] <input file>", allOptions);
+                formatter.setOptionComparator(TraciOption.COMPARATOR);
+                formatter.printHelp(120, "traci [options] <input file>", "Options:", allOptions, null, false);
                 return Result.ABORT;
             }
         });
 
-        final TraciOption macroOption = new TraciOption('D', null, "define macro for preprocessor", "NAME=VALUE")
+        addOption(new MultipleStringOption('D', null, "define macro for preprocessor", "NAME=VALUE", null)
         {
             @Override
-            public Result handleOption(final CommandLine cmd)
+            public Result handleOption(final String[] values, final boolean userSupplied)
             {
-                // final String[] options = cmd.getOptionValues(optName);
                 return Result.SUCCESS;
             }
-        };
-        macroOption.setArgs(2);
-        macroOption.setValueSeparator('=');
-        addOption(macroOption);
+        });
+
+        addOption(new MultipleStringOption('I', null, "directory to search in for includes", "DIR", null)
+        {
+            @Override
+            public Result handleOption(final String[] value, final boolean userSupplied)
+            {
+                return Result.SUCCESS;
+            }
+        });
     }
 
     static String getHelp()

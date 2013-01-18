@@ -5,7 +5,7 @@ import traci.lang.interpreter.exceptions.FunctionReturnException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.interpreter.node.BlockNode;
 import traci.main.Result;
-import traci.main.Settings;
+import traci.main.options.Settings;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;

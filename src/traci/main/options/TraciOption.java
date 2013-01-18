@@ -1,5 +1,7 @@
 package traci.main.options;
 
+import java.util.Comparator;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 
@@ -9,6 +11,16 @@ import traci.main.Result;
 public abstract class TraciOption extends Option
 {
     final protected String optName;
+    Integer sortingIdx = 0;
+
+    public static final Comparator<TraciOption> COMPARATOR = new Comparator<TraciOption>()
+    {
+        @Override
+        public int compare(final TraciOption o1, final TraciOption o2)
+        {
+            return o1.sortingIdx.compareTo(o2.sortingIdx);
+        }
+    };
 
     public String getBothNames()
     {
@@ -42,15 +54,5 @@ public abstract class TraciOption extends Option
         }
     }
 
-    public Result checkOption(final CommandLine cmd)
-    {
-        if (cmd.hasOption(optName))
-        {
-            return handleOption(cmd);
-        }
-
-        return Result.SUCCESS;
-    }
-
-    public abstract Result handleOption(final CommandLine cmd);
+    public abstract Result checkOption(final CommandLine cmd);
 }

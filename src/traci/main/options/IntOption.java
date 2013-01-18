@@ -8,29 +8,48 @@ import traci.util.Log;
 @SuppressWarnings("serial")
 public abstract class IntOption extends TraciOption
 {
-    public IntOption(final Character shortOpt, final String longOpt, final String desc, final String argName)
+    private final Integer defaultValue;
+
+    public IntOption(final Character shortOpt, final String longOpt, final String desc, final String argName,
+            final Integer defaultValue)
     {
         super(shortOpt, longOpt, desc, argName);
+        this.defaultValue = defaultValue;
     }
 
     @Override
-    public Result handleOption(final CommandLine cmd)
+    public Result checkOption(final CommandLine cmd)
     {
-        final String strValue = cmd.getOptionValue(optName);
-
-        final long value;
-        try
+        if (cmd.hasOption(optName))
         {
-            value = Long.parseLong(strValue);
+            final String[] values = cmd.getOptionValues(optName);
+
+            if (values.length > 1)
+            {
+                Log.ERROR("Option '" + getBothNames() + "' used more than once\n" + Options.getHelp());
+                return Result.INVALID_ARGUMENT_ERROR;
+            }
+
+            final int value;
+            try
+            {
+                value = Integer.parseInt(values[0]);
+            }
+            catch (final NumberFormatException e)
+            {
+                Log.ERROR("Argument to option '" + getBothNames() + "' must be integer\n" + Options.getHelp());
+                return Result.INVALID_ARGUMENT_ERROR;
+            }
+
+            return handleOption(value, true);
         }
-        catch (final NumberFormatException e)
+        else if (defaultValue != null)
         {
-            Log.ERROR("Argument to option '" + getBothNames() + "' must be integer\n" + Options.getHelp());
-            return Result.INVALID_ARGUMENT_ERROR;
+            return handleOption(defaultValue, false);
         }
 
-        return handleIntOption(value);
+        return Result.SUCCESS;
     }
 
-    public abstract Result handleIntOption(final long value);
+    public abstract Result handleOption(final int value, final boolean userSupplied);
 }

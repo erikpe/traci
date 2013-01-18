@@ -2,7 +2,7 @@ package traci.model;
 
 import java.util.Random;
 
-import traci.main.Settings;
+import traci.main.options.Settings;
 import traci.math.Transformable;
 import traci.math.Transformation;
 import traci.math.Transformations;
@@ -25,8 +25,8 @@ public class Camera implements Transformable
     {
         this.transformation = Transformations.camera(location, lookAt, up);
 
-        this.aspectRatio = ((double) settings.width) / settings.height;
-        this.fovx = (settings.fov / 360.0) * Math.PI * 2.0;
+        this.aspectRatio = ((double) settings.getWidth()) / settings.getHeight();
+        this.fovx = (settings.getFov() / 360.0) * Math.PI * 2.0;
         this.fovy = fovx / aspectRatio;
         this.xx = 2.0 * Math.tan(fovx / 2.0);
         this.yy = 2.0 * Math.tan(fovy / 2.0);
@@ -43,7 +43,7 @@ public class Camera implements Transformable
         final Vector[] res = new Vector[2];
         final Vector location;
 
-        if (settings.focalBlurEnabled)
+        if (settings.getFocalBlurEnabled())
         {
             final double r = Math.sqrt(randomSource.nextDouble()) / 2.0;
             final double phi = randomSource.nextDouble() * Math.PI * 2.0;

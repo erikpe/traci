@@ -8,29 +8,48 @@ import traci.util.Log;
 @SuppressWarnings("serial")
 public abstract class FloatOption extends TraciOption
 {
-    public FloatOption(final Character shortOpt, final String longOpt, final String desc, final String argName)
+    private final Double defaultValue;
+
+    public FloatOption(final Character shortOpt, final String longOpt, final String desc, final String argName,
+            final Double defaultValue)
     {
         super(shortOpt, longOpt, desc, argName);
+        this.defaultValue = defaultValue;
     }
 
     @Override
-    public Result handleOption(final CommandLine cmd)
+    public Result checkOption(final CommandLine cmd)
     {
-        final String strValue = cmd.getOptionValue(optName);
-
-        final double value;
-        try
+        if (cmd.hasOption(optName))
         {
-            value = Double.parseDouble(strValue);
+            final String[] values = cmd.getOptionValues(optName);
+
+            if (values.length > 1)
+            {
+                Log.ERROR("Option '" + getBothNames() + "' used more than once\n" + Options.getHelp());
+                return Result.INVALID_ARGUMENT_ERROR;
+            }
+
+            final double value;
+            try
+            {
+                value = Double.parseDouble(values[0]);
+            }
+            catch (final NumberFormatException e)
+            {
+                Log.ERROR("Argument to option '" + getBothNames() + "' must be number\n" + Options.getHelp());
+                return Result.INVALID_ARGUMENT_ERROR;
+            }
+
+            return handleOption(value, true);
         }
-        catch (final NumberFormatException e)
+        else if (defaultValue != null)
         {
-            Log.ERROR("Argument to option '" + getBothNames() + "' must be number\n" + Options.getHelp());
-            return Result.INVALID_ARGUMENT_ERROR;
+            return handleOption(defaultValue, false);
         }
 
-        return handleFloatOption(value);
+        return Result.SUCCESS;
     }
 
-    public abstract Result handleFloatOption(final double value);
+    public abstract Result handleOption(final double value, final boolean userSupplied);
 }
