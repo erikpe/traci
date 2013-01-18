@@ -1,5 +1,7 @@
 package traci.main.options;
 
+import java.util.List;
+
 public class Settings
 {
     Boolean debug = null;
@@ -23,6 +25,9 @@ public class Settings
 
     Integer workBlockWidth = null;
     Integer workBlockHeight = null;
+
+    List<String> preprocessorMacros = null;
+    List<String> includeDirs = null;
 
     Settings() { }
 
@@ -89,5 +94,15 @@ public class Settings
     public long getFov()
     {
         return fov;
+    }
+
+    public List<String> getPreprocessorMacros()
+    {
+        return preprocessorMacros;
+    }
+
+    public List<String> getIncludeDirs()
+    {
+        return includeDirs;
     }
 }

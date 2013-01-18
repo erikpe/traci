@@ -1,5 +1,9 @@
 package traci.main.options;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -100,6 +104,23 @@ public class Options
     @SuppressWarnings("serial")
     private void initialize()
     {
+        addOption(new FlagOption(null, "help", "show help")
+        {
+            @Override
+            public Result handleOption(final boolean flagSet)
+            {
+                if (flagSet)
+                {
+                    final HelpFormatter formatter = new HelpFormatter();
+                    formatter.setOptionComparator(TraciOption.COMPARATOR);
+                    formatter.printHelp(120, "traci [options] <input file>", "Options:", allOptions, null, false);
+                    return Result.ABORT;
+                }
+
+                return Result.SUCCESS;
+            }
+        });
+
         addOption(new IntOption('w', "width", "image width in pixels", "SIZE", 800)
         {
             @Override
@@ -212,28 +233,13 @@ public class Options
             }
         });
 
-        addOption(new FlagOption(null, "help", "show help")
-        {
-            @Override
-            public Result handleOption(final boolean flagSet)
-            {
-                if (flagSet)
-                {
-                    final HelpFormatter formatter = new HelpFormatter();
-                    formatter.setOptionComparator(TraciOption.COMPARATOR);
-                    formatter.printHelp(120, "traci [options] <input file>", "Options:", allOptions, null, false);
-                    return Result.ABORT;
-                }
-
-                return Result.SUCCESS;
-            }
-        });
-
         addOption(new MultipleStringOption('D', null, "define macro for preprocessor", "NAME=VALUE", null)
         {
             @Override
             public Result handleOption(final String[] values, final boolean userSupplied)
             {
+                settings.preprocessorMacros = new ArrayList<String>(Arrays.asList(values));
+                settings.preprocessorMacros = Collections.unmodifiableList(settings.preprocessorMacros);
                 return Result.SUCCESS;
             }
         });
@@ -241,8 +247,10 @@ public class Options
         addOption(new MultipleStringOption('I', null, "directory to search in for includes", "DIR", null)
         {
             @Override
-            public Result handleOption(final String[] value, final boolean userSupplied)
+            public Result handleOption(final String[] values, final boolean userSupplied)
             {
+                settings.includeDirs = new ArrayList<String>(Arrays.asList(values));
+                settings.includeDirs = Collections.unmodifiableList(settings.includeDirs);
                 return Result.SUCCESS;
             }
         });

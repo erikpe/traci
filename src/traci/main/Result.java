@@ -7,7 +7,8 @@ public enum Result
     IO_ERROR(-1),
     PARSE_ERROR(-2),
     RUNTIME_ERROR(-3),
-    INVALID_ARGUMENT_ERROR(-4);
+    INVALID_ARGUMENT_ERROR(-4),
+    PREPROCESSOR_ERROR(-5);
 
     public final int code;
 
