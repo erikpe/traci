@@ -10,7 +10,7 @@ def legopartPeg ()
     radius = LU * .3;
     lowerRounding = LEGO_ROUNDING;
     upperRounding = 2 * LEGO_ROUNDING;
-#ifdef FAST_LEGO
+#if FAST_LEGO
     return cylinder (radius, [LU/2, -EPSILON, LU/2], [LU/2, height, LU/2]);
 #else
     return roundedCylinder2 (radius, height, lowerRounding, upperRounding) {

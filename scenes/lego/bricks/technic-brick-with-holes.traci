@@ -1,8 +1,8 @@
 #ifndef TECHNIC_BRICK_WITH_HOLES_TRACI
 #define TECHNIC_BRICK_WITH_HOLES_TRACI
 
-#include "../primitives/lego-units.traci"
-#include "../primitives/lego-primitives.traci"
+#include "primitives/lego-units.traci"
+#include "primitives/lego-primitives.traci"
 
 def technicBrickWithHoles_fast (length)
 {
@@ -80,7 +80,7 @@ def technicBrickWithHoles_accurate (length)
 
 def technicBrickWithHoles (length)
 {
-#ifdef FAST_LEGO
+#if FAST_LEGO
     return technicBrickWithHoles_fast (length);
 #else
     return technicBrickWithHoles_accurate (length);

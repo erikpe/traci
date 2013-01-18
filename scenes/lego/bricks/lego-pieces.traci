@@ -1,8 +1,8 @@
 #ifndef LEGO_PIECES_TRACI
 #define LEGO_PIECES_TRACI
 
-#include "../primitives/lego-units.traci"
-#include "../primitives/lego-primitives.traci"
+#include "primitives/lego-units.traci"
+#include "primitives/lego-primitives.traci"
 
 def legopiecePlate (width, length)
 {

@@ -1,8 +1,8 @@
 #ifndef TECHNIC_PLATE_WITH_HOLES_TRACI
 #define TECHNIC_PLATE_WITH_HOLES_TRACI
 
-#include "../primitives/lego-units.traci"
-#include "../primitives/lego-primitives.traci"
+#include "primitives/lego-units.traci"
+#include "primitives/lego-primitives.traci"
 
 def legopieceTechnicPlateWithHoles (length)
 {
