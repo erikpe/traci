@@ -15,13 +15,8 @@ public abstract class FlagOption extends TraciOption
     @Override
     public Result checkOption(final CommandLine cmd)
     {
-        if (cmd.hasOption(optName))
-        {
-            return handleOption();
-        }
-
-        return Result.SUCCESS;
+        return handleOption(cmd.hasOption(optName));
     }
 
-    public abstract Result handleOption();
+    public abstract Result handleOption(final boolean flagSet);
 }

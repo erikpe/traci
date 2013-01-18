@@ -144,9 +144,9 @@ public class Options
         addOption(new FlagOption('d', "display", "display image during rendering")
         {
             @Override
-            public Result handleOption()
+            public Result handleOption(final boolean flagSet)
             {
-                settings.display = true;
+                settings.display = flagSet;
                 return Result.SUCCESS;
             }
         });
@@ -195,9 +195,9 @@ public class Options
         addOption(new FlagOption(null, "debug", "enable debug messages")
         {
             @Override
-            public Result handleOption()
+            public Result handleOption(final boolean flagSet)
             {
-                settings.debug = true;
+                settings.debug = flagSet;
                 return Result.SUCCESS;
             }
         });
@@ -215,12 +215,17 @@ public class Options
         addOption(new FlagOption(null, "help", "show help")
         {
             @Override
-            public Result handleOption()
+            public Result handleOption(final boolean flagSet)
             {
-                final HelpFormatter formatter = new HelpFormatter();
-                formatter.setOptionComparator(TraciOption.COMPARATOR);
-                formatter.printHelp(120, "traci [options] <input file>", "Options:", allOptions, null, false);
-                return Result.ABORT;
+                if (flagSet)
+                {
+                    final HelpFormatter formatter = new HelpFormatter();
+                    formatter.setOptionComparator(TraciOption.COMPARATOR);
+                    formatter.printHelp(120, "traci [options] <input file>", "Options:", allOptions, null, false);
+                    return Result.ABORT;
+                }
+
+                return Result.SUCCESS;
             }
         });
 
