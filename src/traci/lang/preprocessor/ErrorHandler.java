@@ -29,7 +29,7 @@ public class ErrorHandler extends PreprocessorListener
         return warnings;
     }
 
-    private static void makeIncludePath(final FileLexerSource source, final StringBuilder sb, final boolean last)
+    private static void makeIncludePath(final StringBuilder sb, final FileLexerSource source, final boolean last)
     {
         final FileLexerSource parent = (FileLexerSource) source.getParent();
 
@@ -41,7 +41,7 @@ public class ErrorHandler extends PreprocessorListener
         }
         else
         {
-            makeIncludePath(parent, sb, false);
+            makeIncludePath(sb, parent, false);
             sb.append("                 from ");
             sb.append(source.getPath()).append(':');
             sb.append(source.getLine() - 1);
@@ -57,14 +57,14 @@ public class ErrorHandler extends PreprocessorListener
         }
     }
 
-    private static String makeIncludePath(final FileLexerSource source, final int line, final int column)
+    private static String makeIncludePath(final StringBuilder sb, final FileLexerSource source, final int line,
+            final int column)
     {
-        final StringBuilder sb = new StringBuilder();
         final FileLexerSource parent = (FileLexerSource) source.getParent();
 
         if (parent != null)
         {
-            makeIncludePath(parent, sb, true);
+            makeIncludePath(sb, parent, true);
         }
 
         sb.append("In file: ");
@@ -82,11 +82,11 @@ public class ErrorHandler extends PreprocessorListener
 
         final StringBuilder sb = new StringBuilder();
 
-        sb.append(makeIncludePath((FileLexerSource) source, line, column)).append('\n');
-        sb.append("Preprocessor warning: ");
+        makeIncludePath(sb, (FileLexerSource) source, line, column);
+        sb.append("\nPreprocessor warning: ");
         sb.append(msg);
 
-        Log.ERROR(sb.toString());
+        Log.WARNING(sb.toString());
     }
 
     @Override
@@ -96,8 +96,8 @@ public class ErrorHandler extends PreprocessorListener
 
         final StringBuilder sb = new StringBuilder();
 
-        sb.append(makeIncludePath((FileLexerSource) source, line, column)).append('\n');
-        sb.append("Preprocessor error: ");
+        makeIncludePath(sb, (FileLexerSource) source, line, column);
+        sb.append("\nPreprocessor error: ");
         sb.append(msg);
 
         Log.ERROR(sb.toString());
