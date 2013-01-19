@@ -13,9 +13,9 @@
   <property name="commons-cli-dir" value="commons-cli-1.2" />
   <property name="commons-cli-jar" value="commons-cli-1.2.jar" />
   <property name="commons-cli-sources-jar" value="commons-cli-1.2-sources.jar" />
-  <property name="anarres-cpp-dir" value="anarres-cpp-bin-1.2.6" />
-  <property name="anarres-cpp-jar" value="anarres-cpp-bin-1.2.6.jar" />
-  <property name="anarres-cpp-sources-jar" value="anarres-cpp-sources-1.2.6.jar" />
+  <property name="anarres-cpp-dir" value="anarres-cpp-bin-1.2.8" />
+  <property name="anarres-cpp-jar" value="anarres-cpp-bin-1.2.8.jar" />
+  <property name="anarres-cpp-sources-jar" value="anarres-cpp-sources-1.2.8.jar" />
 
   <property name="jarfile" value="traci-${version}.jar" />
   <property name="src-distfile" value="traci-${version}.tar.gz" />
