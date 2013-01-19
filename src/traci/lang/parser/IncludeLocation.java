@@ -66,13 +66,13 @@ public class IncludeLocation
             sb.append(':');
             sb.append(includePath.get(i).row);
 
-            if (i < includePath.size() - 1)
+            if (i == 0)
             {
-                sb.append(",\n");
+                sb.append(":\n");
             }
             else
             {
-                sb.append(":\n");
+                sb.append(",\n");
             }
         }
 

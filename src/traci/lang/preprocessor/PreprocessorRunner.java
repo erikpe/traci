@@ -54,12 +54,6 @@ public class PreprocessorRunner
             }
             catch (final LexerException e)
             {
-                if (e.getCause() instanceof IOException)
-                {
-                    Log.ERROR("IO error while running preprocessor:\n" + e.getCause().getMessage());
-                    return Result.IO_ERROR;
-                }
-
                 Log.ERROR("Preprocessor error:\n" + e.getMessage());
                 return Result.PREPROCESSOR_ERROR;
             }
@@ -83,8 +77,13 @@ public class PreprocessorRunner
         }
         catch (final IOException e)
         {
-            Log.ERROR("Error while reading preprocessed file:\n" + e.getMessage());
+            Log.ERROR("Preprocessor error:\n" + e.getMessage());
             return Result.IO_ERROR;
+        }
+
+        if (pp.getListener().getErrors() > 0)
+        {
+            return Result.PREPROCESSOR_ERROR;
         }
 
         return Result.SUCCESS;
@@ -99,7 +98,9 @@ public class PreprocessorRunner
         final long start = System.currentTimeMillis();
 
         final Preprocessor pp = new Preprocessor();
+        final ErrorHandler errorHandler = new ErrorHandler();
 
+        pp.setListener(errorHandler);
         pp.addFeature(Feature.LINEMARKERS);
         pp.addFeature(Feature.KEEPCOMMENTS);
 
