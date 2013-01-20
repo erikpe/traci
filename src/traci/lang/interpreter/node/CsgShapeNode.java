@@ -5,10 +5,10 @@ import java.util.List;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
+import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
 import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
-import traci.lang.interpreter.TraciValue;
 import traci.model.shape.csg.Csg;
 import traci.model.shape.csg.Difference;
 import traci.model.shape.csg.Intersection;
@@ -60,7 +60,19 @@ public class CsgShapeNode implements TraciNode
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(csg);
-            blockNode.eval(context.newEntity(entity));
+            context.pushEntity(entity);
+            try
+            {
+                blockNode.eval(context);
+            }
+            catch (final FunctionReturnException e)
+            {
+                throw e;
+            }
+            finally
+            {
+                context.popEntity();
+            }
             value = entity.getValue();
             assert csg == value.getObject();
         }

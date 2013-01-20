@@ -31,6 +31,11 @@ public class FunctionCallNode implements TraciNode
         this.token = (TraciToken) token;
     }
 
+    public TraciToken getToken()
+    {
+        return token;
+    }
+
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
@@ -52,12 +57,28 @@ public class FunctionCallNode implements TraciNode
             args.add(argNode.eval(context));
         }
 
-        TraciValue value = function.invoke(context.newFuncallContext(token.location.fileLocation, id), args);
+        context.pushCallStack(token.location.fileLocation, id);
+        context.pushLocalMemory();
+        TraciValue value = function.invoke(this, context, args);
+        context.popLocalMemory();
+        context.popCallStack();
 
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(value.getObject());
-            blockNode.eval(context.newEntity(entity));
+            context.pushEntity(entity);
+            try
+            {
+                blockNode.eval(context);
+            }
+            catch (final FunctionReturnException e)
+            {
+                throw e;
+            }
+            finally
+            {
+                context.popEntity();
+            }
             value = entity.getValue();
         }
 

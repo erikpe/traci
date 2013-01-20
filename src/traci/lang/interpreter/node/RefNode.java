@@ -37,7 +37,19 @@ public class RefNode implements TraciNode
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(value.getObject());
-            blockNode.eval(context.newEntity(entity));
+            context.pushEntity(entity);
+            try
+            {
+                blockNode.eval(context);
+            }
+            catch (final FunctionReturnException e)
+            {
+                throw e;
+            }
+            finally
+            {
+                context.popEntity();
+            }
             value = entity.getValue();
         }
 
