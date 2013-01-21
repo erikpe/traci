@@ -104,9 +104,39 @@ def pieces6 ()
     }
 }
 
+def pieces7 ()
+{
+    return union {
+        legopiecePlate (1, 4) { YELLOW; roty -PI/2; translate [1, 0, -2]; }
+        legopieceTechnicPlateWithHoles (4) { YELLOW; roty PI/2; translate [5, 0, 2]; }
+        legopieceTechnicPlateWithHoles (8) { BLACK; translate [0, .4, -1]; }
+    } 
+}
+
+def pieces8 ()
+{
+    return union {
+        technicBrickWithHoles (16) { YELLOW; }
+        legopiecePlate (1, 6) { YELLOW; translate [-1, 1.2, 0]; }
+        legopiecePlate (1, 4) { BLACK; roty -PI/2; translate [6, -.4, -1]; }
+        legopiecePlate (1, 4) { BLACK; roty -PI/2; translate [6, 1.2, -1]; }
+        technicBrick1x4WithHoles () { YELLOW; roty -PI/2; translate [6, 0, 1]; }
+        technicBrick1x2WithHoles () { YELLOW; roty -PI/2; translate [6, 0, -2]; }
+        legopiecePlate (1, 4) { BLACK; roty -PI/2; translate [12, -.4, -1]; }
+        legopiecePlate (1, 4) { BLACK; roty -PI/2; translate [12, 1.2, -1]; }
+        technicBrick1x4WithHoles () { YELLOW; roty -PI/2; translate [12, 0, 1]; }
+        technicBrick1x2WithHoles () { YELLOW; roty -PI/2; translate [12, 0, -2]; }
+        legopiecePlate (1, 4) { BLACK; translate [13, -.4, 0]; }
+        legopiecePlate (1, 2) { BLACK; translate [15, 1.2, 0]; }
+        legopiecePlate (1, 2) { BLACK; roty -PI/2; translate [17, 1.2, 0]; }
+        technicBrick1x6WithHoles () { YELLOW; roty -PI/2; translate [17, 0, -2]; }
+    }
+}
+
 def airplane ()
 {
     return union {
+#if 1
         pieces1 ()     { translate [0, 0, 1]; }
         pieces2 (PI/2) { translate [10, 0, 2]; }
         pieces1 ()     { scale [1, 1, -1]; translate [0, 0, -1]; }
@@ -116,10 +146,26 @@ def airplane ()
         pieces5 ()     { translate [8, 4, 3]; }
         pieces5 ()     { scale [1, 1, -1]; translate [8, 4, -3]; }
         pieces6 ()     { translate [-5, -.7, 0]; rotz .7509279107; translate [7, 6.7, 0]; }
+        pieces7 ()     { translate [-1, 4.4, 0]; }
+#endif
+        pieces8 () { roty -PI/2; translate [9, 6, 4]; }
+        pieces8 () { roty PI/2; translate [8, 6, -4]; }
     }
 }
 
 airplane();
+
+cylinder(.1, ORIGO, X*10) {
+    color [1, 0, 0];
+}
+
+cylinder(.1, ORIGO, Y*10) {
+    color [0, 1, 0];
+}
+
+cylinder(.1, ORIGO, Z*10) {
+    color [0, 0, 1];
+}
 
 //pointLight([2, 15, 30], WHITE*30*50);
 //pointLight([-10, 10, 10], WHITE*150);
