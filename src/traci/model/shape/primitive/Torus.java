@@ -118,4 +118,10 @@ public class Torus extends Primitive
 
         return ray;
     }
+
+    @Override
+    public String toString()
+    {
+        return "torus";
+    }
 }

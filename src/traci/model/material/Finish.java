@@ -66,4 +66,10 @@ public class Finish
                Double.valueOf(shininess).equals(Double.valueOf(otherFinish.shininess)) &&
                Double.valueOf(reflectiveness).equals(Double.valueOf(otherFinish.reflectiveness));
     }
+
+    @Override
+    public String toString()
+    {
+        return "[" + specCoeff + "," + diffCoeff + "," + shininess + "," + reflectiveness + "]";
+    }
 }

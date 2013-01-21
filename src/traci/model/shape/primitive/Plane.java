@@ -29,4 +29,10 @@ public class Plane extends Primitive
 
         return null;
     }
+
+    @Override
+    public String toString()
+    {
+        return "plane";
+    }
 }

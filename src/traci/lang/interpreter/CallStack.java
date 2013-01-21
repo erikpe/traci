@@ -35,19 +35,21 @@ public class CallStack
         return new CallStack(Collections.<FileLocation>emptyList(), Collections.<String>emptyList(), "<root>");
     }
 
-    public String format(final FileLocation currentLocation)
+    public void format(final StringBuilder sb, final FileLocation currentLocation)
     {
-        final StringBuilder sb = new StringBuilder();
-
+        sb.append("    at ").append(currentFunction);
         if (currentLocation != null)
         {
-            sb.append("    at ").append(currentFunction);
-            sb.append(" (").append(currentLocation.toString()).append(')');
+            sb.append(" (").append(currentLocation.toString()).append(")\n");
+        }
+        else
+        {
+            sb.append(" (<unknown location>)\n");
         }
 
         for (int i = functions.size() - 1; i >= 0; --i)
         {
-            if (currentLocation != null || i < functions.size() - 1)
+            if (i < functions.size() - 1)
             {
                 sb.append('\n');
             }
@@ -55,7 +57,13 @@ public class CallStack
             sb.append("    at ").append(functions.get(i));
             sb.append(" (").append(fileLocations.get(i).toString()).append(')');
         }
+    }
 
+    @Override
+    public String toString()
+    {
+        final StringBuilder sb = new StringBuilder();
+        format(sb, null);
         return sb.toString();
     }
 }

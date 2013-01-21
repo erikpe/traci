@@ -74,4 +74,10 @@ public class Box extends Primitive
 
         return null;
     }
+
+    @Override
+    public String toString()
+    {
+        return "box";
+    }
 }

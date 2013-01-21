@@ -83,4 +83,10 @@ public class Cylinder extends Primitive
 
         return null;
     }
+
+    @Override
+    public String toString()
+    {
+        return "cylinder";
+    }
 }

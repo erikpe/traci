@@ -21,6 +21,12 @@ public class BuiltinFunctions
         {
             this.id = id;
         }
+
+        @Override
+        public String toString()
+        {
+            return id + "()";
+        }
     }
 
     private abstract static class UnaryNumericalFunction extends BuiltinFunction

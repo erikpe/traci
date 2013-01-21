@@ -51,7 +51,6 @@ public class BoundingBox implements Transformable, Cloneable
 
         if (far < 0)
         {
-            //miss.incrementAndGet();
             return false;
         }
 
@@ -81,11 +80,9 @@ public class BoundingBox implements Transformable, Cloneable
 
         if (far > 0 && near < far)
         {
-            //hit.incrementAndGet();
             return true;
         }
 
-        //miss.incrementAndGet();
         return false;
     }
 
@@ -104,5 +101,11 @@ public class BoundingBox implements Transformable, Cloneable
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "bounding-box";
     }
 }

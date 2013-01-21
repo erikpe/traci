@@ -58,4 +58,10 @@ public class Solid extends Pigment
         final Solid otherSolid = (Solid) other;
         return color.equals(otherSolid.color);
     }
+
+    @Override
+    public String toString()
+    {
+        return "solid:" + color.toString();
+    }
 }

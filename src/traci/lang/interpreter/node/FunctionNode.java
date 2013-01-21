@@ -60,4 +60,10 @@ public class FunctionNode implements TraciNode, Function
 
         return returnValue;
     }
+
+    @Override
+    public String toString()
+    {
+        return id + "()";
+    }
 }

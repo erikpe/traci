@@ -26,6 +26,12 @@ public class Entities
         {
             throw new RuntimeException();
         }
+
+        @Override
+        public String toString()
+        {
+            return "<ENTITY:null>";
+        }
     };
 
     public static Entity makeEntity(final Object object)
@@ -71,6 +77,12 @@ public class Entities
         public TraciValue getValue()
         {
             return new TraciValue(obj);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "<ENTITY:" + obj.toString() + ">";
         }
     }
 

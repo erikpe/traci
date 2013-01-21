@@ -99,6 +99,6 @@ public class Color
     @Override
     public String toString()
     {
-        return "<" + r + ", " + g + ", " + b + ">";
+        return "[" + r + "," + g + "," + b + "]";
     }
 }

@@ -47,4 +47,10 @@ public class Sphere extends Primitive
 
         return null;
     }
+
+    @Override
+    public String toString()
+    {
+        return "sphere";
+    }
 }

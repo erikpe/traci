@@ -157,7 +157,7 @@ public class TraciValue implements Cloneable
     @Override
     public String toString()
     {
-        return value.toString();
+        return "<" + type.toString() + ":" + value.toString() + ">";
     }
 
     @Override

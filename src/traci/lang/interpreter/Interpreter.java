@@ -55,7 +55,7 @@ public class Interpreter
             sb.append("Runtime error: ").append(e.msg).append('\n');
             if (e.callStack != null)
             {
-                sb.append(e.callStack.format(e.includeLocation.fileLocation));
+                e.callStack.format(sb, e.includeLocation.fileLocation);
             }
             Log.ERROR(sb.toString());
             return Result.RUNTIME_ERROR;

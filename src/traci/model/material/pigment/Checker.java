@@ -24,4 +24,10 @@ public class Checker extends Pattern
 
         return color2;
     }
+
+    @Override
+    public String toString()
+    {
+        return "checker";
+    }
 }
