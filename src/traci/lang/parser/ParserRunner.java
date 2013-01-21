@@ -21,7 +21,10 @@ public class ParserRunner
 {
     private final Settings settings;
     private final String code;
-    private Interpreter interpreter = null;;
+
+    private Interpreter interpreter = null;
+    private CharStream input = null;
+    private CommonTree tree = null;
 
     public ParserRunner(final Settings settings, final String code)
     {
@@ -34,14 +37,10 @@ public class ParserRunner
         return interpreter;
     }
 
-    public Result run()
+    private Result getInput()
     {
         final String inputFilename = settings.getInputFilename();
 
-        Log.INFO("Parsing input file: '" + inputFilename + "'");
-        long start = System.currentTimeMillis();
-
-        CharStream input = null;
         if (code == null)
         {
             try
@@ -60,11 +59,15 @@ public class ParserRunner
             input = new ANTLRStringStream(code);
         }
 
+        return Result.SUCCESS;
+    }
+
+    private Result runParser()
+    {
         final TraciLexer lexer = new TraciLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final TraciParser parser = new TraciParser(tokens);
 
-        CommonTree tree = null;
         boolean encounteredErrors = false;
         try
         {
@@ -120,14 +123,15 @@ public class ParserRunner
             return Result.PARSE_ERROR;
         }
 
-        long stop = System.currentTimeMillis();
+        return Result.SUCCESS;
+    }
 
-        Log.INFO("Parsing finished in " + Utilities.millisecondsToString(stop - start));
-        Log.INFO("Building interpreter");
-
-        start = System.currentTimeMillis();
+    private Result buildInterpreter()
+    {
         final CommonTreeNodeStream nodes = new CommonTreeNodeStream(tree);
         final TraciTreeWalker walker = new TraciTreeWalker(nodes);
+        boolean encounteredErrors = false;
+
         BlockNode blockNode = null;
         try
         {
@@ -137,22 +141,57 @@ public class ParserRunner
         {
             encounteredErrors = true;
             final StringBuilder sb = new StringBuilder();
+
             if (e.token != null)
             {
                 final IncludeLocation location = ((TraciToken) e.token).location;
                 sb.append(location.toString()).append('\n');
             }
+
             sb.append("Parse error: ").append(e.getMessage());
             Log.ERROR(sb.toString());
         }
-        interpreter = new Interpreter(settings, blockNode);
-        stop = System.currentTimeMillis();
 
         if (encounteredErrors)
         {
             return Result.PARSE_ERROR;
         }
 
+        interpreter = new Interpreter(settings, blockNode);
+
+        return Result.SUCCESS;
+    }
+
+    public Result run()
+    {
+        Log.INFO("Parsing input file: '" + settings.getInputFilename() + "'");
+        long start = System.currentTimeMillis();
+
+        Result result = getInput();
+        if (result != Result.SUCCESS)
+        {
+            return result;
+        }
+
+        result = runParser();
+        if (result != Result.SUCCESS)
+        {
+            return result;
+        }
+
+        long stop = System.currentTimeMillis();
+        Log.INFO("Parsing finished in " + Utilities.millisecondsToString(stop - start));
+
+        Log.INFO("Building interpreter");
+        start = System.currentTimeMillis();
+
+        result = buildInterpreter();
+        if (result != Result.SUCCESS)
+        {
+            return result;
+        }
+
+        stop = System.currentTimeMillis();
         Log.INFO("Interpreter built in " + Utilities.millisecondsToString(stop - start));
 
         return Result.SUCCESS;
