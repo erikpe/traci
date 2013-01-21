@@ -1,6 +1,9 @@
 #ifndef TECHNIC_PIN_TRACI
 #define TECHNIC_PIN_TRACI
 
+#include "primitives/lego-units.traci"
+#include "primitives/basic-shapes.traci"
+
 def legopieceTechnicPin_helper (length)
 {
     radius = LU*.3;
@@ -53,6 +56,7 @@ def legopieceTechnicPin ()
             translate [-1, -1, -1];
             scale [middleStopperRadius, middleStopperRadius, LU];
         }
+        rotz rand()*2*PI;
         translate [LU, .7*LU, 0];
     }
 }

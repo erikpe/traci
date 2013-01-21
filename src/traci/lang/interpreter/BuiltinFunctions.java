@@ -3,6 +3,7 @@ package traci.lang.interpreter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import traci.lang.interpreter.TraciValue.Type;
 import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
@@ -53,6 +54,25 @@ public class BuiltinFunctions
         }
     }
 
+    private static final BuiltinFunction RAND = new BuiltinFunction("rand")
+    {
+        private final Random random = new Random(0);
+
+        @Override
+        public final TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
+                throws InterpreterIllegalNumberOfArguments
+        {
+            final IncludeLocation location = funcallNode.getToken().location;
+
+            if (args.size() != 0)
+            {
+                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
+            }
+
+            return new TraciValue(random.nextDouble());
+        }
+    };
+
     private static final BuiltinFunction PRINT = new BuiltinFunction("print")
     {
         @Override
@@ -95,6 +115,7 @@ public class BuiltinFunctions
         functions.put(PRINT.id, PRINT);
         functions.put(SIN.id, SIN);
         functions.put(COS.id, COS);
+        functions.put(RAND.id, RAND);
 
         return functions;
     }
