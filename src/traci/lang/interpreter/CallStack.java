@@ -1,51 +1,63 @@
 package traci.lang.interpreter;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import traci.lang.parser.IncludeLocation.FileLocation;
 
 public class CallStack
 {
-    private final Stack<FileLocation> fileLocations;
-    private final Stack<String> functions;
-    private String currentFunction;
+    private final List<FileLocation> fileLocations;
+    private final List<String> functions;
 
-    public CallStack()
+    private CallStack(final List<FileLocation> fileLocations, final List<String> functions)
     {
-        this.fileLocations = new Stack<FileLocation>();
-        this.functions = new Stack<String>();
-        this.currentFunction = "<root>";
+        this.fileLocations = fileLocations;
+        this.functions = functions;
     }
 
-    public void push(final FileLocation location, final String function)
+    public CallStack push(final FileLocation location, final String function)
     {
-        fileLocations.push(location);
-        functions.push(currentFunction);
-        currentFunction = function;
+        final List<FileLocation> newFileLocations = new ArrayList<FileLocation>(fileLocations);
+        final List<String> newFunctions = new ArrayList<String>(functions);
+
+        newFileLocations.add(location);
+        newFunctions.add(function);
+
+        return new CallStack(newFileLocations, newFunctions);
     }
 
-    public void pop()
+    public static CallStack empty()
     {
-        fileLocations.pop();
-        currentFunction = functions.pop();
+        return new CallStack(Collections.<FileLocation>emptyList(), Collections.<String>singletonList("<root>"));
     }
 
-    public String print(final FileLocation currentLocation)
+    public String print(final FileLocation bottomLocation)
     {
         final StringBuilder sb = new StringBuilder();
 
-        push(currentLocation, "DUMMY-FUNCTION");
         for (int i = functions.size() - 1; i >= 0; --i)
         {
+            final FileLocation location;
+
+            if (i == (functions.size() - 1))
+            {
+                location = bottomLocation;
+            }
+            else
+            {
+                location = fileLocations.get(i);
+            }
+
             sb.append("    at ").append(functions.get(i));
-            sb.append(" (").append(fileLocations.get(i).toString()).append(")");
+            sb.append(" (").append(location.toString()).append(")");
 
             if (i >= 1)
             {
                 sb.append("\n");
             }
         }
-        pop();
 
         return sb.toString();
     }

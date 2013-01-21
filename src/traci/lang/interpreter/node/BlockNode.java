@@ -22,29 +22,18 @@ public class BlockNode implements TraciNode
     }
 
     @Override
-    public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
+    public TraciValue eval(Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        context.pushFunctions(functions);
+        context = context.newFunctions(functions);
 
-        try
+        for (final TraciNode statement : statements)
         {
-            for (final TraciNode statement : statements)
+            final TraciValue value = statement.eval(context);
+
+            if (value != null)
             {
-                final TraciValue value = statement.eval(context);
-
-                if (value != null)
-                {
-                    context.applyValue(value);
-                }
+                context.applyValue(value);
             }
-        }
-        catch (final FunctionReturnException e)
-        {
-            throw e;
-        }
-        finally
-        {
-            context.popFunctions();
         }
 
         return null;

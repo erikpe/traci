@@ -30,31 +30,27 @@ public class FunctionNode implements TraciNode, Function
     }
 
     @Override
-    public TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
-            throws InterpreterRuntimeException
+    public TraciValue invoke(Context context, final List<TraciValue> args) throws InterpreterRuntimeException
     {
         assert argIDs.size() == args.size();
 
-        context.pushEntity(Entities.NULL_ENTITY);
+        context = context.newEntity(Entities.NULL_ENTITY);
 
         for (int i = 0; i < argIDs.size(); ++i)
         {
             context.putLocalValue(argIDs.get(i), args.get(i));
         }
 
-        TraciValue returnValue = null;
         try
         {
             bodyNode.eval(context);
         }
         catch (final FunctionReturnException e)
         {
-            returnValue = e.value;
+            return e.value;
         }
 
-        context.popEntity();
-
-        return returnValue;
+        return null;
     }
 
     @Override
