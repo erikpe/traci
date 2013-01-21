@@ -11,7 +11,6 @@ import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
-import traci.lang.interpreter.exceptions.InterpreterIllegalNumberOfArguments;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.interpreter.exceptions.InterpreterUndefinedIdentifier;
 import traci.lang.parser.TraciToken;
@@ -21,7 +20,7 @@ public class FunctionCallNode implements TraciNode
     private final String id;
     private final List<TraciNode> argNodes;
     private final BlockNode blockNode;
-    private final TraciToken token;
+    public final TraciToken token;
 
     public FunctionCallNode(final String id, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
@@ -41,18 +40,13 @@ public class FunctionCallNode implements TraciNode
         {
             throw new InterpreterUndefinedIdentifier(token.location, context.callStack, "function", id);
         }
-        else if (argNodes.size() != function.numArgs())
-        {
-            throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack, id, function.numArgs(),
-                    argNodes.size());
-        }
 
         for (final TraciNode argNode : argNodes)
         {
             args.add(argNode.eval(context));
         }
 
-        TraciValue value = function.invoke(context.newFuncallContext(token.location.fileLocation, id), args);
+        TraciValue value = function.invoke(this, context, args);
 
         if (blockNode != null)
         {
@@ -62,5 +56,10 @@ public class FunctionCallNode implements TraciNode
         }
 
         return value;
+    }
+
+    public TraciToken getToken()
+    {
+        return token;
     }
 }

@@ -7,8 +7,10 @@ import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
+import traci.lang.interpreter.exceptions.InterpreterIllegalNumberOfArguments;
 import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
+import traci.lang.parser.IncludeLocation;
 
 public class FunctionNode implements TraciNode, Function
 {
@@ -30,10 +32,17 @@ public class FunctionNode implements TraciNode, Function
     }
 
     @Override
-    public TraciValue invoke(Context context, final List<TraciValue> args) throws InterpreterRuntimeException
+    public TraciValue invoke(final FunctionCallNode funcallNode, Context context, final List<TraciValue> args)
+            throws InterpreterRuntimeException
     {
-        assert argIDs.size() == args.size();
+        final IncludeLocation location = funcallNode.getToken().location;
 
+        if (args.size() != argIDs.size())
+        {
+            throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, argIDs.size(), args.size());
+        }
+
+        context = context.newFuncallContext(funcallNode.getToken().location.fileLocation, id);
         context = context.newEntity(Entities.NULL_ENTITY);
 
         for (int i = 0; i < argIDs.size(); ++i)
@@ -41,21 +50,16 @@ public class FunctionNode implements TraciNode, Function
             context.putLocalValue(argIDs.get(i), args.get(i));
         }
 
+        TraciValue returnValue = null;
         try
         {
             bodyNode.eval(context);
         }
         catch (final FunctionReturnException e)
         {
-            return e.value;
+            returnValue = e.value;
         }
 
-        return null;
-    }
-
-    @Override
-    public int numArgs()
-    {
-        return argIDs.size();
+        return returnValue;
     }
 }

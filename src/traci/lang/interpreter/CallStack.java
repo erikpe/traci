@@ -10,11 +10,13 @@ public class CallStack
 {
     private final List<FileLocation> fileLocations;
     private final List<String> functions;
+    private final String currentFunction;
 
-    private CallStack(final List<FileLocation> fileLocations, final List<String> functions)
+    private CallStack(final List<FileLocation> fileLocations, final List<String> functions, final String currentFunction)
     {
         this.fileLocations = fileLocations;
         this.functions = functions;
+        this.currentFunction = currentFunction;
     }
 
     public CallStack push(final FileLocation location, final String function)
@@ -23,40 +25,35 @@ public class CallStack
         final List<String> newFunctions = new ArrayList<String>(functions);
 
         newFileLocations.add(location);
-        newFunctions.add(function);
+        newFunctions.add(currentFunction);
 
-        return new CallStack(newFileLocations, newFunctions);
+        return new CallStack(newFileLocations, newFunctions, function);
     }
 
-    public static CallStack empty()
+    public static CallStack makeEmpty()
     {
-        return new CallStack(Collections.<FileLocation>emptyList(), Collections.<String>singletonList("<root>"));
+        return new CallStack(Collections.<FileLocation>emptyList(), Collections.<String>emptyList(), "<root>");
     }
 
-    public String print(final FileLocation bottomLocation)
+    public String format(final FileLocation currentLocation)
     {
         final StringBuilder sb = new StringBuilder();
 
+        if (currentLocation != null)
+        {
+            sb.append("    at ").append(currentFunction);
+            sb.append(" (").append(currentLocation.toString()).append(')');
+        }
+
         for (int i = functions.size() - 1; i >= 0; --i)
         {
-            final FileLocation location;
-
-            if (i == (functions.size() - 1))
+            if (currentLocation != null || i < functions.size() - 1)
             {
-                location = bottomLocation;
-            }
-            else
-            {
-                location = fileLocations.get(i);
+                sb.append('\n');
             }
 
             sb.append("    at ").append(functions.get(i));
-            sb.append(" (").append(location.toString()).append(")");
-
-            if (i >= 1)
-            {
-                sb.append("\n");
-            }
+            sb.append(" (").append(fileLocations.get(i).toString()).append(')');
         }
 
         return sb.toString();

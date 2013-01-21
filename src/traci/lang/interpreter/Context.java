@@ -27,7 +27,7 @@ public class Context
     public static Context newRootContext(final Entity rootEntity)
     {
         return new Context(null, new HashMap<String, TraciValue>(), new HashMap<String, TraciValue>(), rootEntity,
-                CallStack.empty());
+                CallStack.makeEmpty());
     }
 
     public Context newFuncallContext(final FileLocation location, final String function)
