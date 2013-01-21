@@ -86,13 +86,33 @@ public class ParserRunner
         for (final ParseError error : lexer.getLexerErrors())
         {
             encounteredErrors = true;
-            Log.ERROR(error.includeLocation.toString() + "\nLexer error: " + error.msg);
+            final StringBuilder sb = new StringBuilder();
+
+            if (error.includeLocation != null)
+            {
+                sb.append(error.includeLocation.toString()).append('\n');
+            }
+
+            sb.append("Lexer error: ");
+            sb.append(error.msg);
+
+            Log.ERROR(sb.toString());
         }
 
         for (final ParseError error : parser.getParseErrors())
         {
             encounteredErrors = true;
-            Log.ERROR(error.includeLocation.toString() + "\nParse error: " + error.msg);
+            final StringBuilder sb = new StringBuilder();
+
+            if (error.includeLocation != null)
+            {
+                sb.append(error.includeLocation.toString()).append('\n');
+            }
+
+            sb.append("Parse error: ");
+            sb.append(error.msg);
+
+            Log.ERROR(sb.toString());
         }
 
         if (encounteredErrors)

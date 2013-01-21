@@ -28,7 +28,10 @@ private final List<ParseError> parseErrors = new ArrayList<ParseError>();
 public void displayRecognitionError(String[] tokenNames,
                                     RecognitionException e) {
     String msg = getErrorMessage(e, tokenNames);
-    final IncludeLocation location = ((TraciToken) e.token).location;
+    IncludeLocation location = null;
+    if (e.token instanceof TraciToken) {
+        location = ((TraciToken) e.token).location;
+    }
     parseErrors.add(new ParseError(location, msg));
 }
 
@@ -80,12 +83,10 @@ public void displayRecognitionError(String[] tokenNames,
                                     RecognitionException e) {
     final String msg = getErrorMessage(e, tokenNames);
     final IncludeLocation location;
-    if (e.token != null)
-    {
+    if (e.token != null && (e.token instanceof TraciToken)) {
         location = ((TraciToken) e.token).location;
     }
-    else
-    {
+    else {
         location = new IncludeLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
     }
     lexerErrors.add(new ParseError(location, msg));
