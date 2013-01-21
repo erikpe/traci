@@ -3,7 +3,6 @@ package traci.lang.interpreter.node;
 import java.util.List;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Function;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
@@ -43,7 +42,6 @@ public class FunctionNode implements TraciNode, Function
         }
 
         context = context.newFuncallContext(funcallNode.getToken().location.fileLocation, id);
-        context = context.newEntity(Entities.NULL_ENTITY);
 
         for (int i = 0; i < argIDs.size(); ++i)
         {

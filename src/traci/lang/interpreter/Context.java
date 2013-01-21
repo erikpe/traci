@@ -32,7 +32,8 @@ public class Context
 
     public Context newFuncallContext(final FileLocation location, final String function)
     {
-        return new Context(null, globalMemory, new HashMap<String, TraciValue>(), entity, callStack.push(location, function));
+        final CallStack newCallStack = callStack.push(location, function);
+        return new Context(null, globalMemory, new HashMap<String, TraciValue>(), Entities.NULL_ENTITY, newCallStack);
     }
 
     public Context newEntity(final Entity newSurroundingEntity)
