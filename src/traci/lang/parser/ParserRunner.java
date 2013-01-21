@@ -80,7 +80,8 @@ public class ParserRunner
             if (e.token != null)
             {
                 final IncludeLocation location = ((TraciToken) e.token).location;
-                sb.append(location.toString()).append('\n');
+                location.toString(sb);
+                sb.append('\n');
             }
             sb.append("Parse error: ").append(e.getMessage());
             Log.ERROR(sb.toString());
@@ -93,7 +94,8 @@ public class ParserRunner
 
             if (error.includeLocation != null)
             {
-                sb.append(error.includeLocation.toString()).append('\n');
+                error.includeLocation.toString(sb);
+                sb.append('\n');
             }
 
             sb.append("Lexer error: ");
@@ -109,7 +111,8 @@ public class ParserRunner
 
             if (error.includeLocation != null)
             {
-                sb.append(error.includeLocation.toString()).append('\n');
+                error.includeLocation.toString(sb);
+                sb.append('\n');
             }
 
             sb.append("Parse error: ");
@@ -145,7 +148,8 @@ public class ParserRunner
             if (e.token != null)
             {
                 final IncludeLocation location = ((TraciToken) e.token).location;
-                sb.append(location.toString()).append('\n');
+                location.toString(sb);
+                sb.append('\n');
             }
 
             sb.append("Parse error: ").append(e.getMessage());

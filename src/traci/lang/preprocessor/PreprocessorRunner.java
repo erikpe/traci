@@ -1,6 +1,7 @@
 package traci.lang.preprocessor;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -17,7 +18,7 @@ import traci.util.Utilities;
 public class PreprocessorRunner
 {
     private final Settings settings;
-    private StringBuilder sb = null;
+    private String code = null;
 
     public PreprocessorRunner(final Settings settings)
     {
@@ -26,7 +27,7 @@ public class PreprocessorRunner
 
     public String getProcessedCode()
     {
-        return sb.toString();
+        return code;
     }
 
     private Result addMacros(final Preprocessor pp)
@@ -64,7 +65,9 @@ public class PreprocessorRunner
 
     private Result runPreprocessor(final Preprocessor pp)
     {
+        final StringBuilder sb = new StringBuilder();
         final Reader reader = new CppReader(pp);
+
         try
         {
             int c;
@@ -86,12 +89,31 @@ public class PreprocessorRunner
             return Result.PREPROCESSOR_ERROR;
         }
 
+        code = sb.toString();
+
+        return Result.SUCCESS;
+    }
+
+    private Result saveOutput()
+    {
+        try
+        {
+            final FileWriter writer = new FileWriter(settings.getPreprocessorOutput());
+            writer.write(code);
+            writer.close();
+            Log.INFO("Saved preprocessed code to: '" + settings.getPreprocessorOutput() + "'");
+        }
+        catch (final IOException e)
+        {
+            Log.ERROR("Unable to save preprocessor output to: '" + settings.getPreprocessorOutput() + "'");
+            return Result.IO_ERROR;
+        }
+
         return Result.SUCCESS;
     }
 
     public Result run()
     {
-        sb = new StringBuilder();
         final String inputFilename = settings.getInputFilename();
 
         Log.INFO("Preprocessing input file: '" + inputFilename + "'");
@@ -133,6 +155,15 @@ public class PreprocessorRunner
 
         final long stop = System.currentTimeMillis();
         Log.INFO("Preprocessing finished in " + Utilities.millisecondsToString(stop - start));
+
+        if (settings.getPreprocessorOutput() != null)
+        {
+            result = saveOutput();
+            if (result != Result.SUCCESS)
+            {
+                return result;
+            }
+        }
 
         return Result.SUCCESS;
     }

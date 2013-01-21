@@ -46,11 +46,8 @@ public class IncludeLocation
         this.includePath = Collections.unmodifiableList(new ArrayList<FileLocation>(includePath));
     }
 
-    @Override
-    public String toString()
+    public void toString(final StringBuilder sb)
     {
-        final StringBuilder sb = new StringBuilder();
-
         for (int i = includePath.size() - 1; i >= 0; --i)
         {
             if (i == (includePath.size() - 1))
@@ -80,7 +77,13 @@ public class IncludeLocation
         sb.append(fileLocation.filename).append(':');
         sb.append(fileLocation.row).append(':');
         sb.append(fileLocation.col).append(':');
+    }
 
+    @Override
+    public String toString()
+    {
+        final StringBuilder sb = new StringBuilder();
+        toString(sb);
         return sb.toString();
     }
 }

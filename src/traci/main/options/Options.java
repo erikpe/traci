@@ -254,6 +254,16 @@ public class Options
                 return Result.SUCCESS;
             }
         });
+
+        addOption(new StringOption(null, "preprocessor-output", "save preprocessed code to file", "FILE", null)
+        {
+            @Override
+            public Result handleOption(final String value, final boolean userSupplied)
+            {
+                settings.preprocessorOutput = value;
+                return Result.SUCCESS;
+            }
+        });
     }
 
     static String getHelp()

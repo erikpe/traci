@@ -29,6 +29,8 @@ public class Settings
     List<String> preprocessorMacros = null;
     List<String> includeDirs = null;
 
+    String preprocessorOutput = null;
+
     Settings() { }
 
     public int getWorkBlockWidth()
@@ -99,6 +101,11 @@ public class Settings
     public List<String> getPreprocessorMacros()
     {
         return preprocessorMacros;
+    }
+
+    public String getPreprocessorOutput()
+    {
+        return preprocessorOutput;
     }
 
     public List<String> getIncludeDirs()

@@ -49,7 +49,8 @@ public class Interpreter
             final StringBuilder sb = new StringBuilder();
             if (e.includeLocation != null)
             {
-                sb.append(e.includeLocation.toString()).append('\n');
+                e.includeLocation.toString(sb);
+                sb.append('\n');
             }
             sb.append("Runtime error: ").append(e.msg).append('\n');
             if (e.callStack != null)
@@ -75,7 +76,7 @@ public class Interpreter
         final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*50));
         final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
 
-        final Vector camLocation = Vector.make(-10, 15, 15);
+        final Vector camLocation = Vector.make(-15, 30, 40);
         final Vector camLookAt = Vector.make(8, 2, 0);
         final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y, settings);
         scene = new Scene(optimizedRoot, cam);
