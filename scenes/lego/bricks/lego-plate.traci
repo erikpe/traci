@@ -1,0 +1,69 @@
+#ifndef PLATE_TRACI_
+#define PLATE_TRACI_
+
+#include "primitives/lego-units.traci"
+#include "primitives/basic-shapes.traci"
+#include "primitives/lego-primitives.traci"
+
+/*
+ * http://www.bricklink.com/catalogList.asp?catType=P&catString=26
+ */
+def legoPlate (width, length)
+{
+    boxLength = length*LU;
+    boxHeight = .4*LU;
+    boxWidth = width*LU;
+    pegHeight = .2*LU;
+    return union {
+        roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING) {
+            for (x in 0 .. length-1) {
+                for (z in 0 .. width-1) {
+                    legopartPeg () {
+                        translate [x*LU, boxHeight, z*LU];
+                    }
+                }
+            }
+            bbox {
+                scale [boxLength, boxHeight+pegHeight, boxWidth];
+            }
+        }
+    }
+}
+
+/*
+ * Plate 1 x 2
+ * http://www.bricklink.com/catalogItem.asp?P=3023
+ */
+def legoPlate_1x2 ()
+{
+    return legoPlate(1, 2);
+}
+
+/*
+ * Plate 1 x 4
+ * http://www.bricklink.com/catalogItem.asp?P=3710
+ */
+def legoPlate_1x4 ()
+{
+    return legoPlate(1, 4);
+}
+
+/*
+ * Plate 1 x 6
+ * http://www.bricklink.com/catalogItem.asp?P=3666
+ */
+def legoPlate_1x6 ()
+{
+    return legoPlate(1, 6);
+}
+
+/*
+ * Plate 2 x 2
+ * http://www.bricklink.com/catalogItem.asp?P=3022
+ */
+def legoPlate_2x2 ()
+{
+    return legoPlate(2, 2);
+}
+
+#endif // PLATE_TRACI_

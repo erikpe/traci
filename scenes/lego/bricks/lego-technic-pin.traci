@@ -3,8 +3,9 @@
 
 #include "primitives/lego-units.traci"
 #include "primitives/basic-shapes.traci"
+#include "primitives/lego-primitives.traci"
 
-def legopieceTechnicPin_helper (length)
+def legoTechnicPinWithoutFrictionRidgesLengthwise_helper (length)
 {
     radius = LU*.3;
     outerStopperRadius = LU*.04;
@@ -28,17 +29,20 @@ def legopieceTechnicPin_helper (length)
     }
 }
 
-def legopieceTechnicPin ()
+/*
+ * http://www.bricklink.com/catalogItem.asp?P=3673
+ */
+def legoTechnicPinWithoutFrictionRidgesLengthwise ()
 {
     middleStopperRadius = .38*LU;
     middleStopperLength = .15*LU;
     innerRadius = .22*LU;
     return difference {
         union {
-            legopieceTechnicPin_helper (LU-.5*middleStopperLength) {
+            legoTechnicPinWithoutFrictionRidgesLengthwise_helper (LU-.5*middleStopperLength) {
                 translate Z*.5*middleStopperLength;
             }
-            legopieceTechnicPin_helper (LU-.5*middleStopperLength) {
+            legoTechnicPinWithoutFrictionRidgesLengthwise_helper (LU-.5*middleStopperLength) {
                 rotx PI;
                 translate -Z*.5*middleStopperLength;
             }
@@ -59,6 +63,14 @@ def legopieceTechnicPin ()
         rotz rand()*2*PI;
         translate [LU, .7*LU, 0];
     }
+}
+
+/*
+ * Short-hand for: legoTechnicPinWithoutFrictionRidgesLengthwise
+ */
+def legoTechnicPin_1 ()
+{
+    return legoTechnicPinWithoutFrictionRidgesLengthwise();
 }
 
 #endif // TECHNIC_PIN_TRACI

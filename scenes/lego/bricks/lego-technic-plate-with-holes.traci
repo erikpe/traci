@@ -1,0 +1,68 @@
+#ifndef TECHNIC_PLATE_WITH_HOLES_TRACI_
+#define TECHNIC_PLATE_WITH_HOLES_TRACI_
+
+#include "primitives/lego-units.traci"
+#include "primitives/basic-shapes.traci"
+#include "primitives/lego-primitives.traci"
+
+/*
+ * Technic, Plate
+ * http://www.bricklink.com/catalogList.asp?catType=P&catString=140
+ */
+def legoTechnicPlateWithHoles (length)
+{
+    boxLength = length*LU;
+    boxHeight = .4*LU;
+    boxWidth = 2*LU;
+    pegHeight = .2*LU;
+    return union {
+        difference {
+            roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+            for (x in 0 .. length-2) {
+                legopartTechnicPlateHole () {
+                    translate X*(x*LU);
+                }
+            }
+        }
+        for (x in 0 .. length-1) {
+            legopartPeg () {
+                translate [x*LU, boxHeight, 0];
+            }
+            legopartPeg() {
+                translate [x*LU, boxHeight, LU];
+            }
+        }
+        bbox {
+            scale [boxLength, boxHeight+pegHeight, boxWidth];
+        }
+    }
+}
+
+/*
+ * Technic, Plate 2 x 4 with 3 Holes
+ * http://www.bricklink.com/catalogItem.asp?P=3709b
+ */
+def legoTechnicPlateWithHoles_2x4 ()
+{
+    return legoTechnicPlateWithHoles (4);
+}
+
+/*
+ * Technic, Plate 2 x 6 with 5 Holes
+ * http://www.bricklink.com/catalogItem.asp?P=32001
+ */
+def legoTechnicPlateWithHoles_2x6 ()
+{
+    return legoTechnicPlateWithHoles (6);
+}
+
+/*
+ * Technic, Plate 2 x 8 with 7 Holes
+ * http://www.bricklink.com/catalogItem.asp?P=3738
+ */
+def legoTechnicPlateWithHoles_2x8 ()
+{
+    return legoTechnicPlateWithHoles (8);
+}
+
+#endif // TECHNIC_PLATE_WITH_HOLES_TRACI_

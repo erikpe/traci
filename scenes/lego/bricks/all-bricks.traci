@@ -1,9 +1,9 @@
-#ifndef ALL_BRICKS_TRACI
-#define ALL_BRICKS_TRACI
+#ifndef ALL_BRICKS_TRACI_
+#define ALL_BRICKS_TRACI_
 
-#include "technic-brick-with-holes.traci"
-#include "technic-plate-with-holes.traci"
-#include "technic-pin.traci"
-#include "lego-pieces.traci"
+#include "lego-technic-brick-with-holes.traci"
+#include "lego-technic-plate-with-holes.traci"
+#include "lego-technic-pin.traci"
+#include "lego-plate.traci"
 
-#endif // ALL_BRICKS_TRACI
+#endif // ALL_BRICKS_TRACI_

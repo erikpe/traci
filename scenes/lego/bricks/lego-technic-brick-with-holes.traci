@@ -1,10 +1,11 @@
-#ifndef TECHNIC_BRICK_WITH_HOLES_TRACI
-#define TECHNIC_BRICK_WITH_HOLES_TRACI
+#ifndef TECHNIC_BRICK_WITH_HOLES_TRACI_
+#define TECHNIC_BRICK_WITH_HOLES_TRACI_
 
 #include "primitives/lego-units.traci"
+#include "primitives/basic-shapes.traci"
 #include "primitives/lego-primitives.traci"
 
-def technicBrickWithHoles_fast (length)
+def legoTechnicBrickWithHoles_fast (length)
 {
     boxLength = LU * length;
     boxHeight = LU * 1.2;
@@ -34,7 +35,7 @@ def technicBrickWithHoles_fast (length)
     }
 }
 
-def technicBrickWithHoles_accurate (length)
+def legoTechnicBrickWithHoles_accurate (length)
 {
     boxLength = LU * length;
     boxHeight = LU * 1.2;
@@ -78,43 +79,88 @@ def technicBrickWithHoles_accurate (length)
     }
 }
 
-def technicBrickWithHoles (length)
+/*
+ * http://www.bricklink.com/catalogList.asp?catType=P&catString=135
+ */
+def legoTechnicBrickWithHoles (length)
 {
 #if FAST_LEGO
-    return technicBrickWithHoles_fast (length);
+    return legoTechnicBrickWithHoles_fast (length);
 #else
-    return technicBrickWithHoles_accurate (length);
+    return legoTechnicBrickWithHoles_accurate (length);
 #endif // FAST_LEGO
 }
 
-def technicBrick1x2WithHoles ()
+/*
+ * Technic, Brick 1 x 2 with Hole
+ * http://www.bricklink.com/catalogItem.asp?P=3700
+ */
+def legoTechnicBrickWithHoles_1x2 ()
 {
-    return technicBrickWithHoles (2);
+    return legoTechnicBrickWithHoles (2);
 }
 
-def technicBrick1x4WithHoles ()
+/*
+ * Technic, Brick 1 x 4 with Holes
+ * http://www.bricklink.com/catalogItem.asp?P=3701
+ */
+def legoTechnicBrickWithHoles_1x4 ()
 {
-    return technicBrickWithHoles (4);
+    return legoTechnicBrickWithHoles (4);
 }
 
-def technicBrick1x6WithHoles ()
+/*
+ * Technic, Brick 1 x 6 with Holes
+ * http://www.bricklink.com/catalogItem.asp?P=3894
+ */
+def legoTechnicBrickWithHoles_1x6 ()
 {
-    return technicBrickWithHoles (6);
+    return legoTechnicBrickWithHoles (6);
 }
 
-def technicBrick1x8WithHoles ()
+/*
+ * Technic, Brick 1 x 8 with Holes
+ * http://www.bricklink.com/catalogItem.asp?P=3702
+ */
+def legoTechnicBrickWithHoles_1x8 ()
 {
-    return technicBrickWithHoles (8);
+    return legoTechnicBrickWithHoles (8);
 }
 
-def technicBrick1x8WithHoles ()
+/*
+ * Technic, Brick 1 x 10 with Holes
+ * http://www.bricklink.com/catalogItem.asp?P=2730
+ */
+def legoTechnicBrickWithHoles_1x10 ()
 {
-    return technicBrickWithHoles (8);
+    return legoTechnicBrickWithHoles (10);
 }
 
-def technicBrick1x10WithHoles ()
+/*
+ * Technic, Brick 1 x 12 with Holes
+ * http://www.bricklink.com/catalogItem.asp?P=3895
+ */
+def legoTechnicBrickWithHoles_1x12 ()
 {
-    return technicBrickWithHoles (10);
+    return legoTechnicBrickWithHoles (12);
 }
 
-#endif // TECHNIC_BRICK_WITH_HOLES
+/*
+ * Technic, Brick 1 x 14 with Holes
+ * http://www.bricklink.com/catalogItem.asp?P=32018
+ */
+def legoTechnicBrickWithHoles_1x14 ()
+{
+    return legoTechnicBrickWithHoles (14);
+}
+
+/*
+ * Technic, Brick 1 x 16 with Holes
+ * http://www.bricklink.com/catalogItem.asp?P=3703
+ */
+def legoTechnicBrickWithHoles_1x16 ()
+{
+    return legoTechnicBrickWithHoles (16);
+}
+
+#endif // TECHNIC_BRICK_WITH_HOLES_
