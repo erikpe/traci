@@ -1,5 +1,6 @@
 package traci.lang.interpreter;
 
+import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.math.Transformation;
 import traci.math.Vector;
 import traci.model.material.Finish;
@@ -80,7 +81,7 @@ public class TraciValue implements Cloneable
         }
         else
         {
-            throw new RuntimeException();
+            throw new InterpreterInternalException("Unable to make entity of type: " + obj.getClass().toString());
         }
     }
 

@@ -63,6 +63,39 @@ public class PreprocessorRunner
         return Result.SUCCESS;
     }
 
+    private Result addInput(final Preprocessor pp)
+    {
+        final String inputFilename = settings.getInputFilename();
+        final File inputFile = new File(inputFilename);
+
+        try
+        {
+            final String inputFileDir = inputFile.getCanonicalFile().getParent();
+            pp.getQuoteIncludePath().add(inputFileDir);
+        }
+        catch (final IOException e)
+        {
+            // Ignore
+        }
+
+        for (final String includePath : settings.getIncludeDirs())
+        {
+            pp.getQuoteIncludePath().add(includePath);
+        }
+
+        try
+        {
+            pp.addInput(inputFile);
+        }
+        catch (final IOException e)
+        {
+            Log.ERROR("Unable to open input file: '" + inputFilename + "':\n" + e.getMessage());
+            return Result.IO_ERROR;
+        }
+
+        return Result.SUCCESS;
+    }
+
     private Result runPreprocessor(final Preprocessor pp)
     {
         final StringBuilder sb = new StringBuilder();
@@ -114,9 +147,7 @@ public class PreprocessorRunner
 
     public Result run()
     {
-        final String inputFilename = settings.getInputFilename();
-
-        Log.INFO("Preprocessing input file: '" + inputFilename + "'");
+        Log.INFO("Preprocessing input file: '" +  settings.getInputFilename() + "'");
         final long start = System.currentTimeMillis();
 
         final Preprocessor pp = new Preprocessor();
@@ -126,25 +157,16 @@ public class PreprocessorRunner
         pp.addFeature(Feature.LINEMARKERS);
         pp.addFeature(Feature.KEEPCOMMENTS);
 
-        for (final String includePath : settings.getIncludeDirs())
-        {
-            pp.getQuoteIncludePath().add(includePath);
-        }
-
-        Result result = addMacros(pp);
+        Result result = addInput(pp);
         if (result != Result.SUCCESS)
         {
             return result;
         }
 
-        try
+        result = addMacros(pp);
+        if (result != Result.SUCCESS)
         {
-            pp.addInput(new File(inputFilename));
-        }
-        catch (final IOException e)
-        {
-            Log.ERROR("Unable to open input file: '" + inputFilename + "':\n" + e.getMessage());
-            return Result.IO_ERROR;
+            return result;
         }
 
         result = runPreprocessor(pp);
