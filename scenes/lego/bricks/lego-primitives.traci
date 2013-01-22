@@ -1,8 +1,9 @@
-#ifndef LEGO_PRIMITIVES_TRACI
-#define LEGO_PRIMITIVES_TRACI
+#ifndef LEGO_PRIMITIVES_TRACI_
+#define LEGO_PRIMITIVES_TRACI_
 
+#include "common/basic-units.traci"
+#include "common/basic-shapes.traci"
 #include "lego-units.traci"
-#include "basic-shapes.traci"
 
 def legopartPeg ()
 {
@@ -81,4 +82,4 @@ def legopartTechnicPlateHole ()
     }
 }
 
-#endif // LEGO_PRIMITIVES_TRACI
+#endif // LEGO_PRIMITIVES_TRACI_

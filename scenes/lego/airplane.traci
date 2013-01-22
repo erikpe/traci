@@ -1,3 +1,4 @@
+#include "common/basic-units.traci"
 #include "bricks/all-bricks.traci"
 
 def rotHole (obj, theta)
@@ -135,9 +136,12 @@ def pieces8 ()
         legoPlate_1x2 ()                  { BLACK;              translate [15, 1.2, 0]; }
         legoPlate_1x2 ()                  { BLACK;  roty -PI/2; translate [17, 1.2, 0]; }
         legoTechnicBrickWithHoles_1x6 ()  { YELLOW; roty -PI/2; translate [17, 0, -2]; }
+
+        bbox { scale [18, 2.2, 7]; translate [-1, -.4, -2]; }
     }
 }
 
+#if 1
 def airplane ()
 {
     return union {
@@ -157,6 +161,7 @@ def airplane ()
 }
 
 airplane();
+#endif
 
 cylinder(.1, ORIGO, X*20) {
     color [1, 0, 0];

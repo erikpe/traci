@@ -1,0 +1,13 @@
+#ifndef BASIC_UNITS_TRACI_
+#define BASIC_UNITS_TRACI_
+
+global ORIGO = [0, 0, 0];
+
+global X = [1, 0, 0];
+global Y = [0, 1, 0];
+global Z = [0, 0, 1];
+
+global EPSILON = 0.01;
+global PI = 3.14159265358979323846;
+
+#endif // BASIC_UNITS_TRACI_

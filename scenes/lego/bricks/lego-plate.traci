@@ -1,9 +1,10 @@
-#ifndef PLATE_TRACI_
-#define PLATE_TRACI_
+#ifndef LEGO_PLATE_TRACI_
+#define LEGO_PLATE_TRACI_
 
-#include "primitives/lego-units.traci"
-#include "primitives/basic-shapes.traci"
-#include "primitives/lego-primitives.traci"
+#include "common/basic-units.traci"
+#include "common/basic-shapes.traci"
+#include "lego-units.traci"
+#include "lego-primitives.traci"
 
 /*
  * http://www.bricklink.com/catalogList.asp?catType=P&catString=26
@@ -66,4 +67,4 @@ def legoPlate_2x2 ()
     return legoPlate(2, 2);
 }
 
-#endif // PLATE_TRACI_
+#endif // LEGO_PLATE_TRACI_

@@ -1,9 +1,10 @@
-#ifndef TECHNIC_PIN_TRACI
-#define TECHNIC_PIN_TRACI
+#ifndef LEGO_TECHNIC_PIN_TRACI_
+#define LEGO_TECHNIC_PIN_TRACI_
 
-#include "primitives/lego-units.traci"
-#include "primitives/basic-shapes.traci"
-#include "primitives/lego-primitives.traci"
+#include "common/basic-units.traci"
+#include "common/basic-shapes.traci"
+#include "lego-units.traci"
+#include "lego-primitives.traci"
 
 def legoTechnicPinWithoutFrictionRidgesLengthwise_helper (length)
 {
@@ -73,4 +74,4 @@ def legoTechnicPin_1 ()
     return legoTechnicPinWithoutFrictionRidgesLengthwise();
 }
 
-#endif // TECHNIC_PIN_TRACI
+#endif // TECHNIC_PIN_TRACI_

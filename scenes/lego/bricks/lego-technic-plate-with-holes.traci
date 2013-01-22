@@ -1,9 +1,10 @@
-#ifndef TECHNIC_PLATE_WITH_HOLES_TRACI_
-#define TECHNIC_PLATE_WITH_HOLES_TRACI_
+#ifndef LEGO_TECHNIC_PLATE_WITH_HOLES_TRACI_
+#define LEGO_TECHNIC_PLATE_WITH_HOLES_TRACI_
 
-#include "primitives/lego-units.traci"
-#include "primitives/basic-shapes.traci"
-#include "primitives/lego-primitives.traci"
+#include "common/basic-units.traci"
+#include "common/basic-shapes.traci"
+#include "lego-units.traci"
+#include "lego-primitives.traci"
 
 /*
  * Technic, Plate
@@ -65,4 +66,4 @@ def legoTechnicPlateWithHoles_2x8 ()
     return legoTechnicPlateWithHoles (8);
 }
 
-#endif // TECHNIC_PLATE_WITH_HOLES_TRACI_
+#endif // LEGO_TECHNIC_PLATE_WITH_HOLES_TRACI_

@@ -1,9 +1,10 @@
-#ifndef TECHNIC_BRICK_WITH_HOLES_TRACI_
-#define TECHNIC_BRICK_WITH_HOLES_TRACI_
+#ifndef LEGO_TECHNIC_BRICK_WITH_HOLES_TRACI_
+#define LEGO_TECHNIC_BRICK_WITH_HOLES_TRACI_
 
-#include "primitives/lego-units.traci"
-#include "primitives/basic-shapes.traci"
-#include "primitives/lego-primitives.traci"
+#include "common/basic-units.traci"
+#include "common/basic-shapes.traci"
+#include "lego-units.traci"
+#include "lego-primitives.traci"
 
 def legoTechnicBrickWithHoles_fast (length)
 {
@@ -163,4 +164,4 @@ def legoTechnicBrickWithHoles_1x16 ()
     return legoTechnicBrickWithHoles (16);
 }
 
-#endif // TECHNIC_BRICK_WITH_HOLES_
+#endif // LEGO_TECHNIC_BRICK_WITH_HOLES_

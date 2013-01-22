@@ -1,10 +1,12 @@
-#ifndef BASIC_SHAPES_TRACI
-#define BASIC_SHAPES_TRACI
+#ifndef BASIC_SHAPES_TRACI_
+#define BASIC_SHAPES_TRACI_
+
+#include "basic-units.traci"
 
 /*
  * Rounded cylinder 0 (from side):
  *  ___
- * /   \
+ * /   \ 
  * |   |
  * |___|
  *
@@ -29,7 +31,7 @@ def roundedCylinder0 (radius, height, rounding)
 /*
  * Rounded cylinder 1 (from side):
  *  ___
- * /   \
+ * /   \ 
  * |   |
  * \___/
  *
@@ -58,7 +60,7 @@ def roundedCylinder1 (radius, height, rounding)
 /*
  * Rounded cylinder 2 (from side):
  *   ___
- *  /   \
+ *  /   \ 
  *  |   |
  * /_____\
  *
@@ -93,7 +95,7 @@ def roundedCylinder1 (radius, height, rounding)
  * _______
  * \     /
  *  |   |
- * /_____\
+ * /_____\ 
  *
  */
 def roundedCylinder3 (radius, height, rounding)
@@ -128,7 +130,7 @@ def roundedCylinder3 (radius, height, rounding)
  *   ___
  *  |   |
  *  |   |
- * /_____\
+ * /_____\ 
  *
  */
 def roundedCylinder4 (radius, height, rounding)
@@ -321,4 +323,4 @@ def roundedBox2 (x, y, z, r)
     }
 }
 
-#endif // BASIC_SHAPES_TRACI
+#endif // BASIC_SHAPES_TRACI_
