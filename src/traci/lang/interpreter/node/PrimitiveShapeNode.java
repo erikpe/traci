@@ -27,7 +27,7 @@ public class PrimitiveShapeNode implements TraciNode
 {
     private static enum PrimitiveType
     {
-        box(new Type[0])
+        BOX(new Type[0])
         {
             @Override
             protected Primitive make(final List<TraciValue> args)
@@ -36,7 +36,7 @@ public class PrimitiveShapeNode implements TraciNode
             }
         },
 
-        cylinder(new Type[] { Type.NUMBER, Type.VECTOR, Type.VECTOR })
+        CYLINDER(new Type[] { Type.NUMBER, Type.VECTOR, Type.VECTOR })
         {
             @Override
             protected Primitive make(final List<TraciValue> args)
@@ -45,7 +45,7 @@ public class PrimitiveShapeNode implements TraciNode
             }
         },
 
-        plane(new Type[0])
+        PLANE(new Type[0])
         {
             @Override
             protected Primitive make(final List<TraciValue> args)
@@ -54,7 +54,7 @@ public class PrimitiveShapeNode implements TraciNode
             }
         },
 
-        sphere(new Type[0])
+        SPHERE(new Type[0])
         {
             @Override
             protected Primitive make(final List<TraciValue> args)
@@ -63,7 +63,7 @@ public class PrimitiveShapeNode implements TraciNode
             }
         },
 
-        torus(new Type[] { Type.NUMBER, Type.NUMBER })
+        TORUS(new Type[] { Type.NUMBER, Type.NUMBER })
         {
             @Override
             protected Primitive make(final List<TraciValue> args)
@@ -90,7 +90,7 @@ public class PrimitiveShapeNode implements TraciNode
     public PrimitiveShapeNode(final String shapeType, final List<TraciNode> argNodes, final BlockNode blockNode,
             final Token token)
     {
-        this.primitiveType = PrimitiveType.valueOf(shapeType);
+        this.primitiveType = PrimitiveType.valueOf(shapeType.toUpperCase());
         this.argNodes = (argNodes == null ? Collections.<TraciNode> emptyList() : argNodes);
         this.blockNode = blockNode;
         this.token = (TraciToken) token;

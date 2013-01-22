@@ -5,10 +5,10 @@ import java.util.List;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
+import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
 import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
-import traci.lang.interpreter.TraciValue;
 import traci.model.shape.csg.Csg;
 import traci.model.shape.csg.Difference;
 import traci.model.shape.csg.Intersection;
@@ -18,9 +18,9 @@ public class CsgShapeNode implements TraciNode
 {
     private static enum CsgType
     {
-        union,
-        difference,
-        intersection
+        UNION,
+        DIFFERENCE,
+        INTERSECTION
     }
 
     private final CsgType type;
@@ -28,7 +28,7 @@ public class CsgShapeNode implements TraciNode
 
     public CsgShapeNode(final String shapeType, final List<TraciNode> argNodes, final BlockNode blockNode)
     {
-        this.type = CsgType.valueOf(shapeType);
+        this.type = CsgType.valueOf(shapeType.toUpperCase());
         this.blockNode = blockNode;
     }
 
@@ -39,15 +39,15 @@ public class CsgShapeNode implements TraciNode
 
         switch (type)
         {
-        case union:
+        case UNION:
             csg = new Union();
             break;
 
-        case difference:
+        case DIFFERENCE:
             csg = new Difference();
             break;
 
-        case intersection:
+        case INTERSECTION:
             csg = new Intersection();
             break;
 

@@ -19,7 +19,7 @@ public class TransformationNode implements TraciNode
 {
     private static enum TransformationType
     {
-        rotx(EnumSet.<Type>of(Type.NUMBER))
+        ROTX(EnumSet.<Type>of(Type.NUMBER))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -28,7 +28,7 @@ public class TransformationNode implements TraciNode
             }
         },
 
-        roty(EnumSet.<Type>of(Type.NUMBER))
+        ROTY(EnumSet.<Type>of(Type.NUMBER))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -37,7 +37,7 @@ public class TransformationNode implements TraciNode
             }
         },
 
-        rotz(EnumSet.<Type>of(Type.NUMBER))
+        ROTZ(EnumSet.<Type>of(Type.NUMBER))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -46,7 +46,7 @@ public class TransformationNode implements TraciNode
             }
         },
 
-        translate(EnumSet.<Type>of(Type.VECTOR))
+        TRANSLATE(EnumSet.<Type>of(Type.VECTOR))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -55,7 +55,7 @@ public class TransformationNode implements TraciNode
             }
         },
 
-        scale(EnumSet.<Type>of(Type.NUMBER, Type.VECTOR))
+        SCALE(EnumSet.<Type>of(Type.NUMBER, Type.VECTOR))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -87,7 +87,7 @@ public class TransformationNode implements TraciNode
 
     public TransformationNode(final String typeStr, final TraciNode exprNode, final Token token)
     {
-        this.transformationType = TransformationType.valueOf(typeStr);
+        this.transformationType = TransformationType.valueOf(typeStr.toUpperCase());
         this.exprNode = exprNode;
         this.token = (TraciToken) token;
     }

@@ -19,7 +19,7 @@ public class LightNode implements TraciNode
 {
     private static enum LightType
     {
-        pointlight
+        POINTLIGHT;
     }
 
     private final LightType type;
@@ -42,7 +42,7 @@ public class LightNode implements TraciNode
         if (numArgs != 2)
         {
             throw new InterpreterIllegalNumberOfArguments(token.location, context.callStack,
-                    LightType.pointlight.toString(), 2, numArgs);
+                    LightType.POINTLIGHT.toString(), 2, numArgs);
         }
 
         return new PointLight(null, null);
@@ -55,7 +55,7 @@ public class LightNode implements TraciNode
 
         switch (type)
         {
-        case pointlight:
+        case POINTLIGHT:
             light = makePointLight(context);
             break;
 
