@@ -62,6 +62,6 @@ public class Solid extends Pigment
     @Override
     public String toString()
     {
-        return "solid:" + color.toString();
+        return "Solid:" + color.toString();
     }
 }

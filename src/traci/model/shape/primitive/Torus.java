@@ -122,6 +122,6 @@ public class Torus extends Primitive
     @Override
     public String toString()
     {
-        return "torus";
+        return "Torus";
     }
 }

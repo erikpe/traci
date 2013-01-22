@@ -32,4 +32,10 @@ public class Difference extends Csg
 
         return ray;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Difference";
+    }
 }

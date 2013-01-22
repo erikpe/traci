@@ -85,4 +85,10 @@ public class Transformation
 
         return mat.equals(otherTransformation.mat) && invMat.equals(otherTransformation.invMat);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Transformation";
+    }
 }

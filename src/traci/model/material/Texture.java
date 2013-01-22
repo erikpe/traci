@@ -67,4 +67,10 @@ public class Texture
         final Texture otherTexture = (Texture) other;
         return pigment.equals(otherTexture.pigment) && finish.equals(otherTexture.finish);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Texture";
+    }
 }

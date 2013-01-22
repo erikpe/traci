@@ -33,6 +33,6 @@ public class Plane extends Primitive
     @Override
     public String toString()
     {
-        return "plane";
+        return "Plane";
     }
 }

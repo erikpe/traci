@@ -87,6 +87,6 @@ public class Cylinder extends Primitive
     @Override
     public String toString()
     {
-        return "cylinder";
+        return "Cylinder";
     }
 }

@@ -22,4 +22,10 @@ public class Union extends Csg
 
         return ray;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Union";
+    }
 }

@@ -70,4 +70,10 @@ public class Material
         final Material otherMaterial = (Material) other;
         return texture.equals(otherMaterial.texture);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Material";
+    }
 }

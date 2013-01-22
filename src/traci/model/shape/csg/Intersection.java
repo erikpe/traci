@@ -32,4 +32,10 @@ public class Intersection extends Csg
 
         return ray;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Intersection";
+    }
 }

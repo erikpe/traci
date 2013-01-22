@@ -1,5 +1,6 @@
 package traci.lang.interpreter;
 
+import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.math.Transformation;
 import traci.model.material.Material;
 import traci.model.material.Texture;
@@ -24,7 +25,7 @@ public class Entities
         @Override
         public TraciValue getValue()
         {
-            throw new RuntimeException();
+            throw new InterpreterInternalException("getValue() called on null entity");
         }
 
         @Override

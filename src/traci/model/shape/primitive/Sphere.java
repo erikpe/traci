@@ -51,6 +51,6 @@ public class Sphere extends Primitive
     @Override
     public String toString()
     {
-        return "sphere";
+        return "Sphere";
     }
 }

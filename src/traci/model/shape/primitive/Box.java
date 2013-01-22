@@ -78,6 +78,6 @@ public class Box extends Primitive
     @Override
     public String toString()
     {
-        return "box";
+        return "Box";
     }
 }

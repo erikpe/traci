@@ -106,6 +106,6 @@ public class BoundingBox implements Transformable, Cloneable
     @Override
     public String toString()
     {
-        return "bounding-box";
+        return "BoundingBox";
     }
 }
