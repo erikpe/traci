@@ -1,10 +1,10 @@
-package traci.lang.interpreter;
+package traci.lang.interpreter.functions;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
+import traci.lang.interpreter.Context;
+import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
 import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
 import traci.lang.interpreter.exceptions.InterpreterIllegalNumberOfArguments;
@@ -13,6 +13,7 @@ import traci.lang.parser.IncludeLocation;
 
 public class BuiltinFunctions
 {
+
     private abstract static class BuiltinFunction implements Function
     {
         protected final String id;
@@ -114,15 +115,17 @@ public class BuiltinFunctions
         }
     };
 
-    public static Map<String, Function> getAll()
+    private static final BuiltinFunction[] ALL_BUILTIN_FUNCTIONS = new BuiltinFunction[] { PRINT, SIN, COS, RAND };
+
+    public static FunctionSet getAll()
     {
-        final Map<String, Function> functions = new HashMap<String, Function>();
+        final FunctionSet functionSet = new FunctionSet();
 
-        functions.put(PRINT.id, PRINT);
-        functions.put(SIN.id, SIN);
-        functions.put(COS.id, COS);
-        functions.put(RAND.id, RAND);
+        for (final BuiltinFunction function : ALL_BUILTIN_FUNCTIONS)
+        {
+            functionSet.put(function.id, function);
+        }
 
-        return functions;
+        return functionSet;
     }
 }

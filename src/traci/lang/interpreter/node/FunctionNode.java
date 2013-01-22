@@ -3,12 +3,12 @@ package traci.lang.interpreter.node;
 import java.util.List;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.Function;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
 import traci.lang.interpreter.exceptions.InterpreterIllegalNumberOfArguments;
 import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
+import traci.lang.interpreter.functions.Function;
 import traci.lang.parser.IncludeLocation;
 
 public class FunctionNode implements TraciNode, Function

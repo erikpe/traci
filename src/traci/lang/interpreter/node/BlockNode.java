@@ -2,20 +2,19 @@ package traci.lang.interpreter.node;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import traci.lang.interpreter.Context;
-import traci.lang.interpreter.Function;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
+import traci.lang.interpreter.functions.FunctionSet;
 
 public class BlockNode implements TraciNode
 {
     private final List<TraciNode> statements;
-    private final Map<String, Function> functions;
+    private final FunctionSet functions;
 
-    public BlockNode(final Map<String, Function> functions)
+    public BlockNode(final FunctionSet functions)
     {
         this.statements = new ArrayList<TraciNode>();
         this.functions = functions;

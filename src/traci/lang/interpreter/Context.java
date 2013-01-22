@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import traci.lang.interpreter.Entities.Entity;
+import traci.lang.interpreter.functions.Function;
 import traci.lang.parser.IncludeLocation.FileLocation;
 
 public class Context

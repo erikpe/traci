@@ -8,11 +8,11 @@ import org.antlr.runtime.Token;
 import traci.lang.interpreter.Context;
 import traci.lang.interpreter.Entities;
 import traci.lang.interpreter.Entities.Entity;
-import traci.lang.interpreter.Function;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.interpreter.exceptions.InterpreterUndefinedIdentifier;
+import traci.lang.interpreter.functions.Function;
 import traci.lang.parser.TraciToken;
 
 public class FunctionCallNode implements TraciNode

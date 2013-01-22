@@ -8,12 +8,9 @@ options {
 @header {
 package traci.lang.parser;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import traci.lang.interpreter.BuiltinFunctions;
-import traci.lang.interpreter.Function;
 import traci.lang.interpreter.TraciValue;
+import traci.lang.interpreter.functions.BuiltinFunctions;
+import traci.lang.interpreter.functions.FunctionSet;
 import traci.lang.interpreter.node.AssignNode;
 import traci.lang.interpreter.node.BBoxNode;
 import traci.lang.interpreter.node.BinaryOpNode;
@@ -38,7 +35,7 @@ import traci.lang.interpreter.node.WhileNode;
 }
 
 @members {
-private Map<String, Function> visibleFunctions = BuiltinFunctions.getAll();
+private FunctionSet visibleFunctions = BuiltinFunctions.getAll();
 
 public void displayRecognitionError(String[] tokenNames,
                                     RecognitionException e) {
@@ -53,8 +50,8 @@ scene
 
 block returns [BlockNode node]
 @init {
-final Map<String, Function> outerFunctions = visibleFunctions;
-visibleFunctions = new HashMap<String, Function>(outerFunctions);
+final FunctionSet outerFunctions = visibleFunctions;
+visibleFunctions = new FunctionSet(outerFunctions);
 node = new BlockNode(visibleFunctions);
 }
 @after {
