@@ -3,6 +3,7 @@ package traci.lang.interpreter;
 import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.math.Transformation;
 import traci.math.Vector;
+import traci.model.material.Color;
 import traci.model.material.Finish;
 import traci.model.material.Material;
 import traci.model.material.Texture;
@@ -25,7 +26,8 @@ public class TraciValue implements Cloneable
         MATERIAL,
         TEXTURE,
         FINISH,
-        PIGMENT
+        PIGMENT,
+        COLOR;
     };
 
     private final Object value;
@@ -78,6 +80,10 @@ public class TraciValue implements Cloneable
         else if (obj instanceof Pigment)
         {
             type = Type.PIGMENT;
+        }
+        else if (obj instanceof Color)
+        {
+            type = Type.COLOR;
         }
         else
         {
@@ -153,6 +159,11 @@ public class TraciValue implements Cloneable
     public Pigment getPigment()
     {
         return (Pigment) value;
+    }
+
+    public Color getColor()
+    {
+        return (Color) value;
     }
 
     @Override

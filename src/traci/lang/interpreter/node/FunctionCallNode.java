@@ -34,7 +34,7 @@ public class FunctionCallNode implements TraciNode
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         final Function function = context.getFunction(id);
-        final List<TraciValue> args = new ArrayList<TraciValue>();
+        final List<TraciValue> args = new ArrayList<TraciValue>(argNodes.size());
 
         if (function == null)
         {

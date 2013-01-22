@@ -19,7 +19,7 @@ public class TransformationNode implements TraciNode
 {
     private static enum TransformationType
     {
-        ROTX(EnumSet.<Type>of(Type.NUMBER))
+        ROTX("rotx", EnumSet.<Type>of(Type.NUMBER))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -28,7 +28,7 @@ public class TransformationNode implements TraciNode
             }
         },
 
-        ROTY(EnumSet.<Type>of(Type.NUMBER))
+        ROTY("roty", EnumSet.<Type>of(Type.NUMBER))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -37,7 +37,7 @@ public class TransformationNode implements TraciNode
             }
         },
 
-        ROTZ(EnumSet.<Type>of(Type.NUMBER))
+        ROTZ("rotz", EnumSet.<Type>of(Type.NUMBER))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -46,7 +46,7 @@ public class TransformationNode implements TraciNode
             }
         },
 
-        TRANSLATE(EnumSet.<Type>of(Type.VECTOR))
+        TRANSLATE("translate", EnumSet.<Type>of(Type.VECTOR))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -55,7 +55,7 @@ public class TransformationNode implements TraciNode
             }
         },
 
-        SCALE(EnumSet.<Type>of(Type.NUMBER, Type.VECTOR))
+        SCALE("scale", EnumSet.<Type>of(Type.NUMBER, Type.VECTOR))
         {
             @Override
             protected Transformation make(final TraciValue value)
@@ -64,20 +64,27 @@ public class TransformationNode implements TraciNode
                 {
                     return Transformations.scale(value.getNumber());
                 }
-                else
-                {
-                    return Transformations.scale(value.getVector());
-                }
+
+                assert value.getType() == Type.VECTOR;
+                return Transformations.scale(value.getVector());
             }
         };
 
+        private final String id;
         private final Set<Type> validTypes;
 
         protected abstract Transformation make(final TraciValue value);
 
-        private TransformationType(final Set<Type> validTypes)
+        private TransformationType(final String id, final Set<Type> validTypes)
         {
+            this.id = id;
             this.validTypes = validTypes;
+        }
+
+        @Override
+        public String toString()
+        {
+            return id;
         }
     }
 

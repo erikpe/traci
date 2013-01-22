@@ -27,58 +27,66 @@ public class PrimitiveShapeNode implements TraciNode
 {
     private static enum PrimitiveType
     {
-        BOX(new Type[0])
+        BOX("box", new Type[0])
         {
             @Override
-            protected Primitive make(final List<TraciValue> args)
+            protected Box make(final List<TraciValue> args)
             {
                 return new Box();
             }
         },
 
-        CYLINDER(new Type[] { Type.NUMBER, Type.VECTOR, Type.VECTOR })
+        CYLINDER("cylinder", new Type[] { Type.NUMBER, Type.VECTOR, Type.VECTOR })
         {
             @Override
-            protected Primitive make(final List<TraciValue> args)
+            protected Cylinder make(final List<TraciValue> args)
             {
                 return new Cylinder(args.get(0).getNumber(), args.get(1).getVector(), args.get(2).getVector());
             }
         },
 
-        PLANE(new Type[0])
+        PLANE("plane", new Type[0])
         {
             @Override
-            protected Primitive make(final List<TraciValue> args)
+            protected Plane make(final List<TraciValue> args)
             {
                 return new Plane();
             }
         },
 
-        SPHERE(new Type[0])
+        SPHERE("sphere", new Type[0])
         {
             @Override
-            protected Primitive make(final List<TraciValue> args)
+            protected Sphere make(final List<TraciValue> args)
             {
                 return new Sphere();
             }
         },
 
-        TORUS(new Type[] { Type.NUMBER, Type.NUMBER })
+        TORUS("torus", new Type[] { Type.NUMBER, Type.NUMBER })
         {
             @Override
-            protected Primitive make(final List<TraciValue> args)
+            protected Torus make(final List<TraciValue> args)
             {
                 return new Torus(args.get(0).getNumber(), args.get(1).getNumber());
             }
         };
 
-        private Type[] expectedArgTypes;
+        private final String id;
+        private final Type[] expectedArgTypes;
 
         protected abstract Primitive make(final List<TraciValue> args);
 
-        private PrimitiveType(final Type[] expectedArgTypes)
+        private PrimitiveType(final String id, final Type[] expectedArgTypes)
         {
+            this.id = id;
             this.expectedArgTypes = expectedArgTypes;
+        }
+
+        @Override
+        public String toString()
+        {
+            return id;
         }
     }
 
