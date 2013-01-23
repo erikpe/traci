@@ -55,13 +55,21 @@ public class Raytrace
             final Vector toLight = light.location.sub(hitPoint);
             final Vector dirToLight = toLight.normalize();
 
+            /**
+             * Check if path to light is obstructed
+             */
             final Ray lightRay2 = scene.rootShape.shootRay(hitPoint, dirToLight);
-            if (lightRay2 != null && lightRay2.first() != null)
+            final double distToLight = toLight.length();
+            if (lightRay2 != null)
             {
-                continue;
+                final Point pp = lightRay2.first();
+                if (pp != null && pp.dist < distToLight)
+                {
+                    /* Light is obstructed */
+                    continue;
+                }
             }
 
-            final double distToLight = toLight.length();
             final double distCoeff = 1.0 / (distToLight * distToLight);
             final Color lightAtPoint = light.color.mul(distCoeff);
 
