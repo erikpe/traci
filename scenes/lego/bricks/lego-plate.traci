@@ -67,4 +67,22 @@ def legoPlate_2x2 ()
     return legoPlate(2, 2);
 }
 
+/*
+ * Plate 2 x 6
+ * http://www.bricklink.com/catalogItem.asp?P=3795
+ */
+def legoPlate_2x6 ()
+{
+    return legoPlate(2, 6);
+}
+
+/*
+ * Plate 2 x 12
+ * http://www.bricklink.com/catalogItem.asp?P=2445
+ */
+def legoPlate_2x12 ()
+{
+    return legoPlate(2, 12);
+}
+
 #endif // LEGO_PLATE_TRACI_

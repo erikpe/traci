@@ -14,6 +14,7 @@ global BLACK = color [.15, .15, .15];
 global BLACK_LIGHT = color [.2, .2, .2];
 global GRAY = color [.85, .85, .85];
 global YELLOW = color [1, 1, 0];
+global WHITE = color [1, 1, 1];
 
 def pieces1 ()
 {
@@ -125,7 +126,7 @@ def pieces8 ()
         legoTechnicBrickWithHoles_1x16 () { YELLOW; }
         legoPlate_1x6 ()                  { YELLOW;             translate [-1, 1.2, 0]; }
         legoPlate_1x4 ()                  { BLACK;  roty -PI/2; translate [6, -.4, -1]; }
-        legoPlate_1x4 ()                  { BLACK;  roty -PI/2; translate [6, 1.2, -1]; }
+        legoTile_1x4 ()                   { BLACK;  roty -PI/2; translate [6, 1.2, -1]; }
         legoTechnicBrickWithHoles_1x4 ()  { YELLOW; roty -PI/2; translate [6, 0, 1]; }
         legoTechnicBrickWithHoles_1x2 ()  { YELLOW; roty -PI/2; translate [6, 0, -2]; }
         legoPlate_1x4 ()                  { BLACK;  roty -PI/2; translate [12, -.4, -1]; }
@@ -138,6 +139,40 @@ def pieces8 ()
         legoTechnicBrickWithHoles_1x6 ()  { YELLOW; roty -PI/2; translate [17, 0, -2]; }
 
         bbox { scale [18, 2.2, 7]; translate [-1, -.4, -2]; }
+    }
+}
+
+def pieces9 ()
+{
+    return union {
+        legoTechnicBrickWithHoles_1x12 () { BLACK; translate [0, 0, 1]; }
+        legoTechnicBrickWithHoles_1x12 () { BLACK; translate [0, 0, -2]; }
+        union {
+            legoTechnicBrickWithHoles_1x16 () { YELLOW; }
+            legoTechnicBrickWithHoles_1x16 () { YELLOW;             translate [0, 0, -1]; }
+            legoPlate_2x12 ()                 { YELLOW; roty -PI/2; translate [14, 1.2, -6]; }
+            legoPlate_2x12 ()                 { YELLOW; roty -PI/2; translate [16, 1.2, -6]; }
+            legoTechnicBrickWithHoles_1x2 ()  { BLACK;              translate [10, 1.2, -1]; }
+            legoTechnicBrickWithHoles_1x2 ()  { BLACK;              translate [14, 1.6, -1]; }
+            translate [-8, -.7, 0];
+            rotz (-25.2087/360)*PI*2;
+            translate [11, .7, 0];
+        }
+        translate [-1, -.7, 0];
+        rotz (28.7989/360)*PI*2;
+        translate [1, .7, 0];
+    }
+}
+
+def pieces10 ()
+{
+    return union {
+        legoTechnicBrickWithHoles_1x8 () { YELLOW;             translate [0, 0, 2]; }
+        legoTechnicBrickWithHoles_1x8 () { YELLOW;             translate [0, 0, -3]; }
+        legoPlate_2x6 ()                 { BLACK;  roty -PI/2; translate [3, 1.2, -3]; }
+        translate [-1, -.7, 0];
+        rotz (-15.676/360)*PI*2;
+        translate [1, .7, 0];
     }
 }
 
@@ -157,12 +192,16 @@ def airplane ()
         pieces7 ()     { translate [-1, 4.4, 0]; }
         pieces8 ()     { roty -PI/2; translate [9, 6, 4]; }
         pieces8 ()     { roty PI/2;  translate [8, 6, -4]; }
+        pieces9 ()     { translate [14, 0, 0]; }
+        pieces10 ()    { translate [10, 6, 0]; }
+        rotx (20/360)*PI*2;
     }
 }
 
 airplane();
 #endif
 
+#if 0
 cylinder(.1, ORIGO, X*20) {
     color [1, 0, 0];
 }
@@ -174,9 +213,11 @@ cylinder(.1, ORIGO, Y*20) {
 cylinder(.1, ORIGO, Z*20) {
     color [0, 0, 1];
 }
+#endif
 
-//pointLight([2, 15, 30], WHITE*30*50);
-//pointLight([-10, 10, 10], WHITE*150);
+pointlight([-30, 15, 40], WHITE*30*200);
+pointlight([50, 15, 30], WHITE*5000);
+ambientlight(WHITE*.15);
 
 //camera([-10, 15, 15], [8, 2, 0], Y);
 

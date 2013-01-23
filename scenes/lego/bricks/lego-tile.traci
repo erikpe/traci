@@ -1,0 +1,56 @@
+#ifndef LEGO_TILE_TRACI_
+#define LEGO_TILE_TRACI_
+
+#include "common/basic-units.traci"
+#include "common/basic-shapes.traci"
+#include "lego-units.traci"
+#include "lego-primitives.traci"
+
+/*
+ * http://www.bricklink.com/catalogList.asp?catType=P&catString=37
+ */
+def legoTile (width, length)
+{
+    boxLength = length * LU;
+    boxHeight = .4 * LU;
+    boxWidth = width * LU;
+    return roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+}
+
+/*
+ * Tile 1 x 1 with Groove
+ * http://www.bricklink.com/catalogItem.asp?P=3070b
+ */
+def legoTile_1x1 ()
+{
+    return legoTile (1, 1);
+}
+
+/*
+ * Tile 1 x 2 with Groove
+ * http://www.bricklink.com/catalogItem.asp?P=3069b
+ */
+def legoTile_1x2 ()
+{
+    return legoTile (1, 2);
+}
+
+/*
+ * Tile 1 x 3
+ * http://www.bricklink.com/catalogItem.asp?P=63864
+ */
+def legoTile_1x4 ()
+{
+    return legoTile (1, 3);
+}
+
+/*
+ * Tile 1 x 4
+ * http://www.bricklink.com/catalogItem.asp?P=2431
+ */
+def legoTile_1x4 ()
+{
+    return legoTile (1, 4);
+}
+
+#endif // LEGO_TILE_TRACI_
