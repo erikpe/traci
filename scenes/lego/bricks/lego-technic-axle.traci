@@ -1,0 +1,65 @@
+#ifndef LEGO_TECHNIC_AXLE_TRACI_
+#define LEGO_TECHNIC_AXLE_TRACI_
+
+#include "common/basic-units.traci"
+#include "common/basic-shapes.traci"
+#include "lego-units.traci"
+#include "lego-primitives.traci"
+
+/*
+ * http://www.bricklink.com/catalogList.asp?catType=P&catString=134
+ */
+def legoTechnicAxle (length)
+{
+    radius = .28;
+    thickness = .22;
+    return union {
+        roundedBox(length, radius*2, thickness, LEGO_ROUNDING) {
+            translate [0, -radius, -thickness/2];
+        }
+        roundedBox(length, thickness, radius*2, LEGO_ROUNDING) {
+            translate [0, -thickness/2, -radius];
+        }
+        bbox { scale [length, radius*2, radius*2]; translate [0, -radius, -radius]; }
+        roty -PI/2;
+        translate [1, .7, 0];
+    }
+}
+
+/*
+ * Technic, Axle 2
+ * http://www.bricklink.com/catalogItem.asp?P=3704
+ */
+def legoTechnicAxle_2 ()
+{
+    return legoTechnicAxle(2);
+}
+
+/*
+ * Technic, Axle 4
+ * http://www.bricklink.com/catalogItem.asp?P=3705
+ */
+def legoTechnicAxle_4 ()
+{
+    return legoTechnicAxle(4);
+}
+
+/*
+ * Technic, Axle 6
+ * http://www.bricklink.com/catalogItem.asp?P=3706
+ */
+def legoTechnicAxle_6 ()
+{
+    return legoTechnicAxle(6);
+}
+
+/*
+ * Technic, Axle 8
+ * http://www.bricklink.com/catalogItem.asp?P=3707
+ */
+def legoTechnicAxle_8 ()
+{
+    return legoTechnicAxle(8);
+}
+
+#endif // LEGO_TECHNIC_AXLE_TRACI_

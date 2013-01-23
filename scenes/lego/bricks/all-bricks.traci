@@ -6,5 +6,6 @@
 #include "lego-technic-pin.traci"
 #include "lego-plate.traci"
 #include "lego-tile.traci"
+#include "lego-technic-axle.traci"
 
 #endif // ALL_BRICKS_TRACI_

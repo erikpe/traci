@@ -108,6 +108,7 @@ def pieces6 ()
     return union {
         legoTechnicBrickWithHoles_1x6 () { YELLOW; translate [0, 0, 2]; }
         legoTechnicBrickWithHoles_1x6 () { YELLOW; translate [0, 0, -3]; }
+        legoTechnicAxle_8 ()             { BLACK;  translate [0, 0, -4]; }
     }
 }
 
@@ -147,9 +148,12 @@ def pieces9 ()
     return union {
         legoTechnicBrickWithHoles_1x12 () { BLACK; translate [0, 0, 1]; }
         legoTechnicBrickWithHoles_1x12 () { BLACK; translate [0, 0, -2]; }
+        legoTechnicAxle_8 ()              { BLACK; translate [4, 0, -4]; }
+        legoTechnicAxle_6 ()              { BLACK; translate [10, 0, -3]; }
         union {
             legoTechnicBrickWithHoles_1x16 () { YELLOW; }
             legoTechnicBrickWithHoles_1x16 () { YELLOW;             translate [0, 0, -1]; }
+            legoTechnicAxle_8 ()              { BLACK;              translate [0, 0, -4]; }
             legoPlate_2x12 ()                 { YELLOW; roty -PI/2; translate [14, 1.2, -6]; }
             legoPlate_2x12 ()                 { YELLOW; roty -PI/2; translate [16, 1.2, -6]; }
             legoTechnicBrickWithHoles_1x2 ()  { BLACK;              translate [10, 1.2, -1]; }
@@ -214,6 +218,11 @@ cylinder(.1, ORIGO, Z*20) {
     color [0, 0, 1];
 }
 #endif
+
+//pieces6();
+
+//legoTechnicBrickWithHoles_1x2() { YELLOW; }
+//legoTechnicAxle(2) { BLACK; }
 
 pointlight([-30, 15, 40], WHITE*30*200);
 pointlight([50, 15, 30], WHITE*5000);
