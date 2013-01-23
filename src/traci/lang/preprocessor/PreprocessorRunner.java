@@ -67,15 +67,11 @@ public class PreprocessorRunner
     {
         final String inputFilename = settings.getInputFilename();
         final File inputFile = new File(inputFilename);
+        final String inputFileDir = inputFile.getParent();
 
-        try
+        if (inputFileDir != null)
         {
-            final String inputFileDir = inputFile.getCanonicalFile().getParent();
             pp.getQuoteIncludePath().add(inputFileDir);
-        }
-        catch (final IOException e)
-        {
-            // Ignore
         }
 
         for (final String includePath : settings.getIncludeDirs())
