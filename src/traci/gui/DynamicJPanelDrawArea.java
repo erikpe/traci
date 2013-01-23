@@ -1,5 +1,6 @@
 package traci.gui;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Timer;
@@ -16,7 +17,7 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
     /**
      * Redraw period in milliseconds.
      */
-    private static final long REDRAW_PERIOD_MS = 1000;
+    private static final long REDRAW_PERIOD_MS = 100;
 
     private final BufferedImageDrawArea area;
 
@@ -25,6 +26,7 @@ public class DynamicJPanelDrawArea extends JPanel implements DrawArea
     public DynamicJPanelDrawArea(final int width, final int height)
     {
         area = new BufferedImageDrawArea(width, height);
+        setPreferredSize(new Dimension(width, height));
     }
 
     @Override

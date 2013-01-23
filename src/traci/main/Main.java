@@ -54,7 +54,7 @@ public class Main
         {
             final DynamicJPanelDrawArea visibleArea = new DynamicJPanelDrawArea(settings.getWidth(), settings.getHeight());
             drawAreas.add(visibleArea);
-            new MainWindow(visibleArea).setVisible(true);
+            new MainWindow(visibleArea, "Traci: " + settings.getInputFilename()).setVisible(true);
         }
 
         if (settings.getOutputFilename() != null)
