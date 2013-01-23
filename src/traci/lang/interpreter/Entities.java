@@ -4,6 +4,7 @@ import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.math.Transformation;
 import traci.model.material.Material;
 import traci.model.material.Texture;
+import traci.model.material.pigment.Solid;
 import traci.model.shape.BoundingBox;
 import traci.model.shape.csg.Csg;
 import traci.model.shape.primitive.Primitive;
@@ -119,6 +120,10 @@ public class Entities
                 obj.transform(value.getTransformation());
                 break;
 
+            case COLOR:
+                obj.setPigment(Solid.make(value.getColor()));
+                break;
+
             default:
                 throw new RuntimeException();
             }
@@ -164,6 +169,10 @@ public class Entities
 
             case TRANSFORMATION:
                 obj.transform(value.getTransformation());
+                break;
+
+            case COLOR:
+                obj.setPigment(Solid.make(value.getColor()));
                 break;
 
             default:
@@ -218,6 +227,10 @@ public class Entities
                 obj = obj.setPigment(value.getPigment());
                 break;
 
+            case COLOR:
+                obj = obj.setPigment(Solid.make(value.getColor()));
+                break;
+
             default:
                 throw new RuntimeException();
             }
@@ -251,6 +264,9 @@ public class Entities
             case TEXTURE:
                 obj = obj.setTexture(value.getTexture());
                 break;
+
+            case COLOR:
+                obj = obj.setPigment(Solid.make(value.getColor()));
 
             default:
                 throw new RuntimeException();

@@ -61,6 +61,16 @@ public class Color
         return make(r + color.r, g + color.g, b + color.b);
     }
 
+    public Color sub(final Color color)
+    {
+        return make(r - color.r, g - color.g, b - color.b);
+    }
+
+    public Color neg()
+    {
+        return make(-r, -g, -b);
+    }
+
     @Override
     public int hashCode()
     {

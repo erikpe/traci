@@ -12,18 +12,18 @@ public class Raytrace
 {
     protected static Color raytrace(final Scene scene, final int depth, final Vector p, final Vector dir)
     {
-        final Ray ray = scene.shape.shootRay(p, dir);
+        final Ray ray = scene.rootShape.shootRay(p, dir);
 
         if (ray == null)
         {
-            return Color.WHITE.mul(.5);
+            return scene.backgroundColor;
         }
 
         final Point hit = ray.first();
 
         if (hit == null)
         {
-            return Color.WHITE.mul(.5);
+            return scene.backgroundColor;
         }
 
         final double dist = hit.dist;
@@ -35,18 +35,27 @@ public class Raytrace
         final Pigment pigment = obj.getMaterial().texture.pigment;
         final Finish finish = obj.getMaterial().texture.finish;
 
+        final Color hitPointColor = pigment.getColor(hitPoint);
+
         /**
          * Ambient light
          */
-        final Color colorAmb = pigment.getColor(hitPoint).mul(PointLight.ambient);
-        Color colorTotal = colorAmb;
+        Color colorTotal;
+        if (scene.ambientLight != null)
+        {
+            colorTotal = hitPointColor.mul(scene.ambientLight.color);
+        }
+        else
+        {
+            colorTotal = Color.BLACK;
+        }
 
-        for (final PointLight light : scene.lights)
+        for (final PointLight light : scene.pointLights)
         {
             final Vector toLight = light.location.sub(hitPoint);
             final Vector dirToLight = toLight.normalize();
 
-            final Ray lightRay2 = scene.shape.shootRay(hitPoint, dirToLight);
+            final Ray lightRay2 = scene.rootShape.shootRay(hitPoint, dirToLight);
             if (lightRay2 != null && lightRay2.first() != null)
             {
                 continue;
@@ -60,7 +69,7 @@ public class Raytrace
              * Diffuse light
              */
             final double c = Math.max(dirToLight.dot(normal), 0.0);
-            final Color colorDiff = pigment.getColor(hitPoint).mul(lightAtPoint.mul(c * finish.diffCoeff));
+            final Color colorDiff = hitPointColor.mul(lightAtPoint.mul(c * finish.diffCoeff));
 
             colorTotal = colorTotal.add(colorDiff);
 

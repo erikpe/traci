@@ -9,6 +9,7 @@ import traci.lang.interpreter.exceptions.InterpreterIllegalOperatorArgument;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 import traci.math.Vector;
+import traci.model.material.Color;
 
 public class BinaryOpNode implements TraciNode
 {
@@ -43,6 +44,7 @@ public class BinaryOpNode implements TraciNode
             {
             case NUMBER: res = calc(a.getNumber(), b.getNumber()); break;
             case VECTOR: res = calc(a.getNumber(), b.getVector()); break;
+            case COLOR:  res = calc(a.getNumber(), b.getColor()); break;
             default:     res = null; break;
             }
             break;
@@ -61,6 +63,15 @@ public class BinaryOpNode implements TraciNode
             {
             case BOOLEAN: res = calc(a.getBoolean(), b.getBoolean()); break;
             default :     res = null; break;
+            }
+            break;
+
+        case COLOR:
+            switch (bType)
+            {
+            case NUMBER: res = calc(a.getColor(), b.getNumber()); break;
+            case COLOR:  res = calc(a.getColor(), b.getColor()); break;
+            default:     res = null; break;
             }
             break;
 
@@ -114,7 +125,35 @@ public class BinaryOpNode implements TraciNode
         }
     }
 
+    private Object calc(final Double a, final Color b)
+    {
+        switch (op)
+        {
+        case BINARY_MUL: return b.mul(a);
+        default: return null;
+        }
+    }
+
+    private Object calc(final Color a, final Double b)
+    {
+        switch (op)
+        {
+        case BINARY_MUL: return a.mul(b);
+        default: return null;
+        }
+    }
+
     private Object calc(final Vector a, final Vector b)
+    {
+        switch (op)
+        {
+        case BINARY_ADD: return a.add(b);
+        case BINARY_SUB: return a.sub(b);
+        default: return null;
+        }
+    }
+
+    private Object calc(final Color a, final Color b)
     {
         switch (op)
         {

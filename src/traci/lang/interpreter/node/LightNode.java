@@ -16,6 +16,7 @@ import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
 import traci.lang.interpreter.exceptions.InterpreterIllegalNumberOfArguments;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
+import traci.model.light.AmbientLight;
 import traci.model.light.Light;
 import traci.model.light.PointLight;
 
@@ -29,6 +30,15 @@ public class LightNode implements TraciNode
             protected PointLight make(final List<TraciValue> args)
             {
                 return new PointLight(args.get(0).getVector(), args.get(1).getColor());
+            }
+        },
+
+        AMBIENTLIGHT("ambientlight", new Type[] { Type.COLOR })
+        {
+            @Override
+            protected AmbientLight make(final List<TraciValue> args)
+            {
+                return new AmbientLight(args.get(0).getColor());
             }
         };
 
@@ -57,7 +67,7 @@ public class LightNode implements TraciNode
 
     public LightNode(final String lightType, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
-        this.lightType = LightType.valueOf(lightType);
+        this.lightType = LightType.valueOf(lightType.toUpperCase());
         this.argNodes = (argNodes == null ? Collections.<TraciNode>emptyList() : argNodes);
         this.blockNode = blockNode;
         this.token = (TraciToken) token;

@@ -32,20 +32,21 @@ public class VectorNode implements TraciNode
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        final List<TraciValue> values = new ArrayList<TraciValue>(3);
+        final List<Double> values = new ArrayList<Double>(3);
 
         for (int i = 0; i < 3; ++i)
         {
             final TraciValue value = nodes.get(i).eval(context);
-            values.add(value);
 
             if (value.getType() != Type.NUMBER)
             {
                 throw new InterpreterIllegalArgumentType(token.location, context.callStack,
                         "vector", Type.NUMBER, value.getType(), i + 1);
             }
+
+            values.add(value.getNumber());
         }
 
-        return new TraciValue(Vector.make(values.get(0).getNumber(), values.get(1).getNumber(), values.get(2).getNumber()));
+        return new TraciValue(Vector.make(values.get(0), values.get(1), values.get(2)));
     }
 }

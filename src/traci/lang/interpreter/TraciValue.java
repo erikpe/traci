@@ -3,6 +3,7 @@ package traci.lang.interpreter;
 import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.math.Transformation;
 import traci.math.Vector;
+import traci.model.light.Light;
 import traci.model.material.Color;
 import traci.model.material.Finish;
 import traci.model.material.Material;
@@ -27,7 +28,8 @@ public class TraciValue implements Cloneable
         TEXTURE,
         FINISH,
         PIGMENT,
-        COLOR;
+        COLOR,
+        LIGHT;
     };
 
     private final Object value;
@@ -85,9 +87,13 @@ public class TraciValue implements Cloneable
         {
             type = Type.COLOR;
         }
+        else if (obj instanceof Light)
+        {
+            type = Type.LIGHT;
+        }
         else
         {
-            throw new InterpreterInternalException("Unable to make entity of type: " + obj.getClass().toString());
+            throw new InterpreterInternalException("Unable to make TraciValue of type: " + obj.getClass().toString());
         }
     }
 
@@ -166,6 +172,11 @@ public class TraciValue implements Cloneable
         return (Color) value;
     }
 
+    public Light getLight()
+    {
+        return (Light) value;
+    }
+
     @Override
     public String toString()
     {
@@ -185,6 +196,7 @@ public class TraciValue implements Cloneable
         case TEXTURE:
         case FINISH:
         case PIGMENT:
+        case COLOR:
             return this;
 
         case PRIMITIVE_SHAPE:
@@ -197,7 +209,7 @@ public class TraciValue implements Cloneable
             return new TraciValue(getBoundingBox().clone());
 
         default:
-            return null;
+            throw new InterpreterInternalException("Trying to clone() value of type " + type.toString());
         }
     }
 }

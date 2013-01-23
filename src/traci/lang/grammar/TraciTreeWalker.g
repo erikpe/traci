@@ -106,8 +106,6 @@ assignable_statement returns [TraciNode node]
         { $node = new BBoxNode($function_call_args.nodes, $block.node); }
     | ^(TRANSFORMATION expr)
         { $node = new TransformationNode($TRANSFORMATION.text, $expr.node, $TRANSFORMATION.token); }
-    | ^(COLOR expr)
-        { $node = new ColorNode($expr.node, $COLOR.token); }
     | ^(LIGHT function_call_args? block?)
         { $node = new LightNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
     | expr
@@ -133,6 +131,8 @@ expr returns [TraciNode node]
         { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node, $ID.token); }
     | ^(VECTOR a=expr b=expr c=expr)
         { $node = new VectorNode($a.node, $b.node, $c.node, $VECTOR.token); }
+    | ^(COLOR a=expr b=expr c=expr)
+        { $node = new ColorNode($a.node, $b.node, $c.node, $COLOR.token); }
     | INT                   { $node = new ConstNode(new TraciValue(Double.valueOf($INT.text))); }
     | FLOAT                 { $node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text))); }
     ;

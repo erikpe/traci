@@ -9,6 +9,7 @@ import traci.lang.interpreter.exceptions.InterpreterIllegalOperatorArgument;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 import traci.math.Vector;
+import traci.model.material.Color;
 
 public class UnaryOpNode implements TraciNode
 {
@@ -36,6 +37,7 @@ public class UnaryOpNode implements TraciNode
         case NUMBER:  res = calc(a.getNumber()); break;
         case BOOLEAN: res = calc(a.getBoolean()); break;
         case VECTOR:  res = calc(a.getVector()); break;
+        case COLOR:   res = calc(a.getColor()); break;
         default:      res = null;;
         }
 
@@ -67,6 +69,16 @@ public class UnaryOpNode implements TraciNode
     }
 
     private Object calc(final Vector a)
+    {
+        switch (op)
+        {
+        case UNARY_PLUS: return a;
+        case UNARY_NEG:  return a.neg();
+        default: return null;
+        }
+    }
+
+    private Object calc(final Color a)
     {
         switch (op)
         {

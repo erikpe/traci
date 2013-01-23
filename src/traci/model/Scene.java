@@ -3,30 +3,31 @@ package traci.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import traci.model.light.AmbientLight;
+import traci.model.light.Light;
 import traci.model.light.PointLight;
+import traci.model.material.Color;
 import traci.model.shape.Shape;
 
 public class Scene
 {
-    public Camera camera = null;
-    public Shape shape = null;
-    public final List<PointLight> lights;
+    public Shape rootShape;
+    public Camera camera;
+
+    public AmbientLight ambientLight;
+    public final List<PointLight> pointLights;
+
+    public Color backgroundColor = Color.BLACK;
 
     public Scene()
     {
-        this(null, null);
-    }
+        this.rootShape = null;
+        this.camera = null;
 
-    public Scene(final Shape shape, final Camera camera)
-    {
-        this.camera = camera;
-        this.shape = shape;
-        this.lights = new ArrayList<PointLight>();
-    }
+        this.ambientLight = null;
+        this.pointLights = new ArrayList<PointLight>();
 
-    public void addLight(final PointLight light)
-    {
-        lights.add(light);
+        this.backgroundColor = Color.BLACK;
     }
 
     public void setCamera(final Camera camera)
@@ -34,8 +35,35 @@ public class Scene
         this.camera = camera;
     }
 
-    public void setShape(final Shape shape)
+    public void setRootShape(final Shape rootShape)
     {
-        this.shape = shape;
+        this.rootShape = rootShape;
+    }
+
+    public void addLight(final Light light)
+    {
+        if (light instanceof PointLight)
+        {
+            addPointLight((PointLight) light);
+        }
+        else if (light instanceof AmbientLight)
+        {
+            setAmbientLight((AmbientLight) light);
+        }
+    }
+
+    public void addPointLight(final PointLight pointLight)
+    {
+        pointLights.add(pointLight);
+    }
+
+    public void setAmbientLight(final AmbientLight ambientLight)
+    {
+        this.ambientLight = ambientLight;
+    }
+
+    public void setBackgroundColor(final Color backgroundColor)
+    {
+        this.backgroundColor = backgroundColor;
     }
 }

@@ -131,7 +131,6 @@ assignable_statement
     | CSG_SHAPE function_call_args? (block | ';')       -> ^(CSG_SHAPE function_call_args? block?)
     | BBOX function_call_args? (block | ';')            -> ^(BBOX function_call_args? block?)
     | TRANSFORMATION expr ';'                           -> ^(TRANSFORMATION expr)
-    | COLOR expr ';'                                    -> ^(COLOR expr)
     | LIGHT function_call_args? (block | ';')           -> ^(LIGHT function_call_args? block?)
     | expr ';'!
     ;
@@ -172,6 +171,7 @@ primary_expr
     | function_call
     | variable_reference
     | vector
+    | color
     | '('! expr ')'!
     ;
 
@@ -194,6 +194,10 @@ variable_reference
 
 vector 
     : VECTOR expr ',' expr ',' expr ']' -> ^(VECTOR expr*)
+    ;
+
+color
+    : COLOR '[' expr ',' expr ',' expr ']' -> ^(COLOR expr*)
     ;
 
 DEF : 'def';
@@ -225,7 +229,7 @@ COLOR
     ;
 
 LIGHT
-    :	( 'pointlight' )
+    :	( 'pointlight' | 'ambientlight' )
     ;
 
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*

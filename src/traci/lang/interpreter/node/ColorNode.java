@@ -1,5 +1,8 @@
 package traci.lang.interpreter.node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.antlr.runtime.Token;
 
 import traci.lang.interpreter.Context;
@@ -10,32 +13,40 @@ import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 import traci.model.material.Color;
-import traci.model.material.pigment.Solid;
 
 public class ColorNode implements TraciNode
 {
-    private final TraciNode exprNode;
+    private final List<TraciNode> nodes;
     private final TraciToken token;
 
-    public ColorNode(final TraciNode exprNode, final Token token)
+    public ColorNode(final TraciNode aNode, final TraciNode bNode, final TraciNode cNode, final Token token)
     {
-        this.exprNode = exprNode;
+        this.nodes = new ArrayList<TraciNode>(3);
         this.token = (TraciToken) token;
+
+        nodes.add(aNode);
+        nodes.add(bNode);
+        nodes.add(cNode);
     }
 
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        final TraciValue exprValue = exprNode.eval(context);
+        final List<Double> values = new ArrayList<Double>(3);
 
-        if (exprValue.getType() != Type.VECTOR)
+        for (int i = 0; i < 3; ++i)
         {
-            throw new InterpreterIllegalArgumentType(token.location, context.callStack, "color", Type.VECTOR,
-                    exprValue.getType(), 1);
+            final TraciValue value = nodes.get(i).eval(context);
+
+            if (value.getType() != Type.NUMBER)
+            {
+                throw new InterpreterIllegalArgumentType(token.location, context.callStack, "color", Type.NUMBER,
+                        value.getType(), i + 1);
+            }
+
+            values.add(value.getNumber());
         }
 
-        final Color color = Color.make(exprValue.getVector());
-
-        return new TraciValue(Solid.make(color));
+        return new TraciValue(Color.make(values.get(0), values.get(1), values.get(2)));
     }
 }
