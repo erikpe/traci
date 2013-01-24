@@ -1,0 +1,72 @@
+#ifndef LEGO_TECHNIC_BUSH_TRACI_
+#define LEGO_TECHNIC_BUSH_TRACI_
+
+#include "common/basic-units.traci"
+#include "common/basic-shapes.traci"
+#include "lego-units.traci"
+#include "lego-primitives.traci"
+
+def legoTechnicBush12ToothedTypeII_accurate (radius, height)
+{
+    innerRadius = .3;
+    toothHeight = .07;
+    toothSpacing = .08;
+    return difference {
+        roundedCylinder1 (radius, height, LEGO_ROUNDING);
+        torus (.07*2, .27*2) { rotx PI/2; translate Y*.26; }
+        roundedCylinder2 (innerRadius, toothHeight, LEGO_ROUNDING, LEGO_ROUNDING) {
+            rotx PI;
+            translate Y*height;
+        }
+        for (i in 0 .. 15) {
+            box {
+                scale [radius-innerRadius+LEGO_ROUNDING+EPSILON, toothHeight+EPSILON, toothSpacing];
+                translate [innerRadius-LEGO_ROUNDING, height-toothHeight, -toothSpacing/2];
+                roty i*(22.5/360)*PI*2;
+            }
+        }
+    }
+}
+
+def legoTechnicBush12ToothedTypeII_fast (radius, height)
+{
+    innerRadius = .3;
+    toothHeight = .07;
+    return difference {
+        cylinder (radius, ORIGO, Y*height);
+        torus (.07*2, .27*2) { rotx PI/2; translate Y*.26; }
+        cylinder (innerRadius, Y*(height-toothHeight), Y*(height+EPSILON));
+    }
+}
+
+/*
+ * Technic Bush 1/2 Toothed Type I
+ * http://www.bricklink.com/catalogItem.asp?P=4265a
+ */
+def legoTechnicBush12ToothedTypeII ()
+{
+    radius = .44;
+    height = .5;
+
+#if FAST_LEGO
+    bush = legoTechnicBush12ToothedTypeII_fast (radius, height);
+#else
+    bush = legoTechnicBush12ToothedTypeII_accurate (radius, height);
+#endif // FAST_LEGO
+
+    return bush {
+        bbox { scale [radius*2, height, radius*2]; translate [-radius, 0, -radius]; }
+        rotx PI/2;
+        translate [1, .7, 0];
+    }
+}
+
+/*
+ * Short hand for legoTechnicBush12ToothedTypeII ()
+ */
+def legoTechnicBush1 ()
+{
+    return legoTechnicBush12ToothedTypeII();
+}
+
+#endif // LEGO_TECHNIC_BUSH_TRACI_

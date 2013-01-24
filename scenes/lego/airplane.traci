@@ -109,6 +109,8 @@ def pieces6 ()
         legoTechnicBrickWithHoles_1x6 () { YELLOW; translate [0, 0, 2]; }
         legoTechnicBrickWithHoles_1x6 () { YELLOW; translate [0, 0, -3]; }
         legoTechnicAxle_8 ()             { BLACK;  translate [0, 0, -4]; }
+        legoTechnicBush1 ()              { GRAY;   translate [0, 0, 3]; }
+        legoTechnicBush1 ()              { GRAY;   scale [1, 1, -1]; translate [0, 0, -3]; }
     }
 }
 
@@ -146,10 +148,14 @@ def pieces8 ()
 def pieces9 ()
 {
     return union {
-        legoTechnicBrickWithHoles_1x12 () { BLACK; translate [0, 0, 1]; }
-        legoTechnicBrickWithHoles_1x12 () { BLACK; translate [0, 0, -2]; }
-        legoTechnicAxle_8 ()              { BLACK; translate [4, 0, -4]; }
-        legoTechnicAxle_6 ()              { BLACK; translate [10, 0, -3]; }
+        legoTechnicBrickWithHoles_1x12 () { BLACK;                   translate [0, 0, 1]; }
+        legoTechnicBrickWithHoles_1x12 () { BLACK;                   translate [0, 0, -2]; }
+        legoTechnicAxle_8 ()              { BLACK;                   translate [4, 0, -4]; }
+        legoTechnicBush1 ()               { GRAY;                    translate [4, 0, 2]; }
+        legoTechnicBush1 ()               { GRAY;  scale [1, 1, -1]; translate [4, 0, -2]; }
+        legoTechnicAxle_6 ()              { BLACK;                   translate [10, 0, -3]; }
+        legoTechnicBush1 ()               { GRAY;                    translate [10, 0, 2]; }
+        legoTechnicBush1 ()               { GRAY;  scale [1, 1, -1]; translate [10, 0, -2]; }
         union {
             legoTechnicBrickWithHoles_1x16 () { YELLOW; }
             legoTechnicBrickWithHoles_1x16 () { YELLOW;             translate [0, 0, -1]; }
@@ -219,10 +225,11 @@ cylinder(.1, ORIGO, Z*20) {
 }
 #endif
 
-//pieces6();
+//pieces9();
 
-//legoTechnicBrickWithHoles_1x2() { YELLOW; }
-//legoTechnicAxle(2) { BLACK; }
+//legoTechnicBush1 () { GRAY; }
+//legoTechnicBrickWithHoles_1x2() { YELLOW; translate -Z; }
+//legoTechnicAxle(2) { BLACK; translate -Z;}
 
 pointlight([-30, 15, 40], WHITE*30*200);
 pointlight([50, 15, 30], WHITE*5000);
