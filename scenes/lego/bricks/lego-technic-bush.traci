@@ -6,7 +6,7 @@
 #include "lego-units.traci"
 #include "lego-primitives.traci"
 
-def legoTechnicBush12ToothedTypeII_accurate (radius, height)
+def legoTechnicBush12ToothedTypeI_accurate (radius, height)
 {
     innerRadius = .3;
     toothHeight = .07;
@@ -28,7 +28,7 @@ def legoTechnicBush12ToothedTypeII_accurate (radius, height)
     }
 }
 
-def legoTechnicBush12ToothedTypeII_fast (radius, height)
+def legoTechnicBush12ToothedTypeI_fast (radius, height)
 {
     innerRadius = .3;
     toothHeight = .07;
@@ -43,15 +43,15 @@ def legoTechnicBush12ToothedTypeII_fast (radius, height)
  * Technic Bush 1/2 Toothed Type I
  * http://www.bricklink.com/catalogItem.asp?P=4265a
  */
-def legoTechnicBush12ToothedTypeII ()
+def legoTechnicBush12ToothedTypeI ()
 {
     radius = .44;
     height = .5;
 
 #if FAST_LEGO
-    bush = legoTechnicBush12ToothedTypeII_fast (radius, height);
+    bush = legoTechnicBush12ToothedTypeI_fast (radius, height);
 #else
-    bush = legoTechnicBush12ToothedTypeII_accurate (radius, height);
+    bush = legoTechnicBush12ToothedTypeI_accurate (radius, height);
 #endif // FAST_LEGO
 
     return bush {
@@ -62,11 +62,70 @@ def legoTechnicBush12ToothedTypeII ()
 }
 
 /*
- * Short hand for legoTechnicBush12ToothedTypeII ()
+ * Short hand for legoTechnicBush12ToothedTypeI ()
  */
-def legoTechnicBush1 ()
+def legoTechnicBushToothed ()
 {
-    return legoTechnicBush12ToothedTypeII();
+    return legoTechnicBush12ToothedTypeI();
+}
+
+def legoTechnicBush_accurate (outerRadius, height)
+{
+    lowerHeight = .2;
+    upperHeight = .2;
+    innerRadius = .38;
+    axleThickness = .23;
+    axleRadius = .3;
+    return difference {
+        union {
+            roundedCylinder1 (outerRadius, lowerHeight, LEGO_ROUNDING);
+            roundedCylinder3 (innerRadius, height-lowerHeight-upperHeight, LEGO_ROUNDING) {
+                translate [0, lowerHeight, 0];
+            }
+            roundedCylinder1 (outerRadius, upperHeight, LEGO_ROUNDING) {
+                translate [0, height-upperHeight, 0];
+            }
+        }
+        box {
+            scale [axleRadius*2, height+2*EPSILON, axleThickness];
+            translate [-axleRadius, EPSILON, -axleThickness/2];
+        }
+        box {
+            scale [axleThickness, height+2*EPSILON, axleRadius*2];
+            translate [-axleThickness/2, EPSILON, -axleRadius];
+        }
+        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [-.5, 0, -.5]; }
+        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [-.5, 0, .5]; }
+        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [.5, 0, -.5]; }
+        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [.5, 0, .5]; }
+        box {
+            scale [(innerRadius+LEGO_ROUNDING)*2, height-lowerHeight-upperHeight, .12];
+            translate [-innerRadius-LEGO_ROUNDING, lowerHeight, -.12/2];
+        }
+    }
+}
+
+/*
+ * Technic Bush
+ * http://www.bricklink.com/catalogItem.asp?P=3713
+ */
+def legoTechnicBush()
+{
+    radius = .48;
+    height = 1;
+
+#ifdef FAST_LEGO
+    bush = legoTechnicBush_accurate(radius, height);
+#else
+    bush = legoTechnicBush_fast(radius, height);
+#endif
+
+    return bush {
+        roty randint(0,3)*(PI/2);
+        bbox { scale [radius*2, height, radius*2]; translate [-radius, 0, -radius]; }
+        rotx PI/2;
+        translate [1, .7, 0];
+    }
 }
 
 #endif // LEGO_TECHNIC_BUSH_TRACI_
