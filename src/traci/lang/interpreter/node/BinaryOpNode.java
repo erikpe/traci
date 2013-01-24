@@ -91,18 +91,19 @@ public class BinaryOpNode implements TraciNode
 
     private Object calc(final Double a, final Double b)
     {
+        a.compareTo(b);
         switch (op)
         {
         case BINARY_ADD:  return Double.valueOf(a + b);
         case BINARY_SUB:  return Double.valueOf(a - b);
         case BINARY_MUL:  return Double.valueOf(a * b);
         case BINARY_DIV:  return Double.valueOf(a / b);
-        case COMPARE_LT:  return Boolean.valueOf(a < b);
-        case COMPARE_LTE: return Boolean.valueOf(a <= b);
-        case COMPARE_GT:  return Boolean.valueOf(a > b);
-        case COMPARE_GTE: return Boolean.valueOf(a >= b);
-        case COMPARE_EQ:  return Boolean.valueOf(a == b);
-        case COMPARE_NEQ: return Boolean.valueOf(a != b);
+        case COMPARE_LT:  return Boolean.valueOf(a.compareTo(b) < 0);
+        case COMPARE_LTE: return Boolean.valueOf(a.compareTo(b) <= 0);
+        case COMPARE_GT:  return Boolean.valueOf(a.compareTo(b) > 0);
+        case COMPARE_GTE: return Boolean.valueOf(a.compareTo(b) >= 0);
+        case COMPARE_EQ:  return Boolean.valueOf(a.compareTo(b) == 0);
+        case COMPARE_NEQ: return Boolean.valueOf(a.compareTo(b) != 0);
         default: return null;
         }
     }
@@ -167,8 +168,8 @@ public class BinaryOpNode implements TraciNode
     {
         switch (op)
         {
-        case COMPARE_EQ:  return Boolean.valueOf(a == b);
-        case COMPARE_NEQ: return Boolean.valueOf(a != b);
+        case COMPARE_EQ:  return Boolean.valueOf(a.compareTo(b) == 0);
+        case COMPARE_NEQ: return Boolean.valueOf(a.compareTo(b) != 0);
         default: return null;
         }
     }
