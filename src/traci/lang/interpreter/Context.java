@@ -6,21 +6,21 @@ import java.util.Map;
 import traci.lang.interpreter.Entities.Entity;
 import traci.lang.interpreter.TraciValue.Type;
 import traci.lang.interpreter.functions.Function;
+import traci.lang.interpreter.functions.FunctionSet;
 import traci.lang.parser.IncludeLocation.FileLocation;
 import traci.model.Scene;
 
 public class Context
 {
     private final Scene scene;
-    private final Map<String, Function> functions;
+    private final FunctionSet functions;
     private final Map<String, TraciValue> globalMemory;
     private final Map<String, TraciValue> localMemory;
     private final Entity entity;
     public final CallStack callStack;
 
-    private Context(final Scene scene, final Map<String, Function> functions,
-            final Map<String, TraciValue> globalMemory, final Map<String, TraciValue> localMemory, final Entity entity,
-            final CallStack callStack)
+    private Context(final Scene scene, final FunctionSet functions, final Map<String, TraciValue> globalMemory,
+            final Map<String, TraciValue> localMemory, final Entity entity, final CallStack callStack)
     {
         this.scene = scene;
         this.functions = functions;
@@ -48,7 +48,7 @@ public class Context
         return new Context(scene, functions, globalMemory, localMemory, newSurroundingEntity, callStack);
     }
 
-    public Context newFunctions(final Map<String, Function> newFunctions)
+    public Context newFunctions(final FunctionSet newFunctions)
     {
         return new Context(scene, newFunctions, globalMemory, localMemory, entity, callStack);
     }

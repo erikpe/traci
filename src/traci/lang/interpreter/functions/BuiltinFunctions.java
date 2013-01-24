@@ -115,11 +115,20 @@ public class BuiltinFunctions
         }
     };
 
-    private static final BuiltinFunction[] ALL_BUILTIN_FUNCTIONS = new BuiltinFunction[] { PRINT, SIN, COS, RAND };
+    private static final BuiltinFunction SQRT = new UnaryNumericalFunction("sqrt")
+    {
+        @Override
+        protected double calc(final double arg)
+        {
+            return Math.sqrt(arg);
+        }
+    };
+
+    private static final BuiltinFunction[] ALL_BUILTIN_FUNCTIONS = new BuiltinFunction[] { PRINT, SIN, COS, RAND, SQRT };
 
     public static FunctionSet getAll()
     {
-        final FunctionSet functionSet = new FunctionSet();
+        final FunctionSet functionSet = new FunctionSet(null);
 
         for (final BuiltinFunction function : ALL_BUILTIN_FUNCTIONS)
         {

@@ -35,7 +35,7 @@ import traci.lang.interpreter.node.WhileNode;
 }
 
 @members {
-private FunctionSet visibleFunctions = BuiltinFunctions.getAll();
+private FunctionSet functionsThisScope = BuiltinFunctions.getAll();
 
 public void displayRecognitionError(String[] tokenNames,
                                     RecognitionException e) {
@@ -50,15 +50,15 @@ scene
 
 block returns [BlockNode node]
 @init {
-final FunctionSet outerFunctions = visibleFunctions;
-visibleFunctions = new FunctionSet(outerFunctions);
-node = new BlockNode(visibleFunctions);
+final FunctionSet functionsOuterScope = functionsThisScope;
+functionsThisScope = new FunctionSet(functionsOuterScope);
+node = new BlockNode(functionsThisScope);
 }
 @after {
-visibleFunctions = outerFunctions;
+functionsThisScope = functionsOuterScope;
 }
     : ^(BLOCK ( statement    { $node.addStatement($statement.node); }
-              | function_def { visibleFunctions.put($function_def.node.id, $function_def.node); } )*)
+              | function_def { functionsThisScope.put($function_def.node.id, $function_def.node); } )*)
     ;
 
 function_def returns [FunctionNode node]
