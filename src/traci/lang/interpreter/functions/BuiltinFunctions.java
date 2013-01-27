@@ -160,8 +160,33 @@ public class BuiltinFunctions
         }
     };
 
+    private static final BuiltinFunction LENGTH = new BuiltinFunction("length")
+    {
+        @Override
+        public TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
+                throws InterpreterIllegalNumberOfArguments, InterpreterIllegalArgumentType
+        {
+            final IncludeLocation location = funcallNode.getToken().location;
+
+            if (args.size() != 1)
+            {
+                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
+            }
+
+            if (args.get(0).getType() != Type.VECTOR)
+            {
+                throw new InterpreterIllegalArgumentType(location, context.callStack, id, Type.VECTOR, args.get(0)
+                        .getType(), 1);
+            }
+
+            final Double length = args.get(0).getVector().length();
+
+            return new TraciValue(length);
+        }
+    };
+
     private static final BuiltinFunction[] ALL_BUILTIN_FUNCTIONS = new BuiltinFunction[] { PRINT, SIN, COS, RAND,
-            RANDINT, SQRT };
+            RANDINT, SQRT, LENGTH };
 
     public static FunctionSet getAll()
     {
