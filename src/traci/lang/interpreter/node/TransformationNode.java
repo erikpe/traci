@@ -1,7 +1,11 @@
 package traci.lang.interpreter.node;
 
-import java.util.EnumSet;
-import java.util.Set;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.antlr.runtime.Token;
 
@@ -9,7 +13,8 @@ import traci.lang.interpreter.Context;
 import traci.lang.interpreter.TraciValue;
 import traci.lang.interpreter.TraciValue.Type;
 import traci.lang.interpreter.exceptions.FunctionReturnException;
-import traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
+import traci.lang.interpreter.exceptions.InterpreterIllegalArguments;
+import traci.lang.interpreter.exceptions.InterpreterInternalException;
 import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.parser.TraciToken;
 import traci.math.Transformation;
@@ -19,124 +24,100 @@ public class TransformationNode implements TraciNode
 {
     private static enum TransformationType
     {
-        ROTX("rotx", EnumSet.<Type>of(Type.NUMBER))
-        {
-            @Override
-            protected Transformation make(final TraciValue value)
-            {
-                return Transformations.rotx(value.getNumber());
-            }
-        },
-
-        ROTY("roty", EnumSet.<Type>of(Type.NUMBER))
-        {
-            @Override
-            protected Transformation make(final TraciValue value)
-            {
-                return Transformations.roty(value.getNumber());
-            }
-        },
-
-        ROTZ("rotz", EnumSet.<Type>of(Type.NUMBER))
-        {
-            @Override
-            protected Transformation make(final TraciValue value)
-            {
-                return Transformations.rotz(value.getNumber());
-            }
-        },
-
-        TRANSLATE("translate", EnumSet.<Type>of(Type.VECTOR))
-        {
-            @Override
-            protected Transformation make(final TraciValue value)
-            {
-                return Transformations.translate(value.getVector());
-            }
-        },
-
-        SCALE("scale", EnumSet.<Type>of(Type.NUMBER, Type.VECTOR))
-        {
-            @Override
-            protected Transformation make(final TraciValue value)
-            {
-                if (value.getType() == Type.NUMBER)
-                {
-                    return Transformations.scale(value.getNumber());
-                }
-
-                assert value.getType() == Type.VECTOR;
-                return Transformations.scale(value.getVector());
-            }
-        },
-
-        SCALEX("scalex", EnumSet.<Type>of(Type.NUMBER))
-        {
-            @Override
-            protected Transformation make(final TraciValue value)
-            {
-                return Transformations.scalex(value.getNumber());
-            }
-        },
-
-        SCALEY("scaley", EnumSet.<Type>of(Type.NUMBER))
-        {
-            @Override
-            protected Transformation make(final TraciValue value)
-            {
-                return Transformations.scaley(value.getNumber());
-            }
-        },
-
-        SCALEZ("scalez", EnumSet.<Type>of(Type.NUMBER))
-        {
-            @Override
-            protected Transformation make(final TraciValue value)
-            {
-                return Transformations.scalez(value.getNumber());
-            }
-        };
+        ROTX("rotx"),
+        ROTY("roty"),
+        ROTZ("rotz"),
+        TRANSLATE("translate"),
+        SCALE("scale"),
+        SCALEX("scalex"),
+        SCALEY("scaley"),
+        SCALEZ("scalez"),
+        ROT_VEC_TO_VEC("rotVecToVec"),
+        ROT_AROUND("rotAround");
 
         private final String id;
-        private final Set<Type> validTypes;
 
-        protected abstract Transformation make(final TraciValue value);
-
-        private TransformationType(final String id, final Set<Type> validTypes)
+        private TransformationType(final String id)
         {
             this.id = id;
-            this.validTypes = validTypes;
-        }
-
-        @Override
-        public String toString()
-        {
-            return id;
         }
     }
 
+    private static final Map<String, TransformationType> typeMap;
+    static
+    {
+        final Map<String, TransformationType> types = new HashMap<String, TransformationType>();
+        for (final TransformationType transformationType : TransformationType.values())
+        {
+            types.put(transformationType.id, transformationType);
+        }
+        typeMap = Collections.<String, TransformationType>unmodifiableMap(types);
+    }
+
     private final TransformationType transformationType;
-    private final TraciNode exprNode;
+    private final List<TraciNode> argNodes;
     private final TraciToken token;
 
-    public TransformationNode(final String typeStr, final TraciNode exprNode, final Token token)
+    public TransformationNode(final String typeStr, final TraciNode argNode, final Token token)
     {
-        this.transformationType = TransformationType.valueOf(typeStr.toUpperCase());
-        this.exprNode = exprNode;
+        this(typeStr, Collections.<TraciNode>singletonList(argNode), token);
+    }
+
+    public TransformationNode(final String typeStr, final List<TraciNode> argNodes, final Token token)
+    {
+        this.transformationType = typeMap.get(typeStr);
+        this.argNodes = argNodes;
         this.token = (TraciToken) token;
+
+        if (transformationType == null)
+        {
+            throw new InterpreterInternalException("Unknown transformation type: " + typeStr);
+        }
+    }
+
+    private Transformation make(final TransformationType transformationType, final List<TraciValue> traciArgs)
+    {
+        final Class<?>[] argTypes = new Class<?>[traciArgs.size()];
+        final Object[] args = new Object[traciArgs.size()];
+
+        for (int i = 0; i < traciArgs.size(); ++i)
+        {
+            argTypes[i] = traciArgs.get(i).getType().clazz;
+            args[i] = traciArgs.get(i).getObject();
+        }
+
+        try
+        {
+            final Method method = Transformations.class.getMethod(transformationType.id, argTypes);
+            return (Transformation) method.invoke(null, args);
+        }
+        catch (final Exception e)
+        {
+            return null;
+        }
     }
 
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        final TraciValue exprValue = exprNode.eval(context);
-
-        if (!transformationType.validTypes.contains(exprValue.getType()))
+        final List<TraciValue> args = new ArrayList<TraciValue>(argNodes.size());
+        for (final TraciNode argNode : argNodes)
         {
-            throw new InterpreterIllegalArgumentType(token.location, context.callStack, transformationType.toString(),
-                    transformationType.validTypes, exprValue.getType(), 1);
+            args.add(argNode.eval(context));
         }
 
-        return new TraciValue(transformationType.make(exprValue));
+        final Transformation transformation = make(transformationType, args);
+        if (transformation == null)
+        {
+            final List<Type> argTypes = new ArrayList<Type>(args.size());
+            for (final TraciValue val : args)
+            {
+                argTypes.add(val.getType());
+            }
+
+            throw new InterpreterIllegalArguments(token.location, context.callStack, transformationType.id, argTypes);
+        }
+
+        return new TraciValue(transformation);
     }
 }

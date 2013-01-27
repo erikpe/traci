@@ -14,7 +14,7 @@ public class Transformations
         return IDENTITY;
     }
 
-    public static Transformation translate(final double x, final double y, final double z)
+    public static Transformation translate(final Double x, final Double y, final Double z)
     {
         return translate(Vector.make(x, y, z));
     }
@@ -24,12 +24,12 @@ public class Transformations
         return make(Matrix.translate(vec), Matrix.translate(vec.neg()));
     }
 
-    public static Transformation scale(final double val)
+    public static Transformation scale(final Double val)
     {
         return scale(Vector.make(val, val, val));
     }
 
-    public static Transformation scale(final double x, final double y, final double z)
+    public static Transformation scale(final Double x, final Double y, final Double z)
     {
         return scale(Vector.make(x, y, z));
     }
@@ -40,32 +40,32 @@ public class Transformations
         return make(Matrix.scale(vec), Matrix.scale(invVec));
     }
 
-    public static Transformation scalex(final double val)
+    public static Transformation scalex(final Double val)
     {
-        return scale(val, 1, 1);
+        return scale(val, 1.0, 1.0);
     }
 
-    public static Transformation scaley(final double val)
+    public static Transformation scaley(final Double val)
     {
-        return scale(1, val, 1);
+        return scale(1.0, val, 1.0);
     }
 
-    public static Transformation scalez(final double val)
+    public static Transformation scalez(final Double val)
     {
-        return scale(1, 1, val);
+        return scale(1.0, 1.0, val);
     }
 
-    public static Transformation rotx(final double theta)
+    public static Transformation rotx(final Double theta)
     {
         return make(Matrix.rotx(theta), Matrix.rotx(-theta));
     }
 
-    public static Transformation roty(final double theta)
+    public static Transformation roty(final Double theta)
     {
         return make(Matrix.roty(theta), Matrix.roty(-theta));
     }
 
-    public static Transformation rotz(final double theta)
+    public static Transformation rotz(final Double theta)
     {
         return make(Matrix.rotz(theta), Matrix.rotz(-theta));
     }
@@ -104,7 +104,7 @@ public class Transformations
         return rotVecToZ(vec1).compose(rotZToVec(vec2));
     }
 
-    public static Transformation rotAround(final Vector vec1, final Vector vec2, final double theta)
+    public static Transformation rotAround(final Vector vec1, final Vector vec2, final Double theta)
     {
         final Vector dir = vec2.sub(vec1).normalize();
 

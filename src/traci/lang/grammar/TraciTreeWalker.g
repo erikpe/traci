@@ -105,8 +105,8 @@ assignable_statement returns [TraciNode node]
         { $node = new BBoxNode($function_call_args.nodes, $block.node); }
     | ^(TRANSFORMATION expr)
         { $node = new TransformationNode($TRANSFORMATION.text, $expr.node, $TRANSFORMATION.token); }
-//    | ^(TRANSFORMATION2 function_call_args)
-//    	{ $node = new TransformationNode($TRANSFORMATION2.text, $function_call_args.nodes, $TRANSFORMATION2.token); }
+    | ^(TRANSFORMATION2 function_call_args)
+    	{ $node = new TransformationNode($TRANSFORMATION2.text, $function_call_args.nodes, $TRANSFORMATION2.token); }
     | ^(LIGHT function_call_args? block?)
         { $node = new LightNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
     | expr

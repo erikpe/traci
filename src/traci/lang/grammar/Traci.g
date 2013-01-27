@@ -202,7 +202,7 @@ color
 
 transformation
     : TRANSFORMATION expr                -> ^(TRANSFORMATION expr)
-#    | TRANSFORMATION2 function_call_args -> ^(TRANSFORMATION2 function_call_args)
+    | TRANSFORMATION2 function_call_args -> ^(TRANSFORMATION2 function_call_args)
     ;
 
 DEF : 'def';
@@ -230,7 +230,7 @@ TRANSFORMATION
     ;
 
 TRANSFORMATION2
-    :   ( 'rot_around_vec' | 'rot_vec_to_vec' )
+    :   ( 'rotAround' | 'rotVecToVec' )
     ;
 
 COLOR
