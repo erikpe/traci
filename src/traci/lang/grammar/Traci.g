@@ -130,6 +130,8 @@ assignable_statement
     | PRIMITIVE_SHAPE function_call_args? (block | ';') -> ^(PRIMITIVE_SHAPE function_call_args? block?)
     | CSG_SHAPE function_call_args? (block | ';')       -> ^(CSG_SHAPE function_call_args? block?)
     | BBOX function_call_args? (block | ';')            -> ^(BBOX function_call_args? block?)
+    | TRANSFORMATION expr ';'                           -> ^(TRANSFORMATION expr)
+    | TRANSFORMATION2 function_call_args ';'            -> ^(TRANSFORMATION2 function_call_args)
     | LIGHT function_call_args? (block | ';')           -> ^(LIGHT function_call_args? block?)
     | expr ';'!
     ;
@@ -171,7 +173,6 @@ primary_expr
     | variable_reference
     | vector
     | color
-    | transformation
     | '('! expr ')'!
     ;
 
@@ -198,11 +199,6 @@ vector
 
 color
     : COLOR '[' expr ',' expr ',' expr ']' -> ^(COLOR expr*)
-    ;
-
-transformation
-    : TRANSFORMATION expr                -> ^(TRANSFORMATION expr)
-    | TRANSFORMATION2 function_call_args -> ^(TRANSFORMATION2 function_call_args)
     ;
 
 DEF : 'def';
