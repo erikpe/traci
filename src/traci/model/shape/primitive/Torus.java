@@ -13,7 +13,12 @@ public class Torus extends Primitive
     final double r;
     final double r2;
 
-    public Torus(final double r, final double R)
+    public Torus(final Double r)
+    {
+        this(r, 1.0);
+    }
+
+    public Torus(final Double r, final Double R)
     {
         this.r = r / R;
         this.r2 = this.r * this.r;

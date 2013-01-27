@@ -7,8 +7,15 @@ import traci.render.Ray;
 
 public class Cylinder extends Primitive
 {
-    public Cylinder(final double radius, final Vector v0, final Vector v1)
+    public Cylinder()
     {
+        super();
+    }
+
+    public Cylinder(final Double radius, final Vector v0, final Vector v1)
+    {
+        this();
+
         final double length = v1.sub(v0).length();
 
         transform(Transformations.scale(radius, length, radius));

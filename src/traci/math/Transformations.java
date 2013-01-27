@@ -14,6 +14,11 @@ public class Transformations
         return IDENTITY;
     }
 
+    public static Transformation translate(final double x, final double y, final double z)
+    {
+        return translate(Vector.make(x, y, z));
+    }
+
     public static Transformation translate(final Vector vec)
     {
         return make(Matrix.translate(vec), Matrix.translate(vec.neg()));
@@ -94,14 +99,12 @@ public class Transformations
         return rotVecToZ(vec).invert();
     }
 
-    public static Transformation rotVecToVec(final Vector vec1,
-            final Vector vec2)
+    public static Transformation rotVecToVec(final Vector vec1, final Vector vec2)
     {
         return rotVecToZ(vec1).compose(rotZToVec(vec2));
     }
 
-    public static Transformation rotAround(final double theta,
-            final Vector vec1, final Vector vec2)
+    public static Transformation rotAround(final Vector vec1, final Vector vec2, final double theta)
     {
         final Vector dir = vec2.sub(vec1).normalize();
 

@@ -17,19 +17,26 @@ import traci.model.shape.primitive.Primitive;
 public class TraciValue implements Cloneable
 {
     public static enum Type {
-        NUMBER,
-        BOOLEAN,
-        VECTOR,
-        PRIMITIVE_SHAPE,
-        CSG_SHAPE,
-        BOUNDING_BOX,
-        TRANSFORMATION,
-        MATERIAL,
-        TEXTURE,
-        FINISH,
-        PIGMENT,
-        COLOR,
-        LIGHT;
+        NUMBER(Double.class),
+        BOOLEAN(Boolean.class),
+        VECTOR(Vector.class),
+        PRIMITIVE_SHAPE(Primitive.class),
+        CSG_SHAPE(Csg.class),
+        BOUNDING_BOX(BoundingBox.class),
+        TRANSFORMATION(Transformation.class),
+        MATERIAL(Material.class),
+        TEXTURE(Texture.class),
+        FINISH(Finish.class),
+        PIGMENT(Pigment.class),
+        COLOR(Color.class),
+        LIGHT(Light.class);
+
+        public final Class<?> clazz;
+
+        private Type(final Class<?> clazz)
+        {
+            this.clazz = clazz;
+        }
     };
 
     private final Object value;

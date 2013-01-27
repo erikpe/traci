@@ -1,11 +1,33 @@
 package traci.model.shape.primitive;
 
+import traci.math.Transformations;
 import traci.math.Vector;
 import traci.render.Point.Type;
 import traci.render.Ray;
 
 public class Box extends Primitive
 {
+    public Box()
+    {
+        super();
+    }
+
+    public Box(final Vector v0, final Vector v1)
+    {
+        this();
+
+        final double xSize = Math.abs(v1.x() - v0.x());
+        final double ySize = Math.abs(v1.y() - v0.y());
+        final double zSize = Math.abs(v1.z() - v0.z());
+
+        final double x = Math.min(v0.x(), v1.x());
+        final double y = Math.min(v0.y(), v1.y());
+        final double z = Math.min(v0.z(), v1.z());
+
+        transform(Transformations.scale(xSize, ySize, zSize));
+        transform(Transformations.translate(x, y, z));
+    }
+
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {

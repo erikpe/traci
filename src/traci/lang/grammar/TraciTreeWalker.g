@@ -17,16 +17,15 @@ import traci.lang.interpreter.node.BinaryOpNode;
 import traci.lang.interpreter.node.BlockNode;
 import traci.lang.interpreter.node.ColorNode;
 import traci.lang.interpreter.node.ConstNode;
-import traci.lang.interpreter.node.CsgShapeNode;
 import traci.lang.interpreter.node.ForNode;
 import traci.lang.interpreter.node.FunctionCallNode;
 import traci.lang.interpreter.node.FunctionNode;
 import traci.lang.interpreter.node.IfElseNode;
 import traci.lang.interpreter.node.LightNode;
 import traci.lang.interpreter.node.Op;
-import traci.lang.interpreter.node.PrimitiveShapeNode;
 import traci.lang.interpreter.node.RefNode;
 import traci.lang.interpreter.node.ReturnNode;
+import traci.lang.interpreter.node.ShapeNode;
 import traci.lang.interpreter.node.TraciNode;
 import traci.lang.interpreter.node.TransformationNode;
 import traci.lang.interpreter.node.UnaryOpNode;
@@ -99,13 +98,15 @@ statement returns [TraciNode node]
 
 assignable_statement returns [TraciNode node]
     : ^(PRIMITIVE_SHAPE function_call_args? block?)
-        { $node = new PrimitiveShapeNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
+        { $node = new ShapeNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
     | ^(CSG_SHAPE function_call_args? block?)
-        { $node = new CsgShapeNode($CSG_SHAPE.text, $function_call_args.nodes, $block.node); }
+        { $node = new ShapeNode($CSG_SHAPE.text, $function_call_args.nodes, $block.node, $CSG_SHAPE.token); }
     | ^(BBOX function_call_args? block?)
         { $node = new BBoxNode($function_call_args.nodes, $block.node); }
     | ^(TRANSFORMATION expr)
         { $node = new TransformationNode($TRANSFORMATION.text, $expr.node, $TRANSFORMATION.token); }
+//    | ^(TRANSFORMATION2 function_call_args)
+//    	{ $node = new TransformationNode($TRANSFORMATION2.text, $function_call_args.nodes, $TRANSFORMATION2.token); }
     | ^(LIGHT function_call_args? block?)
         { $node = new LightNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
     | expr

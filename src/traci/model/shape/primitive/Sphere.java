@@ -1,11 +1,23 @@
 package traci.model.shape.primitive;
 
+import traci.math.Transformations;
 import traci.math.Vector;
 import traci.render.Point.Type;
 import traci.render.Ray;
 
 public class Sphere extends Primitive
 {
+    public Sphere()
+    {
+        super();
+    }
+
+    public Sphere(final Double radius)
+    {
+        this();
+        transform(Transformations.scale(radius));
+    }
+
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {
