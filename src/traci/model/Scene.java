@@ -17,7 +17,7 @@ public class Scene
     public AmbientLight ambientLight;
     public final List<PointLight> pointLights;
 
-    public Color backgroundColor = Color.BLACK;
+    public Color backgroundColor;
 
     public Scene()
     {
@@ -27,7 +27,7 @@ public class Scene
         this.ambientLight = null;
         this.pointLights = new ArrayList<PointLight>();
 
-        this.backgroundColor = Color.BLACK;
+        this.backgroundColor = Color.WHITE.mul(.25);
     }
 
     public void setCamera(final Camera camera)

@@ -80,6 +80,41 @@ public class BuiltinFunctions
         }
     };
 
+    private static final BuiltinFunction RANDINT = new BuiltinFunction("randint")
+    {
+        private final Random random = new Random(0);
+
+        @Override
+        public final TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
+                throws InterpreterIllegalNumberOfArguments, InterpreterIllegalArgumentType
+        {
+            final IncludeLocation location = funcallNode.getToken().location;
+
+            if (args.size() != 2)
+            {
+                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
+            }
+
+            if (args.get(0).getType() != Type.NUMBER)
+            {
+                throw new InterpreterIllegalArgumentType(location, context.callStack, id, Type.NUMBER, args.get(0)
+                        .getType(), 1);
+            }
+
+            if (args.get(1).getType() != Type.NUMBER)
+            {
+                throw new InterpreterIllegalArgumentType(location, context.callStack, id, Type.NUMBER, args.get(1)
+                        .getType(), 1);
+            }
+
+            final int start = args.get(0).getNumber().intValue();
+            final int end = args.get(1).getNumber().intValue();
+            final int value = random.nextInt(end - start + 1) + start;
+
+            return new TraciValue(Double.valueOf(value));
+        }
+    };
+
     private static final BuiltinFunction PRINT = new BuiltinFunction("print")
     {
         @Override
@@ -93,6 +128,7 @@ public class BuiltinFunctions
                 throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
             }
 
+            System.out.println(args.get(0).toString());
             return null;
         }
     };
@@ -124,7 +160,8 @@ public class BuiltinFunctions
         }
     };
 
-    private static final BuiltinFunction[] ALL_BUILTIN_FUNCTIONS = new BuiltinFunction[] { PRINT, SIN, COS, RAND, SQRT };
+    private static final BuiltinFunction[] ALL_BUILTIN_FUNCTIONS = new BuiltinFunction[] { PRINT, SIN, COS, RAND,
+            RANDINT, SQRT };
 
     public static FunctionSet getAll()
     {

@@ -15,8 +15,8 @@ public class Camera implements Transformable
     private final double fovy;
 
     private Transformation transformation;
-    public final double focalDist = 21;
-    public final double aperture = .5;
+    public final double focalDist = 45;
+    public final double aperture = .4;
 
     private final double xx;
     private final double yy;

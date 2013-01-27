@@ -8,7 +8,7 @@ public class MainWindow extends JFrame
     public MainWindow(final DynamicJPanelDrawArea drawArea, final String title)
     {
         setLocation(200, 200);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().add(drawArea);
         setTitle(title);
         pack();

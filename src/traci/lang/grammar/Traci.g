@@ -221,7 +221,7 @@ CSG_SHAPE
     ;
 
 TRANSFORMATION
-    :	( 'translate' | 'scale' | 'rotate' | 'rotx' | 'roty' | 'rotz' )
+    :	( 'translate' | 'scale' | 'scalex' | 'scaley' | 'scalez' | 'rotate' | 'rotx' | 'roty' | 'rotz' )
     ;
 
 COLOR

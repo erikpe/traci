@@ -35,6 +35,21 @@ public class Transformations
         return make(Matrix.scale(vec), Matrix.scale(invVec));
     }
 
+    public static Transformation scalex(final double val)
+    {
+        return scale(val, 1, 1);
+    }
+
+    public static Transformation scaley(final double val)
+    {
+        return scale(1, val, 1);
+    }
+
+    public static Transformation scalez(final double val)
+    {
+        return scale(1, 1, val);
+    }
+
     public static Transformation rotx(final double theta)
     {
         return make(Matrix.rotx(theta), Matrix.rotx(-theta));

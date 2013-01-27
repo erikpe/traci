@@ -68,6 +68,33 @@ public class TransformationNode implements TraciNode
                 assert value.getType() == Type.VECTOR;
                 return Transformations.scale(value.getVector());
             }
+        },
+
+        SCALEX("scalex", EnumSet.<Type>of(Type.NUMBER))
+        {
+            @Override
+            protected Transformation make(final TraciValue value)
+            {
+                return Transformations.scalex(value.getNumber());
+            }
+        },
+
+        SCALEY("scaley", EnumSet.<Type>of(Type.NUMBER))
+        {
+            @Override
+            protected Transformation make(final TraciValue value)
+            {
+                return Transformations.scaley(value.getNumber());
+            }
+        },
+
+        SCALEZ("scalez", EnumSet.<Type>of(Type.NUMBER))
+        {
+            @Override
+            protected Transformation make(final TraciValue value)
+            {
+                return Transformations.scalez(value.getNumber());
+            }
         };
 
         private final String id;

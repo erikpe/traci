@@ -6,11 +6,16 @@ import traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import traci.lang.interpreter.node.BlockNode;
 import traci.main.Result;
 import traci.main.options.Settings;
+import traci.math.Transformations;
 import traci.math.Vector;
 import traci.model.Camera;
 import traci.model.Scene;
+import traci.model.material.Color;
+import traci.model.material.pigment.Checker;
+import traci.model.material.pigment.NonUniform;
 import traci.model.shape.Shape;
 import traci.model.shape.csg.Union;
+import traci.model.shape.primitive.Plane;
 import traci.util.Log;
 import traci.util.Utilities;
 
@@ -39,6 +44,7 @@ public class Interpreter
 
         final Union rootUnion = new Union();
         final Entity entity = Entities.makeEntity(rootUnion);
+
         try
         {
             blockNode.eval(Context.newRootContext(scene, entity));
@@ -46,23 +52,32 @@ public class Interpreter
         catch (final InterpreterRuntimeException e)
         {
             final StringBuilder sb = new StringBuilder();
+
             if (e.includeLocation != null)
             {
                 e.includeLocation.toString(sb);
                 sb.append('\n');
             }
+
             sb.append("Runtime error: ").append(e.msg).append('\n');
+
             if (e.callStack != null)
             {
                 e.callStack.format(sb, e.includeLocation.fileLocation);
             }
+
             Log.ERROR(sb.toString());
+
             return Result.RUNTIME_ERROR;
         }
         catch (final FunctionReturnException e)
         {
             // Ignore
         }
+
+        final Plane plane = new Plane();
+        plane.setPigment(new NonUniform(Transformations.identity(), new Checker(Color.WHITE, Color.BLACK)));
+        //rootUnion.add(plane);
 
         Shape optimizedRoot = rootUnion.optimize();
         if (optimizedRoot == null)
@@ -74,16 +89,17 @@ public class Interpreter
         final long stop = System.currentTimeMillis();
         Log.INFO("Scene constructed in " + Utilities.millisecondsToString(stop - start));
 
-//        final PointLight light = new PointLight(Vector.make(2, 15, 30), Color.WHITE.mul(30*50));
-//        final PointLight light2 = new PointLight(Vector.make(-10, 10, 10), Color.WHITE.mul(150));
-
-        final Vector camLocation = Vector.make(-15, 30, 40);
-        final Vector camLookAt = Vector.make(8, 2, 0);
-        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y, settings);
+//        final Vector camLocation = Vector.make(-5, 10, 10);
+//        final Vector camLookAt = Vector.make(0, 0, 0);
+//        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y, settings);
+        //Airplane
+        Vector loc = Vector.make(-2.4*2, 6.7*2, 8.5*2);
+        final Vector lookAt = Vector.make(7*2, 1.3*3, -1*2);
+        loc = lookAt.add(loc.sub(lookAt).mul(2));
+        final Vector camLocation = Vector.make(-2.4*2, 6.7*2, 8.5*2);
+        final Vector camLookAt = Vector.make(7*2, 1.3*2, -1*2);
+        final Camera cam = new Camera(loc, lookAt, Vector.UNIT_Y, settings);
         scene.setCamera(cam);
-//        scene = new Scene(optimizedRoot, cam);
-//        scene.addPointLight(light);
-//        scene.addPointLight(light2);
 
         return Result.SUCCESS;
     }
