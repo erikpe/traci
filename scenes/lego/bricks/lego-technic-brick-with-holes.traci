@@ -63,7 +63,7 @@ def legoTechnicBrickWithHoles_accurate (length)
             }
         }
         for (i in 0 .. length-2) {
-            roundedCylinder0 (LU*.15, LU*.35, LEGO_ROUNDING) {
+            roundedCylinder0_base (LU*.15, LU*.35, LEGO_ROUNDING) {
                 scale [1, -1, 1];
                 translate [LU, LU*.35, LU*.5];
                 translate X*LU*i;

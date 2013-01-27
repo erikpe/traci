@@ -12,7 +12,7 @@ def legoTechnicBush12ToothedTypeI_accurate (radius, height)
     toothHeight = .07;
     toothSpacing = .08;
     return difference {
-        roundedCylinder1 (radius, height, LEGO_ROUNDING);
+        roundedCylinder1_base (radius, height, LEGO_ROUNDING);
         torus (.07*2, .27*2) { rotx PI/2; translate Y*.26; }
         roundedCylinder2 (innerRadius, toothHeight, LEGO_ROUNDING, LEGO_ROUNDING) {
             rotx PI;
@@ -78,11 +78,11 @@ def legoTechnicBush_accurate (outerRadius, height)
     axleRadius = .3;
     return difference {
         union {
-            roundedCylinder1 (outerRadius, lowerHeight, LEGO_ROUNDING);
+            roundedCylinder1_base (outerRadius, lowerHeight, LEGO_ROUNDING);
             roundedCylinder3 (innerRadius, height-lowerHeight-upperHeight, LEGO_ROUNDING) {
                 translate [0, lowerHeight, 0];
             }
-            roundedCylinder1 (outerRadius, upperHeight, LEGO_ROUNDING) {
+            roundedCylinder1_base (outerRadius, upperHeight, LEGO_ROUNDING) {
                 translate [0, height-upperHeight, 0];
             }
         }
