@@ -14,10 +14,10 @@ def legoTechnicAxle (length)
     radius = .28;
     thickness = .22;
     return union {
-        roundedBox(length, radius*2, thickness, LEGO_ROUNDING) {
+        roundedBox1 (length, radius*2, thickness, LEGO_ROUNDING) {
             translate [0, -radius, -thickness/2];
         }
-        roundedBox(length, thickness, radius*2, LEGO_ROUNDING) {
+        roundedBox1 (length, thickness, radius*2, LEGO_ROUNDING) {
             translate [0, -thickness/2, -radius];
         }
         bbox { scale [length, radius*2, radius*2]; translate [0, -radius, -radius]; }

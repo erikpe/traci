@@ -14,7 +14,7 @@ def legoTile (width, length)
     boxLength = length * LU;
     boxHeight = .4 * LU;
     boxWidth = width * LU;
-    return roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+    return roundedBox1 (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
 }
 
 /*

@@ -26,7 +26,7 @@ def legopartPegHole ()
     radius = LU * .3;
     innerRadius = LU * .2;
     lowerRounding = LEGO_ROUNDING;
-    upperRounding = 2 * LEGO_ROUNDING;
+    upperRounding = LEGO_ROUNDING;
     return difference {
         roundedCylinder2 (radius, height, lowerRounding, upperRounding);
         roundedCylinder2 (innerRadius, height - EPSILON, upperRounding, lowerRounding) {

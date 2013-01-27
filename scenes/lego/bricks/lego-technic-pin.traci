@@ -94,11 +94,17 @@ def legoTechnicAxlePinWithoutFrictionRidgesLengthwise_accurate (middleStopperRad
                 rotx PI/2;
                 translate -Z*.5*middleStopperLength;
             }
-            roundedBox (axleRadius*2, axleThickness, LU-middleStopperLength/2+LEGO_ROUNDING, LEGO_ROUNDING) {
-                translate [-axleRadius, -axleThickness/2, middleStopperLength/2-LEGO_ROUNDING];
+            roundedBox2 (axleRadius*2, LU-middleStopperLength/2, axleThickness, LEGO_ROUNDING) {
+                rotx PI/2;
+                translate [-axleRadius, axleThickness/2, middleStopperLength/2];
             }
-            roundedBox (axleThickness, axleRadius*2, LU-middleStopperLength/2+LEGO_ROUNDING, LEGO_ROUNDING) {
-                translate [-axleThickness/2, -axleRadius, middleStopperLength/2-LEGO_ROUNDING];
+            roundedBox2 (axleThickness, LU-middleStopperLength/2, axleRadius*2, LEGO_ROUNDING) {
+                rotx PI/2;
+                translate [-axleThickness/2, axleRadius, middleStopperLength/2];
+            }
+            bbox {
+                scale [middleStopperRadius*2, middleStopperRadius*2, LU*2];
+                translate [-middleStopperRadius, -middleStopperRadius, -LU];
             }
         }
         roundedCylinder4 (innerRadius, 1, LEGO_ROUNDING) {

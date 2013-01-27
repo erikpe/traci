@@ -45,7 +45,7 @@ def legoTechnicBrickWithHoles_accurate (length)
     pegHeight = LU * .2;
     return union {
         difference {
-            roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+            roundedBox1 (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
             difference {
                 roundedBox2 (boxLength-2*thickness, boxHeight-thickness, boxWidth-2*thickness, LEGO_ROUNDING) {
                     translate [thickness, 0, thickness];

@@ -8,5 +8,6 @@
 #include "lego-tile.traci"
 #include "lego-technic-axle.traci"
 #include "lego-technic-bush.traci"
+#include "lego-technic-liftarm.traci"
 
 #endif // ALL_BRICKS_TRACI_

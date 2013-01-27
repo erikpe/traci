@@ -18,7 +18,7 @@ def legoTechnicPlateWithHoles (length)
     pegHeight = .2*LU;
     return union {
         difference {
-            roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
+            roundedBox1 (boxLength, boxHeight, boxWidth, LEGO_ROUNDING);
             for (x in 0 .. length-2) {
                 legopartTechnicPlateHole () {
                     translate X*(x*LU);

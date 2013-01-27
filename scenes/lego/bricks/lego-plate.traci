@@ -16,7 +16,7 @@ def legoPlate (width, length)
     boxWidth = width*LU;
     pegHeight = .2*LU;
     return union {
-        roundedBox (boxLength, boxHeight, boxWidth, LEGO_ROUNDING) {
+        roundedBox1 (boxLength, boxHeight, boxWidth, LEGO_ROUNDING) {
             for (x in 0 .. length-1) {
                 for (z in 0 .. width-1) {
                     legopartPeg () {
