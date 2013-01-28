@@ -53,7 +53,7 @@ def legoTechnicPinWithoutFrictionRidgesLengthwise ()
                 translate -Z*.5*middleStopperLength;
             }
         }
-        roundedCylinder3 (innerRadius, 2*LU, LEGO_ROUNDING) {
+        roundedCylinder3_base (innerRadius, 2*LU, LEGO_ROUNDING) {
             translate -Y*LU;
             rotx PI/2;
         }
@@ -83,8 +83,8 @@ def legoTechnicAxlePinWithoutFrictionRidgesLengthwise_accurate (middleStopperRad
 {
     middleStopperLength = .15*LU;
     innerRadius = .22*LU;
-    axleRadius = .28;
-    axleThickness = .22;
+    axleRadius = AXLE_RADIUS;
+    axleThickness = AXLE_THICKNESS;
     return difference {
         union {
             legoTechnicPinWithoutFrictionRidgesLengthwise_helper (LU-.5*middleStopperLength) {

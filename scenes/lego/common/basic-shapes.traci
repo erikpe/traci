@@ -81,7 +81,7 @@ def roundedCylinder1 (v0, v1, radius, rounding)
  * /_____\
  *
  */
- def roundedCylinder2 (radius, height, lowerRounding, upperRounding)
+ def roundedCylinder2_base (radius, height, lowerRounding, upperRounding)
  {
     return union {
         cylinder (radius, Y*(lowerRounding-EPSILON), Y*(height-upperRounding));
@@ -106,6 +106,14 @@ def roundedCylinder1 (v0, v1, radius, rounding)
     }
 }
 
+def roundedCylinder2 (v0, v1, radius, rounding)
+{
+    return roundedCylinder2_base (radius, length(v1-v0), rounding, rounding) {
+        rotVecToVec (Y, v1-v0);
+        translate v0;
+    }
+}
+
 /*
  * Rounded cylinder 3 (from side):
  * _______
@@ -114,7 +122,7 @@ def roundedCylinder1 (v0, v1, radius, rounding)
  * /_____\ 
  *
  */
-def roundedCylinder3 (radius, height, rounding)
+def roundedCylinder3_base (radius, height, rounding)
 {
     return union {
         cylinder (radius, Y*(rounding-EPSILON), Y*(height-rounding+EPSILON));
@@ -138,6 +146,14 @@ def roundedCylinder3 (radius, height, rounding)
             scale [radius+rounding, height+EPSILON+EPSILON, radius+rounding];
             translate -Y*EPSILON;
        }
+    }
+}
+
+def roundedCylinder3 (v0, v1, radius, rounding)
+{
+    return roundedCylinder3_base (radius, length(v1-v0), rounding) {
+        rotVecToVec (Y, v1-v0);
+        translate v0;
     }
 }
 

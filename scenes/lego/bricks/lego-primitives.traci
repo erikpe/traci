@@ -14,7 +14,7 @@ def legopartPeg ()
 #if FAST_LEGO
     return cylinder (radius, [LU/2, -EPSILON, LU/2], [LU/2, height, LU/2]);
 #else
-    return roundedCylinder2 (radius, height, lowerRounding, upperRounding) {
+    return roundedCylinder2_base (radius, height, lowerRounding, upperRounding) {
         translate [LU/2, 0, LU/2];
     }
 #endif // FAST_LEGO
@@ -28,8 +28,8 @@ def legopartPegHole ()
     lowerRounding = LEGO_ROUNDING;
     upperRounding = LEGO_ROUNDING;
     return difference {
-        roundedCylinder2 (radius, height, lowerRounding, upperRounding);
-        roundedCylinder2 (innerRadius, height - EPSILON, upperRounding, lowerRounding) {
+        roundedCylinder2_base (radius, height, lowerRounding, upperRounding);
+        roundedCylinder2_base (innerRadius, height - EPSILON, upperRounding, lowerRounding) {
             rotx PI;
             translate Y*height;
         }
@@ -54,11 +54,11 @@ def legopartTechnicBrickHole ()
     cd = LU * .08;
     height = LU * .7;
     return union {
-        roundedCylinder3 (radius, length-2*cd, rounding) {
+        roundedCylinder3_base (radius, length-2*cd, rounding) {
             translate Y*cd;
         }
-        roundedCylinder2 (radius+cw, cd, rounding, rounding);
-        roundedCylinder2 (radius+cw, cd, rounding, rounding) {
+        roundedCylinder2_base (radius+cw, cd, rounding, rounding);
+        roundedCylinder2_base (radius+cw, cd, rounding, rounding) {
             rotx PI;
             translate Y*length;
         }
@@ -77,7 +77,7 @@ def legopartTechnicPlateHole ()
 {
     radius = LU * .3;
     height = LU * .4;
-    return roundedCylinder3 (radius, height, LEGO_ROUNDING) {
+    return roundedCylinder3_base (radius, height, LEGO_ROUNDING) {
         translate [LU, 0, LU];
     }
 }

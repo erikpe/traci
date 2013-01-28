@@ -7,68 +7,49 @@
 #include "lego-primitives.traci"
 
 /*
-difference {
-  union {
-    difference {
-      box { <0,0,-.25> <1.5,.25,.25> }
-      box { <-.1,-.1,-.175> <1.5,.3,.175> }
-    }
-    box { <.5,.08,-.25> <1,.17,.25> }
-    cylinder { <0,0,0> <0,.5,0>, .25 }
-    cylinder { <1.5,0,0> <1.5,.25,0>, .25 }
-    cylinder { <1,0,0> <1,.25,0>, .22 }
-    cylinder { <.5,0,0> <.5,.25,0>, .22 }
-  }
-  cylinder { <.5,-.1,0> <.5,.3,0> .15 }
-  cylinder { <.5,.22,0> <.5,.3,0> .18 }
-  cylinder { <.5,-.1,0> <.5,.03,0> .18 }
-  cylinder { <1,-.1,0> <1,.3,0> .15 }
-  cylinder { <1,.22,0> <1,.3,0> .18 }
-  cylinder { <1,-.1,0> <1,.03,0> .18 }
-
-  cylinder { <0,.25,0> <0,.6,0> .15 }
-  cylinder { <0,.25,0> <0,.6,0> .15 translate <-.25,0,-.25> }
-  cylinder { <0,.25,0> <0,.6,0> .15 translate <-.25,0,.25> }
-  cylinder { <0,.25,0> <0,.6,0> .15 translate <.25,0,-.25> }
-  cylinder { <0,.25,0> <0,.6,0> .15 translate <.25,0,.25> }
-
-  object { axel_form rotate <0,0,90> translate <0,-.1,0> }
-  object { axel_form rotate <0,0,90> translate <1.5,-.1,0> }
-  box { <1.24,-.1,-.054> <1.5,.3,.054> }
-  box { <0,-.1,-.054> <.26,.25,.054> }
-  texture { ytan }
-}
-*/
-
-/*
  * Technic, Liftarm 1 x 4 Thin with Stud Connector
  * http://www.bricklink.com/catalogItem.asp?P=2825
  */
 def legoTechnicLiftarmWithStudConnector_1x4 ()
 {
-    return difference {
-        union {
-            box { scale [3, .5, .15]; translate -Z*.5; }
-            box { scale [3, .5, .15]; translate Z*.35; }
-            box { scale [1, .18, 1]; translate [1, .16, -.5]; }
-            cylinder (.5, ORIGO, Y);
-            cylinder (.5, X*3, [3, .5, 0]);
-            cylinder (.44, X*2, [2, .5, 0]);
-            cylinder (.44, X, [1, .5, 0]);
+    return union {
+        roundedBox_base (.5, 3, .15, LEGO_ROUNDING) {
+            rotz -PI/2;
+            translate [0, .5, -.5];
         }
-        cylinder (.3, [1, -EPSILON, 0], [1, .5+EPSILON, 0]);
-        cylinder (.36, [1, .44, 0], [1, .5+EPSILON, 0]);
-        cylinder (.36, [1, -EPSILON, 0], [1, .06, 0]);
-        cylinder (.3, [2, -EPSILON, 0], [2, .5+EPSILON, 0]);
-        cylinder (.36, [2, .44, 0], [2, .5+EPSILON, 0]);
-        cylinder (.36, [2, -EPSILON, 0], [2, .06, 0]);
-        cylinder (.3, Y*.5, Y*1.2);
-        cylinder (.3, Y*.5, Y*1.2) { translate [-.5, 0, -.5]; }
-        cylinder (.3, Y*.5, Y*1.2) { translate [-.5, 0, .5]; }
-        cylinder (.3, Y*.5, Y*1.2) { translate [.5, 0, -.5]; }
-        cylinder (.3, Y*.5, Y*1.2) { translate [.5, 0, .5]; }
-        //box { 
-        //rotx PI;
+        roundedBox_base (.5, 3, .15, LEGO_ROUNDING) {
+            rotz -PI/2;
+            translate [0, .5, .35];
+        }
+        difference {
+            union {
+                box { scale [1, .18, 1]; translate [1, .16, -.5]; }
+                roundedCylinder1 (X*2, [2, .5, 0], .44, LEGO_ROUNDING);
+                roundedCylinder1 (X, [1, .5, 0], .44, LEGO_ROUNDING);
+            }
+            roundedCylinder2 ([1, .5, 0], [1, .44, 0], .36, LEGO_ROUNDING/2);
+            roundedCylinder2 ([1, 0, 0], [1, .06, 0], .36, LEGO_ROUNDING/2);
+            roundedCylinder3 ([1, .06, 0], [1, .44, 0], .3, LEGO_ROUNDING/2);
+            roundedCylinder2 ([2, .5, 0], [2, .44, 0], .36, LEGO_ROUNDING/2);
+            roundedCylinder2 ([2, 0, 0], [2, .06, 0], .36, LEGO_ROUNDING/2);
+            roundedCylinder3 ([2, .06, 0], [2, .44, 0], .3, LEGO_ROUNDING/2);
+        }
+        difference {
+            roundedCylinder1 (X*3, [3, .5, 0], .5, LEGO_ROUNDING);
+            legoTechnicAxle_base2 (.5, AXLE_RADIUS + EPSILON, AXLE_THICKNESS + EPSILON, LEGO_ROUNDING) {
+                translate X*3;
+            }
+        }
+        difference {
+            roundedCylinder1 (ORIGO, Y, .5, LEGO_ROUNDING);
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING);
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [-.5, 0, -.5]; }
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [-.5, 0, .5]; }
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [.5, 0, -.5]; }
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [.5, 0, .5]; }
+            legoTechnicAxle_base2 (.5, AXLE_RADIUS + EPSILON, AXLE_THICKNESS + EPSILON, LEGO_ROUNDING);
+        }
+        bbox { scale [4, 1, 1]; translate [-.5, 0, -.5]; }
     }
 }
 
