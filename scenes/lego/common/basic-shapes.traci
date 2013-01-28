@@ -382,7 +382,7 @@ def roundedBox3 (x, y, z, r)
 }
 
 /*
- * Rounded cylinder 4 (from side):
+ * Rounded box 4 (from side):
  *   ___
  *  |   |
  *  |   |

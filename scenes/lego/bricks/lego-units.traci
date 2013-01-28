@@ -6,5 +6,7 @@ global BH = LU * 1.2; // Brick-Height
 global PH = LU * .4;  // Plate-Height
 global PEG_HEIGHT = LU * .2;
 global LEGO_ROUNDING = .03;
+global AXLE_RADIUS = .28;
+global AXLE_THICKNESS = .22;
 
 #endif // LEGO_UNITS_TRACI

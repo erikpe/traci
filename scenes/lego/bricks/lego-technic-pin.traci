@@ -5,6 +5,7 @@
 #include "common/basic-shapes.traci"
 #include "lego-units.traci"
 #include "lego-primitives.traci"
+#include "lego-technic-pin.traci"
 
 def legoTechnicPinWithoutFrictionRidgesLengthwise_helper (length)
 {
@@ -94,13 +95,9 @@ def legoTechnicAxlePinWithoutFrictionRidgesLengthwise_accurate (middleStopperRad
                 rotx PI/2;
                 translate -Z*.5*middleStopperLength;
             }
-            roundedBox2 (axleRadius*2, LU-middleStopperLength/2, axleThickness, LEGO_ROUNDING) {
+            legoTechnicAxle_base3 (LU-middleStopperLength/2, axleRadius, axleThickness, LEGO_ROUNDING) {
                 rotx PI/2;
-                translate [-axleRadius, axleThickness/2, middleStopperLength/2];
-            }
-            roundedBox2 (axleThickness, LU-middleStopperLength/2, axleRadius*2, LEGO_ROUNDING) {
-                rotx PI/2;
-                translate [-axleThickness/2, axleRadius, middleStopperLength/2];
+                translate [0, 0, middleStopperLength/2];
             }
             bbox {
                 scale [middleStopperRadius*2, middleStopperRadius*2, LU*2];
