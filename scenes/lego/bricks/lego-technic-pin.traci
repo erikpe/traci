@@ -119,7 +119,7 @@ def legoTechnicAxlePinWithoutFrictionRidgesLengthwise ()
 {
     middleStopperRadius = .38*LU;
 
-#ifdef FAST_LEGO
+#if FAST_LEGO
     pin = legoTechnicAxlePinWithoutFrictionRidgesLengthwise_accurate (middleStopperRadius);
 #else
     pin = legoTechnicAxlePinWithoutFrictionRidgesLengthwise_accurate (middleStopperRadius);

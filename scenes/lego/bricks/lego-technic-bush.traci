@@ -110,10 +110,10 @@ def legoTechnicBush()
     radius = .48;
     height = 1;
 
-#ifdef FAST_LEGO
-    bush = legoTechnicBush_accurate(radius, height);
-#else
+#if FAST_LEGO
     bush = legoTechnicBush_fast(radius, height);
+#else
+    bush = legoTechnicBush_accurate(radius, height);
 #endif
 
     return bush {
