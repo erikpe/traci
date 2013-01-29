@@ -72,7 +72,6 @@ def pieces4 ()
 {
     return union {
         legoTechnicBrickWithHoles_1x4 () { YELLOW; roty PI/2;  translate [0, .4, 2]; }
-        //legoTechnicAxlePin ()            { RED;   roty -PI/2; translate [1, .4, -1]; }
         legoTechnicBrickWithHoles_1x6 () { YELLOW;             translate [0, 1.6, 1]; }
         legoTechnicBrickWithHoles_1x6 () { YELLOW;             translate [0, 1.6, -2]; }
         legoTechnicPlateWithHoles_2x4 () { YELLOW; roty PI/2;  translate [0, 0, 2]; }
@@ -114,6 +113,7 @@ def pieces7 ()
         legoPlate_1x4 ()                 { YELLOW; roty -PI/2; translate [1, 0, -2]; }
         legoTechnicPlateWithHoles_2x4 () { YELLOW; roty PI/2;  translate [5, 0, 2]; }
         legoTechnicPlateWithHoles_2x8 () { BLACK;              translate [0, .4, -1]; }
+
         bbox { scale [8, 1, 4]; translate [0, 0, -2]; }
     } 
 }
@@ -173,19 +173,31 @@ def pieces9 ()
             union {
                 legoTechnicBrickWithHoles_1x2 ()  { BLACK;              translate [10, 1.2, -1]; }
                 legoTechnicBrickWithHoles_1x2 ()  { BLACK;              translate [14, 1.6, -1]; }
-                legoTechnicAxlePin ()             { GRAY;               translate [14, 1.6, -1]; }
-                legoTechnicLiftarm_1 ()           { GRAY;  rotx PI/2; rotz PI/2; translate [15, 2.3, 0]; }
-                legoTechnicAxle (2)               { BLACK;              translate [14, 4.6, -1]; }
-                legoTechnicBushToothed ()         { GRAY;               translate [14, 4.6, .5]; }
-                legoTechnicLiftarm_1 ()           { GRAY;  rotx -PI/2;  translate [12, 5.3, 0]; }
-                legoTechnicBushToothed ()         { GRAY;  scalez -1;   translate [14, 4.6, -.5]; }
-                legoTechnicAxle (2)               { BLACK;              translate [11, 4.6, -1]; }
-                legoTechnicBushToothed ()         { GRAY;               translate [11, 4.6, .5]; }
                 legoTechnicAxlePin ()             { GRAY;               translate [10, 1.2, -1]; }
-                legoTechnicBushToothed ()         { GRAY;               translate [10, 1.2, .5]; }
-                bbox { scale [6, 4.6, 2]; translate [10, 1.2, -1]; }
+                legoTechnicBushToothed ()         { GRAY;               translate [10, 1.2, .4]; }
+                legoTechnicPlateWithToothedEnds_1x5 () {
+                    BLACK;
+                    rotx PI/2;
+                    translate [-.5, .5, 0];
+                    rotz 1.2145277951583;
+                    translate [11, 1.9, 0];
+                }
+                union {
+                    legoTechnicAxlePin ()             { GRAY;               translate [14, 1.6, -1]; }
+                    legoTechnicLiftarm_1 ()           { GRAY;  rotx PI/2; rotz PI/2; translate [15, 2.3, 0]; }
+                    legoTechnicAxle (2)               { BLACK;              translate [14, 4.6, -1]; }
+                    legoTechnicBushToothed ()         { GRAY;               translate [14, 4.6, .5]; }
+                    legoTechnicLiftarm_1 ()           { GRAY;  rotx -PI/2;  translate [12, 5.3, 0]; }
+                    legoTechnicBushToothed ()         { GRAY;  scalez -1;   translate [14, 4.6, -.5]; }
+                    legoTechnicAxle (2)               { BLACK;              translate [11, 4.6, -1]; }
+                    legoTechnicBushToothed ()         { GRAY;               translate [11, 4.6, .4]; }
+                    translate [-15, -2.3, 0];
+                    rotz -0.12430945820273;
+                    translate [15, 2.3, 0];
+                }
+                bbox { scale [6.5, 5.1, 2]; translate [10, 1.2, -1]; }
             }
-            bbox { scale [16, 5.8, 12]; translate [0, 0, -6]; }
+            bbox { scale [16.5, 6.3, 12]; translate [0, 0, -6]; }
             translate [-8, -.7, 0];
             rotz (-25.2087/360)*PI*2;
             translate [11, .7, 0];
@@ -196,15 +208,38 @@ def pieces9 ()
     }
 }
 
+a = 0.099668652491162;
+alpha = 1.1148591426671;
+beta = 1.0093762740913;
+gamma = 1.0173572368314;
+foo = 0.12430945820273;
+bar = 1.2145277951583;
+
 def pieces10 ()
 {
     return union {
         legoTechnicBrickWithHoles_1x8 () { YELLOW;             translate [0, 0, 2]; }
         legoTechnicBrickWithHoles_1x8 () { YELLOW;             translate [0, 0, -3]; }
         legoPlate_2x6 ()                 { BLACK;  roty -PI/2; translate [3, 1.2, -3]; }
+
+        bbox { scale [8, 1.8, 6]; translate [0, 0, -3]; }
         translate [-1, -.7, 0];
         rotz (-15.676/360)*PI*2;
         translate [1, .7, 0];
+    }
+}
+
+def pieces11 ()
+{
+    return union {
+        legoTechnicAxlePin () { GRAY; }
+        legoTechnicBushToothed () { GRAY; translate Z; }
+        legoTechnicPlateWithToothedEnds_1x5 () { BLACK; rotx PI/2; translate [-1.5, 1.2, 1.5]; }
+        bbox { scale [5, 1, 2.1]; translate [-1.5, .2, 0]; }
+        translate [-1, -.7, 0];
+        rotz 2.5;
+        translate [1, .7, 0];
+        
     }
 }
 
@@ -226,6 +261,7 @@ def airplane ()
         pieces8 ()     { roty PI/2;  translate [8, 6, -4]; }
         pieces9 ()     { translate [14, 0, 0]; }
         pieces10 ()    { translate [10, 6, 0]; }
+        pieces11 ()    { roty -PI/2; translate [0, 2, -1]; }
         rotx (20/360)*PI*2;
     }
 }
@@ -247,6 +283,8 @@ cylinder(.02, ORIGO, Z*20) {
 }
 #endif
 
+//pieces11 ();
+
 //legoTechnicAxlePin () { YELLOW; scale 2; }
 
 //legoTechnicLiftarm_2 () { GRAY; }
@@ -261,13 +299,11 @@ cylinder(.02, ORIGO, Z*20) {
 //legoTechnicBush () { GRAY; }
 
 //legoTechnicAxlePin() { GRAY; }
+//legoTechnicBushToothed () { YELLOW; translate Y*2; scale 3;}
+//legoTechnicPlateWithToothedEnds_1x5 () { GRAY; }
 
 pointlight([-30, 15, 40], WHITE*30*200);
 pointlight([60, 15, 30], WHITE*6000);
 ambientlight(WHITE*.15);
 
 //camera([-10, 15, 15], [8, 2, 0], Y);
-
-//for (i in 0 .. 10) {
-//    airplane() { translate X*.01*i; }
-//}

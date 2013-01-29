@@ -2,7 +2,7 @@
 #define ALL_BRICKS_TRACI_
 
 #include "lego-technic-brick-with-holes.traci"
-#include "lego-technic-plate-with-holes.traci"
+#include "lego-technic-plate.traci"
 #include "lego-technic-pin.traci"
 #include "lego-plate.traci"
 #include "lego-tile.traci"
