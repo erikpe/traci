@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import se.ejp.traci.math.Vector;
 
-public class TestVector
+public class VectorTest
 {
     private Vector v0 = null;
     private Vector v1 = null;

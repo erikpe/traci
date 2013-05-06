@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import se.ejp.traci.math.Matrix;
 
-public class TestMatrix
+public class MatrixTest
 {
     @Before
     public void setUp() throws Exception
