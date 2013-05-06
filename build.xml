@@ -5,6 +5,9 @@
   <property name="bin" value="bin" />
   <property name="lib" value="lib" />
   <property name="tmp" value="tmp" />
+  <property name="test" value="test" />
+  <property name="bin-test" value="bin-test" />
+  <property name="test-output" value="test-output" />
 
   <property name="antlr-dir" value="antlr-3.5" />
   <property name="antlr-jar" value="antlr-3.5-complete-no-st3.jar" />
@@ -16,6 +19,9 @@
   <property name="anarres-cpp-dir" value="anarres-cpp-bin-1.2.8" />
   <property name="anarres-cpp-jar" value="anarres-cpp-bin-1.2.8.jar" />
   <property name="anarres-cpp-sources-jar" value="anarres-cpp-sources-1.2.8.jar" />
+  <property name="junit-dir" value="junit-4.11" />
+  <property name="junit-jar" value="junit-4.11.jar" />
+  <property name="hamcrest-jar" value="hamcrest-core-1.3.jar" />
 
   <property name="jarfile" value="traci-${version}.jar" />
   <property name="src-distfile" value="traci-${version}.tar.gz" />
@@ -27,7 +33,9 @@
     <delete file="${src}/traci/lang/parser/Traci.tokens" />
     <delete file="${src}/traci/lang/parser/TraciTreeWalker.tokens" />
     <delete dir="${bin}" />
+    <delete dir="${bin-test}" />
     <delete dir="${tmp}" />
+    <delete dir="${test-output}" />
     <delete file="${jarfile}" />
     <delete file="${src-distfile}" />
   </target>
@@ -48,6 +56,19 @@
         <pathelement location="${lib}/${antlr-dir}/${antlr-runtime-jar}" />
         <pathelement location="${lib}/${commons-cli-dir}/${commons-cli-jar}" />
         <pathelement location="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" />
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="compile-test" depends="compile">
+    <mkdir dir="${bin-test}" />
+    <javac srcdir="${test}" destdir="${bin-test}" includeantruntime="false">
+      <classpath>
+        <pathelement location="${bin}" />
+        <pathelement location="${lib}/${antlr-dir}/${antlr-runtime-jar}" />
+        <pathelement location="${lib}/${commons-cli-dir}/${commons-cli-jar}" />
+        <pathelement location="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" />
+        <pathelement location="${lib}/${junit-dir}/${junit-jar}" />
       </classpath>
     </javac>
   </target>
@@ -103,6 +124,7 @@
     <tar destfile="${src-distfile}" compression="gzip">
       <tarfileset dir="." prefix="traci-${version}">
         <include name="src/" />
+        <include name="test/" />
         <include name="scenes/" />
         <include name="images/" />
         <include name="lib/" />
@@ -111,6 +133,34 @@
         <include name="COPYING" />
       </tarfileset>
     </tar>
+  </target>
+
+  <target name="test" depends="compile, compile-test">
+    <mkdir dir="${test-output}" />
+    <junit printsummary="yes" haltonfailure="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="${bin}" />
+        <pathelement location="${bin-test}" />
+        <pathelement location="${lib}/${antlr-dir}/${antlr-runtime-jar}" />
+        <pathelement location="${lib}/${commons-cli-dir}/${commons-cli-jar}" />
+        <pathelement location="${lib}/${anarres-cpp-dir}/${anarres-cpp-jar}" />
+        <pathelement location="${lib}/${junit-dir}/${hamcrest-jar}" />
+        <pathelement location="${lib}/${junit-dir}/${junit-jar}" />
+      </classpath>
+      <formatter type="xml" />
+      <batchtest todir="${test-output}">
+        <fileset dir="${test}" includes="**/*Test*.java" />
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="test-report" depends="test">
+    <junitreport todir="${test-output}">
+      <fileset dir="${test-output}">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report format="frames" todir="${test-output}" />
+    </junitreport>
   </target>
 
 </project>
