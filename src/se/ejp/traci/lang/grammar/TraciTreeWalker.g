@@ -6,31 +6,31 @@ options {
 }
 
 @header {
-package traci.lang.parser;
+package se.ejp.traci.lang.parser;
 
-import traci.lang.interpreter.TraciValue;
-import traci.lang.interpreter.functions.BuiltinFunctions;
-import traci.lang.interpreter.functions.FunctionSet;
-import traci.lang.interpreter.node.AssignNode;
-import traci.lang.interpreter.node.BBoxNode;
-import traci.lang.interpreter.node.BinaryOpNode;
-import traci.lang.interpreter.node.BlockNode;
-import traci.lang.interpreter.node.ColorNode;
-import traci.lang.interpreter.node.ConstNode;
-import traci.lang.interpreter.node.ForNode;
-import traci.lang.interpreter.node.FunctionCallNode;
-import traci.lang.interpreter.node.FunctionNode;
-import traci.lang.interpreter.node.IfElseNode;
-import traci.lang.interpreter.node.LightNode;
-import traci.lang.interpreter.node.Op;
-import traci.lang.interpreter.node.RefNode;
-import traci.lang.interpreter.node.ReturnNode;
-import traci.lang.interpreter.node.ShapeNode;
-import traci.lang.interpreter.node.TraciNode;
-import traci.lang.interpreter.node.TransformationNode;
-import traci.lang.interpreter.node.UnaryOpNode;
-import traci.lang.interpreter.node.VectorNode;
-import traci.lang.interpreter.node.WhileNode;
+import se.ejp.traci.lang.interpreter.TraciValue;
+import se.ejp.traci.lang.interpreter.functions.BuiltinFunctions;
+import se.ejp.traci.lang.interpreter.functions.FunctionSet;
+import se.ejp.traci.lang.interpreter.node.AssignNode;
+import se.ejp.traci.lang.interpreter.node.BBoxNode;
+import se.ejp.traci.lang.interpreter.node.BinaryOpNode;
+import se.ejp.traci.lang.interpreter.node.BlockNode;
+import se.ejp.traci.lang.interpreter.node.ColorNode;
+import se.ejp.traci.lang.interpreter.node.ConstNode;
+import se.ejp.traci.lang.interpreter.node.ForNode;
+import se.ejp.traci.lang.interpreter.node.FunctionCallNode;
+import se.ejp.traci.lang.interpreter.node.FunctionNode;
+import se.ejp.traci.lang.interpreter.node.IfElseNode;
+import se.ejp.traci.lang.interpreter.node.LightNode;
+import se.ejp.traci.lang.interpreter.node.Op;
+import se.ejp.traci.lang.interpreter.node.RefNode;
+import se.ejp.traci.lang.interpreter.node.ReturnNode;
+import se.ejp.traci.lang.interpreter.node.ShapeNode;
+import se.ejp.traci.lang.interpreter.node.TraciNode;
+import se.ejp.traci.lang.interpreter.node.TransformationNode;
+import se.ejp.traci.lang.interpreter.node.UnaryOpNode;
+import se.ejp.traci.lang.interpreter.node.VectorNode;
+import se.ejp.traci.lang.interpreter.node.WhileNode;
 }
 
 @members {

@@ -17,9 +17,9 @@ tokens {
 }
 
 @parser::header {
-package traci.lang.parser;
+package se.ejp.traci.lang.parser;
 
-import traci.util.Log;
+import se.ejp.traci.util.Log;
 }
 
 @parser::members {
@@ -42,10 +42,10 @@ public Iterable<ParseError> getParseErrors()
 }
 
 @lexer::header {
-package traci.lang.parser;
+package se.ejp.traci.lang.parser;
 
-import traci.lang.parser.IncludeLocation.FileLocation;
-import traci.util.Log;
+import se.ejp.traci.lang.parser.IncludeLocation.FileLocation;
+import se.ejp.traci.util.Log;
 }
 
 @lexer::members {
