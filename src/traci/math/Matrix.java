@@ -11,6 +11,11 @@ public class Matrix
         data = new double[16];
     }
 
+    public double at(final int row, final int col)
+    {
+        return data[row * 4 + col];
+    }
+
     private static Matrix newEye()
     {
         final Matrix res = newZero();
