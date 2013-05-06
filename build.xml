@@ -42,6 +42,7 @@
 
   <target name="generate-parser">
     <java jar="${lib}/${antlr-dir}/${antlr-jar}" fork="true">
+      <arg value="-make" />
       <arg value="-fo" />
       <arg value="${src}/se/ejp/traci/lang/parser" />
       <arg value="${src}/se/ejp/traci/lang/grammar/Traci.g" />
