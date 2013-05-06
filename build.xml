@@ -115,7 +115,7 @@
       <fileset dir="${tmp}/${commons-cli-dir}" />
       <fileset dir="${tmp}/${anarres-cpp-dir}" />
       <manifest>
-        <attribute name="Main-Class" value="traci.main.Main" />
+        <attribute name="Main-Class" value="se.ejp.traci.main.Main" />
       </manifest>
     </jar>
   </target>
