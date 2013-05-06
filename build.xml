@@ -60,7 +60,7 @@
     </javac>
   </target>
 
-  <target name="compile-test" depends="compile">
+  <target name="compile-tests" depends="compile">
     <mkdir dir="${bin-test}" />
     <javac srcdir="${test}" destdir="${bin-test}" includeantruntime="false">
       <classpath>
@@ -135,7 +135,7 @@
     </tar>
   </target>
 
-  <target name="test" depends="compile, compile-test">
+  <target name="run-tests" depends="compile, compile-tests">
     <mkdir dir="${test-output}" />
     <junit printsummary="yes" haltonfailure="yes" showoutput="yes">
       <classpath>
@@ -149,18 +149,21 @@
       </classpath>
       <formatter type="xml" />
       <batchtest todir="${test-output}">
-        <fileset dir="${test}" includes="**/Test*.java" />
+        <fileset dir="${test}" includes="**/*Test.java" />
       </batchtest>
     </junit>
   </target>
 
-  <target name="test-report" depends="test">
+  <target name="test-report" depends="run-tests">
     <junitreport todir="${test-output}">
       <fileset dir="${test-output}">
         <include name="TEST-*.xml" />
       </fileset>
       <report format="frames" todir="${test-output}" />
     </junitreport>
+  </target>
+
+  <target name="test" depends="run-tests, test-report">
   </target>
 
 </project>
