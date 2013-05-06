@@ -27,11 +27,11 @@
   <property name="src-distfile" value="traci-${version}.tar.gz" />
 
   <target name="clean">
-    <delete file="${src}/traci/lang/parser/TraciLexer.java" />
-    <delete file="${src}/traci/lang/parser/TraciParser.java" />
-    <delete file="${src}/traci/lang/parser/TraciTreeWalker.java" />
-    <delete file="${src}/traci/lang/parser/Traci.tokens" />
-    <delete file="${src}/traci/lang/parser/TraciTreeWalker.tokens" />
+    <delete file="${src}/se/ejp/traci/lang/parser/TraciLexer.java" />
+    <delete file="${src}/se/ejp/traci/lang/parser/TraciParser.java" />
+    <delete file="${src}/se/ejp/traci/lang/parser/TraciTreeWalker.java" />
+    <delete file="${src}/se/ejp/traci/lang/parser/Traci.tokens" />
+    <delete file="${src}/se/ejp/traci/lang/parser/TraciTreeWalker.tokens" />
     <delete dir="${bin}" />
     <delete dir="${bin-test}" />
     <delete dir="${tmp}" />
@@ -43,9 +43,9 @@
   <target name="generate-parser">
     <java jar="${lib}/${antlr-dir}/${antlr-jar}" fork="true">
       <arg value="-fo" />
-      <arg value="${src}/traci/lang/parser" />
-      <arg value="${src}/traci/lang/grammar/Traci.g" />
-      <arg value="${src}/traci/lang/grammar/TraciTreeWalker.g" />
+      <arg value="${src}/se/ejp/traci/lang/parser" />
+      <arg value="${src}/se/ejp/traci/lang/grammar/Traci.g" />
+      <arg value="${src}/se/ejp/traci/lang/grammar/TraciTreeWalker.g" />
     </java>
   </target>
 
