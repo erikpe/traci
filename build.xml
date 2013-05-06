@@ -149,7 +149,7 @@
       </classpath>
       <formatter type="xml" />
       <batchtest todir="${test-output}">
-        <fileset dir="${test}" includes="**/*Test*.java" />
+        <fileset dir="${test}" includes="**/Test*.java" />
       </batchtest>
     </junit>
   </target>
