@@ -42,6 +42,7 @@
 
   <target name="generate-parser">
     <java jar="${lib}/${antlr-dir}/${antlr-jar}" fork="true">
+      <arg value="-verbose" />
       <arg value="-make" />
       <arg value="-fo" />
       <arg value="${src}/se/ejp/traci/lang/parser" />
@@ -138,7 +139,7 @@
 
   <target name="run-tests" depends="compile, compile-tests">
     <mkdir dir="${test-output}" />
-    <junit printsummary="yes" haltonfailure="yes" showoutput="yes">
+    <junit printsummary="yes" showoutput="yes">
       <classpath>
         <pathelement location="${bin}" />
         <pathelement location="${bin-test}" />
