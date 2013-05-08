@@ -4,7 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -20,9 +23,9 @@ import org.junit.Test;
 
 public class TraciParserTest
 {
-    TraciParser parser = null;
-    CommonTree parseTree = null;
-    List<ParseError> parserErrors = null;
+    private TraciParser parser = null;
+    private CommonTree parseTree = null;
+    private List<ParseError> parserErrors = null;
 
     @Before
     public void setUp()
@@ -68,6 +71,21 @@ public class TraciParserTest
         assertEquals(clazz, parserErrors.get(0).e.getClass());
     }
 
+    private void assertAllErrors(final Class<? extends RecognitionException> ... errorClasses)
+    {
+        final Set<Class<? extends RecognitionException>> expectedErrors =
+                new HashSet<Class<? extends RecognitionException>>(Arrays.asList(errorClasses));
+        final Set<Class<? extends RecognitionException>> encounteredErrors =
+                new HashSet<Class<? extends RecognitionException>>();
+
+        for (final ParseError error : parserErrors)
+        {
+            encounteredErrors.add(error.e.getClass());
+        }
+
+        assertEquals(expectedErrors, encounteredErrors);
+    }
+
     @Test
     public void testParser() throws RecognitionException
     {
@@ -86,6 +104,7 @@ public class TraciParserTest
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testColor() throws RecognitionException
     {
         runParser("color [.5, 2.23, .17];");
@@ -105,5 +124,44 @@ public class TraciParserTest
 
         runParser("color [.5, 2.23];");
         assertError(MismatchedTokenException.class);
+
+        runParser("color [.5, 2.23, .17, 5];");
+        assertAllErrors(MismatchedTokenException.class, UnwantedTokenException.class);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testVector() throws RecognitionException
+    {
+        runParser("[.5, 2.23, .17];");
+        assertNoError();
+        final Tree node = parseTree.getChild(0);
+        assertEquals(TraciParser.VECTOR, node.getType());
+        assertEquals(3, node.getChildCount());
+
+        runParser("[.5, 2.23, .17;");
+        assertError(MissingTokenException.class);
+
+        runParser("[.5, 2.23 .17];");
+        assertError(MissingTokenException.class);
+
+        runParser("[.5, 2.23];");
+        assertError(MismatchedTokenException.class);
+
+        runParser("[.5, 2.23, .17, 5];");
+        assertAllErrors(MismatchedTokenException.class, UnwantedTokenException.class);
+    }
+
+    @Test
+    public void testRef() throws RecognitionException
+    {
+        runParser("foo;");
+        assertNoError();
+        Tree node = parseTree.getChild(0);
+        assertEquals(TraciParser.REF, node.getType());
+        assertEquals(1, node.getChildCount());
+        node = node.getChild(0);
+        assertEquals(TraciParser.ID, node.getType());
+        assertEquals("foo", node.getText());
     }
 }
