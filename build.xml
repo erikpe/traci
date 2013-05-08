@@ -8,6 +8,7 @@
   <property name="test" value="test" />
   <property name="bin-test" value="bin-test" />
   <property name="test-output" value="test-output" />
+  <property name="test-report" value="test-report" />
 
   <property name="antlr-dir" value="antlr-3.5" />
   <property name="antlr-jar" value="antlr-3.5-complete-no-st3.jar" />
@@ -36,6 +37,7 @@
     <delete dir="${bin-test}" />
     <delete dir="${tmp}" />
     <delete dir="${test-output}" />
+    <delete dir="${test-report}" />
     <delete file="${jarfile}" />
     <delete file="${src-distfile}" />
   </target>
@@ -139,7 +141,7 @@
 
   <target name="run-tests" depends="compile, compile-tests">
     <mkdir dir="${test-output}" />
-    <junit printsummary="yes" showoutput="yes">
+    <junit failureProperty="test.failure" printsummary="yes" showoutput="yes">
       <classpath>
         <pathelement location="${bin}" />
         <pathelement location="${bin-test}" />
@@ -157,15 +159,17 @@
   </target>
 
   <target name="test-report" depends="run-tests">
-    <junitreport todir="${test-output}">
+    <mkdir dir="${test-report}" />
+    <junitreport todir="${test-report}">
       <fileset dir="${test-output}">
         <include name="TEST-*.xml" />
       </fileset>
-      <report format="frames" todir="${test-output}" />
+      <report format="frames" />
     </junitreport>
   </target>
 
   <target name="test" depends="run-tests, test-report">
+    <fail message="Failed test(s)" if="test.failure" />
   </target>
 
 </project>
