@@ -1,6 +1,7 @@
 package se.ejp.traci.lang.parser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,6 @@ public class TraciParserTest
 {
     TraciParser parser = null;
     CommonTree parseTree = null;
-    List<ParseError> lexerErrors = null;
     List<ParseError> parserErrors = null;
 
     @Before
@@ -31,7 +31,6 @@ public class TraciParserTest
     {
         parser = null;
         parseTree = null;
-        lexerErrors = null;
         parserErrors = null;
     }
 
@@ -39,8 +38,6 @@ public class TraciParserTest
     {
         final TraciLexer lexer = new TraciLexer(new ANTLRStringStream(code));
         parser = new TraciParser(new CommonTokenStream(lexer));
-
-        lexerErrors = new ArrayList<ParseError>();
         parserErrors = new ArrayList<ParseError>();
 
         try
@@ -49,10 +46,7 @@ public class TraciParserTest
         }
         finally
         {
-            for (final ParseError error : lexer.getLexerErrors())
-            {
-                lexerErrors.add(error);
-            }
+            assertFalse(lexer.getLexerErrors().iterator().hasNext());
             for (final ParseError error : parser.getParseErrors())
             {
                 parserErrors.add(error);
@@ -64,7 +58,6 @@ public class TraciParserTest
     public void testParser() throws RecognitionException
     {
         runParser("17+23;");
-        assertEquals(0, lexerErrors.size());
         assertEquals(0, parserErrors.size());
     }
 
@@ -72,7 +65,10 @@ public class TraciParserTest
     public void testMismatchedToken() throws RecognitionException
     {
         runParser("17+23");
-        assertEquals(0, lexerErrors.size());
+        assertEquals(1, parserErrors.size());
+        assertEquals(MismatchedTokenException.class, parserErrors.get(0).e.getClass());
+
+        runParser("17+23)");
         assertEquals(1, parserErrors.size());
         assertEquals(MismatchedTokenException.class, parserErrors.get(0).e.getClass());
     }
