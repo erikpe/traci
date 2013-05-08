@@ -9,8 +9,11 @@ import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.MissingTokenException;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.UnwantedTokenException;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,22 +57,53 @@ public class TraciParserTest
         }
     }
 
+    private void assertNoError()
+    {
+        assertEquals(0, parserErrors.size());
+    }
+
+    private void assertError(final Class<? extends RecognitionException> clazz)
+    {
+        assertEquals(1, parserErrors.size());
+        assertEquals(clazz, parserErrors.get(0).e.getClass());
+    }
+
     @Test
     public void testParser() throws RecognitionException
     {
         runParser("17+23;");
-        assertEquals(0, parserErrors.size());
+        assertNoError();
     }
 
     @Test
     public void testMismatchedToken() throws RecognitionException
     {
         runParser("17+23");
-        assertEquals(1, parserErrors.size());
-        assertEquals(MismatchedTokenException.class, parserErrors.get(0).e.getClass());
+        assertError(MismatchedTokenException.class);
 
         runParser("17+23)");
-        assertEquals(1, parserErrors.size());
-        assertEquals(MismatchedTokenException.class, parserErrors.get(0).e.getClass());
+        assertError(MismatchedTokenException.class);
+    }
+
+    @Test
+    public void testColor() throws RecognitionException
+    {
+        runParser("color [.5, 2.23, .17];");
+        assertNoError();
+        final Tree node = parseTree.getChild(0);
+        assertEquals(TraciParser.COLOR, node.getType());
+        assertEquals(3, node.getChildCount());
+
+        runParser("color [.5, 2.23, .17;");
+        assertError(MissingTokenException.class);
+
+        runParser("color [.5, 2.23 .17];");
+        assertError(MissingTokenException.class);
+
+        runParser("color color [.5, 2.23, .17];");
+        assertError(UnwantedTokenException.class);
+
+        runParser("color [.5, 2.23];");
+        assertError(MismatchedTokenException.class);
     }
 }
