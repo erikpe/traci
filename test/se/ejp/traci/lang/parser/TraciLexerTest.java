@@ -54,9 +54,9 @@ public class TraciLexerTest
     @Test
     public void testNoViableAltException()
     {
-        runLexer("17¤23;");
+        runLexer("17%23;");
         assertEquals(1, errors.size());
         assertEquals(NoViableAltException.class, errors.get(0).e.getClass());
-        assertEquals('¤', errors.get(0).e.c);
+        assertEquals('@', errors.get(0).e.c);
     }
 }
