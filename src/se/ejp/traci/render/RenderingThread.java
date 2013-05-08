@@ -3,6 +3,8 @@ package se.ejp.traci.render;
 import java.util.Queue;
 import java.util.Random;
 
+import se.ejp.traci.util.Log;
+
 public class RenderingThread extends Thread
 {
     static class WorkBlock
@@ -23,6 +25,12 @@ public class RenderingThread extends Thread
 
             assert randomSource != null;
             this.randomSource = randomSource;
+        }
+
+        @Override
+        public String toString()
+        {
+            return "(" + x + "," + y + ") [size " + width + "x" + height + "]";
         }
     }
 
@@ -47,12 +55,19 @@ public class RenderingThread extends Thread
     @Override
     public void run()
     {
-        WorkBlock block;
+        final String msgPrefix = getName() + ": ";
 
+        Log.DEBUG(msgPrefix + "starting");
+
+        WorkBlock block;
         while ((block = workQueue.poll()) != null)
         {
+            Log.DEBUG(msgPrefix + "starting work on block at " + block.toString());
             renderer.renderBlock(block);
+            Log.DEBUG(msgPrefix + "finished with block at " + block.toString());
         }
+
+        Log.DEBUG(msgPrefix + "exiting");
     }
 
     private static synchronized long nextIndex()

@@ -8,8 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.ejp.traci.math.Vector;
-
 public class VectorTest
 {
     private Vector v0 = null;
@@ -57,7 +55,8 @@ public class VectorTest
     }
 
     @Test
-    public void testSub(){
+    public void testSub()
+    {
         final Vector diff = v1.sub(v0);
         assertEquals(9, diff.x(), 0);
         assertEquals(18, diff.y(), 0);

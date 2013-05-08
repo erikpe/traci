@@ -6,8 +6,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.ejp.traci.math.Matrix;
-
 public class MatrixTest
 {
     @Before

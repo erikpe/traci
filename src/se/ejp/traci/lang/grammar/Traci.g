@@ -32,7 +32,7 @@ public void displayRecognitionError(String[] tokenNames,
     if (e.token instanceof TraciToken) {
         location = ((TraciToken) e.token).location;
     }
-    parseErrors.add(new ParseError(location, msg));
+    parseErrors.add(new ParseError(e, location, msg));
 }
 
 public Iterable<ParseError> getParseErrors()
@@ -89,7 +89,7 @@ public void displayRecognitionError(String[] tokenNames,
     else {
         location = new IncludeLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
     }
-    lexerErrors.add(new ParseError(location, msg));
+    lexerErrors.add(new ParseError(e, location, msg));
 }
 
 public Iterable<ParseError> getLexerErrors()
