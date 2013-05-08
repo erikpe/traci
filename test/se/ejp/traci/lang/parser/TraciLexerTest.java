@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.NoViableAltException;
 import org.antlr.runtime.Token;
@@ -16,47 +15,50 @@ import org.junit.Test;
 
 public class TraciLexerTest
 {
-    CharStream code = null;
     TraciLexer lexer = null;
-    CommonTokenStream tokenStream = null;
     List<? extends Token> tokens = null;
-    List<ParseError> errors = null;
+    List<ParseError> lexerErrors = null;
 
     @Before
-    public void setUp() throws Exception
+    public void setUp()
     {
     }
 
     @After
-    public void tearDown() throws Exception
+    public void tearDown()
     {
-        code = null;
         lexer = null;
-        tokenStream = null;
         tokens = null;
-        errors = null;
+        lexerErrors = null;
     }
 
-    private void runLexer(final String strCode)
+    private void runLexer(final String code)
     {
-        code = new ANTLRStringStream(strCode);
-        lexer = new TraciLexer(code);
-        tokenStream = new CommonTokenStream(lexer);
+        lexer = new TraciLexer(new ANTLRStringStream(code));
+        final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         tokenStream.fill();
         tokens = tokenStream.getTokens();
-        errors = new ArrayList<ParseError>();
+        lexerErrors = new ArrayList<ParseError>();
         for (final ParseError error : lexer.getLexerErrors())
         {
-            errors.add(error);
+            lexerErrors.add(error);
         }
+    }
+
+    @Test
+    public void testLexer()
+    {
+        runLexer("17+23;");
+        assertEquals(0, lexerErrors.size());
+        assertEquals(5, tokens.size());
     }
 
     @Test
     public void testNoViableAltException()
     {
         runLexer("17%23;");
-        assertEquals(1, errors.size());
-        assertEquals(NoViableAltException.class, errors.get(0).e.getClass());
-        assertEquals('@', errors.get(0).e.c);
+        assertEquals(1, lexerErrors.size());
+        assertEquals(NoViableAltException.class, lexerErrors.get(0).e.getClass());
+        assertEquals('%', lexerErrors.get(0).e.c);
     }
 }
