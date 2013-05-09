@@ -13,9 +13,9 @@ import se.ejp.traci.model.material.Color;
 
 public class BinaryOpNode implements TraciNode
 {
-    private final Op op;
-    private final TraciNode aNode;
-    private final TraciNode bNode;
+    public final Op op;
+    public final TraciNode aNode;
+    public final TraciNode bNode;
     private final TraciToken token;
 
     public BinaryOpNode(final Op op, final TraciNode aNode, final TraciNode bNode, final Token token)

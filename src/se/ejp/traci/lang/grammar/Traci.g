@@ -106,7 +106,7 @@ function
     ;
 
 function_def_args
-    : LPAR ( ID ( COMMA_OP ID )* )? RPAR -> ^(ARGS ID*)
+    : LPAR (ID (COMMA_OP ID)*)? RPAR -> ^(ARGS ID*)
     ;
 
 block
@@ -148,11 +148,11 @@ expr
     ;
 
 conditional_expr
-    : addition_expr ( ( LT_OP^ | GT_OP^ | LTE_OP^ | GTE_OP^ | EQ_OP^ | NEQ_OP^ ) addition_expr )?
+    : addition_expr ((LT_OP^ | GT_OP^ | LTE_OP^ | GTE_OP^ | EQ_OP^ | NEQ_OP^) addition_expr )?
     ;
 
 addition_expr
-    : multiplication_expr ( (PLUS_OP^ | MINUS_OP^ ) multiplication_expr )*
+    : multiplication_expr ((PLUS_OP^ | MINUS_OP^) multiplication_expr )*
     ;
 
 unary_expr
@@ -163,7 +163,7 @@ unary_expr
     ;
 
 multiplication_expr
-    : unary_expr ( ( MUL_OP^ | DIV_OP^ ) unary_expr )*
+    : unary_expr ((MUL_OP^ | DIV_OP^) unary_expr)*
     ;
 
 primary_expr
@@ -185,7 +185,7 @@ function_call
     ;
 
 function_call_args
-    : LPAR ( expr ( COMMA_OP expr )* )? RPAR -> ^(ARGS expr*)
+    : LPAR (expr (COMMA_OP expr)*)? RPAR -> ^(ARGS expr*)
     ;
 
 variable_reference
@@ -233,57 +233,58 @@ IN : 'in';
 DOTS : '..';
 
 PRIMITIVE_SHAPE
-    :	( 'box' | 'cylinder' | 'plane' | 'sphere' | 'torus' )
+    : ('box' | 'cylinder' | 'plane' | 'sphere' | 'torus')
     ;
 
 CSG_SHAPE
-    :	( 'union' | 'difference' | 'intersection' )
+    : ('union' | 'difference' | 'intersection' )
     ;
 
 TRANSFORMATION
-    :	( 'translate' | 'scale' | 'scalex' | 'scaley' | 'scalez' | 'rotate' | 'rotx' | 'roty' | 'rotz' )
+    : ('translate' | 'scale' | 'scalex' | 'scaley' | 'scalez' | 'rotate' | 'rotx' | 'roty' | 'rotz')
     ;
 
 TRANSFORMATION2
-    :   ( 'rotAround' | 'rotVecToVec' )
+    : ('rotAround' | 'rotVecToVec')
     ;
 
 COLOR
-    :	( 'color' )
+    : ('color')
     ;
 
 LIGHT
-    :	( 'pointlight' | 'ambientlight' )
+    : ('pointlight' | 'ambientlight')
     ;
 
-ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
+ID  : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*
     ;
 
-INT :	'0'..'9'+
+INT : ('0'..'9')+
     ;
 
 FLOAT
-    :   ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
-    |   '.' ('0'..'9')+ EXPONENT?
-    |   ('0'..'9')+ EXPONENT
+    : ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
+    | '.' ('0'..'9')+ EXPONENT?
+    | ('0'..'9')+ EXPONENT
     ;
 
 COMMENT
-    :   '//' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
-    |   '/*' ( options {greedy=false;} : . )* '*/' {$channel=HIDDEN;}
+    : '//' ~('\n'|'\r')* '\r'? '\n' { $channel=HIDDEN; }
+    | '/*' (options { greedy=false; } : .)* '*/' { $channel=HIDDEN; }
     ;
 
-WS  :   ( ' ' | '\t' | '\r' | '\n' ) {$channel=HIDDEN;}
+WS  : (' ' | '\t' | '\r' | '\n')+ { $channel=HIDDEN; }
     ;
 
 fragment
 EXPONENT
-    :	('e'|'E') ('+'|'-')? ('0'..'9')+ ;
+    : ('e' | 'E') ('+' | '-')? ('0'..'9')+
+    ;
 
 QSTRING
-    :	'"' ( ~( '"' | '\\' ) | '\\' . )* '"'
+    : '"' (~('"' | '\\') | '\\' .)* '"'
     ;
 
 PPLINE
-    : '#line' WS+ row=INT WS+ QSTRING WS+ action=INT {$channel=HIDDEN; ppLine($row.text, $QSTRING.text, $action.text);}
+    : '#line' WS+ row=INT WS QSTRING WS action=INT { $channel=HIDDEN; ppLine($row.text, $QSTRING.text, $action.text); }
     ;

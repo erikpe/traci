@@ -43,4 +43,9 @@ public class BlockNode implements TraciNode
         assert(statement != null);
         statements.add(statement);
     }
+
+    public List<TraciNode> getStatements()
+    {
+        return statements;
+    }
 }

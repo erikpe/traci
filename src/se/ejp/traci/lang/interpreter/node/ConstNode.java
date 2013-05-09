@@ -5,7 +5,7 @@ import se.ejp.traci.lang.interpreter.TraciValue;
 
 public class ConstNode implements TraciNode
 {
-    private final TraciValue value;
+    public final TraciValue value;
 
     public ConstNode(final TraciValue value)
     {
