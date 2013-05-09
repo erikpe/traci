@@ -56,6 +56,16 @@ public class TraciLexerBase
         runLexer(pp.getProcessedCode());
     }
 
+    protected void assertNoError()
+    {
+        assertEquals(0, lexerErrors.size());
+    }
+
+    protected void assertErrors(final int numErrors)
+    {
+        assertEquals(numErrors, lexerErrors.size());
+    }
+
     protected void assertToken(final int tokenNr, final Integer tokenType, final String tokenText, final Integer channel)
     {
         assertToken(tokenNr, tokenType, tokenText, channel, null, null);

@@ -15,7 +15,7 @@ public class TraciLexerTest extends TraciLexerBase
     public void testLexer()
     {
         runLexer("17+\n23;");
-        assertEquals(0, lexerErrors.size());
+        assertNoError();
         assertEquals(6, tokens.size());
         assertToken(0, TraciLexer.INT,          "17", Token.DEFAULT_CHANNEL, 1, 0);
         assertToken(1, TraciLexer.PLUS_OP,       "+", Token.DEFAULT_CHANNEL, 1, 2);
@@ -29,7 +29,7 @@ public class TraciLexerTest extends TraciLexerBase
     public void testNoViableAltException()
     {
         runLexer("17%23;");
-        assertEquals(1, lexerErrors.size());
+        assertErrors(1);
         assertEquals(NoViableAltException.class, lexerErrors.get(0).e.getClass());
         assertEquals('%', lexerErrors.get(0).e.c);
     }
@@ -38,27 +38,27 @@ public class TraciLexerTest extends TraciLexerBase
     public void testFloat()
     {
         runLexer(".23");
-        assertEquals(0, lexerErrors.size());
+        assertNoError();
         assertToken(0, TraciLexer.FLOAT, ".23", Token.DEFAULT_CHANNEL, 1, 0);
 
         runLexer("2.23.23");
-        assertEquals(0, lexerErrors.size());
+        assertNoError();
         assertToken(0, TraciLexer.FLOAT, "2.23", Token.DEFAULT_CHANNEL, 1, 0);
 
         runLexer("2.23e-10-5");
-        assertEquals(0, lexerErrors.size());
+        assertNoError();
         assertToken(0, TraciLexer.FLOAT, "2.23e-10", Token.DEFAULT_CHANNEL, 1, 0);
 
         runLexer(".23E+13.2");
-        assertEquals(0, lexerErrors.size());
+        assertNoError();
         assertToken(0, TraciLexer.FLOAT, ".23E+13", Token.DEFAULT_CHANNEL, 1, 0);
 
         runLexer("23E13");
-        assertEquals(0, lexerErrors.size());
+        assertNoError();
         assertToken(0, TraciLexer.FLOAT, "23E13", Token.DEFAULT_CHANNEL, 1, 0);
 
         runLexer("1.2e+");
-        assertEquals(1, lexerErrors.size());
+        assertErrors(1);
         assertEquals(EarlyExitException.class, lexerErrors.get(0).e.getClass());
     }
 
@@ -66,20 +66,23 @@ public class TraciLexerTest extends TraciLexerBase
     public void testLexerFile() throws IOException
     {
         runLexerFile("testcode/fibonacci.traci");
-        assertEquals(0, lexerErrors.size());
-        assertToken(0, TraciLexer.DEF, "def", Token.DEFAULT_CHANNEL, 1, 0);
-        assertToken(1, TraciLexer.WS,    " ", Token.HIDDEN_CHANNEL,  1, 3);
-        assertToken(2, TraciLexer.ID,  "fib", Token.DEFAULT_CHANNEL, 1, 4);
-        assertToken(3, TraciLexer.LPAR,  "(", Token.DEFAULT_CHANNEL, 1, 7);
-        assertToken(4, TraciLexer.ID,    "n", Token.DEFAULT_CHANNEL, 1, 8);
-        assertToken(5, TraciLexer.RPAR,  ")", Token.DEFAULT_CHANNEL, 1, 9);
+        assertNoError();
+        assertToken(0, TraciLexer.DEF,  "def", Token.DEFAULT_CHANNEL, 1, 0);
+        assertToken(1, TraciLexer.WS,     " ", Token.HIDDEN_CHANNEL,  1, 3);
+        assertToken(2, TraciLexer.ID,   "fib", Token.DEFAULT_CHANNEL, 1, 4);
+        assertToken(3, TraciLexer.LPAR,   "(", Token.DEFAULT_CHANNEL, 1, 7);
+        assertToken(4, TraciLexer.ID,     "n", Token.DEFAULT_CHANNEL, 1, 8);
+        assertToken(5, TraciLexer.RPAR,   ")", Token.DEFAULT_CHANNEL, 1, 9);
+        assertToken(6, TraciLexer.WS,    "\r", Token.HIDDEN_CHANNEL,  1, 10);
+        assertToken(7, TraciLexer.WS,    "\n", Token.HIDDEN_CHANNEL,  1, 11);
+        assertToken(8, TraciLexer.LCURLY, "{", Token.DEFAULT_CHANNEL, 2, 0);
     }
 
     @Test
     public void testLexerWithPreprocessor()
     {
         runLexerPreprocessedFile("testcode/fibonacci.traci");
-        assertEquals(0, lexerErrors.size());
+        assertNoError();
         assertToken(0, TraciLexer.PPLINE, null, Token.HIDDEN_CHANNEL, 1, 0);
         assertToken(1, TraciLexer.WS,     "\n", Token.HIDDEN_CHANNEL);
         assertToken(2, TraciLexer.DEF,   "def", Token.DEFAULT_CHANNEL, 1, 0);

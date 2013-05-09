@@ -164,4 +164,13 @@ public class TraciParserTest
         assertEquals(TraciParser.ID, node.getType());
         assertEquals("foo", node.getText());
     }
+
+    @Test
+    public void testFloat() throws RecognitionException
+    {
+        runParser(".23;");
+        assertNoError();
+        final Tree node = parseTree.getChild(0);
+        assertEquals(TraciParser.FLOAT, node.getType());
+    }
 }
