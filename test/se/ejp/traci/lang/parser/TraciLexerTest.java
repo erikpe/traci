@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
+import org.antlr.runtime.EarlyExitException;
 import org.antlr.runtime.NoViableAltException;
 import org.antlr.runtime.Token;
 import org.junit.Test;
@@ -31,6 +32,34 @@ public class TraciLexerTest extends TraciLexerBase
         assertEquals(1, lexerErrors.size());
         assertEquals(NoViableAltException.class, lexerErrors.get(0).e.getClass());
         assertEquals('%', lexerErrors.get(0).e.c);
+    }
+
+    @Test
+    public void testFloat()
+    {
+        runLexer(".23");
+        assertEquals(0, lexerErrors.size());
+        assertToken(0, TraciLexer.FLOAT, ".23", Token.DEFAULT_CHANNEL, 1, 0);
+
+        runLexer("2.23.23");
+        assertEquals(0, lexerErrors.size());
+        assertToken(0, TraciLexer.FLOAT, "2.23", Token.DEFAULT_CHANNEL, 1, 0);
+
+        runLexer("2.23e-10-5");
+        assertEquals(0, lexerErrors.size());
+        assertToken(0, TraciLexer.FLOAT, "2.23e-10", Token.DEFAULT_CHANNEL, 1, 0);
+
+        runLexer(".23E+13.2");
+        assertEquals(0, lexerErrors.size());
+        assertToken(0, TraciLexer.FLOAT, ".23E+13", Token.DEFAULT_CHANNEL, 1, 0);
+
+        runLexer("23E13");
+        assertEquals(0, lexerErrors.size());
+        assertToken(0, TraciLexer.FLOAT, "23E13", Token.DEFAULT_CHANNEL, 1, 0);
+
+        runLexer("1.2e+");
+        assertEquals(1, lexerErrors.size());
+        assertEquals(EarlyExitException.class, lexerErrors.get(0).e.getClass());
     }
 
     @Test
