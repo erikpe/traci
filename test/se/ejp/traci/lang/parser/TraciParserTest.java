@@ -137,7 +137,7 @@ public class TraciParserTest
         assertNoError();
         final Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.VECTOR, node.getType());
-        assertEquals(3, node.getChildCount());
+        assertEquals(4, node.getChildCount());
 
         runParser("[.5, 2.23, .17;");
         assertError(MissingTokenException.class);
