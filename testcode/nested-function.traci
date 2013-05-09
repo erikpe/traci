@@ -1,0 +1,21 @@
+def foo()
+{
+    return 42;
+}
+
+def bar()
+{
+    return foo();
+
+    def foo()
+    {
+        return 23;
+    }
+}
+
+return bar() + gazonk();
+
+def gazonk()
+{
+    return 2;
+}

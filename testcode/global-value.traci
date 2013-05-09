@@ -1,0 +1,10 @@
+def foo()
+{
+    global bar = bar + 2;
+}
+
+global bar = 42;
+
+foo();
+
+return bar;
