@@ -12,7 +12,6 @@ tokens {
     REF;
     UNARY_OP;
     BLOCK;
-    ASSIGN;
     GLOBAL_ASSIGN;
 }
 
@@ -107,33 +106,33 @@ function
     ;
 
 function_def_args
-    : '(' ( ID ( ',' ID )* )? ')' -> ^(ARGS ID*)
+    : LPAR ( ID ( COMMA_OP ID )* )? RPAR -> ^(ARGS ID*)
     ;
 
 block
-    : '{' (function | statement)* '}' -> ^(BLOCK function* statement*)
+    : LCURLY (function | statement)* RCURLY -> ^(BLOCK function* statement*)
     ;
 
 statement
-    : IF '(' expr ')' block (ELSE block)?    -> ^(IF expr block block?)
-    | WHILE '(' expr ')' block               -> ^(WHILE expr block)
-    | FOR '(' ID IN expr DOTS expr ')' block -> ^(FOR ID expr expr block)
+    : IF LPAR expr RPAR block (ELSE block)?    -> ^(IF expr block block?)
+    | WHILE LPAR expr RPAR block               -> ^(WHILE expr block)
+    | FOR LPAR ID IN expr DOTS expr RPAR block -> ^(FOR ID expr expr block)
     | assignable_statement
-    | RETURN assignable_statement            -> ^(RETURN assignable_statement)
-    | GLOBAL ID '=' assignable_statement     -> ^(GLOBAL_ASSIGN ID assignable_statement)
-    | ID '=' assignable_statement            -> ^(ASSIGN ID assignable_statement)
+    | RETURN assignable_statement              -> ^(RETURN assignable_statement)
+    | GLOBAL ID ASSIGN assignable_statement    -> ^(GLOBAL_ASSIGN ID assignable_statement)
+    | ID ASSIGN assignable_statement           -> ^(ASSIGN ID assignable_statement)
     ;
 
 assignable_statement
-    : (ID '{')=>id_statement
-    | (ID function_call_args '{')=>function_call_statement
-    | PRIMITIVE_SHAPE function_call_args? (block | ';') -> ^(PRIMITIVE_SHAPE function_call_args? block?)
-    | CSG_SHAPE function_call_args? (block | ';')       -> ^(CSG_SHAPE function_call_args? block?)
-    | BBOX function_call_args? (block | ';')            -> ^(BBOX function_call_args? block?)
-    | TRANSFORMATION expr ';'                           -> ^(TRANSFORMATION expr)
-    | TRANSFORMATION2 function_call_args ';'            -> ^(TRANSFORMATION2 function_call_args)
-    | LIGHT function_call_args? (block | ';')           -> ^(LIGHT function_call_args? block?)
-    | expr ';'!
+    : (ID LCURLY)=>id_statement
+    | (ID function_call_args LCURLY)=>function_call_statement
+    | PRIMITIVE_SHAPE function_call_args? (block | SEMICOLON) -> ^(PRIMITIVE_SHAPE function_call_args? block?)
+    | CSG_SHAPE function_call_args? (block | SEMICOLON)       -> ^(CSG_SHAPE function_call_args? block?)
+    | BBOX function_call_args? (block | SEMICOLON)            -> ^(BBOX function_call_args? block?)
+    | TRANSFORMATION expr SEMICOLON                           -> ^(TRANSFORMATION expr)
+    | TRANSFORMATION2 function_call_args SEMICOLON            -> ^(TRANSFORMATION2 function_call_args)
+    | LIGHT function_call_args? (block | SEMICOLON)           -> ^(LIGHT function_call_args? block?)
+    | expr SEMICOLON!
     ;
 
 id_statement
@@ -149,22 +148,22 @@ expr
     ;
 
 conditional_expr
-    : addition_expr ( ( '<'^ | '>'^ | '<='^ | '>='^ | '=='^ | '!='^ ) addition_expr )?
+    : addition_expr ( ( LT_OP^ | GT_OP^ | LTE_OP^ | GTE_OP^ | EQ_OP^ | NEQ_OP^ ) addition_expr )?
     ;
 
 addition_expr
-    : multiplication_expr ( ('+'^ | '-'^ ) multiplication_expr )*
+    : multiplication_expr ( (PLUS_OP^ | MINUS_OP^ ) multiplication_expr )*
     ;
 
 unary_expr
     : primary_expr
-    | '-' unary_expr -> ^(UNARY_OP '-' unary_expr)
-    | '+' unary_expr -> ^(UNARY_OP '+' unary_expr)
-    | '!' unary_expr -> ^(UNARY_OP '!' unary_expr)
+    | MINUS_OP unary_expr -> ^(UNARY_OP MINUS_OP unary_expr)
+    | PLUS_OP unary_expr -> ^(UNARY_OP PLUS_OP unary_expr)
+    | NOT_OP unary_expr -> ^(UNARY_OP NOT_OP unary_expr)
     ;
 
 multiplication_expr
-    : unary_expr ( ( '*'^ | '/'^ ) unary_expr )*
+    : unary_expr ( ( MUL_OP^ | DIV_OP^ ) unary_expr )*
     ;
 
 primary_expr
@@ -173,7 +172,7 @@ primary_expr
     | variable_reference
     | vector
     | color
-    | '('! expr ')'!
+    | LPAR! expr RPAR!
     ;
 
 constant
@@ -186,7 +185,7 @@ function_call
     ;
 
 function_call_args
-    : '(' ( expr ( ',' expr )* )? ')' -> ^(ARGS expr*)
+    : LPAR ( expr ( COMMA_OP expr )* )? RPAR -> ^(ARGS expr*)
     ;
 
 variable_reference
@@ -194,12 +193,33 @@ variable_reference
     ;
 
 vector 
-    : VECTOR expr ',' expr ',' expr ']' -> ^(VECTOR expr*)
+    : LBRACKET expr COMMA_OP expr COMMA_OP expr RBRACKET -> ^(VECTOR LBRACKET expr*)
     ;
 
 color
-    : COLOR '[' expr ',' expr ',' expr ']' -> ^(COLOR expr*)
+    : COLOR LBRACKET expr COMMA_OP expr COMMA_OP expr RBRACKET -> ^(COLOR expr*)
     ;
+
+LTE_OP : '<=';
+GTE_OP : '>=';
+EQ_OP : '==';
+NEQ_OP : '!=';
+LT_OP : '<';
+GT_OP : '>';
+PLUS_OP : '+';
+MINUS_OP : '-';
+MUL_OP : '*';
+DIV_OP : '/';
+NOT_OP : '!';
+COMMA_OP : ',';
+ASSIGN : '=';
+SEMICOLON : ';';
+LBRACKET : '[';
+RBRACKET : ']';
+LPAR : '(';
+RPAR : ')';
+LCURLY : '{';
+RCURLY : '}';
 
 DEF : 'def';
 RETURN : 'return';
@@ -211,7 +231,6 @@ BBOX : 'bbox';
 FOR : 'for';
 IN : 'in';
 DOTS : '..';
-VECTOR : '[';
 
 PRIMITIVE_SHAPE
     :	( 'box' | 'cylinder' | 'plane' | 'sphere' | 'torus' )
