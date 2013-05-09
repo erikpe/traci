@@ -69,14 +69,14 @@ function_def_args returns [List<String> argIDs]
 @init {
 argIDs = new ArrayList<String>();
 }
-    : ^(ARGS ( ID { $argIDs.add($ID.text); } )*)
+    : ^(ARGS (ID { $argIDs.add($ID.text); } )*)
     ;
 
 function_call_args returns [List<TraciNode> nodes]
 @init {
 nodes = new ArrayList<TraciNode>();
 }
-    : ^(ARGS ( expr { $nodes.add($expr.node); } )*)
+    : ^(ARGS (expr { $nodes.add($expr.node); })*)
     ;
 
 statement returns [TraciNode node]
