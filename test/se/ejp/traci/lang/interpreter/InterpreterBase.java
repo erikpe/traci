@@ -81,6 +81,4 @@ public class InterpreterBase
         assertEquals(Result.SUCCESS, result);
         runInterpreter(pp.getProcessedCode());
     }
-
-
 }

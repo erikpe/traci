@@ -7,8 +7,8 @@ import org.antlr.runtime.Token;
 
 import se.ejp.traci.lang.interpreter.Context;
 import se.ejp.traci.lang.interpreter.Entities;
-import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.Entities.Entity;
+import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterUndefinedIdentifier;
@@ -20,7 +20,7 @@ public class FunctionCallNode implements TraciNode
     private final String id;
     private final List<TraciNode> argNodes;
     private final BlockNode blockNode;
-    public final TraciToken token;
+    private final TraciToken token;
 
     public FunctionCallNode(final String id, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {

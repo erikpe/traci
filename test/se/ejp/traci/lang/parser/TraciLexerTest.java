@@ -1,6 +1,7 @@
 package se.ejp.traci.lang.parser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -92,5 +93,42 @@ public class TraciLexerTest extends TraciLexerBase
         assertToken(7, TraciLexer.RPAR,   ")",   Token.DEFAULT_CHANNEL, 1, 9);
         assertToken(8, TraciLexer.WS,     null,  Token.HIDDEN_CHANNEL,  1, 10);
         assertToken(9, TraciLexer.LCURLY, "{",   Token.DEFAULT_CHANNEL, 2, 0);
+    }
+
+    @Test
+    public void testInclude()
+    {
+        runLexerPreprocessedFile("testcode/a.traci");
+        assertNoError();
+        assertToken( 0, TraciLexer.PPLINE,    null, Token.HIDDEN_CHANNEL, 1, 0);
+        assertToken( 1, TraciLexer.WS,        null, Token.HIDDEN_CHANNEL);
+        assertToken( 2, TraciLexer.INT,       "17", Token.DEFAULT_CHANNEL, 1, 0);
+        assertToken( 3, TraciLexer.WS,        null, Token.HIDDEN_CHANNEL,  1, 2);
+        assertToken( 4, TraciLexer.PPLINE,    null, Token.HIDDEN_CHANNEL,  2, 0);
+        assertToken( 5, TraciLexer.WS,        null, Token.HIDDEN_CHANNEL);
+        assertToken( 6, TraciLexer.PLUS_OP,   "+",  Token.DEFAULT_CHANNEL, 1, 0);
+        assertToken( 7, TraciLexer.WS,        null, Token.HIDDEN_CHANNEL,  1, 1);
+        assertToken( 8, TraciLexer.INT,       "23", Token.DEFAULT_CHANNEL, 2, 1);
+        assertToken( 9, TraciLexer.WS,        null, Token.HIDDEN_CHANNEL,  2, 3);
+        assertToken(10, TraciLexer.PPLINE,    null, Token.HIDDEN_CHANNEL,  3, 0);
+        assertToken(11, TraciLexer.WS,        null, Token.HIDDEN_CHANNEL);
+        assertToken(12, TraciLexer.SEMICOLON, ";",  Token.DEFAULT_CHANNEL, 3, 0);
+        assertToken(13, TraciLexer.WS,        null, Token.HIDDEN_CHANNEL,  3, 1);
+        assertToken(14, TraciLexer.EOF,       null, Token.DEFAULT_CHANNEL, 4, 0);
+
+        TraciToken tok = (TraciToken) tokens.get(2);
+        assertTrue(tok.location.fileLocation.filename.endsWith("a.traci"));
+        assertTrue(tok.location.includePath.isEmpty());
+
+        tok = (TraciToken) tokens.get(8);
+        assertTrue(tok.location.fileLocation.filename.endsWith("b.traci"));
+        assertEquals(1, tok.location.includePath.size());
+        assertEquals(2, tok.location.includePath.get(0).row);
+        assertEquals(0, tok.location.includePath.get(0).col);
+        assertTrue(tok.location.includePath.get(0).filename.endsWith("a.traci"));
+
+        tok = (TraciToken) tokens.get(12);
+        assertTrue(tok.location.fileLocation.filename.endsWith("a.traci"));
+        assertTrue(tok.location.includePath.isEmpty());
     }
 }
