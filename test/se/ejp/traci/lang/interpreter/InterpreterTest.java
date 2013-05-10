@@ -39,6 +39,30 @@ public class InterpreterTest extends InterpreterBase
     }
 
     @Test
+    public void testWhileLoop() throws RecognitionException, IOException, InterpreterRuntimeException
+    {
+        runInterpreterFile("testcode/while-loop.traci");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(55, value.getNumber(), 0);
+    }
+
+    @Test
+    public void testForLoop() throws RecognitionException, IOException, InterpreterRuntimeException
+    {
+        runInterpreterFile("testcode/for-loop.traci");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(45, value.getNumber(), 0);
+    }
+
+    @Test
+    public void testIfStatement() throws RecognitionException, IOException, InterpreterRuntimeException
+    {
+        runInterpreterFile("testcode/if-statement.traci");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(14, value.getNumber(), 0);
+    }
+
+    @Test
     public void testAdd() throws RecognitionException, InterpreterRuntimeException
     {
         runInterpreter("return 17+23;");
@@ -47,7 +71,7 @@ public class InterpreterTest extends InterpreterBase
 
         try
         {
-            runInterpreter("return 17+(1<2);");
+            runInterpreter("17+(1<2);");
             fail("Missing exception");
         }
         catch (final InterpreterIllegalOperatorArgument e)

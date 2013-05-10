@@ -1,0 +1,25 @@
+foo = 0;
+
+if (1 < 2) {
+    foo = 23;
+}
+
+if (1 < 2) {
+    foo = foo + 1;
+}
+else {
+    foo = foo - 1;
+}
+
+if (1 > 2) {
+    foo = foo + 10;
+}
+else {
+    foo = foo - 10;
+}
+
+if (1 > 2) {
+    foo = foo + 100;
+}
+
+return foo;
