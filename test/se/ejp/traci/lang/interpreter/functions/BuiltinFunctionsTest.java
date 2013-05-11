@@ -37,6 +37,20 @@ public class BuiltinFunctionsTest extends InterpreterBase
 
         try
         {
+            runInterpreter("return sin();");
+            fail("Missed exception");
+        }
+        catch (final InterpreterIllegalNumberOfArguments e)
+        {
+            assertEquals("sin", e.function);
+            assertEquals(1, e.expectedNumArgs);
+            assertEquals(0, e.gotNumArgs);
+            assertEquals(1, e.includeLocation.fileLocation.row);
+            assertEquals(7, e.includeLocation.fileLocation.col);
+        }
+
+        try
+        {
             runInterpreter("return sin(1, 2);");
             fail("Missed exception");
         }
@@ -86,6 +100,20 @@ public class BuiltinFunctionsTest extends InterpreterBase
 
         try
         {
+            runInterpreter("return cos();");
+            fail("Missed exception");
+        }
+        catch (final InterpreterIllegalNumberOfArguments e)
+        {
+            assertEquals("cos", e.function);
+            assertEquals(1, e.expectedNumArgs);
+            assertEquals(0, e.gotNumArgs);
+            assertEquals(1, e.includeLocation.fileLocation.row);
+            assertEquals(7, e.includeLocation.fileLocation.col);
+        }
+
+        try
+        {
             runInterpreter("return cos(1, 2);");
             fail("Missed exception");
         }
@@ -109,6 +137,64 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals(Collections.singleton(Type.NUMBER), e.expectedArgType);
             assertEquals(Type.VECTOR, e.gotArgType);
             assertEquals(1, e.argIndex);
+            assertEquals(1, e.includeLocation.fileLocation.row);
+            assertEquals(7, e.includeLocation.fileLocation.col);
+        }
+    }
+
+    @Test
+    public void testLength() throws RecognitionException, InterpreterRuntimeException
+    {
+        runInterpreter("return length([1, 2, 3]);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(3.7416573867739, value.getNumber(), 1e-10);
+
+        runInterpreter("return length([1, -2, 3]);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(3.7416573867739, value.getNumber(), 1e-10);
+
+        runInterpreter("return length([0, 0, 0]);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 1e-10);
+
+        try
+        {
+            runInterpreter("return length();");
+            fail("Missed exception");
+        }
+        catch (final InterpreterIllegalNumberOfArguments e)
+        {
+            assertEquals("length", e.function);
+            assertEquals(1, e.expectedNumArgs);
+            assertEquals(0, e.gotNumArgs);
+            assertEquals(1, e.includeLocation.fileLocation.row);
+            assertEquals(7, e.includeLocation.fileLocation.col);
+        }
+
+        try
+        {
+            runInterpreter("return length([1, 2, 3], [4, 5, 6]);");
+            fail("Missed exception");
+        }
+        catch (final InterpreterIllegalNumberOfArguments e)
+        {
+            assertEquals("length", e.function);
+            assertEquals(1, e.expectedNumArgs);
+            assertEquals(2, e.gotNumArgs);
+            assertEquals(1, e.includeLocation.fileLocation.row);
+            assertEquals(7, e.includeLocation.fileLocation.col);
+        }
+
+        try
+        {
+            runInterpreter("return length(23);");
+            fail("Missed exception");
+        }
+        catch (final InterpreterIllegalArgumentType e)
+        {
+            assertEquals("length", e.function);
+            assertEquals(Collections.singleton(Type.VECTOR), e.expectedArgType);
+            assertEquals(Type.NUMBER, e.gotArgType);
             assertEquals(1, e.includeLocation.fileLocation.row);
             assertEquals(7, e.includeLocation.fileLocation.col);
         }
