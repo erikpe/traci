@@ -77,7 +77,7 @@ public class Interpreter
 
         final Plane plane = new Plane();
         plane.setPigment(new NonUniform(Transformations.identity(), new Checker(Color.WHITE, Color.BLACK)));
-        //rootUnion.add(plane);
+        rootUnion.add(plane);
 
         Shape optimizedRoot = rootUnion.optimize();
         if (optimizedRoot == null)

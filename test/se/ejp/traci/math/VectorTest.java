@@ -1,6 +1,7 @@
 package se.ejp.traci.math;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Random;
 
@@ -35,10 +36,12 @@ public class VectorTest
     {
         for (int i = 0; i < 10; ++i)
         {
-            final long x = rand.nextLong();
-            final long y = rand.nextLong();
-            final long z = rand.nextLong();
+            final double x = rand.nextDouble();
+            final double y = rand.nextDouble();
+            final double z = rand.nextDouble();
             final Vector vec = Vector.make(x, y, z);
+            assertEquals(Vector.make(x, y, z), vec);
+            assertNotEquals(Vector.make(x, y + 1, z), vec);
             assertEquals(x,  vec.x(), 0);
             assertEquals(y,  vec.y(), 0);
             assertEquals(z,  vec.z(), 0);

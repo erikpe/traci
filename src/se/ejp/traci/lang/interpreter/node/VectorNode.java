@@ -40,8 +40,8 @@ public class VectorNode implements TraciNode
 
             if (value.getType() != Type.NUMBER)
             {
-                throw new InterpreterIllegalArgumentType(token.location, context.callStack,
-                        "vector", Type.NUMBER, value.getType(), i + 1);
+                throw new InterpreterIllegalArgumentType(token.location, context.callStack, "vector", Type.NUMBER,
+                        value.getType(), i + 1);
             }
 
             values.add(value.getNumber());

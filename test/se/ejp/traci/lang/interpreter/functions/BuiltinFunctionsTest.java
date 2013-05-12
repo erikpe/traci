@@ -38,7 +38,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return sin();");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalNumberOfArguments e)
         {
@@ -52,7 +52,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return sin(1, 2);");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalNumberOfArguments e)
         {
@@ -66,7 +66,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return sin([1, 2, 3]);");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalArgumentType e)
         {
@@ -101,7 +101,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return cos();");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalNumberOfArguments e)
         {
@@ -115,7 +115,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return cos(1, 2);");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalNumberOfArguments e)
         {
@@ -129,7 +129,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return cos([1, 2, 3]);");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalArgumentType e)
         {
@@ -160,7 +160,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return length();");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalNumberOfArguments e)
         {
@@ -174,7 +174,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return length([1, 2, 3], [4, 5, 6]);");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalNumberOfArguments e)
         {
@@ -188,7 +188,7 @@ public class BuiltinFunctionsTest extends InterpreterBase
         try
         {
             runInterpreter("return length(23);");
-            fail("Missed exception");
+            fail("Missing exception");
         }
         catch (final InterpreterIllegalArgumentType e)
         {
@@ -198,5 +198,11 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals(1, e.includeLocation.fileLocation.row);
             assertEquals(7, e.includeLocation.fileLocation.col);
         }
+    }
+
+    @Test
+    public void testSqrt() throws RecognitionException, InterpreterRuntimeException
+    {
+        runInterpreter("return sqrt(2);");
     }
 }

@@ -91,4 +91,27 @@ public class Vector
     {
         return "[" + x + "," + y + "," + z + "]";
     }
+
+    @Override
+    public boolean equals(final Object other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        else if (other == this)
+        {
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
+        }
+
+        final Vector otherVector = (Vector) other;
+
+        return Double.valueOf(x).equals(Double.valueOf(otherVector.x)) &&
+               Double.valueOf(y).equals(Double.valueOf(otherVector.y)) &&
+               Double.valueOf(z).equals(Double.valueOf(otherVector.z));
+    }
 }

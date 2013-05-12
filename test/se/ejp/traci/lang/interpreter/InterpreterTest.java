@@ -63,6 +63,26 @@ public class InterpreterTest extends InterpreterBase
     }
 
     @Test
+    public void testFloat() throws RecognitionException, InterpreterRuntimeException
+    {
+        runInterpreter("return .23;");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0.23, value.getNumber(), 0);
+
+        runInterpreter("return 2.23;");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(2.23, value.getNumber(), 0);
+
+        runInterpreter("return -3.23E+5;");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(-3.23E+5, value.getNumber(), 0);
+
+        runInterpreter("return .23e-3;");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(.23e-3, value.getNumber(), 0);
+    }
+
+    @Test
     public void testAdd() throws RecognitionException, InterpreterRuntimeException
     {
         runInterpreter("return 17+23;");
