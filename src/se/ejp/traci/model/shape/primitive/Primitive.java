@@ -99,6 +99,11 @@ public abstract class Primitive extends Shape
         return material;
     }
 
+    public Transformation getTransformation()
+    {
+        return transformation;
+    }
+
     @Override
     public Object clone()
     {

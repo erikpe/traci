@@ -11,8 +11,8 @@ import org.antlr.runtime.Token;
 
 import se.ejp.traci.lang.interpreter.Context;
 import se.ejp.traci.lang.interpreter.Entities;
-import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.Entities.Entity;
+import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalArguments;
@@ -68,11 +68,10 @@ public class ShapeNode implements TraciNode
     private final BlockNode blockNode;
     private final TraciToken token;
 
-    public ShapeNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode,
-            final Token token)
+    public ShapeNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
         this.shapeType = typeMap.get(typeStr);
-        this.argNodes = (argNodes == null ? Collections.<TraciNode> emptyList() : argNodes);
+        this.argNodes = (argNodes == null ? Collections.<TraciNode>emptyList() : argNodes);
         this.blockNode = blockNode;
         this.token = (TraciToken) token;
 

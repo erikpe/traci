@@ -9,6 +9,9 @@ import se.ejp.traci.lang.parser.IncludeLocation;
 @SuppressWarnings("serial")
 public class InterpreterIllegalArguments extends InterpreterRuntimeException
 {
+    public final String function;
+    public final List<Type> gotArgTypes;
+
     private static String makeMsg(final String function, final List<Type> gotArgTypes)
     {
         final StringBuilder sb = new StringBuilder();
@@ -33,5 +36,8 @@ public class InterpreterIllegalArguments extends InterpreterRuntimeException
             final List<Type> gotArgTypes)
     {
         super(location, callStack, makeMsg(function, gotArgTypes));
+
+        this.function = function;
+        this.gotArgTypes = gotArgTypes;
     }
 }
