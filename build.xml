@@ -147,7 +147,7 @@
 
   <target name="run-tests" depends="compile, compile-tests">
     <mkdir dir="${test.output.dir}" />
-    <junit failureProperty="test.failure" printsummary="yes" showoutput="yes">
+    <junit failureProperty="test.failure" printsummary="yes" showoutput="no">
       <classpath>
         <pathelement location="${build.dir}" />
         <pathelement location="${test.build.dir}" />
@@ -166,7 +166,7 @@
 
   <target name="test-report" depends="run-tests">
     <mkdir dir="${test.report.dir}" />
-    <junitreport todir="${test.report.dir}">
+    <junitreport todir="${test.output.dir}">
       <fileset dir="${test.output.dir}">
         <include name="TEST-*.xml" />
       </fileset>
