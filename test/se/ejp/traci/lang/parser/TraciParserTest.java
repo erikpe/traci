@@ -31,7 +31,6 @@ public class TraciParserTest extends TraciParserBase
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testColor() throws RecognitionException
     {
         runParser("color [.5, 2.23, .17];");
@@ -53,11 +52,11 @@ public class TraciParserTest extends TraciParserBase
         assertError(MismatchedTokenException.class);
 
         runParser("color [.5, 2.23, .17, 5];");
-        assertAllErrors(MismatchedTokenException.class, UnwantedTokenException.class);
+        assertError(MismatchedTokenException.class);
+        assertError(UnwantedTokenException.class);
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testVector() throws RecognitionException
     {
         runParser("[.5, 2.23, .17];");
@@ -76,7 +75,8 @@ public class TraciParserTest extends TraciParserBase
         assertError(MismatchedTokenException.class);
 
         runParser("[.5, 2.23, .17, 5];");
-        assertAllErrors(MismatchedTokenException.class, UnwantedTokenException.class);
+        assertError(MismatchedTokenException.class);
+        assertError(UnwantedTokenException.class);
     }
 
     @Test
@@ -114,4 +114,9 @@ public class TraciParserTest extends TraciParserBase
         runParserPreprocessedFile("testcode/fibonacci.traci");
         assertNoError();
     }
+
+     @Test
+     public void testTransformation() throws RecognitionException
+     {
+     }
 }

@@ -2,19 +2,18 @@ package se.ejp.traci.lang.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 
 import se.ejp.traci.lang.preprocessor.PreprocessorRunner;
@@ -74,22 +73,49 @@ public class TraciParserBase
 
     protected void assertError(final Class<? extends RecognitionException> clazz)
     {
-        assertEquals(1, parserErrors.size());
-        assertEquals(clazz, parserErrors.get(0).e.getClass());
+        assertError(clazz, null, null);
     }
 
-    protected void assertAllErrors(final Class<? extends RecognitionException> ... errorClasses)
+    protected void assertError(final Class<? extends RecognitionException> clazz, final Integer row, final Integer col)
     {
-        final Set<Class<? extends RecognitionException>> expectedErrors =
-                new HashSet<Class<? extends RecognitionException>>(Arrays.asList(errorClasses));
-        final Set<Class<? extends RecognitionException>> encounteredErrors =
-                new HashSet<Class<? extends RecognitionException>>();
+        boolean foundError = false;
 
         for (final ParseError error : parserErrors)
         {
-            encounteredErrors.add(error.e.getClass());
+            if (!clazz.equals(error.e.getClass()))
+            {
+                continue;
+            }
+
+            final Token token = error.e.token;
+
+            if (row != null)
+            {
+                if (token instanceof TraciToken)
+                {
+                    assertEquals(token.getLine(), ((TraciToken) token).location.fileLocation.row);
+                }
+                if (row.intValue() != token.getLine())
+                {
+                    continue;
+                }
+            }
+
+            if (col != null)
+            {
+                if (token instanceof TraciToken)
+                {
+                    assertEquals(token.getCharPositionInLine(), ((TraciToken) token).location.fileLocation.col);
+                }
+                if (col.intValue() != token.getCharPositionInLine())
+                {
+                    continue;
+                }
+            }
+
+            foundError = true;
         }
 
-        assertEquals(expectedErrors, encounteredErrors);
+        assertTrue(foundError);
     }
 }
