@@ -56,17 +56,15 @@ public class TransformationNode implements TraciNode
 
     private final TransformationType transformationType;
     private final List<TraciNode> argNodes;
+    private final BlockNode blockNode;
     private final TraciToken token;
 
-    public TransformationNode(final String typeStr, final TraciNode argNode, final Token token)
-    {
-        this(typeStr, Collections.<TraciNode>singletonList(argNode), token);
-    }
-
-    public TransformationNode(final String typeStr, final List<TraciNode> argNodes, final Token token)
+    public TransformationNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode,
+            final Token token)
     {
         this.transformationType = typeMap.get(typeStr);
-        this.argNodes = argNodes;
+        this.argNodes = (argNodes == null ? Collections.<TraciNode>emptyList() : argNodes);
+        this.blockNode = blockNode;
         this.token = (TraciToken) token;
 
         if (transformationType == null)

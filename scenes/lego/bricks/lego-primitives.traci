@@ -16,7 +16,7 @@ def legopartPeg ()
 #else
     return roundedCylinder2_base (radius, height, lowerRounding, upperRounding) {
         translate [LU/2, 0, LU/2];
-    }
+    };
 #endif // FAST_LEGO
 }
 
@@ -32,9 +32,9 @@ def legopartPegHole ()
         roundedCylinder2_base (innerRadius, height - EPSILON, upperRounding, lowerRounding) {
             rotx PI;
             translate Y*height;
-        }
+        };
         translate [LU/2, 0, LU/2];
-    }
+    };
 }
 
 def fastLegopartTechnicBrickHole ()
@@ -56,21 +56,21 @@ def legopartTechnicBrickHole ()
     return union {
         roundedCylinder3_base (radius, length-2*cd, rounding) {
             translate Y*cd;
-        }
+        };
         roundedCylinder2_base (radius+cw, cd, rounding, rounding);
         roundedCylinder2_base (radius+cw, cd, rounding, rounding) {
             rotx PI;
             translate Y*length;
-        }
+        };
         bbox {
             scale [2, 1, 2];
             translate [-1, 0, -1];
             scale [radius+cw+rounding, length+EPSILON+EPSILON, radius+cw+rounding];
             translate -Y*EPSILON;
-        }
+        };
         rotx PI/2;
         translate [LU, height, 0];
-    }
+    };
 }
 
 def legopartTechnicPlateHole ()
@@ -79,7 +79,7 @@ def legopartTechnicPlateHole ()
     height = LU * .4;
     return roundedCylinder3_base (radius, height, LEGO_ROUNDING) {
         translate [LU, 0, LU];
-    }
+    };
 }
 
 #endif // LEGO_PRIMITIVES_TRACI_

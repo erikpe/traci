@@ -18,22 +18,22 @@ def legoTechnicBrickWithHoles_fast (length)
             box {
                 scale [boxLength-2*shrink, boxHeight-2*shrink, boxWidth-2*shrink];
                 translate [1, 1, 1] * shrink;
-            }
+            };
             for (i in 0 .. length-2) {
                 fastLegopartTechnicBrickHole() {
                     translate X*i*LU;
-                }
+                };
             }
-        }
+        };
         for (i in 0 .. length-1) {
             legopartPeg () {
                 translate [LU*i, boxHeight, 0];
-            }
+            };
         }
         bbox {
             scale [boxLength, boxHeight+pegHeight, boxWidth];
-        }
-    }
+        };
+    };
 }
 
 def legoTechnicBrickWithHoles_accurate (length)
@@ -49,35 +49,35 @@ def legoTechnicBrickWithHoles_accurate (length)
             difference {
                 roundedBox2 (boxLength-2*thickness, boxHeight-thickness, boxWidth-2*thickness, LEGO_ROUNDING) {
                     translate [thickness, 0, thickness];
-                }
+                };
                 for (i in 0 .. length-2) {
                     cylinder (LU*.3+thickness*.5, [LU, LU*.7, thickness-EPSILON], [LU, LU*.7, boxWidth-thickness+EPSILON]) {
                         translate X*LU*i;
-                    }
+                    };
                 }
-            }
+            };
             for (i in 0 .. length-2) {
                 legopartTechnicBrickHole () {
                     translate X*i*LU;
-                }
+                };
             }
-        }
+        };
         for (i in 0 .. length-2) {
             roundedCylinder0_base (LU*.15, LU*.35, LEGO_ROUNDING) {
                 scale [1, -1, 1];
                 translate [LU, LU*.35, LU*.5];
                 translate X*LU*i;
-            }
+            };
         }
         for (i in 0 .. length-1) {
             legopartPegHole () {
                 translate [LU*i, boxHeight, 0];
-            }
+            };
         }
         bbox {
             scale [boxLength, boxHeight+pegHeight, boxWidth];
-        }
-    }
+        };
+    };
 }
 
 /*

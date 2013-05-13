@@ -15,20 +15,20 @@ def legoTechnicBush12ToothedTypeI_accurate (radius, height)
     axleRadius = AXLE_RADIUS + EPSILON;
     return difference {
         roundedCylinder1_base (radius, height, LEGO_ROUNDING);
-        torus (.07*2, .27*2) { rotx PI/2; translate Y*.26; }
+        torus (.07*2, .27*2) { rotx PI/2; translate Y*.26; };
         roundedCylinder2_base (innerRadius, toothHeight, LEGO_ROUNDING, LEGO_ROUNDING) {
             rotx PI;
             translate Y*height;
-        }
+        };
         legoTechnicAxle_base2 (height-toothHeight, axleRadius, axleThickness, LEGO_ROUNDING);
         for (i in 0 .. 15) {
             box {
                 scale [radius-innerRadius+LEGO_ROUNDING+EPSILON, toothHeight+EPSILON, toothSpacing];
                 translate [innerRadius-LEGO_ROUNDING, height-toothHeight, -toothSpacing/2];
                 roty i*(22.5/360)*PI*2;
-            }
+            };
         }
-    }
+    };
 }
 
 def legoTechnicBush12ToothedTypeI_fast (radius, height)
@@ -37,9 +37,9 @@ def legoTechnicBush12ToothedTypeI_fast (radius, height)
     toothHeight = .07;
     return difference {
         cylinder (radius, ORIGO, Y*height);
-        torus (.07*2, .27*2) { rotx PI/2; translate Y*.26; }
+        torus (.07*2, .27*2) { rotx PI/2; translate Y*.26; };
         cylinder (innerRadius, Y*(height-toothHeight), Y*(height+EPSILON));
-    }
+    };
 }
 
 /*
@@ -58,10 +58,10 @@ def legoTechnicBush12ToothedTypeI ()
 #endif // FAST_LEGO
 
     return bush {
-        bbox { scale [radius*2, height, radius*2]; translate [-radius, 0, -radius]; }
+        bbox { scale [radius*2, height, radius*2]; translate [-radius, 0, -radius]; };
         rotx PI/2;
         translate [1, .7, 0];
-    }
+    };
 }
 
 /*
@@ -84,21 +84,21 @@ def legoTechnicBush_accurate (outerRadius, height)
             roundedCylinder1_base (outerRadius, lowerHeight, LEGO_ROUNDING);
             roundedCylinder3_base (innerRadius, height-lowerHeight-upperHeight, LEGO_ROUNDING) {
                 translate [0, lowerHeight, 0];
-            }
+            };
             roundedCylinder1_base (outerRadius, upperHeight, LEGO_ROUNDING) {
                 translate [0, height-upperHeight, 0];
-            }
-        }
+            };
+        };
         legoTechnicAxle_base2 (height, axleRadius, axleThickness, LEGO_ROUNDING);
-        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [-.5, 0, -.5]; }
-        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [-.5, 0, .5]; }
-        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [.5, 0, -.5]; }
-        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [.5, 0, .5]; }
+        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [-.5, 0, -.5]; };
+        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [-.5, 0, .5]; };
+        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [.5, 0, -.5]; };
+        cylinder (.3, -EPSILON*Y, (lowerHeight+EPSILON)*Y) { translate [.5, 0, .5]; };
         box {
             scale [(innerRadius+LEGO_ROUNDING)*2, height-lowerHeight-upperHeight, .12];
             translate [-innerRadius-LEGO_ROUNDING, lowerHeight, -.12/2];
-        }
-    }
+        };
+    };
 }
 
 /*
@@ -118,10 +118,10 @@ def legoTechnicBush()
 
     return bush {
         roty randint(0,3)*(PI/2);
-        bbox { scale [radius*2, height, radius*2]; translate [-radius, 0, -radius]; }
+        bbox { scale [radius*2, height, radius*2]; translate [-radius, 0, -radius]; };
         rotx PI/2;
         translate [1, .7, 0];
-    }
+    };
 }
 
 #endif // LEGO_TECHNIC_BUSH_TRACI_

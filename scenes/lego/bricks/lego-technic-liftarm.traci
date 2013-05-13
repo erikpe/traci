@@ -16,41 +16,41 @@ def legoTechnicLiftarmWithStudConnector_1x4 ()
         roundedBox_base (.5, 3, .15, LEGO_ROUNDING) {
             rotz -PI/2;
             translate [0, .5, -.5];
-        }
+        };
         roundedBox_base (.5, 3, .15, LEGO_ROUNDING) {
             rotz -PI/2;
             translate [0, .5, .35];
-        }
+        };
         difference {
             union {
-                box { scale [1, .18, 1]; translate [1, .16, -.5]; }
+                box { scale [1, .18, 1]; translate [1, .16, -.5]; };
                 roundedCylinder1 (X*2, [2, .5, 0], .44, LEGO_ROUNDING);
                 roundedCylinder1 (X, [1, .5, 0], .44, LEGO_ROUNDING);
-            }
+            };
             roundedCylinder2 ([1, .5, 0], [1, .44, 0], .36, LEGO_ROUNDING/2);
             roundedCylinder2 ([1, 0, 0], [1, .06, 0], .36, LEGO_ROUNDING/2);
             roundedCylinder3 ([1, .06, 0], [1, .44, 0], .3, LEGO_ROUNDING/2);
             roundedCylinder2 ([2, .5, 0], [2, .44, 0], .36, LEGO_ROUNDING/2);
             roundedCylinder2 ([2, 0, 0], [2, .06, 0], .36, LEGO_ROUNDING/2);
             roundedCylinder3 ([2, .06, 0], [2, .44, 0], .3, LEGO_ROUNDING/2);
-        }
+        };
         difference {
             roundedCylinder1 (X*3, [3, .5, 0], .5, LEGO_ROUNDING);
             legoTechnicAxle_base2 (.5, AXLE_RADIUS + EPSILON, AXLE_THICKNESS + EPSILON, LEGO_ROUNDING) {
                 translate X*3;
-            }
-        }
+            };
+        };
         difference {
             roundedCylinder1 (ORIGO, Y, .5, LEGO_ROUNDING);
             roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING);
-            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [-.5, 0, -.5]; }
-            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [-.5, 0, .5]; }
-            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [.5, 0, -.5]; }
-            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [.5, 0, .5]; }
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [-.5, 0, -.5]; };
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [-.5, 0, .5]; };
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [.5, 0, -.5]; };
+            roundedCylinder2 (Y, Y*.5, .3, LEGO_ROUNDING/2) { translate [.5, 0, .5]; };
             legoTechnicAxle_base2 (.5, AXLE_RADIUS + EPSILON, AXLE_THICKNESS + EPSILON, LEGO_ROUNDING);
-        }
-        bbox { scale [4, 1, 1]; translate [-.5, 0, -.5]; }
-    }
+        };
+        bbox { scale [4, 1, 1]; translate [-.5, 0, -.5]; };
+    };
 }
 
 /*

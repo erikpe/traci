@@ -21,14 +21,14 @@ def legoPlate (width, length)
                 for (z in 0 .. width-1) {
                     legopartPeg () {
                         translate [x*LU, boxHeight, z*LU];
-                    }
+                    };
                 }
             }
             bbox {
                 scale [boxLength, boxHeight+pegHeight, boxWidth];
-            }
-        }
-    }
+            };
+        };
+    };
 }
 
 /*

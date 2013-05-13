@@ -117,30 +117,19 @@ statement
     : IF LPAR expr RPAR block (ELSE block)?    -> ^(IF expr block block?)
     | WHILE LPAR expr RPAR block               -> ^(WHILE expr block)
     | FOR LPAR ID IN expr DOTS expr RPAR block -> ^(FOR ID expr expr block)
-    | assignable_statement
-    | RETURN assignable_statement              -> ^(RETURN assignable_statement)
-    | GLOBAL ID ASSIGN assignable_statement    -> ^(GLOBAL_ASSIGN ID assignable_statement)
-    | ID ASSIGN assignable_statement           -> ^(ASSIGN ID assignable_statement)
-    ;
-
-assignable_statement
-    : (ID LCURLY)=>id_statement
-    | (ID function_call_args LCURLY)=>function_call_statement
-    | PRIMITIVE_SHAPE function_call_args? (block | SEMICOLON) -> ^(PRIMITIVE_SHAPE function_call_args? block?)
-    | CSG_SHAPE function_call_args? (block | SEMICOLON)       -> ^(CSG_SHAPE function_call_args? block?)
-    | BBOX function_call_args? (block | SEMICOLON)            -> ^(BBOX function_call_args? block?)
-    | TRANSFORMATION expr SEMICOLON                           -> ^(TRANSFORMATION expr)
-    | TRANSFORMATION2 function_call_args SEMICOLON            -> ^(TRANSFORMATION2 function_call_args)
-    | LIGHT function_call_args? (block | SEMICOLON)           -> ^(LIGHT function_call_args? block?)
+    | (ID ASSIGN) => assign
+    | (TRANSFORMATION ~(LPAR | LCURLY | SEMICOLON)) => simplified_transformation_statement
     | expr SEMICOLON!
+    | RETURN expr SEMICOLON                    -> ^(RETURN expr)
+    | GLOBAL ID ASSIGN expr SEMICOLON          -> ^(GLOBAL_ASSIGN ID expr)
     ;
 
-id_statement
-    : ID block -> ^(REF ID block)
+assign
+    : ID ASSIGN expr SEMICOLON -> ^(ASSIGN ID expr)
     ;
 
-function_call_statement
-    : ID function_call_args block -> ^(FUNCALL ID function_call_args block)
+simplified_transformation_statement
+    : TRANSFORMATION expr SEMICOLON -> ^(TRANSFORMATION ^(ARGS expr*))
     ;
 
 expr
@@ -148,11 +137,15 @@ expr
     ;
 
 conditional_expr
-    : addition_expr ((LT_OP^ | GT_OP^ | LTE_OP^ | GTE_OP^ | EQ_OP^ | NEQ_OP^) addition_expr )?
+    : addition_expr ((LT_OP^ | GT_OP^ | LTE_OP^ | GTE_OP^ | EQ_OP^ | NEQ_OP^) addition_expr)?
     ;
 
 addition_expr
-    : multiplication_expr ((PLUS_OP^ | MINUS_OP^) multiplication_expr )*
+    : multiplication_expr ((PLUS_OP^ | MINUS_OP^) multiplication_expr)*
+    ;
+
+multiplication_expr
+    : unary_expr ((MUL_OP^ | DIV_OP^) unary_expr)*
     ;
 
 unary_expr
@@ -162,14 +155,15 @@ unary_expr
     | NOT_OP unary_expr -> ^(UNARY_OP NOT_OP unary_expr)
     ;
 
-multiplication_expr
-    : unary_expr ((MUL_OP^ | DIV_OP^) unary_expr)*
-    ;
-
 primary_expr
     : constant
     | function_call
     | variable_reference
+    | primitive_shape
+    | csg_shape
+    | bbox
+    | transformation
+    | light
     | vector
     | color
     | LPAR! expr RPAR!
@@ -181,7 +175,7 @@ constant
     ;
 
 function_call
-    : ID function_call_args -> ^(FUNCALL ID function_call_args)
+    : ID function_call_args block? -> ^(FUNCALL ID function_call_args block?)
     ;
 
 function_call_args
@@ -189,7 +183,29 @@ function_call_args
     ;
 
 variable_reference
-    : ID -> ^(REF ID)
+    : ID block? -> ^(REF ID block?)
+    ;
+
+primitive_shape
+    : PRIMITIVE_SHAPE function_call_args block? -> ^(PRIMITIVE_SHAPE function_call_args block?)
+    | PRIMITIVE_SHAPE block?                    -> ^(PRIMITIVE_SHAPE ^(ARGS) block?)
+    ;
+
+csg_shape
+    : CSG_SHAPE function_call_args? block? -> ^(CSG_SHAPE function_call_args? block?)
+    ;
+
+bbox
+    : BBOX function_call_args? block? -> ^(BBOX function_call_args? block?)
+    ;
+
+transformation
+    : TRANSFORMATION function_call_args block? -> ^(TRANSFORMATION function_call_args block?)
+    | TRANSFORMATION block?                    -> ^(TRANSFORMATION ^(ARGS) block?)
+    ;
+
+light
+    : LIGHT function_call_args? block? -> ^(LIGHT function_call_args? block?)
     ;
 
 vector 
@@ -241,11 +257,7 @@ CSG_SHAPE
     ;
 
 TRANSFORMATION
-    : ('translate' | 'scale' | 'scalex' | 'scaley' | 'scalez' | 'rotate' | 'rotx' | 'roty' | 'rotz')
-    ;
-
-TRANSFORMATION2
-    : ('rotAround' | 'rotVecToVec')
+    : ('translate' | 'scale' | 'scalex' | 'scaley' | 'scalez' | 'rotate' | 'rotx' | 'roty' | 'rotz' | 'rotAround' | 'rotVecToVec')
     ;
 
 COLOR

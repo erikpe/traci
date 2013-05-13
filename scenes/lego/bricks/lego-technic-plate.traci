@@ -22,21 +22,21 @@ def legoTechnicPlateWithHoles (length)
             for (x in 0 .. length-2) {
                 legopartTechnicPlateHole () {
                     translate X*(x*LU);
-                }
+                };
             }
-        }
+        };
         for (x in 0 .. length-1) {
             legopartPeg () {
                 translate [x*LU, boxHeight, 0];
-            }
+            };
             legopartPeg() {
                 translate [x*LU, boxHeight, LU];
-            }
+            };
         }
         bbox {
             scale [boxLength, boxHeight+pegHeight, boxWidth];
-        }
-    }
+        };
+    };
 }
 
 /*
@@ -80,19 +80,19 @@ def legoTechnicPlateWithToothedEnds_1x5 ()
                     scale [.2 + EPSILON, toothHeight + EPSILON, toothSpacing];
                     translate [-.5 - EPSILON, -EPSILON, 0];
                     roty i*(22.5/360)*PI*2;
-                }
+                };
             }
             bbox {
                 scale [1 + 2*EPSILON, toothHeight + EPSILON, 1 + 2*EPSILON];
                 translate [-.5 - EPSILON, -EPSILON, -.5 - EPSILON];
-            }
-        }
+            };
+        };
     }
     toothHeight = .07;
     toothSpacing = .08;
     return union {
-        legopartPegHole () { translate [1, .4, 0]; }
-        legopartPegHole () { translate [3, .4, 0]; }
+        legopartPegHole () { translate [1, .4, 0]; };
+        legopartPegHole () { translate [3, .4, 0]; };
         difference {
             union {
                 roundedCylinder1 ([.5, 0, .5], [.5, .4, .5], .5, LEGO_ROUNDING);
@@ -100,21 +100,21 @@ def legoTechnicPlateWithToothedEnds_1x5 ()
                 roundedBox_base (.4-toothHeight, 4, 1, LEGO_ROUNDING) {
                     rotz -PI/2;
                     translate [.5, .4, 0];
-                }
+                };
                 roundedBox0 (3, toothHeight + LEGO_ROUNDING, 1, LEGO_ROUNDING) {
                     rotx PI;
                     translate [1, toothHeight + LEGO_ROUNDING, 1];
-                }
-            }
+                };
+            };
             legoTechnicAxle_base2 (.4, AXLE_RADIUS + EPSILON, AXLE_THICKNESS + EPSILON, LEGO_ROUNDING) {
                 translate [2.5, 0, .5];
-            }
+            };
             roundedCylinder3 ([.5, 0, .5], [.5, .4, .5], .3, LEGO_ROUNDING);
             roundedCylinder3 ([4.5, 0, .5], [4.5, .4, .5], .3, LEGO_ROUNDING);
-            tooths (toothHeight, toothSpacing) { translate [.5, 0, .5]; }
-            tooths (toothHeight, toothSpacing) { translate [4.5, 0, .5]; }
-        }
-    }
+            tooths (toothHeight, toothSpacing) { translate [.5, 0, .5]; };
+            tooths (toothHeight, toothSpacing) { translate [4.5, 0, .5]; };
+        };
+    };
 }
 
 #endif // LEGO_TECHNIC_PLATE_WITH_HOLES_TRACI_

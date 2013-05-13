@@ -19,13 +19,13 @@ def roundedCylinder0_base (radius, height, rounding)
         torus (rounding, radius-rounding) {
             rotx PI/2;
             translate Y*(height-rounding);
-        }
+        };
         bbox {
             scale [2, 1, 2];
             translate [-1, 0, -1];
             scale [radius, height, radius];
-        }
-    }
+        };
+    };
 }
 
 def roundedCylinder0 (v0, v1, radius, rounding)
@@ -33,7 +33,7 @@ def roundedCylinder0 (v0, v1, radius, rounding)
     return roundedCylinder0_base (radius, length(v1-v0), rounding) {
         rotVecToVec (Y, v1-v0);
         translate v0;
-    }
+    };
 }
 
 /*
@@ -52,17 +52,17 @@ def roundedCylinder1_base (radius, height, rounding)
         torus (rounding, radius-rounding) {
             rotx PI/2;
             translate Y*rounding;
-        }
+        };
         torus (rounding, radius-rounding) {
             rotx PI/2;
             translate Y*(height-rounding);
-        }
+        };
         bbox {
             scale [2, 1, 2];
             translate [-1, 0, -1];
             scale [radius, height, radius];
-        }
-    }
+        };
+    };
 }
 
 def roundedCylinder1 (v0, v1, radius, rounding)
@@ -70,7 +70,7 @@ def roundedCylinder1 (v0, v1, radius, rounding)
     return roundedCylinder1_base (radius, length(v1-v0), rounding) {
         rotVecToVec (Y, v1-v0);
         translate v0;
-    }
+    };
 }
 
 /*
@@ -89,21 +89,21 @@ def roundedCylinder1 (v0, v1, radius, rounding)
         torus (upperRounding, radius-upperRounding) {
             rotx PI/2;
             translate Y*(height-upperRounding);
-        }
+        };
         difference {
             cylinder (radius+lowerRounding, -Y*EPSILON, Y*lowerRounding);
             torus (lowerRounding, radius+lowerRounding) {
                 rotx PI/2;
                 translate Y*lowerRounding;
-            }
-        }
+            };
+        };
         bbox {
             scale [2, 1, 2];
             translate [-1, 0, -1];
             scale [radius+lowerRounding, height+EPSILON, radius+lowerRounding];
             translate -Y*EPSILON;
-        }
-    }
+        };
+    };
 }
 
 def roundedCylinder2 (v0, v1, radius, rounding)
@@ -111,7 +111,7 @@ def roundedCylinder2 (v0, v1, radius, rounding)
     return roundedCylinder2_base (radius, length(v1-v0), rounding, rounding) {
         rotVecToVec (Y, v1-v0);
         translate v0;
-    }
+    };
 }
 
 /*
@@ -131,22 +131,22 @@ def roundedCylinder3_base (radius, height, rounding)
             torus (rounding, radius+rounding) {
                 rotx PI/2;
                 translate Y*rounding;
-            }
-        }
+            };
+        };
         difference {
             cylinder (radius+rounding, Y*(height-rounding), Y*(height+EPSILON));
             torus (rounding, radius+rounding) {
                 rotx PI/2;
                 translate Y*(height-rounding);
-            }
-        }
+            };
+        };
         bbox {
             scale [2, 1, 2];
             translate [-1, 0, -1];
             scale [radius+rounding, height+EPSILON+EPSILON, radius+rounding];
             translate -Y*EPSILON;
-       }
-    }
+       };
+    };
 }
 
 def roundedCylinder3 (v0, v1, radius, rounding)
@@ -154,7 +154,7 @@ def roundedCylinder3 (v0, v1, radius, rounding)
     return roundedCylinder3_base (radius, length(v1-v0), rounding) {
         rotVecToVec (Y, v1-v0);
         translate v0;
-    }
+    };
 }
 
 /*
@@ -174,15 +174,15 @@ def roundedCylinder4 (radius, height, rounding)
             torus (rounding, radius+rounding) {
                 rotx PI/2;
                 translate Y*rounding;
-            }
-        }
+            };
+        };
         bbox {
             scale [2, 1, 2];
             translate [-1, 0, -1];
             scale [radius+rounding, height+EPSILON, radius+rounding];
             translate -Y*EPSILON;
-        }
-    }
+        };
+    };
 }
 
 def roundedBox_helper1 (x, z, r)
@@ -195,17 +195,17 @@ def roundedBox_helper1 (x, z, r)
         box {
             scale [x - 2*r, 2*r, z - 2*r];
             translate [r, 0, r];
-        }
-        sphere { scale r; translate v0; }
-        sphere { scale r; translate v1; }
-        sphere { scale r; translate v2; }
-        sphere { scale r; translate v3; }
+        };
+        sphere { scale r; translate v0; };
+        sphere { scale r; translate v1; };
+        sphere { scale r; translate v2; };
+        sphere { scale r; translate v3; };
         cylinder (r, v0, v1);
         cylinder (r, v1, v2);
         cylinder (r, v2, v3);
         cylinder (r, v3, v0);
-        bbox { scale [x, 2*r, z]; }
-    }
+        bbox { scale [x, 2*r, z]; };
+    };
 }
 
 def roundedBox_helper2 (x, z, r)
@@ -216,11 +216,11 @@ def roundedBox_helper2 (x, z, r)
             box {
                 scale [3*r + EPSILON/10, 2*r, 3*r + EPSILON/10];
                 translate [-EPSILON/10, -r, -EPSILON/10];
-            }
+            };
             torus (r, r+r) {
                 rotx PI/2;
-            }
-        }
+            };
+        };
     }
     return union {
         cylinder (r, [r, 0, -r], [x-r, 0, -r]);
@@ -230,23 +230,23 @@ def roundedBox_helper2 (x, z, r)
         corner (r) {
             roty PI;
             translate [r, 0, r];
-        }
+        };
         corner (r) {
             roty PI/2;
             translate [x-r, 0, r];
-        }
+        };
         corner (r) {
             translate [x-r, 0, z-r];
-        }
+        };
         corner (r) {
             roty -PI/2;
             translate [r, 0, z-r];
-        }
+        };
         bbox {
             scale [x + 4*r, 2*r, z + 4*r];
             translate [-2*r, -r, -2*r];
-        }
-    }
+        };
+    };
 }
 
 def roundedBox_helper3 (x, z, r)
@@ -256,11 +256,11 @@ def roundedBox_helper3 (x, z, r)
             box {
                 scale [x + 2*r, r + EPSILON, z - 2*r];
                 translate [-r, -EPSILON, r];
-            }
+            };
             box {
                 scale [x - 2*r, r + EPSILON, z + 2*r];
                 translate [r, -EPSILON, -r];
-            }
+            };
             cylinder (2*r, [r, -EPSILON, r], [r, r, r]);
             cylinder (2*r, [x - r, -EPSILON, r], [x - r, r, r]);
             cylinder (2*r, [x - r, -EPSILON, z - r], [x - r, r, z - r]);
@@ -268,16 +268,16 @@ def roundedBox_helper3 (x, z, r)
             bbox {
                 scale [x + 2*r, r + EPSILON, z + 2*r];
                 translate [-r, -EPSILON, -r];
-            }
-        }
+            };
+        };
         roundedBox_helper2 (x, z, r) {
             translate Y*r;
-        }
+        };
         bbox {
             scale [x + 2*r, r + EPSILON, z + 2*r];
             translate [-r, -EPSILON, -r];
-        }
-    }
+        };
+    };
 }
 
 /*
@@ -302,18 +302,18 @@ def roundedBox_base (x, y, z, r)
         box {
             scale [x, y, z - 2*r];
             translate Z*r;
-        }
+        };
         box {
             scale [x - 2*r, y, z];
             translate X*r;
-        }
+        };
         cylinder (r, v0, v4);
         cylinder (r, v1, v5);
         cylinder (r, v2, v6);
         cylinder (r, v3, v7);
 
-        bbox { scale [x, y, z]; }
-    }
+        bbox { scale [x, y, z]; };
+    };
 }
 
 /*
@@ -328,10 +328,10 @@ def roundedBox0 (x, y, z, r)
  {
     return union {
         roundedBox_base (x, y - r, z, r);
-        roundedBox_helper1 (x, z, r) { translate [0, y - 2*r, 0]; }
+        roundedBox_helper1 (x, z, r) { translate [0, y - 2*r, 0]; };
 
-        bbox { scale [x, y, z]; }
-    }
+        bbox { scale [x, y, z]; };
+    };
  }
 
 /*
@@ -345,12 +345,12 @@ def roundedBox0 (x, y, z, r)
 def roundedBox1 (x, y, z, r)
 {
     return union {
-        roundedBox_base (x, y - 2*r, z, r) { translate Y*r; }
+        roundedBox_base (x, y - 2*r, z, r) { translate Y*r; };
         roundedBox_helper1 (x, z, r);
-        roundedBox_helper1 (x, z, r) { translate [0, y - 2*r, 0]; }
+        roundedBox_helper1 (x, z, r) { translate [0, y - 2*r, 0]; };
 
-        bbox { scale [x, y, z]; }
-    }
+        bbox { scale [x, y, z]; };
+    };
 }
 
 /*
@@ -364,15 +364,15 @@ def roundedBox1 (x, y, z, r)
 def roundedBox2 (x, y, z, r)
 {
     return union {
-        roundedBox_base (x, y - 2*r + EPSILON, z, r) { translate [0, r - EPSILON, 0]; }
-        roundedBox_helper1 (x, z, r) { translate [0, y - 2*r, 0]; }
+        roundedBox_base (x, y - 2*r + EPSILON, z, r) { translate [0, r - EPSILON, 0]; };
+        roundedBox_helper1 (x, z, r) { translate [0, y - 2*r, 0]; };
         roundedBox_helper3 (x, z, r);
 
         bbox {
             scale [x + 2*r, y + EPSILON, z + 2*r];
             translate [-r, -EPSILON, -r];
-        }
-    }
+        };
+    };
 }
 
 /*
@@ -386,15 +386,15 @@ def roundedBox2 (x, y, z, r)
 def roundedBox3 (x, y, z, r)
 {
     return union {
-        roundedBox_base (x, y - 2*r + 2*EPSILON, z, r) { translate [0, r - EPSILON, 0]; }
-        roundedBox_helper3 (x, z, r) { scaley -1; translate [0, y, 0]; }
+        roundedBox_base (x, y - 2*r + 2*EPSILON, z, r) { translate [0, r - EPSILON, 0]; };
+        roundedBox_helper3 (x, z, r) { scaley -1; translate [0, y, 0]; };
         roundedBox_helper3 (x, z, r);
 
         bbox {
             scale [x + 2*r, y + 2*EPSILON, z + 2*r];
             translate [-r, -EPSILON, -r];
-        }
-    }
+        };
+    };
 }
 
 /*
@@ -408,14 +408,14 @@ def roundedBox3 (x, y, z, r)
 def roundedBox4 (x, y, z, r)
 {
     return union {
-        roundedBox_base (x, y - r + EPSILON, z, r) { translate [0, r - EPSILON, 0]; }
+        roundedBox_base (x, y - r + EPSILON, z, r) { translate [0, r - EPSILON, 0]; };
         roundedBox_helper3 (x, z, r);
 
         bbox {
             scale [x + 2*r, y + EPSILON, z + 2*r];
             translate [-r, -EPSILON, -r];
-        }
-    }
+        };
+    };
 }
 
 #endif // BASIC_SHAPES_TRACI_
