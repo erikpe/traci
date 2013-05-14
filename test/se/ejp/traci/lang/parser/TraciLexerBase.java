@@ -70,7 +70,6 @@ public class TraciLexerBase
             final Integer channel, final Integer row, final Integer col)
     {
         assertTrue(tokens.size() > tokenNr);
-
         final Token token = tokens.get(tokenNr);
 
         if (tokenType != null)

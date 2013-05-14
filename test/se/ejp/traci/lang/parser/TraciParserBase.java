@@ -1,6 +1,7 @@
 package se.ejp.traci.lang.parser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import org.antlr.runtime.tree.CommonTree;
 import se.ejp.traci.lang.preprocessor.PreprocessorRunner;
 import se.ejp.traci.main.Result;
 import se.ejp.traci.main.options.MockSettings;
+
 
 public class TraciParserBase
 {
@@ -65,6 +67,11 @@ public class TraciParserBase
     protected void assertNoError()
     {
         assertEquals(0, parseErrors.size());
+    }
+
+    protected void assertError()
+    {
+        assertFalse(parseErrors.isEmpty());
     }
 
     protected void assertError(final Class<? extends RecognitionException> clazz)

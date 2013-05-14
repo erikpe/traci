@@ -131,4 +131,48 @@ public class TraciLexerTest extends TraciLexerBase
         assertTrue(tok.location.fileLocation.filename.endsWith("a.traci"));
         assertTrue(tok.location.includePath.isEmpty());
     }
+
+    @Test
+    public void testTransformation()
+    {
+        runLexer("translate scale scalex scaley scalez rotx roty rotz rotAround rotVecToVec");
+        assertNoError();
+        assertToken( 0, TraciLexer.TRANSFORMATION, "translate",   Token.DEFAULT_CHANNEL, 1,  0);
+        assertToken( 1, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1,  9);
+        assertToken( 2, TraciLexer.TRANSFORMATION, "scale",       Token.DEFAULT_CHANNEL, 1, 10);
+        assertToken( 3, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 15);
+        assertToken( 4, TraciLexer.TRANSFORMATION, "scalex",      Token.DEFAULT_CHANNEL, 1, 16);
+        assertToken( 5, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 22);
+        assertToken( 6, TraciLexer.TRANSFORMATION, "scaley",      Token.DEFAULT_CHANNEL, 1, 23);
+        assertToken( 7, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 29);
+        assertToken( 8, TraciLexer.TRANSFORMATION, "scalez",      Token.DEFAULT_CHANNEL, 1, 30);
+        assertToken( 9, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 36);
+        assertToken(10, TraciLexer.TRANSFORMATION, "rotx",        Token.DEFAULT_CHANNEL, 1, 37);
+        assertToken(11, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 41);
+        assertToken(12, TraciLexer.TRANSFORMATION, "roty",        Token.DEFAULT_CHANNEL, 1, 42);
+        assertToken(13, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 46);
+        assertToken(14, TraciLexer.TRANSFORMATION, "rotz",        Token.DEFAULT_CHANNEL, 1, 47);
+        assertToken(15, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 51);
+        assertToken(16, TraciLexer.TRANSFORMATION, "rotAround",   Token.DEFAULT_CHANNEL, 1, 52);
+        assertToken(17, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 61);
+        assertToken(18, TraciLexer.TRANSFORMATION, "rotVecToVec", Token.DEFAULT_CHANNEL, 1, 62);
+        assertToken(19, TraciLexer.EOF,            null,          Token.DEFAULT_CHANNEL, 1, 73);
+    }
+
+    @Test
+    public void testPrimitiveShape()
+    {
+        runLexer("box cylinder plane sphere torus");
+        assertNoError();
+        assertToken(0, TraciLexer.PRIMITIVE_SHAPE, "box",      Token.DEFAULT_CHANNEL, 1,  0);
+        assertToken(1, TraciLexer.WS,              " ",        Token.HIDDEN_CHANNEL,  1,  3);
+        assertToken(2, TraciLexer.PRIMITIVE_SHAPE, "cylinder", Token.DEFAULT_CHANNEL, 1,  4);
+        assertToken(3, TraciLexer.WS,              " ",        Token.HIDDEN_CHANNEL,  1, 12);
+        assertToken(4, TraciLexer.PRIMITIVE_SHAPE, "plane",    Token.DEFAULT_CHANNEL, 1, 13);
+        assertToken(5, TraciLexer.WS,              " ",        Token.HIDDEN_CHANNEL,  1, 18);
+        assertToken(6, TraciLexer.PRIMITIVE_SHAPE, "sphere",   Token.DEFAULT_CHANNEL, 1, 19);
+        assertToken(7, TraciLexer.WS,              " ",        Token.HIDDEN_CHANNEL,  1, 25);
+        assertToken(8, TraciLexer.PRIMITIVE_SHAPE, "torus",    Token.DEFAULT_CHANNEL, 1, 26);
+        assertToken(9, TraciLexer.EOF,             null,       Token.DEFAULT_CHANNEL, 1, 31);
+    }
 }
