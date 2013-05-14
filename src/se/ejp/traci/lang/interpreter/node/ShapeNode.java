@@ -31,7 +31,7 @@ import se.ejp.traci.model.shape.primitive.Torus;
 
 public class ShapeNode implements TraciNode
 {
-    private static enum ShapeType
+    static enum ShapeType
     {
         BOX("box", Box.class),
         CYLINDER("cylinder", Cylinder.class),
@@ -42,8 +42,8 @@ public class ShapeNode implements TraciNode
         DIFFERENCE("difference", Difference.class),
         INTERSECTION("intersection", Intersection.class);
 
-        private final String id;
-        private final Class<? extends Shape> clazz;
+        final String id;
+        final Class<? extends Shape> clazz;
 
         private ShapeType(final String id, final Class<? extends Shape> clazz)
         {
@@ -63,9 +63,9 @@ public class ShapeNode implements TraciNode
         typeMap = Collections.<String, ShapeType>unmodifiableMap(types);
     }
 
-    private final ShapeType shapeType;
-    private final List<TraciNode> argNodes;
-    private final BlockNode blockNode;
+    final ShapeType shapeType;
+    final List<TraciNode> argNodes;
+    final BlockNode blockNode;
     private final TraciToken token;
 
     public ShapeNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)

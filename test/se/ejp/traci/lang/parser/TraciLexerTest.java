@@ -175,4 +175,17 @@ public class TraciLexerTest extends TraciLexerBase
         assertToken(8, TraciLexer.PRIMITIVE_SHAPE, "torus",    Token.DEFAULT_CHANNEL, 1, 26);
         assertToken(9, TraciLexer.EOF,             null,       Token.DEFAULT_CHANNEL, 1, 31);
     }
+
+    @Test
+    public void testCsgShape()
+    {
+        runLexer("union difference intersection");
+        assertNoError();
+        assertToken(0, TraciLexer.CSG_SHAPE, "union",        Token.DEFAULT_CHANNEL, 1,  0);
+        assertToken(1, TraciLexer.WS,        " ",            Token.HIDDEN_CHANNEL,  1,  5);
+        assertToken(2, TraciLexer.CSG_SHAPE, "difference",   Token.DEFAULT_CHANNEL, 1,  6);
+        assertToken(3, TraciLexer.WS,        " ",            Token.HIDDEN_CHANNEL,  1, 16);
+        assertToken(4, TraciLexer.CSG_SHAPE, "intersection", Token.DEFAULT_CHANNEL, 1, 17);
+        assertToken(5, TraciLexer.EOF,       null,           Token.DEFAULT_CHANNEL, 1, 29);
+    }
 }

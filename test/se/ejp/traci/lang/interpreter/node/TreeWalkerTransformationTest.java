@@ -1,126 +1,117 @@
-package se.ejp.traci.lang.parser;
+package se.ejp.traci.lang.interpreter.node;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import org.antlr.runtime.NoViableAltException;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.UnwantedTokenException;
-import org.antlr.runtime.tree.Tree;
 import org.junit.Test;
 
-public class TransformationParserTest extends TraciParserBase
+import se.ejp.traci.lang.parser.TraciTreeWalkerBase;
+
+public class TreeWalkerTransformationTest extends TraciTreeWalkerBase
 {
     private void assertResult(final String id, final int numArgs, final boolean hasBlock, final boolean isWrapped)
     {
-        assertNoError();
-        assertEquals(TraciParser.BLOCK, parseTree.getType());
-        assertEquals(1, parseTree.getChildCount());
-        Tree node = parseTree.getChild(0);
+        assertEquals(1, rootNode.getStatements().size());
+        TraciNode node = rootNode.getStatements().get(0);
 
         if (isWrapped)
         {
-            assertEquals(TraciParser.FUNCALL, node.getType());
-            assertEquals(2, node.getChildCount());
-            assertEquals(TraciParser.ID, node.getChild(0).getType());
-            assertEquals("foo", node.getChild(0).getText());
-            assertEquals(TraciParser.ARGS, node.getChild(1).getType());
-            assertEquals(1, node.getChild(1).getChildCount());
-            node = node.getChild(1).getChild(0);
+            assertEquals(FunctionCallNode.class, node.getClass());
+            final FunctionCallNode funCallNode = (FunctionCallNode) node;
+            assertEquals("foo", funCallNode.id);
+            assertEquals(1, funCallNode.argNodes.size());
+            assertNull(funCallNode.blockNode);
+            node = funCallNode.argNodes.get(0);
         }
 
-        assertEquals(TraciParser.TRANSFORMATION, node.getType());
-        assertEquals(id, node.getText());
+        assertEquals(TransformationNode.class, node.getClass());
+        final TransformationNode trNode = (TransformationNode) node;
+        assertEquals(id, trNode.transformationType.id);
+        assertEquals(numArgs, trNode.argNodes.size());
 
         if (hasBlock)
         {
-            assertEquals(2, node.getChildCount());
-            assertEquals(TraciParser.BLOCK, node.getChild(1).getType());
+            assertNotNull(trNode.blockNode);
         }
         else
         {
-            assertEquals(1, node.getChildCount());
+            assertNull(trNode.blockNode);
         }
-
-        assertEquals(TraciParser.ARGS, node.getChild(0).getType());
-        assertEquals(numArgs, node.getChild(0).getChildCount());
     }
 
     private void runTest(final String id) throws RecognitionException
     {
-        runParser(id + ";");
+        runTreeWalker(id + ";");
         assertResult(id, 0, false, false);
 
-        runParser(id + "();");
+        runTreeWalker(id + "();");
         assertResult(id, 0, false, false);
 
-        runParser(id + " { };");
+        runTreeWalker(id + " { };");
         assertResult(id, 0, true, false);
 
-        runParser(id + " { 17; };");
+        runTreeWalker(id + " () { };");
         assertResult(id, 0, true, false);
 
-        runParser(id + "(23);");
+        runTreeWalker(id + " { 17; };");
+        assertResult(id, 0, true, false);
+
+        runTreeWalker(id + "(23);");
         assertResult(id, 1, false, false);
 
-        runParser(id + " 23;");
+        runTreeWalker(id + " 23;");
         assertResult(id, 1, false, false);
 
-        runParser(id + " [1, 2, 3];");
+        runTreeWalker(id + " [1, 2, 3];");
         assertResult(id, 1, false, false);
 
-        runParser(id + "(23) { };");
+        runTreeWalker(id + "(23) { };");
         assertResult(id, 1, true, false);
 
-        runParser(id + "(23) { 17; };");
+        runTreeWalker(id + "(23) { 17; };");
         assertResult(id, 1, true, false);
 
-        runParser(id + "(23, bar);");
+        runTreeWalker(id + "(23, bar);");
         assertResult(id, 2, false, false);
 
-        runParser(id + "(bar, 23) { };");
+        runTreeWalker(id + "(bar, 23) { };");
         assertResult(id, 2, true, false);
 
-        runParser(id + "(23, 1+2) { 17; };");
+        runTreeWalker(id + "(23, 1+2) { 17; };");
         assertResult(id, 2, true, false);
 
-        runParser("foo(" + id + ");");
+        runTreeWalker("foo(" + id + ");");
         assertResult(id, 0, false, true);
 
-        runParser("foo(" + id + "());");
+        runTreeWalker("foo(" + id + "());");
         assertResult(id, 0, false, true);
 
-        runParser("foo(" + id + " { });");
+        runTreeWalker("foo(" + id + " { });");
         assertResult(id, 0, true, true);
 
-        runParser("foo(" + id + " { 17; });");
+        runTreeWalker("foo(" + id + " { 17; });");
         assertResult(id, 0, true, true);
 
-        runParser("foo(" + id + "(23));");
+        runTreeWalker("foo(" + id + "(23));");
         assertResult(id, 1, false, true);
 
-        runParser("foo(" + id + " 23);");
-        assertError(UnwantedTokenException.class);
-        assertError(NoViableAltException.class);
-
-        runParser("foo(" + id + " [1, 2, 3]);");
-        assertError(UnwantedTokenException.class);
-        assertError(NoViableAltException.class);
-
-        runParser("foo(" + id + "(23) { });");
+        runTreeWalker("foo(" + id + "(23) { });");
         assertResult(id, 1, true, true);
 
-        runParser("foo(" + id + "(23) { 17; });");
+        runTreeWalker("foo(" + id + "(23) { 17; });");
         assertResult(id, 1, true, true);
 
-        runParser("foo(" + id + "(23, bar));");
+        runTreeWalker("foo(" + id + "(23, bar));");
         assertResult(id, 2, false, true);
 
-        runParser("foo(" + id + "(bar, 23) { });");
+        runTreeWalker("foo(" + id + "(bar, 23) { });");
         assertResult(id, 2, true, true);
 
-        runParser("foo(" + id + "(23, 1+2) { 17; });");
+        runTreeWalker("foo(" + id + "(23, 1+2) { 17; });");
         assertResult(id, 2, true, true);
-    }
+}
 
     @Test
     public void testTranslate() throws RecognitionException

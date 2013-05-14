@@ -8,7 +8,7 @@ import org.antlr.runtime.UnwantedTokenException;
 import org.antlr.runtime.tree.Tree;
 import org.junit.Test;
 
-public class PrimitiveShapeParserTest extends TraciParserBase
+public class ParserTransformationTest extends TraciParserBase
 {
     private void assertResult(final String id, final int numArgs, final boolean hasBlock, final boolean isWrapped)
     {
@@ -28,7 +28,7 @@ public class PrimitiveShapeParserTest extends TraciParserBase
             node = node.getChild(1).getChild(0);
         }
 
-        assertEquals(TraciParser.PRIMITIVE_SHAPE, node.getType());
+        assertEquals(TraciParser.TRANSFORMATION, node.getType());
         assertEquals(id, node.getText());
 
         if (hasBlock)
@@ -56,6 +56,9 @@ public class PrimitiveShapeParserTest extends TraciParserBase
         runParser(id + " { };");
         assertResult(id, 0, true, false);
 
+        runParser(id + " () { };");
+        assertResult(id, 0, true, false);
+
         runParser(id + " { 17; };");
         assertResult(id, 0, true, false);
 
@@ -63,10 +66,10 @@ public class PrimitiveShapeParserTest extends TraciParserBase
         assertResult(id, 1, false, false);
 
         runParser(id + " 23;");
-        assertError(NoViableAltException.class);
+        assertResult(id, 1, false, false);
 
         runParser(id + " [1, 2, 3];");
-        assertError(NoViableAltException.class);
+        assertResult(id, 1, false, false);
 
         runParser(id + "(23) { };");
         assertResult(id, 1, true, false);
@@ -123,32 +126,62 @@ public class PrimitiveShapeParserTest extends TraciParserBase
     }
 
     @Test
-    public void testBox() throws RecognitionException
+    public void testTranslate() throws RecognitionException
     {
-        runTest("box");
+        runTest("translate");
     }
 
     @Test
-    public void testCylinder() throws RecognitionException
+    public void testScale() throws RecognitionException
     {
-        runTest("cylinder");
+        runTest("scale");
     }
 
     @Test
-    public void testPlane() throws RecognitionException
+    public void testScaleX() throws RecognitionException
     {
-        runTest("plane");
+        runTest("scalex");
     }
 
     @Test
-    public void testSphere() throws RecognitionException
+    public void testScaleY() throws RecognitionException
     {
-        runTest("sphere");
+        runTest("scaley");
     }
 
     @Test
-    public void testTorus() throws RecognitionException
+    public void testScaleZ() throws RecognitionException
     {
-        runTest("torus");
+        runTest("scalez");
+    }
+
+    @Test
+    public void testRotX() throws RecognitionException
+    {
+        runTest("rotx");
+    }
+
+    @Test
+    public void testRotY() throws RecognitionException
+    {
+        runTest("roty");
+    }
+
+    @Test
+    public void testRotZ() throws RecognitionException
+    {
+        runTest("rotz");
+    }
+
+    @Test
+    public void testAround() throws RecognitionException
+    {
+        runTest("rotAround");
+    }
+
+    @Test
+    public void testVecToVec() throws RecognitionException
+    {
+        runTest("rotVecToVec");
     }
 }
