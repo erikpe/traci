@@ -22,7 +22,7 @@ import se.ejp.traci.math.Transformations;
 
 public class TransformationNode implements TraciNode
 {
-    private static enum TransformationType
+    static enum TransformationType
     {
         ROTX("rotx"),
         ROTY("roty"),
@@ -35,7 +35,7 @@ public class TransformationNode implements TraciNode
         ROT_VEC_TO_VEC("rotVecToVec"),
         ROT_AROUND("rotAround");
 
-        private final String id;
+        final String id;
 
         private TransformationType(final String id)
         {
@@ -54,10 +54,10 @@ public class TransformationNode implements TraciNode
         typeMap = Collections.<String, TransformationType>unmodifiableMap(types);
     }
 
-    private final TransformationType transformationType;
-    private final List<TraciNode> argNodes;
-    private final BlockNode blockNode;
-    private final TraciToken token;
+    final TransformationType transformationType;
+    final List<TraciNode> argNodes;
+    final BlockNode blockNode;
+    final TraciToken token;
 
     public TransformationNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode,
             final Token token)

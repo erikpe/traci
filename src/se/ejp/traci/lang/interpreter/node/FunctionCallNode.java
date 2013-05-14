@@ -17,9 +17,9 @@ import se.ejp.traci.lang.parser.TraciToken;
 
 public class FunctionCallNode implements TraciNode
 {
-    private final String id;
-    private final List<TraciNode> argNodes;
-    private final BlockNode blockNode;
+    final String id;
+    final List<TraciNode> argNodes;
+    final BlockNode blockNode;
     private final TraciToken token;
 
     public FunctionCallNode(final String id, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)

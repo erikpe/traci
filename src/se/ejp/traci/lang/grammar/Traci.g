@@ -272,7 +272,7 @@ CSG_SHAPE
     ;
 
 TRANSFORMATION
-    : ('translate' | 'scale' | 'scalex' | 'scaley' | 'scalez' | 'rotate' | 'rotx' | 'roty' | 'rotz' | 'rotAround' | 'rotVecToVec')
+    : ('translate' | 'scale' | 'scalex' | 'scaley' | 'scalez' | 'rotx' | 'roty' | 'rotz' | 'rotAround' | 'rotVecToVec')
     ;
 
 COLOR
