@@ -207,7 +207,7 @@ primitive_shape
     ;
 
 csg_shape
-    : CSG_SHAPE function_call_args? block? -> ^(CSG_SHAPE function_call_args? block?)
+    : CSG_SHAPE block? -> ^(CSG_SHAPE block?)
     ;
 
 bbox
