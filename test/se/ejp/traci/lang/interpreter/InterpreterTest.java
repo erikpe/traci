@@ -101,4 +101,10 @@ public class InterpreterTest extends InterpreterBase
             assertEquals(Type.BOOLEAN, e.rightType);
         }
     }
+
+    @Test
+    public void test() throws RecognitionException, InterpreterRuntimeException
+    {
+        //runInterpreter("rotz(360)*2;");
+    }
 }

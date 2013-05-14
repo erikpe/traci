@@ -1,7 +1,6 @@
 package se.ejp.traci.lang.parser;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -24,13 +23,13 @@ public class TraciParserBase
 {
     protected TraciParser parser = null;
     protected CommonTree parseTree = null;
-    protected List<ParseError> parserErrors = null;
+    protected List<ParseError> parseErrors = null;
 
     protected void run(final CharStream input) throws RecognitionException
     {
         final TraciLexer lexer = new TraciLexer(input);
         parser = new TraciParser(new CommonTokenStream(lexer));
-        parserErrors = new ArrayList<ParseError>();
+        parseErrors = new ArrayList<ParseError>();
 
         try
         {
@@ -38,11 +37,8 @@ public class TraciParserBase
         }
         finally
         {
-            assertFalse(lexer.getLexerErrors().iterator().hasNext());
-            for (final ParseError error : parser.getParseErrors())
-            {
-                parserErrors.add(error);
-            }
+            assertTrue(lexer.getLexerErrors().isEmpty());
+            parseErrors = parser.getParseErrors();
         }
     }
 
@@ -68,7 +64,7 @@ public class TraciParserBase
 
     protected void assertNoError()
     {
-        assertEquals(0, parserErrors.size());
+        assertEquals(0, parseErrors.size());
     }
 
     protected void assertError(final Class<? extends RecognitionException> clazz)
@@ -80,7 +76,7 @@ public class TraciParserBase
     {
         boolean foundError = false;
 
-        for (final ParseError error : parserErrors)
+        for (final ParseError error : parseErrors)
         {
             if (!clazz.equals(error.e.getClass()))
             {

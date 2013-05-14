@@ -1,8 +1,8 @@
 package se.ejp.traci.lang.interpreter;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -38,8 +38,8 @@ public class InterpreterBase
         final TraciParser parser = new TraciParser(new CommonTokenStream(lexer));
         final CommonTree parseTree = (CommonTree) parser.scene().getTree();
 
-        assertFalse(lexer.getLexerErrors().iterator().hasNext());
-        assertFalse(parser.getParseErrors().iterator().hasNext());
+        assertTrue(lexer.getLexerErrors().isEmpty());
+        assertTrue(parser.getParseErrors().isEmpty());
 
         final TraciTreeWalker walker = new TraciTreeWalker(new CommonTreeNodeStream(parseTree));
         final BlockNode rootNode = walker.block();

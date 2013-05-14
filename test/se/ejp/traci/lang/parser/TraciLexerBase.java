@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.runtime.ANTLRFileStream;
@@ -29,11 +28,7 @@ public class TraciLexerBase
         final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         tokenStream.fill();
         tokens = tokenStream.getTokens();
-        lexerErrors = new ArrayList<ParseError>();
-        for (final ParseError error : lexer.getLexerErrors())
-        {
-            lexerErrors.add(error);
-        }
+        lexerErrors = lexer.getLexerErrors();
     }
 
     protected void runLexer(final String code)
