@@ -5,6 +5,13 @@ options {
     ASTLabelType=CommonTree;
 }
 
+@rulecatch {
+catch (final RecognitionException e)
+{
+    throw e;
+}
+}
+
 @header {
 package se.ejp.traci.lang.parser;
 
@@ -35,12 +42,6 @@ import se.ejp.traci.lang.interpreter.node.WhileNode;
 
 @members {
 private FunctionSet functionsThisScope = BuiltinFunctions.getAll();
-
-public void displayRecognitionError(String[] tokenNames,
-                                    RecognitionException e) {
-    String hdr = getErrorHeader(e);
-    String msg = getErrorMessage(e, tokenNames);
-}
 }
 
 scene

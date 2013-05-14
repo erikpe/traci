@@ -24,17 +24,20 @@ import se.ejp.traci.util.Log;
 @parser::members {
 private final List<ParseError> parseErrors = new ArrayList<ParseError>();
 
-public void displayRecognitionError(String[] tokenNames,
-                                    RecognitionException e) {
+public void displayRecognitionError(String[] tokenNames, RecognitionException e)
+{
     String msg = getErrorMessage(e, tokenNames);
     IncludeLocation location = null;
-    if (e.token instanceof TraciToken) {
+
+    if (e.token instanceof TraciToken)
+    {
         location = ((TraciToken) e.token).location;
     }
+
     parseErrors.add(new ParseError(e, location, msg));
 }
 
-public Iterable<ParseError> getParseErrors()
+public List<ParseError> getParseErrors()
 {
     return parseErrors;
 }
@@ -52,9 +55,11 @@ private String currentFilename = null;
 private final Stack<FileLocation> includeStack = new Stack<FileLocation>();
 private final List<ParseError> lexerErrors = new ArrayList<ParseError>();
 
-public Token emit() {
+public Token emit()
+{
     final TraciToken tok = new TraciToken(input, state.type, state.channel, state.tokenStartCharIndex, getCharIndex() - 1,
             new FileLocation(currentFilename, state.tokenStartLine, state.tokenStartCharPositionInLine), includeStack);
+
     tok.setLine(state.tokenStartLine);
     tok.setText(state.text);
     tok.setCharPositionInLine(state.tokenStartCharPositionInLine);
@@ -62,36 +67,46 @@ public Token emit() {
     return tok;
 }
 
-public void ppLine(String rowStr, String filename, String actionStr) {
+public void ppLine(String rowStr, String filename, String actionStr)
+{
     final int row = Integer.parseInt(rowStr);
     final int action = Integer.parseInt(actionStr);
-    if (action == 1) {
-        if (currentFilename != null) {
+
+    if (action == 1)
+    {
+        if (currentFilename != null)
+        {
             includeStack.push(new FileLocation(currentFilename, input.getLine(), 0));
         }
         input.setLine(0);
     }
-    else if (action == 2) {
+    else if (action == 2)
+    {
         final FileLocation location = includeStack.pop();
         input.setLine(location.row);
     }
+
     currentFilename = filename;
 }
 
-public void displayRecognitionError(String[] tokenNames,
-                                    RecognitionException e) {
+public void displayRecognitionError(String[] tokenNames, RecognitionException e)
+{
     final String msg = getErrorMessage(e, tokenNames);
     final IncludeLocation location;
-    if (e.token != null && (e.token instanceof TraciToken)) {
+
+    if (e.token != null && (e.token instanceof TraciToken))
+    {
         location = ((TraciToken) e.token).location;
     }
-    else {
+    else
+    {
         location = new IncludeLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
     }
+
     lexerErrors.add(new ParseError(e, location, msg));
 }
 
-public Iterable<ParseError> getLexerErrors()
+public List<ParseError> getLexerErrors()
 {
     return lexerErrors;
 }

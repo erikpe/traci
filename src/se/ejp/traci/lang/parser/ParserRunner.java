@@ -152,7 +152,9 @@ public class ParserRunner
                 sb.append('\n');
             }
 
-            sb.append("Parse error: ").append(e.getMessage());
+            final String msg = walker.getErrorMessage(e, walker.getTokenNames());
+            sb.append("Tree walker error: ").append(msg);
+
             Log.ERROR(sb.toString());
         }
 
