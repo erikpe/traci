@@ -85,6 +85,9 @@ public class TreeWalkerPrimitiveShapeTest extends TraciTreeWalkerBase
         runTreeWalker("foo(" + id + " { });");
         assertResult(id, 0, true, true);
 
+        runTreeWalker("foo(" + id + " () { });");
+        assertResult(id, 0, true, true);
+
         runTreeWalker("foo(" + id + " { 17; });");
         assertResult(id, 0, true, true);
 

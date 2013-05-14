@@ -90,6 +90,9 @@ public class ParserCsgShapeTest extends TraciParserBase
         runParser("foo(" + id + " { });");
         assertResult(id, 0, true, true);
 
+        runParser("foo(" + id + " () { });");
+        assertError();
+
         runParser("foo(" + id + " { 17; });");
         assertResult(id, 0, true, true);
 

@@ -95,6 +95,9 @@ public class ParserTransformationTest extends TraciParserBase
         runParser("foo(" + id + " { });");
         assertResult(id, 0, true, true);
 
+        runParser("foo(" + id + " () { });");
+        assertResult(id, 0, true, true);
+
         runParser("foo(" + id + " { 17; });");
         assertResult(id, 0, true, true);
 
