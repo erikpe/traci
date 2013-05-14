@@ -99,12 +99,26 @@ public class InterpreterTest extends InterpreterBase
             assertEquals(Type.NUMBER, e.leftType);
             assertEquals("+", e.op);
             assertEquals(Type.BOOLEAN, e.rightType);
+            assertEquals(1, e.includeLocation.fileLocation.row);
+            assertEquals(2, e.includeLocation.fileLocation.col);
         }
     }
 
     @Test
     public void test() throws RecognitionException, InterpreterRuntimeException
     {
-        //runInterpreter("rotz(360)*2;");
+        try
+        {
+            runInterpreter("rotz(360)*2;");
+            fail("Missing exception");
+        }
+        catch (final InterpreterIllegalOperatorArgument e)
+        {
+            assertEquals(Type.TRANSFORMATION, e.leftType);
+            assertEquals("*", e.op);
+            assertEquals(Type.NUMBER, e.rightType);
+            assertEquals(1, e.includeLocation.fileLocation.row);
+            assertEquals(9, e.includeLocation.fileLocation.col);
+        }
     }
 }
