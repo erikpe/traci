@@ -81,35 +81,20 @@ nodes = new ArrayList<TraciNode>();
     ;
 
 statement returns [TraciNode node]
-    : assignable_statement
-        { $node = $assignable_statement.node; }
-    | ^(RETURN assignable_statement)
-        { $node = new ReturnNode($assignable_statement.node); }
+    : expr
+        { $node = $expr.node; }
+    | ^(RETURN expr)
+        { $node = new ReturnNode($expr.node); }
     | ^(IF expr a=block b=block?)
         { $node = new IfElseNode($expr.node, $a.node, $b.node, $IF.token); }
     | ^(WHILE expr block)
         { $node = new WhileNode($expr.node, $block.node, $WHILE.token); }
     | ^(FOR ID c=expr d=expr block)
         { $node = new ForNode($ID.text, $c.node, $d.node, $block.node, $FOR.token); }
-    | ^(GLOBAL_ASSIGN ID assignable_statement)
-        { $node = new AssignNode($ID.text, $assignable_statement.node, true); }
-    | ^(ASSIGN ID assignable_statement)
-        { $node = new AssignNode($ID.text, $assignable_statement.node, false); }
-    ;
-
-assignable_statement returns [TraciNode node]
-    : ^(PRIMITIVE_SHAPE function_call_args? block?)
-        { $node = new ShapeNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
-    | ^(CSG_SHAPE function_call_args? block?)
-        { $node = new ShapeNode($CSG_SHAPE.text, $function_call_args.nodes, $block.node, $CSG_SHAPE.token); }
-    | ^(BBOX function_call_args? block?)
-        { $node = new BBoxNode($function_call_args.nodes, $block.node); }
-    | ^(TRANSFORMATION function_call_args? block?)
-    	{ $node = new TransformationNode($TRANSFORMATION.text, $function_call_args.nodes, $block.node, $TRANSFORMATION.token); }
-    | ^(LIGHT function_call_args? block?)
-        { $node = new LightNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
-    | expr
-        { $node = $expr.node; }
+    | ^(GLOBAL_ASSIGN ID expr)
+        { $node = new AssignNode($ID.text, $expr.node, true); }
+    | ^(ASSIGN ID expr)
+        { $node = new AssignNode($ID.text, $expr.node, false); }
     ;
 
 expr returns [TraciNode node]
@@ -133,6 +118,16 @@ expr returns [TraciNode node]
         { $node = new VectorNode($a.node, $b.node, $c.node, $LBRACKET.token); }
     | ^(COLOR a=expr b=expr c=expr)
         { $node = new ColorNode($a.node, $b.node, $c.node, $COLOR.token); }
-    | INT                   { $node = new ConstNode(new TraciValue(Double.valueOf($INT.text))); }
-    | FLOAT                 { $node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text))); }
+    | ^(PRIMITIVE_SHAPE function_call_args block?)
+        { $node = new ShapeNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
+    | ^(CSG_SHAPE function_call_args? block?)
+        { $node = new ShapeNode($CSG_SHAPE.text, $function_call_args.nodes, $block.node, $CSG_SHAPE.token); }
+    | ^(BBOX function_call_args? block?)
+        { $node = new BBoxNode($function_call_args.nodes, $block.node); }
+    | ^(TRANSFORMATION function_call_args block?)
+    	{ $node = new TransformationNode($TRANSFORMATION.text, $function_call_args.nodes, $block.node, $TRANSFORMATION.token); }
+    | ^(LIGHT function_call_args? block?)
+        { $node = new LightNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
+    | INT   { $node = new ConstNode(new TraciValue(Double.valueOf($INT.text))); }
+    | FLOAT { $node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text))); }
     ;
