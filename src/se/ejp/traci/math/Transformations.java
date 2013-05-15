@@ -109,13 +109,13 @@ public class Transformations
         final Vector dir = vec2.sub(vec1).normalize();
 
         final Transformation rotToZ = rotVecToZ(dir);
-        final Transformation res = identity();
+        Transformation res = identity();
 
-        res.compose(translate(vec1.neg()));
-        res.compose(rotToZ);
-        res.compose(rotz(theta));
-        res.compose(rotToZ.invert());
-        res.compose(translate(vec1));
+        res = res.compose(translate(vec1.neg()));
+        res = res.compose(rotToZ);
+        res = res.compose(rotz(theta));
+        res = res.compose(rotToZ.invert());
+        res = res.compose(translate(vec1));
 
         return res;
     }

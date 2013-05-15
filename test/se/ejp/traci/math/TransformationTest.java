@@ -1,14 +1,14 @@
 package se.ejp.traci.math;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 public class TransformationTest
 {
-    private void assertTransformationApproxEquals(final Transformation tr0, final Transformation tr1,
-            final double epsilon)
+    private void assertTransformationApproxEquals(final Transformation tr0, final Transformation tr1, final double epsilon)
     {
         for (int row = 0; row < 4; ++row)
         {
@@ -21,7 +21,7 @@ public class TransformationTest
     }
 
     @Test
-    public void test()
+    public void testIdentity()
     {
         final Transformation t1 = Transformations.translate(1.0, 2.5, 3.0);
         final Transformation t2 = Transformations.identity();
@@ -35,7 +35,7 @@ public class TransformationTest
     }
 
     @Test
-    public void test2()
+    public void testAssociativity()
     {
         final Transformation t1 = Transformations.translate(1.0, 2.5, 3.0);
         final Transformation t2 = Transformations.rotx(2.23);
@@ -45,6 +45,18 @@ public class TransformationTest
         final Transformation t5 = t1.compose(t2.compose(t3));
 
         assertEquals(t4, t5);
+    }
+
+    @Test
+    public void testNonCommutativity()
+    {
+        final Transformation t1 = Transformations.translate(1.0, 2.5, 3.0);
+        final Transformation t2 = Transformations.rotx(2.23);
+
+        final Transformation t3 = t1.compose(t2);
+        final Transformation t4 = t2.compose(t1);
+
+        assertNotEquals(t3, t4);
     }
 
     @Test
@@ -64,8 +76,10 @@ public class TransformationTest
         assertEquals(eye, Transformations.rotx(2.23).compose(Transformations.rotx(-2.23)));
         assertEquals(eye, Transformations.roty(3.23).compose(Transformations.roty(-3.23)));
         assertEquals(eye, Transformations.rotz(4.23).compose(Transformations.rotz(-4.23)));
-        assertTransformationApproxEquals(eye, Transformations.rotVecToZ(v0).compose(Transformations.rotZToVec(v0)), 1e-15);
-        assertTransformationApproxEquals(eye, Transformations.rotZToVec(v0).compose(Transformations.rotVecToZ(v0)), 1e-15);
-        assertTransformationApproxEquals(eye, Transformations.rotVecToVec(v0, v3).compose(Transformations.rotVecToVec(v3, v0)), 1e-15);
+        assertTransformationApproxEquals(eye, Transformations.rotVecToZ(v0).compose(Transformations.rotZToVec(v0)), 1e-14);
+        assertTransformationApproxEquals(eye, Transformations.rotZToVec(v0).compose(Transformations.rotVecToZ(v0)), 1e-14);
+        assertTransformationApproxEquals(eye, Transformations.rotVecToVec(v0, v3).compose(Transformations.rotVecToVec(v3, v0)), 1e-14);
+        assertTransformationApproxEquals(eye, Transformations.rotAround(v0, v3, 2.23).compose(Transformations.rotAround(v0, v3, -2.23)), 1e-14);
+        assertTransformationApproxEquals(eye, Transformations.rotAround(v0, v3, 2.23).compose(Transformations.rotAround(v3, v0, 2.23)), 1e-14);
     }
 }
