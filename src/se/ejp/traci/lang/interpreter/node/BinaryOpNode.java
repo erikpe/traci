@@ -91,7 +91,6 @@ public class BinaryOpNode implements TraciNode
 
     private Object calc(final Double a, final Double b)
     {
-        a.compareTo(b);
         switch (op)
         {
         case BINARY_ADD:  return Double.valueOf(a + b);

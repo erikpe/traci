@@ -10,6 +10,8 @@ import java.util.Map;
 import org.antlr.runtime.Token;
 
 import se.ejp.traci.lang.interpreter.Context;
+import se.ejp.traci.lang.interpreter.Entities;
+import se.ejp.traci.lang.interpreter.Entities.Entity;
 import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
@@ -24,6 +26,7 @@ public class TransformationNode implements TraciNode
 {
     static enum TransformationType
     {
+        IDENTITY("identity"),
         ROTX("rotx"),
         ROTY("roty"),
         ROTZ("rotz"),
@@ -116,6 +119,15 @@ public class TransformationNode implements TraciNode
             throw new InterpreterIllegalArguments(token.location, context.callStack, transformationType.id, argTypes);
         }
 
-        return new TraciValue(transformation);
+        TraciValue value = new TraciValue(transformation);
+
+        if (blockNode != null)
+        {
+            final Entity entity = Entities.makeEntity(value.getObject());
+            blockNode.eval(context.newEntity(entity));
+            value = entity.getValue();
+        }
+
+        return value;
     }
 }

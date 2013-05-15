@@ -114,7 +114,13 @@ public class TreeWalkerTransformationTest extends TraciTreeWalkerBase
 
         runTreeWalker("foo(" + id + "(23, 1+2) { 17; });");
         assertResult(id, 2, true, true);
-}
+    }
+
+    @Test
+    public void testIdentity() throws RecognitionException
+    {
+        runTest("identity");
+    }
 
     @Test
     public void testTranslate() throws RecognitionException

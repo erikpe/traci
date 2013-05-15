@@ -14,7 +14,7 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.math.Vector;
 
-public class VectorNodeTest extends InterpreterBase
+public class InterpreterVectorTest extends InterpreterBase
 {
     @Test
     public void testVector() throws RecognitionException, InterpreterRuntimeException

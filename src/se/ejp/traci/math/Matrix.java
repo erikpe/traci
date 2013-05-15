@@ -1,5 +1,7 @@
 package se.ejp.traci.math;
 
+import se.ejp.traci.util.Utilities;
+
 public class Matrix
 {
     private static final Matrix EYE = newEye();
@@ -257,7 +259,7 @@ public class Matrix
 
         for (int i = 0; i < data.length; ++i)
         {
-            if (!Double.valueOf(data[i]).equals(Double.valueOf(otherMatrix.data[i])))
+            if (!Utilities.approxEqualsDouble(data[i], otherMatrix.data[i]))
             {
                 return false;
             }

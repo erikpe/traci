@@ -129,6 +129,12 @@ public class ParserTransformationTest extends TraciParserBase
     }
 
     @Test
+    public void testIdentity() throws RecognitionException
+    {
+        runTest("identity");
+    }
+
+    @Test
     public void testTranslate() throws RecognitionException
     {
         runTest("translate");

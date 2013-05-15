@@ -135,7 +135,7 @@ public class TraciLexerTest extends TraciLexerBase
     @Test
     public void testTransformation()
     {
-        runLexer("translate scale scalex scaley scalez rotx roty rotz rotAround rotVecToVec");
+        runLexer("translate scale scalex scaley scalez rotx roty rotz rotAround rotVecToVec identity");
         assertNoError();
         assertToken( 0, TraciLexer.TRANSFORMATION, "translate",   Token.DEFAULT_CHANNEL, 1,  0);
         assertToken( 1, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1,  9);
@@ -156,7 +156,9 @@ public class TraciLexerTest extends TraciLexerBase
         assertToken(16, TraciLexer.TRANSFORMATION, "rotAround",   Token.DEFAULT_CHANNEL, 1, 52);
         assertToken(17, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 61);
         assertToken(18, TraciLexer.TRANSFORMATION, "rotVecToVec", Token.DEFAULT_CHANNEL, 1, 62);
-        assertToken(19, TraciLexer.EOF,            null,          Token.DEFAULT_CHANNEL, 1, 73);
+        assertToken(19, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 73);
+        assertToken(20, TraciLexer.TRANSFORMATION, "identity",    Token.DEFAULT_CHANNEL, 1, 74);
+        assertToken(21, TraciLexer.EOF,            null,          Token.DEFAULT_CHANNEL, 1, 82);
     }
 
     @Test

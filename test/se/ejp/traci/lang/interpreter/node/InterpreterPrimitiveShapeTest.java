@@ -17,7 +17,7 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.model.shape.primitive.Box;
 
-public class ShapeNodeTest extends InterpreterBase
+public class InterpreterPrimitiveShapeTest extends InterpreterBase
 {
     @Test
     public void testBox() throws RecognitionException, InterpreterRuntimeException
