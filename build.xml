@@ -146,6 +146,7 @@
   </target>
 
   <target name="run-tests" depends="compile, compile-tests">
+    <delete dir="${test.output.dir}" />
     <mkdir dir="${test.output.dir}" />
     <junit failureProperty="test.failure" printsummary="yes" haltonfailure="no" showoutput="no">
       <classpath>
@@ -174,7 +175,18 @@
     </junitreport>
   </target>
 
-  <target name="test" depends="run-tests, test-report">
+  <target name="test" depends="test-report">
+    <concat>
+      <fileset file="${test.report.dir}/overview-summary.html" />
+      <filterchain>
+        <linecontainsregexp>
+          <regexp pattern='title="Display all tests"' />
+        </linecontainsregexp>
+        <tokenfilter>
+          <replaceregex pattern='.*"all-tests.html"&gt;(\d+).*"alltests-fails.html"&gt;(\d+).*"alltests-errors.html"&gt;(\d+).*' replace="Tests run: \1, Failed: \2, Errors: \3" />
+        </tokenfilter>
+      </filterchain>
+    </concat>
     <fail message="Failed test(s)" if="test.failure" />
   </target>
 
