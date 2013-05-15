@@ -211,7 +211,8 @@ csg_shape
     ;
 
 bbox
-    : BBOX function_call_args? block? -> ^(BBOX function_call_args? block?)
+    : BBOX function_call_args block? -> ^(BBOX function_call_args block?)
+    | BBOX block?                    -> ^(BBOX ^(ARGS) block?)
     ;
 
 transformation
@@ -220,7 +221,8 @@ transformation
     ;
 
 light
-    : LIGHT function_call_args? block? -> ^(LIGHT function_call_args? block?)
+    : LIGHT function_call_args block? -> ^(LIGHT function_call_args block?)
+    | LIGHT block?                    -> ^(LIGHT ^(ARGS) block?)
     ;
 
 vector 

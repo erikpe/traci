@@ -1,15 +1,14 @@
 package se.ejp.traci.lang.interpreter.node;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.antlr.runtime.Token;
 
 import se.ejp.traci.lang.interpreter.Context;
 import se.ejp.traci.lang.interpreter.Entities;
-import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.Entities.Entity;
+import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalArgumentType;
@@ -67,8 +66,9 @@ public class LightNode implements TraciNode
 
     public LightNode(final String lightType, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
+        assert argNodes != null;
         this.lightType = LightType.valueOf(lightType.toUpperCase());
-        this.argNodes = (argNodes == null ? Collections.<TraciNode>emptyList() : argNodes);
+        this.argNodes = argNodes;
         this.blockNode = blockNode;
         this.token = (TraciToken) token;
     }

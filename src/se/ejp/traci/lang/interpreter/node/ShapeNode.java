@@ -70,8 +70,9 @@ public class ShapeNode implements TraciNode
 
     public ShapeNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
+        assert argNodes != null;
         this.shapeType = typeMap.get(typeStr);
-        this.argNodes = (argNodes == null ? Collections.<TraciNode>emptyList() : argNodes);
+        this.argNodes = argNodes;
         this.blockNode = blockNode;
         this.token = (TraciToken) token;
 

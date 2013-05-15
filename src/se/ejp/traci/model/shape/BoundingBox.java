@@ -19,6 +19,22 @@ public class BoundingBox implements Transformable, Cloneable
         transformation = Transformations.identity();
     }
 
+    public BoundingBox(final Vector v0, final Vector v1)
+    {
+        this();
+
+        final double xSize = Math.abs(v1.x() - v0.x());
+        final double ySize = Math.abs(v1.y() - v0.y());
+        final double zSize = Math.abs(v1.z() - v0.z());
+
+        final double x = Math.min(v0.x(), v1.x());
+        final double y = Math.min(v0.y(), v1.y());
+        final double z = Math.min(v0.z(), v1.z());
+
+        transform(Transformations.scale(xSize, ySize, zSize));
+        transform(Transformations.translate(x, y, z));
+    }
+
     @Override
     public void transform(final Transformation tr)
     {
