@@ -14,6 +14,7 @@ import se.ejp.traci.lang.interpreter.InterpreterBase;
 import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalArguments;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
+import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.model.shape.primitive.Box;
 
@@ -22,20 +23,39 @@ public class InterpreterPrimitiveShapeTest extends InterpreterBase
     @Test
     public void testBox() throws RecognitionException, InterpreterRuntimeException
     {
+        final Transformation eye = Transformations.identity();
+        final Transformation t0 = Transformations.translate(1.0, 2.0, 3.0);
+        final Transformation t1 = Transformations.scalez(2.23);
+
         runInterpreter("return box;");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(Transformations.identity(), value.getPrimitive().getTransformation());
+        assertEquals(eye, value.getPrimitive().getTransformation());
 
         runInterpreter("return box();");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(Transformations.identity(), value.getPrimitive().getTransformation());
+        assertEquals(eye, value.getPrimitive().getTransformation());
 
         runInterpreter("return box() { };");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(Transformations.identity(), value.getPrimitive().getTransformation());
+        assertEquals(eye, value.getPrimitive().getTransformation());
+
+        runInterpreter("return box() { translate [1, 2, 3]; };");
+        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
+        assertEquals(Box.class, value.getPrimitive().getClass());
+        assertEquals(t0, value.getPrimitive().getTransformation());
+
+        runInterpreter("return box() { translate [1, 2, 3]; scalez 2.23; };");
+        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
+        assertEquals(Box.class, value.getPrimitive().getClass());
+        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
+
+        runInterpreter("return box() { translate([1, 2, 3]) { scalez 2.23; }; };");
+        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
+        assertEquals(Box.class, value.getPrimitive().getClass());
+        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
 
         runInterpreter("return box([1,2,3], [4,5,6]);");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
@@ -44,6 +64,12 @@ public class InterpreterPrimitiveShapeTest extends InterpreterBase
         runInterpreter("return box([1,2,3], [4,5,6]) { translate [1, 2, 3]; };");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Box.class, value.getPrimitive().getClass());
+
+        runInterpreter("return box([1,10,100], [4,14,105]);");
+        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
+        assertEquals(Box.class, value.getPrimitive().getClass());
+        assertEquals(Transformations.scale(3.0, 4.0, 5.0).compose(Transformations.translate(1.0, 10.0, 100.0)),
+                     value.getPrimitive().getTransformation());
 
         try
         {
