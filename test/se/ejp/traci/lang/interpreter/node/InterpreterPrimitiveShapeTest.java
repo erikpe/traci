@@ -68,8 +68,21 @@ public class InterpreterPrimitiveShapeTest extends InterpreterBase
         runInterpreter("return box([1,10,100], [4,14,105]);");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(Transformations.scale(3.0, 4.0, 5.0).compose(Transformations.translate(1.0, 10.0, 100.0)),
-                     value.getPrimitive().getTransformation());
+        {
+            final Transformation tmp0 = Transformations.scale(3.0, 4.0, 5.0);
+            final Transformation tmp1 = Transformations.translate(1.0, 10.0, 100.0);
+            assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());
+        }
+
+        runInterpreter("return box([1,10,100], [4,14,105]) { translate [10,20,30]; };");
+        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
+        assertEquals(Box.class, value.getPrimitive().getClass());
+        {
+            final Transformation tmp0 = Transformations.scale(3.0, 4.0, 5.0);
+            final Transformation tmp1 = Transformations.translate(1.0, 10.0, 100.0);
+            final Transformation tmp2 = Transformations.translate(10.0, 20.0, 30.0);
+            assertEquals(tmp0.compose(tmp1).compose(tmp2), value.getPrimitive().getTransformation());
+        }
 
         try
         {
