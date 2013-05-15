@@ -147,7 +147,7 @@
 
   <target name="run-tests" depends="compile, compile-tests">
     <mkdir dir="${test.output.dir}" />
-    <junit failureProperty="test.failure" printsummary="yes" showoutput="no">
+    <junit failureProperty="test.failure" printsummary="yes" haltonfailure="no" showoutput="no">
       <classpath>
         <pathelement location="${build.dir}" />
         <pathelement location="${test.build.dir}" />
