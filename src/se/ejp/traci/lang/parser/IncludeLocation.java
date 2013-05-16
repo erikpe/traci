@@ -14,20 +14,9 @@ public class IncludeLocation
 
         public FileLocation(final String filename, final int row, final int col)
         {
-            this.filename = unquote(filename);
+            this.filename = filename;
             this.row = row;
             this.col = col;
-        }
-
-        private static String unquote(String str)
-        {
-            if (str == null)
-            {
-                return null;
-            }
-            str = str.substring(1, str.length() - 1);
-            str = str.replace("\\\\", "\\");
-            return str;
         }
 
         @Override
@@ -53,8 +42,7 @@ public class IncludeLocation
             if (i == (includePath.size() - 1))
             {
                 sb.append("In file included from ");
-            }
-            else
+            } else
             {
                 sb.append("                 from ");
             }
@@ -66,8 +54,7 @@ public class IncludeLocation
             if (i == 0)
             {
                 sb.append(":\n");
-            }
-            else
+            } else
             {
                 sb.append(",\n");
             }

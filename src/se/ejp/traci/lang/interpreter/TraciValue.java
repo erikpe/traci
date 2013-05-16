@@ -16,10 +16,12 @@ import se.ejp.traci.model.shape.primitive.Primitive;
 
 public class TraciValue implements Cloneable
 {
-    public static enum Type {
+    public static enum Type
+    {
         NUMBER(Double.class),
         BOOLEAN(Boolean.class),
         VECTOR(Vector.class),
+        STRING(String.class),
         PRIMITIVE_SHAPE(Primitive.class),
         CSG_SHAPE(Csg.class),
         BOUNDING_BOX(BoundingBox.class),
@@ -44,64 +46,23 @@ public class TraciValue implements Cloneable
 
     public TraciValue(final Object obj)
     {
-        this.value = obj;
+        Type tmpType = null;
+        for (final Type t : Type.values())
+        {
+            if (t.clazz.isAssignableFrom(obj.getClass()))
+            {
+                tmpType = t;
+                break;
+            }
+        }
 
-        if (obj instanceof Double)
-        {
-            type = Type.NUMBER;
-        }
-        else if (obj instanceof Boolean)
-        {
-            type = Type.BOOLEAN;
-        }
-        else if (obj instanceof Vector)
-        {
-            type = Type.VECTOR;
-        }
-        else if (obj instanceof Primitive)
-        {
-            type = Type.PRIMITIVE_SHAPE;
-        }
-        else if (obj instanceof Csg)
-        {
-            type = Type.CSG_SHAPE;
-        }
-        else if (obj instanceof BoundingBox)
-        {
-            type = Type.BOUNDING_BOX;
-        }
-        else if (obj instanceof Transformation)
-        {
-            type = Type.TRANSFORMATION;
-        }
-        else if (obj instanceof Material)
-        {
-            type = Type.MATERIAL;
-        }
-        else if (obj instanceof Texture)
-        {
-            type = Type.TEXTURE;
-        }
-        else if (obj instanceof Finish)
-        {
-            type = Type.FINISH;
-        }
-        else if (obj instanceof Pigment)
-        {
-            type = Type.PIGMENT;
-        }
-        else if (obj instanceof Color)
-        {
-            type = Type.COLOR;
-        }
-        else if (obj instanceof Light)
-        {
-            type = Type.LIGHT;
-        }
-        else
+        if (tmpType == null)
         {
             throw new InterpreterInternalException("Unable to make TraciValue of type: " + obj.getClass().toString());
         }
+
+        this.value = obj;
+        this.type = tmpType;
     }
 
     public Type getType()
@@ -127,6 +88,11 @@ public class TraciValue implements Cloneable
     public Vector getVector()
     {
         return (Vector) value;
+    }
+
+    public String getString()
+    {
+        return (String) value;
     }
 
     public Shape getShape()
@@ -198,13 +164,14 @@ public class TraciValue implements Cloneable
         case NUMBER:
         case BOOLEAN:
         case VECTOR:
+        case STRING:
         case TRANSFORMATION:
         case MATERIAL:
         case TEXTURE:
         case FINISH:
         case PIGMENT:
         case COLOR:
-            return this;
+            return this; // These are immuatable, no need to clone
 
         case PRIMITIVE_SHAPE:
             return new TraciValue(getPrimitive().clone());

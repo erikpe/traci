@@ -187,6 +187,7 @@ primary_expr
 constant
     : FLOAT
     | INT
+    | QSTRING
     ;
 
 function_call
@@ -315,5 +316,6 @@ QSTRING
     ;
 
 PPLINE
-    : '#line' WS+ row=INT WS QSTRING WS action=INT { $channel=HIDDEN; ppLine($row.text, $QSTRING.text, $action.text); }
+    : '#line' WS+ row=INT WS QSTRING WS action=INT
+        { $channel=HIDDEN; ppLine($row.text, ParserUtilities.unquoteQstring($QSTRING.text), $action.text); }
     ;
