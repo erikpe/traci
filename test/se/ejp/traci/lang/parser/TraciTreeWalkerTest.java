@@ -14,7 +14,7 @@ import se.ejp.traci.lang.interpreter.node.TraciNode;
 public class TraciTreeWalkerTest extends TraciTreeWalkerBase
 {
     @Test
-    public void test() throws RecognitionException
+    public void testTreeWalker() throws RecognitionException
     {
         runTreeWalker("17+23;");
         assertEquals(1, rootNode.getStatements().size());
@@ -30,5 +30,17 @@ public class TraciTreeWalkerTest extends TraciTreeWalkerBase
         assertEquals(17, aNode.value.getNumber(), 0);
         assertEquals(Type.NUMBER, bNode.value.getType());
         assertEquals(23, bNode.value.getNumber(), 0);
+    }
+
+    @Test
+    public void testString() throws RecognitionException
+    {
+        runTreeWalker("\"foo/bar.hej\";");
+        assertEquals(1, rootNode.getStatements().size());
+        final TraciNode statement = rootNode.getStatements().get(0);
+        assertEquals(ConstNode.class, statement.getClass());
+        final ConstNode constNode = (ConstNode) statement;
+        assertEquals(Type.STRING, constNode.value.getType());
+        assertEquals("foo/bar.hej", constNode.value.getString());
     }
 }

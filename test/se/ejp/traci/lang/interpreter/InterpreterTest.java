@@ -105,6 +105,14 @@ public class InterpreterTest extends InterpreterBase
     }
 
     @Test
+    public void testString() throws RecognitionException, InterpreterRuntimeException
+    {
+        runInterpreter("return \"foo/bar.hej\";");
+        assertEquals(Type.STRING, value.getType());
+        assertEquals("foo/bar.hej", value.getString());
+    }
+
+    @Test
     public void test() throws RecognitionException, InterpreterRuntimeException
     {
         try

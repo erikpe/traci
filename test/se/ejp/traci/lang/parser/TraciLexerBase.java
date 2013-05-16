@@ -10,6 +10,7 @@ import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 
 import se.ejp.traci.lang.preprocessor.PreprocessorRunner;
@@ -56,9 +57,52 @@ public class TraciLexerBase
         assertEquals(0, lexerErrors.size());
     }
 
-    protected void assertErrors(final int numErrors)
+    protected void assertError(final Class<? extends RecognitionException> clazz)
     {
-        assertEquals(numErrors, lexerErrors.size());
+        assertError(clazz, null, null);
+    }
+
+    protected void assertError(final Class<? extends RecognitionException> clazz, final Integer row, final Integer col)
+    {
+        boolean foundError = false;
+
+        for (final ParseError error : lexerErrors)
+        {
+            if (!clazz.equals(error.e.getClass()))
+            {
+                continue;
+            }
+
+            final Token token = error.e.token;
+
+            if (token != null && row != null)
+            {
+                if (token instanceof TraciToken)
+                {
+                    assertEquals(token.getLine(), ((TraciToken) token).location.fileLocation.row);
+                }
+                if (row.intValue() != token.getLine())
+                {
+                    continue;
+                }
+            }
+
+            if (token != null && col != null)
+            {
+                if (token instanceof TraciToken)
+                {
+                    assertEquals(token.getCharPositionInLine(), ((TraciToken) token).location.fileLocation.col);
+                }
+                if (col.intValue() != token.getCharPositionInLine())
+                {
+                    continue;
+                }
+            }
+
+            foundError = true;
+        }
+
+        assertTrue(foundError);
     }
 
     protected void assertToken(final int tokenNr, final Integer tokenType, final String tokenText, final Integer channel)

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.antlr.runtime.EarlyExitException;
+import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.NoViableAltException;
 import org.antlr.runtime.Token;
 import org.junit.Test;
@@ -30,9 +31,7 @@ public class TraciLexerTest extends TraciLexerBase
     public void testNoViableAltException()
     {
         runLexer("17%23;");
-        assertErrors(1);
-        assertEquals(NoViableAltException.class, lexerErrors.get(0).e.getClass());
-        assertEquals('%', lexerErrors.get(0).e.c);
+        assertError(NoViableAltException.class);
     }
 
     @Test
@@ -59,8 +58,23 @@ public class TraciLexerTest extends TraciLexerBase
         assertToken(0, TraciLexer.FLOAT, "23E13", Token.DEFAULT_CHANNEL, 1, 0);
 
         runLexer("1.2e+");
-        assertErrors(1);
-        assertEquals(EarlyExitException.class, lexerErrors.get(0).e.getClass());
+        assertError(EarlyExitException.class);
+    }
+
+    @Test
+    public void testString()
+    {
+        runLexer("\"hej\"");
+        assertNoError();
+        assertToken(0, TraciLexer.QSTRING, "\"hej\"", Token.DEFAULT_CHANNEL, 1, 0);
+        assertToken(1, TraciLexer.EOF,     null,      Token.DEFAULT_CHANNEL, 1, 5);
+
+        runLexer("\"hej");
+        assertError(MismatchedTokenException.class, 1, 4);
+
+        runLexer("\"foo/bar.hej\"");
+        assertToken(0, TraciLexer.QSTRING, "\"foo/bar.hej\"", Token.DEFAULT_CHANNEL, 1, 0);
+        assertToken(1, TraciLexer.EOF,     null,              Token.DEFAULT_CHANNEL, 1, 13);
     }
 
     @Test

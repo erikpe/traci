@@ -18,6 +18,19 @@ public class TraciParserTest extends TraciParserBase
     {
         runParser("17+23;");
         assertNoError();
+        assertEquals(TraciParser.BLOCK, parseTree.getType());
+        assertEquals(1, parseTree.getChildCount());
+        final Tree node = parseTree.getChild(0);
+        assertEquals(TraciParser.PLUS_OP, node.getType());
+        assertEquals(2, node.getChildCount());
+        final Tree left = node.getChild(0);
+        final Tree right = node.getChild(1);
+        assertEquals(TraciParser.INT, left.getType());
+        assertEquals(TraciParser.INT, right.getType());
+        assertEquals(0, left.getChildCount());
+        assertEquals(0, right.getChildCount());
+        assertEquals("17", left.getText());
+        assertEquals("23", right.getText());
     }
 
     @Test
@@ -35,6 +48,8 @@ public class TraciParserTest extends TraciParserBase
     {
         runParser("color [.5, 2.23, .17];");
         assertNoError();
+        assertEquals(TraciParser.BLOCK, parseTree.getType());
+        assertEquals(1, parseTree.getChildCount());
         final Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.COLOR, node.getType());
         assertEquals(3, node.getChildCount());
@@ -61,6 +76,8 @@ public class TraciParserTest extends TraciParserBase
     {
         runParser("[.5, 2.23, .17];");
         assertNoError();
+        assertEquals(TraciParser.BLOCK, parseTree.getType());
+        assertEquals(1, parseTree.getChildCount());
         final Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.VECTOR, node.getType());
         assertEquals(4, node.getChildCount());
@@ -80,10 +97,25 @@ public class TraciParserTest extends TraciParserBase
     }
 
     @Test
+    public void testString() throws RecognitionException
+    {
+        runParser("\"foo/bar.hej\";");
+        assertNoError();
+        assertEquals(TraciParser.BLOCK, parseTree.getType());
+        assertEquals(1, parseTree.getChildCount());
+        final Tree node = parseTree.getChild(0);
+        assertEquals(TraciParser.QSTRING, node.getType());
+        assertEquals("\"foo/bar.hej\"", node.getText());
+        assertEquals(0, node.getChildCount());
+    }
+
+    @Test
     public void testRef() throws RecognitionException
     {
         runParser("foo;");
         assertNoError();
+        assertEquals(TraciParser.BLOCK, parseTree.getType());
+        assertEquals(1, parseTree.getChildCount());
         Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.REF, node.getType());
         assertEquals(1, node.getChildCount());
@@ -97,6 +129,8 @@ public class TraciParserTest extends TraciParserBase
     {
         runParser(".23;");
         assertNoError();
+        assertEquals(TraciParser.BLOCK, parseTree.getType());
+        assertEquals(1, parseTree.getChildCount());
         final Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.FLOAT, node.getType());
     }
