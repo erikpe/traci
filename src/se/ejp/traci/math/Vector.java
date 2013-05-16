@@ -1,6 +1,5 @@
 package se.ejp.traci.math;
 
-import se.ejp.traci.util.Utilities;
 
 public class Vector
 {
@@ -112,8 +111,8 @@ public class Vector
 
         final Vector otherVector = (Vector) other;
 
-        return Utilities.approxEqualsDouble(x, otherVector.x) &&
-               Utilities.approxEqualsDouble(y, otherVector.y) &&
-               Utilities.approxEqualsDouble(z, otherVector.z);
+        return Double.valueOf(x).equals(Double.valueOf(otherVector.x)) &&
+               Double.valueOf(y).equals(Double.valueOf(otherVector.y)) &&
+               Double.valueOf(z).equals(Double.valueOf(otherVector.z));
     }
 }

@@ -179,6 +179,7 @@ primary_expr
     | bbox
     | transformation
     | light
+    | pigment
     | vector
     | color
     | LPAR! expr RPAR!
@@ -224,6 +225,11 @@ transformation
 light
     : LIGHT function_call_args block? -> ^(LIGHT function_call_args block?)
     | LIGHT block?                    -> ^(LIGHT ^(ARGS) block?)
+    ;
+
+pigment
+    : PIGMENT function_call_args block? -> ^(PIGMENT function_call_args block?)
+    | PIGMENT block?                    -> ^(PIGMENT ^(ARGS) block?)
     ;
 
 vector 
@@ -284,6 +290,10 @@ COLOR
 
 LIGHT
     : ('pointlight' | 'ambientlight')
+    ;
+
+PIGMENT
+    : ('solid' | 'image' | 'checker')
     ;
 
 ID  : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*

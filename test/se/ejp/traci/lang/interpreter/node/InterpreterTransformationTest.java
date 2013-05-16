@@ -2,6 +2,7 @@ package se.ejp.traci.lang.interpreter.node;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static se.ejp.traci.util.AssertApprox.assertApprox;
 
 import java.util.Collections;
 
@@ -21,27 +22,27 @@ public class InterpreterTransformationTest extends InterpreterBase
     {
         runInterpreter("return identity;");
         assertEquals(Type.TRANSFORMATION, value.getType());
-        assertEquals(Transformations.identity(), value.getTransformation());
+        assertApprox(Transformations.identity(), value.getTransformation());
 
         runInterpreter("return identity();");
         assertEquals(Type.TRANSFORMATION, value.getType());
-        assertEquals(Transformations.identity(), value.getTransformation());
+        assertApprox(Transformations.identity(), value.getTransformation());
 
         runInterpreter("return identity() { };");
         assertEquals(Type.TRANSFORMATION, value.getType());
-        assertEquals(Transformations.identity(), value.getTransformation());
+        assertApprox(Transformations.identity(), value.getTransformation());
 
         runInterpreter("return identity { identity; };");
         assertEquals(Type.TRANSFORMATION, value.getType());
-        assertEquals(Transformations.identity(), value.getTransformation());
+        assertApprox(Transformations.identity(), value.getTransformation());
 
         runInterpreter("return identity { rotx(2.23); };");
         assertEquals(Type.TRANSFORMATION, value.getType());
-        assertEquals(Transformations.rotx(2.23), value.getTransformation());
+        assertApprox(Transformations.rotx(2.23), value.getTransformation());
 
         runInterpreter("return identity { rotx(2.23) { }; rotx(-2.23); };");
         assertEquals(Type.TRANSFORMATION, value.getType());
-        assertEquals(Transformations.identity(), value.getTransformation());
+        assertApprox(Transformations.identity(), value.getTransformation());
 
         try
         {

@@ -1,6 +1,5 @@
 package se.ejp.traci.math;
 
-import se.ejp.traci.util.Utilities;
 
 public class Matrix
 {
@@ -13,7 +12,7 @@ public class Matrix
         data = new double[16];
     }
 
-    double at(final int row, final int col)
+    public double at(final int row, final int col)
     {
         return data[row * 4 + col];
     }
@@ -259,7 +258,7 @@ public class Matrix
 
         for (int i = 0; i < data.length; ++i)
         {
-            if (!Utilities.approxEqualsDouble(data[i], otherMatrix.data[i]))
+            if (!Double.valueOf(data[i]).equals(Double.valueOf(otherMatrix.data[i])))
             {
                 return false;
             }

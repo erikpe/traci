@@ -2,8 +2,8 @@ package se.ejp.traci.math;
 
 public class Transformation
 {
-    final Matrix mat;
-    final Matrix invMat;
+    public final Matrix mat;
+    public final Matrix invMat;
 
     private Transformation(final Matrix mat, final Matrix invMat)
     {

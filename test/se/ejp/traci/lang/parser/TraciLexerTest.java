@@ -19,12 +19,12 @@ public class TraciLexerTest extends TraciLexerBase
         runLexer("17+\n23;");
         assertNoError();
         assertEquals(6, tokens.size());
-        assertToken(0, TraciLexer.INT,      "17", Token.DEFAULT_CHANNEL, 1, 0);
-        assertToken(1, TraciLexer.PLUS_OP,   "+", Token.DEFAULT_CHANNEL, 1, 2);
-        assertToken(2, TraciLexer.WS,       "\n", Token.HIDDEN_CHANNEL,  1, 3);
-        assertToken(3, TraciLexer.INT,      "23", Token.DEFAULT_CHANNEL, 2, 0);
-        assertToken(4, TraciLexer.SEMICOLON, ";", Token.DEFAULT_CHANNEL, 2, 2);
-        assertToken(5, TraciLexer.EOF,   "<EOF>", Token.DEFAULT_CHANNEL, 2, 3);
+        assertToken(0, TraciLexer.INT,       "17",    Token.DEFAULT_CHANNEL, 1, 0);
+        assertToken(1, TraciLexer.PLUS_OP,   "+",     Token.DEFAULT_CHANNEL, 1, 2);
+        assertToken(2, TraciLexer.WS,        "\n",    Token.HIDDEN_CHANNEL,  1, 3);
+        assertToken(3, TraciLexer.INT,       "23",    Token.DEFAULT_CHANNEL, 2, 0);
+        assertToken(4, TraciLexer.SEMICOLON, ";",     Token.DEFAULT_CHANNEL, 2, 2);
+        assertToken(5, TraciLexer.EOF,       "<EOF>", Token.DEFAULT_CHANNEL, 2, 3);
     }
 
     @Test

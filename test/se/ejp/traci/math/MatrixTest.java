@@ -1,6 +1,7 @@
 package se.ejp.traci.math;
 
 import static org.junit.Assert.assertEquals;
+import static se.ejp.traci.util.AssertApprox.assertApprox;
 
 import org.junit.Test;
 
@@ -27,11 +28,11 @@ public class MatrixTest
         final Vector v1 = Vector.make(-v0.x(), -v0.y(), -v0.z());
         final Vector v2 = Vector.make(1.0 / v0.x(), 1.0 / v0.y(), 1.0 / v0.z());
 
-        assertEquals(Matrix.eye(), Matrix.eye().mul(Matrix.eye()));
-        assertEquals(Matrix.eye(), Matrix.rotx(2.23).mul(Matrix.rotx(-2.23)));
-        assertEquals(Matrix.eye(), Matrix.roty(3.23).mul(Matrix.roty(-3.23)));
-        assertEquals(Matrix.eye(), Matrix.rotz(4.23).mul(Matrix.rotz(-4.23)));
-        assertEquals(Matrix.eye(), Matrix.scale(v0).mul(Matrix.scale(v2)));
-        assertEquals(Matrix.eye(), Matrix.translate(v0).mul(Matrix.translate(v1)));
+        assertApprox(Matrix.eye(), Matrix.eye().mul(Matrix.eye()));
+        assertApprox(Matrix.eye(), Matrix.rotx(2.23).mul(Matrix.rotx(-2.23)));
+        assertApprox(Matrix.eye(), Matrix.roty(3.23).mul(Matrix.roty(-3.23)));
+        assertApprox(Matrix.eye(), Matrix.rotz(4.23).mul(Matrix.rotz(-4.23)));
+        assertApprox(Matrix.eye(), Matrix.scale(v0).mul(Matrix.scale(v2)));
+        assertApprox(Matrix.eye(), Matrix.translate(v0).mul(Matrix.translate(v1)));
     }
 }
