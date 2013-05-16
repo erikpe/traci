@@ -19,7 +19,6 @@ import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.functions.BuiltinFunctions;
 import se.ejp.traci.lang.interpreter.functions.FunctionSet;
 import se.ejp.traci.lang.interpreter.node.AssignNode;
-import se.ejp.traci.lang.interpreter.node.BBoxNode;
 import se.ejp.traci.lang.interpreter.node.BinaryOpNode;
 import se.ejp.traci.lang.interpreter.node.BlockNode;
 import se.ejp.traci.lang.interpreter.node.ColorNode;
@@ -28,11 +27,10 @@ import se.ejp.traci.lang.interpreter.node.ForNode;
 import se.ejp.traci.lang.interpreter.node.FunctionCallNode;
 import se.ejp.traci.lang.interpreter.node.FunctionNode;
 import se.ejp.traci.lang.interpreter.node.IfElseNode;
-import se.ejp.traci.lang.interpreter.node.LightNode;
+import se.ejp.traci.lang.interpreter.node.ObjectNode;
 import se.ejp.traci.lang.interpreter.node.Op;
 import se.ejp.traci.lang.interpreter.node.RefNode;
 import se.ejp.traci.lang.interpreter.node.ReturnNode;
-import se.ejp.traci.lang.interpreter.node.ShapeNode;
 import se.ejp.traci.lang.interpreter.node.TraciNode;
 import se.ejp.traci.lang.interpreter.node.TransformationNode;
 import se.ejp.traci.lang.interpreter.node.UnaryOpNode;
@@ -121,15 +119,15 @@ expr returns [TraciNode node]
     | ^(COLOR a=expr b=expr c=expr)
         { $node = new ColorNode($a.node, $b.node, $c.node, $COLOR.token); }
     | ^(PRIMITIVE_SHAPE function_call_args block?)
-        { $node = new ShapeNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
+        { $node = new ObjectNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
     | ^(CSG_SHAPE block?)
-        { $node = new ShapeNode($CSG_SHAPE.text, Collections.<TraciNode>emptyList(), $block.node, $CSG_SHAPE.token); }
+        { $node = new ObjectNode($CSG_SHAPE.text, Collections.<TraciNode>emptyList(), $block.node, $CSG_SHAPE.token); }
     | ^(BBOX function_call_args block?)
-        { $node = new BBoxNode($function_call_args.nodes, $block.node, $BBOX.token); }
+        { $node = new ObjectNode($BBOX.text, $function_call_args.nodes, $block.node, $BBOX.token); }
     | ^(TRANSFORMATION function_call_args block?)
     	{ $node = new TransformationNode($TRANSFORMATION.text, $function_call_args.nodes, $block.node, $TRANSFORMATION.token); }
     | ^(LIGHT function_call_args block?)
-        { $node = new LightNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
+        { $node = new ObjectNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
     | INT   { $node = new ConstNode(new TraciValue(Double.valueOf($INT.text))); }
     | FLOAT { $node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text))); }
     ;

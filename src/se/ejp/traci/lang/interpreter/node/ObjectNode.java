@@ -19,7 +19,9 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalArguments;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.parser.TraciToken;
-import se.ejp.traci.model.shape.Shape;
+import se.ejp.traci.model.light.AmbientLight;
+import se.ejp.traci.model.light.PointLight;
+import se.ejp.traci.model.shape.BoundingBox;
 import se.ejp.traci.model.shape.csg.Difference;
 import se.ejp.traci.model.shape.csg.Intersection;
 import se.ejp.traci.model.shape.csg.Union;
@@ -29,60 +31,66 @@ import se.ejp.traci.model.shape.primitive.Plane;
 import se.ejp.traci.model.shape.primitive.Sphere;
 import se.ejp.traci.model.shape.primitive.Torus;
 
-public class ShapeNode implements TraciNode
+public class ObjectNode implements TraciNode
 {
-    static enum ShapeType
+    static enum ObjectType
     {
         BOX("box", Box.class),
         CYLINDER("cylinder", Cylinder.class),
         PLANE("plane", Plane.class),
         SPHERE("sphere", Sphere.class),
         TORUS("torus", Torus.class),
+
         UNION("union", Union.class),
         DIFFERENCE("difference", Difference.class),
-        INTERSECTION("intersection", Intersection.class);
+        INTERSECTION("intersection", Intersection.class),
+
+        BBOX("bbox", BoundingBox.class),
+
+        POINTLIGHT("pointlight", PointLight.class),
+        AMBIENTLIGHT("ambientlight", AmbientLight.class);
 
         final String id;
-        final Class<? extends Shape> clazz;
+        final Class<?> clazz;
 
-        private ShapeType(final String id, final Class<? extends Shape> clazz)
+        private ObjectType(final String id, final Class<?> clazz)
         {
             this.id = id;
             this.clazz = clazz;
         }
     }
 
-    private static final Map<String, ShapeType> typeMap;
+    private static final Map<String, ObjectType> typeMap;
     static
     {
-        final Map<String, ShapeType> types = new HashMap<String, ShapeType>();
-        for (final ShapeType transformationType : ShapeType.values())
+        final Map<String, ObjectType> types = new HashMap<String, ObjectType>();
+        for (final ObjectType objectType : ObjectType.values())
         {
-            types.put(transformationType.id, transformationType);
+            types.put(objectType.id, objectType);
         }
-        typeMap = Collections.<String, ShapeType>unmodifiableMap(types);
+        typeMap = Collections.<String, ObjectType>unmodifiableMap(types);
     }
 
-    final ShapeType shapeType;
+    final ObjectType objectType;
     final List<TraciNode> argNodes;
     final BlockNode blockNode;
-    private final TraciToken token;
+    final TraciToken token;
 
-    public ShapeNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
+    public ObjectNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
         assert argNodes != null;
-        this.shapeType = typeMap.get(typeStr);
+        this.objectType = typeMap.get(typeStr);
         this.argNodes = argNodes;
         this.blockNode = blockNode;
         this.token = (TraciToken) token;
 
-        if (shapeType == null)
+        if (objectType == null)
         {
-            throw new InterpreterInternalException("Unknown shape type: " + typeStr);
+            throw new InterpreterInternalException("Unknown object type: " + typeStr);
         }
     }
 
-    private static Shape make(final ShapeType shapeType, final List<TraciValue> traciArgs)
+    private static Object make(final ObjectType objectType, final List<TraciValue> traciArgs)
     {
         final Class<?>[] argTypes = new Class<?>[traciArgs.size()];
         final Object[] args = new Object[traciArgs.size()];
@@ -95,7 +103,7 @@ public class ShapeNode implements TraciNode
 
         try
         {
-            final Constructor<? extends Shape> constructor = shapeType.clazz.getConstructor(argTypes);
+            final Constructor<?> constructor = objectType.clazz.getConstructor(argTypes);
             return constructor.newInstance(args);
         }
         catch (final Exception e)
@@ -113,8 +121,8 @@ public class ShapeNode implements TraciNode
             args.add(argNode.eval(context));
         }
 
-        final Shape shape = make(shapeType, args);
-        if (shape == null)
+        final Object object = make(objectType, args);
+        if (object == null)
         {
             final List<Type> argTypes = new ArrayList<Type>(args.size());
             for (final TraciValue val : args)
@@ -122,17 +130,17 @@ public class ShapeNode implements TraciNode
                 argTypes.add(val.getType());
             }
 
-            throw new InterpreterIllegalArguments(token.location, context.callStack, shapeType.id, argTypes);
+            throw new InterpreterIllegalArguments(token.location, context.callStack, objectType.id, argTypes);
         }
 
-        TraciValue value = new TraciValue(shape);
+        TraciValue value = new TraciValue(object);
 
         if (blockNode != null)
         {
             final Entity entity = Entities.makeEntity(value.getObject());
             blockNode.eval(context.newEntity(entity));
             value = entity.getValue();
-            assert shape == value.getObject();
+            assert object == value.getObject();
         }
 
         return value;
