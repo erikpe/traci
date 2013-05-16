@@ -6,12 +6,11 @@ import se.ejp.traci.lang.interpreter.Context;
 import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalNumberOfArguments;
-import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.interpreter.functions.Function;
 import se.ejp.traci.lang.parser.IncludeLocation;
 
-public class FunctionNode implements TraciNode, Function
+public class FunctionNode implements Function
 {
     public final String id;
     public final List<String> argIDs;
@@ -22,12 +21,6 @@ public class FunctionNode implements TraciNode, Function
         this.id = id;
         this.argIDs = argIDs;
         this.bodyNode = bodyNode;
-    }
-
-    @Override
-    public TraciValue eval(final Context dummy)
-    {
-        throw new InterpreterInternalException("FunctionNode.eval() should never be called.");
     }
 
     @Override
