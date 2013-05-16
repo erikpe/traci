@@ -3,11 +3,13 @@ package se.ejp.traci.lang.interpreter.node;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 
 import se.ejp.traci.lang.parser.TraciTreeWalkerBase;
+import se.ejp.traci.model.shape.primitive.Primitive;
 
 public class TreeWalkerPrimitiveShapeTest extends TraciTreeWalkerBase
 {
@@ -26,18 +28,19 @@ public class TreeWalkerPrimitiveShapeTest extends TraciTreeWalkerBase
             node = funCallNode.argNodes.get(0);
         }
 
-        assertEquals(ShapeNode.class, node.getClass());
-        final ShapeNode shapeNode = (ShapeNode) node;
-        assertEquals(id, shapeNode.shapeType.id);
-        assertEquals(numArgs, shapeNode.argNodes.size());
+        assertEquals(ObjectNode.class, node.getClass());
+        final ObjectNode objectNode = (ObjectNode) node;
+        assertEquals(id, objectNode.objectType.id);
+        assertTrue(Primitive.class.isAssignableFrom(objectNode.objectType.clazz));
+        assertEquals(numArgs, objectNode.argNodes.size());
 
         if (hasBlock)
         {
-            assertNotNull(shapeNode.blockNode);
+            assertNotNull(objectNode.blockNode);
         }
         else
         {
-            assertNull(shapeNode.blockNode);
+            assertNull(objectNode.blockNode);
         }
     }
 
