@@ -499,20 +499,20 @@ public class InterpreterPrimitiveShapeTest extends InterpreterBase
         runInterpreter("return torus(.23);");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Torus.class, value.getPrimitive().getClass());
-        assertEquals(.23, ((Torus) value.getPrimitive()).r, 0);
+        assertEquals(.23, ((Torus) value.getPrimitive()).smallRadius(), 0);
         assertEquals(Transformations.identity(), value.getPrimitive().getTransformation());
 
         runInterpreter("return torus(.23) { };");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Torus.class, value.getPrimitive().getClass());
-        assertEquals(.23, ((Torus) value.getPrimitive()).r, 0);
+        assertEquals(.23, ((Torus) value.getPrimitive()).smallRadius(), 0);
         assertEquals(Transformations.identity(), value.getPrimitive().getTransformation());
 
         runInterpreter("return torus(.23) { rotz 2.2; translate [10,20,30]; };");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Torus.class, value.getPrimitive().getClass());
         {
-            assertEquals(.23, ((Torus) value.getPrimitive()).r, 0);
+            assertEquals(.23, ((Torus) value.getPrimitive()).smallRadius(), 0);
             final Transformation tmp0 = Transformations.rotz(2.2);
             final Transformation tmp1 = Transformations.translate(10.0, 20.0, 30.0);
             assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());
@@ -521,20 +521,20 @@ public class InterpreterPrimitiveShapeTest extends InterpreterBase
         runInterpreter("return torus(.23, 2);");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Torus.class, value.getPrimitive().getClass());
-        assertEquals(.23/2.0, ((Torus) value.getPrimitive()).r, 0);
+        assertEquals(.23/2.0, ((Torus) value.getPrimitive()).smallRadius(), 0);
         assertEquals(Transformations.scale(2.0), value.getPrimitive().getTransformation());
 
         runInterpreter("return torus(.23, 2) { };");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Torus.class, value.getPrimitive().getClass());
-        assertEquals(.23/2.0, ((Torus) value.getPrimitive()).r, 0);
+        assertEquals(.23/2.0, ((Torus) value.getPrimitive()).smallRadius(), 0);
         assertEquals(Transformations.scale(2.0), value.getPrimitive().getTransformation());
 
         runInterpreter("return torus(.23, 2) { translate [10,20,30]; };");
         assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
         assertEquals(Torus.class, value.getPrimitive().getClass());
         {
-            assertEquals(.23/2.0, ((Torus) value.getPrimitive()).r, 0);
+            assertEquals(.23/2.0, ((Torus) value.getPrimitive()).smallRadius(), 0);
             final Transformation tmp0 = Transformations.scale(2.0);
             final Transformation tmp1 = Transformations.translate(10.0, 20.0, 30.0);
             assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());

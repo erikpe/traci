@@ -10,8 +10,8 @@ import se.ejp.traci.render.Ray;
 
 public class Torus extends Primitive
 {
-    public final double r;
-    public final double r2;
+    private double r;
+    private double r2;
 
     private Torus(final double r)
     {
@@ -129,9 +129,23 @@ public class Torus extends Primitive
         return ray;
     }
 
+    public double smallRadius()
+    {
+        return r;
+    }
+
     @Override
     public String toString()
     {
         return "Torus";
+    }
+
+    @Override
+    public Object clone()
+    {
+        final Torus res = (Torus) super.clone();
+        res.r = r;
+        res.r2 = r2;
+        return res;
     }
 }
