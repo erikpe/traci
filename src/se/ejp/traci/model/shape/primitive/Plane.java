@@ -1,11 +1,18 @@
 package se.ejp.traci.model.shape.primitive;
 
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.render.Ray;
 import se.ejp.traci.render.Point.Type;
+import se.ejp.traci.render.Ray;
 
 public class Plane extends Primitive
 {
+    private Plane() { }
+
+    public static Plane make()
+    {
+        return new Plane();
+    }
+
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {

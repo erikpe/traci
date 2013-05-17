@@ -14,14 +14,19 @@ public class BoundingBox implements Transformable, Cloneable
 
     private Transformation transformation;
 
-    public BoundingBox()
+    private BoundingBox()
     {
         transformation = Transformations.identity();
     }
 
-    public BoundingBox(final Vector v0, final Vector v1)
+    public static BoundingBox make()
     {
-        this();
+        return new BoundingBox();
+    }
+
+    public static BoundingBox make(final Vector v0, final Vector v1)
+    {
+        final BoundingBox bbox = make();
 
         final double xSize = Math.abs(v1.x() - v0.x());
         final double ySize = Math.abs(v1.y() - v0.y());
@@ -31,8 +36,10 @@ public class BoundingBox implements Transformable, Cloneable
         final double y = Math.min(v0.y(), v1.y());
         final double z = Math.min(v0.z(), v1.z());
 
-        transform(Transformations.scale(xSize, ySize, zSize));
-        transform(Transformations.translate(x, y, z));
+        bbox.transform(Transformations.scale(xSize, ySize, zSize));
+        bbox.transform(Transformations.translate(x, y, z));
+
+        return bbox;
     }
 
     @Override

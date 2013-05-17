@@ -2,20 +2,23 @@ package se.ejp.traci.model.shape.primitive;
 
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.render.Ray;
 import se.ejp.traci.render.Point.Type;
+import se.ejp.traci.render.Ray;
 
 public class Sphere extends Primitive
 {
-    public Sphere()
+    private Sphere() { }
+
+    public static Sphere make()
     {
-        super();
+        return new Sphere();
     }
 
-    public Sphere(final Double radius)
+    public static Sphere make(final Double radius)
     {
-        this();
-        transform(Transformations.scale(radius));
+        final Sphere sphere = make();
+        sphere.transform(Transformations.scale(radius));
+        return sphere;
     }
 
     @Override

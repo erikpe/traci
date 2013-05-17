@@ -2,25 +2,29 @@ package se.ejp.traci.model.shape.primitive;
 
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.render.Ray;
 import se.ejp.traci.render.Point.Type;
+import se.ejp.traci.render.Ray;
 
 public class Cylinder extends Primitive
 {
-    public Cylinder()
+    private Cylinder() { }
+
+    public static Cylinder make()
     {
-        super();
+        return new Cylinder();
     }
 
-    public Cylinder(final Double radius, final Vector v0, final Vector v1)
+    public static Cylinder make(final Double radius, final Vector v0, final Vector v1)
     {
-        this();
-
         final double length = v1.sub(v0).length();
 
-        transform(Transformations.scale(radius, length, radius));
-        transform(Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0)));
-        transform(Transformations.translate(v0));
+        final Cylinder cylinder = make();
+
+        cylinder.transform(Transformations.scale(radius, length, radius));
+        cylinder.transform(Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0)));
+        cylinder.transform(Transformations.translate(v0));
+
+        return cylinder;
     }
 
     @Override

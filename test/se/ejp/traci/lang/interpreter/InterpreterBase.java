@@ -44,7 +44,7 @@ public class InterpreterBase
         final TraciTreeWalker walker = new TraciTreeWalker(new CommonTreeNodeStream(parseTree));
         final BlockNode rootNode = walker.block();
 
-        final Union rootUnion = new Union();
+        final Union rootUnion = Union.make();
         final Entity entity = Entities.makeEntity(rootUnion);
         scene = new Scene();
         value = null;

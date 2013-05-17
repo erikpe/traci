@@ -5,6 +5,13 @@ import se.ejp.traci.render.Ray;
 
 public class Union extends Csg
 {
+    private Union() { }
+
+    public static Union make()
+    {
+        return new Union();
+    }
+
     @Override
     public Ray shootRay(final Vector p, final Vector dir)
     {

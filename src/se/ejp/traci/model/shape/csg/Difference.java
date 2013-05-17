@@ -5,6 +5,13 @@ import se.ejp.traci.render.Ray;
 
 public class Difference extends Csg
 {
+    private Difference() { }
+
+    public static Difference make()
+    {
+        return new Difference();
+    }
+
     @Override
     public Ray shootRay(final Vector p, final Vector dir)
     {

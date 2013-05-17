@@ -6,8 +6,13 @@ public class AmbientLight extends Light
 {
     public final Color color;
 
-    public AmbientLight(final Color color)
+    private AmbientLight(final Color color)
     {
         this.color = color;
+    }
+
+    public static AmbientLight make(final Color color)
+    {
+        return new AmbientLight(color);
     }
 }

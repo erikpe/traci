@@ -1,6 +1,6 @@
 package se.ejp.traci.lang.interpreter.node;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,8 +19,12 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalArguments;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.parser.TraciToken;
+import se.ejp.traci.math.Transformations;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
+import se.ejp.traci.model.material.pigment.Checker;
+import se.ejp.traci.model.material.pigment.PngImage;
+import se.ejp.traci.model.material.pigment.Solid;
 import se.ejp.traci.model.shape.BoundingBox;
 import se.ejp.traci.model.shape.csg.Difference;
 import se.ejp.traci.model.shape.csg.Intersection;
@@ -35,28 +39,41 @@ public class ObjectNode implements TraciNode
 {
     static enum ObjectType
     {
-        BOX("box", Box.class),
-        CYLINDER("cylinder", Cylinder.class),
-        PLANE("plane", Plane.class),
-        SPHERE("sphere", Sphere.class),
-        TORUS("torus", Torus.class),
-
-        UNION("union", Union.class),
-        DIFFERENCE("difference", Difference.class),
-        INTERSECTION("intersection", Intersection.class),
-
-        BBOX("bbox", BoundingBox.class),
-
-        POINTLIGHT("pointlight", PointLight.class),
-        AMBIENTLIGHT("ambientlight", AmbientLight.class);
+        BOX           ("box",          Box.class,             "make"),
+        CYLINDER      ("cylinder",     Cylinder.class,        "make"),
+        PLANE         ("plane",        Plane.class,           "make"),
+        SPHERE        ("sphere",       Sphere.class,          "make"),
+        TORUS         ("torus",        Torus.class,           "make"),
+        UNION         ("union",        Union.class,           "make"),
+        DIFFERENCE    ("difference",   Difference.class,      "make"),
+        INTERSECTION  ("intersection", Intersection.class,    "make"),
+        BBOX          ("bbox",         BoundingBox.class,     "make"),
+        POINTLIGHT    ("pointlight",   PointLight.class,      "make"),
+        AMBIENTLIGHT  ("ambientlight", AmbientLight.class,    "make"),
+        IMAGE         ("image",        PngImage.class,        "make"),
+        SOLID         ("solid",        Solid.class,           "make"),
+        CHECKER       ("checker",      Checker.class,         "make"),
+        IDENTITY      ("identity",     Transformations.class, "identity"),
+        ROTX          ("rotx",         Transformations.class, "rotx"),
+        ROTY          ("roty",         Transformations.class, "roty"),
+        ROTZ          ("rotz",         Transformations.class, "rotz"),
+        TRANSLATE     ("translate",    Transformations.class, "translate"),
+        SCALE         ("scale",        Transformations.class, "scale"),
+        SCALEX        ("scalex",       Transformations.class, "scalex"),
+        SCALEY        ("scaley",       Transformations.class, "scaley"),
+        SCALEZ        ("scalez",       Transformations.class, "scalez"),
+        ROT_VEC_TO_VEC("rotVecToVec",  Transformations.class, "rotVecToVec"),
+        ROT_AROUND    ("rotAround",    Transformations.class, "rotAround");
 
         final String id;
         final Class<?> clazz;
+        final String methodName;
 
-        private ObjectType(final String id, final Class<?> clazz)
+        private ObjectType(final String id, final Class<?> clazz, final String methodName)
         {
             this.id = id;
             this.clazz = clazz;
+            this.methodName = methodName;
         }
     }
 
@@ -103,8 +120,8 @@ public class ObjectNode implements TraciNode
 
         try
         {
-            final Constructor<?> constructor = objectType.clazz.getConstructor(argTypes);
-            return constructor.newInstance(args);
+            final Method method = objectType.clazz.getMethod(objectType.methodName, argTypes);
+            return method.invoke(null, args);
         }
         catch (final Exception e)
         {

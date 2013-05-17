@@ -13,17 +13,22 @@ public class Torus extends Primitive
     public final double r;
     public final double r2;
 
-    public Torus(final Double r)
+    private Torus(final double r)
     {
-        this(r, 1.0);
+        this.r = r;
+        this.r2 = r * r;
     }
 
-    public Torus(final Double r, final Double R)
+    public static Torus make(final Double r)
     {
-        this.r = r / R;
-        this.r2 = this.r * this.r;
+        return new Torus(r);
+    }
 
-        transform(Transformations.scale(R));
+    public static Torus make(final Double r, final Double R)
+    {
+        final Torus torus = make(r / R);
+        torus.transform(Transformations.scale(R));
+        return torus;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class Interpreter
         Log.INFO("Constructing scene");
         final long start = System.currentTimeMillis();
 
-        final Union rootUnion = new Union();
+        final Union rootUnion = Union.make();
         final Entity entity = Entities.makeEntity(rootUnion);
 
         try
@@ -75,21 +75,21 @@ public class Interpreter
             // Ignore
         }
 
-        final Plane plane = new Plane();
+        final Plane plane = Plane.make();
         plane.setPigment(new NonUniform(Transformations.identity(), new Checker(Color.WHITE, Color.BLACK)));
         rootUnion.add(plane);
 
         Shape optimizedRoot = rootUnion.optimize();
         if (optimizedRoot == null)
         {
-            optimizedRoot = new Union();
+            optimizedRoot = Union.make();
         }
         scene.setRootShape(optimizedRoot);
 
         final long stop = System.currentTimeMillis();
         Log.INFO("Scene constructed in " + Utilities.millisecondsToString(stop - start));
 
-//        final Vector camLocation = Vector.make(-5, 10, 10);
+//        final Vector camLocation = Vector.make(-5, 4, 10);
 //        final Vector camLookAt = Vector.make(0, 0, 0);
 //        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y, settings);
         //Airplane

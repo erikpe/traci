@@ -19,7 +19,7 @@ public abstract class Csg extends Shape implements Iterable<Shape>
     protected int numShapes;
     protected BoundingBox bBox;
 
-    public Csg()
+    protected Csg()
     {
         this.shapes = new Shape[0];
         this.numShapes = 0;

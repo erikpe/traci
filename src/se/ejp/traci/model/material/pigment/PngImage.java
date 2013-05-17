@@ -26,12 +26,12 @@ public class PngImage implements NonUniformPigment, Interpolatable
     private final Projection2D projection;
     private final Color borderColor;
 
-    public PngImage(final String filename, final RepeatPolicy repeater, final Projection2D projection)
+    public PngImage(final String filename, final String repeatPolicyStr, final String projStr)
     {
-        this(filename, repeater, projection, Color.BLACK);
+        this(filename, RepeatPolicy.REPEAT, Projection2D.CYLINDER, Color.BLACK);
     }
 
-    public PngImage(final String filename, final RepeatPolicy repeater, final Projection2D projection,
+    private PngImage(final String filename, final RepeatPolicy repeater, final Projection2D projection,
             final Color borderColor)
     {
         this.repeatPolicy = repeater;

@@ -5,6 +5,13 @@ import se.ejp.traci.render.Ray;
 
 public class Intersection extends Csg
 {
+    private Intersection() { }
+
+    public static Intersection make()
+    {
+        return new Intersection();
+    }
+
     @Override
     public Ray shootRay(final Vector p, final Vector dir)
     {

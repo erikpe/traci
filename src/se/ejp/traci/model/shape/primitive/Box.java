@@ -2,20 +2,20 @@ package se.ejp.traci.model.shape.primitive;
 
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.render.Ray;
 import se.ejp.traci.render.Point.Type;
+import se.ejp.traci.render.Ray;
 
 public class Box extends Primitive
 {
-    public Box()
+    private Box() { }
+
+    public static Box make()
     {
-        super();
+        return new Box();
     }
 
-    public Box(final Vector v0, final Vector v1)
+    public static Box make(final Vector v0, final Vector v1)
     {
-        this();
-
         final double xSize = Math.abs(v1.x() - v0.x());
         final double ySize = Math.abs(v1.y() - v0.y());
         final double zSize = Math.abs(v1.z() - v0.z());
@@ -24,8 +24,12 @@ public class Box extends Primitive
         final double y = Math.min(v0.y(), v1.y());
         final double z = Math.min(v0.z(), v1.z());
 
-        transform(Transformations.scale(xSize, ySize, zSize));
-        transform(Transformations.translate(x, y, z));
+        final Box box = make();
+
+        box.transform(Transformations.scale(xSize, ySize, zSize));
+        box.transform(Transformations.translate(x, y, z));
+
+        return box;
     }
 
     @Override
