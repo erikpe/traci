@@ -63,8 +63,8 @@ public class Transformation
     public int hashCode()
     {
         int hash = getClass().hashCode();
-        hash = hash * 31 + mat.hashCode();
-        hash = hash * 31 + invMat.hashCode();
+        hash = 31 * hash + mat.hashCode();
+        hash = 31 * hash + invMat.hashCode();
         return hash;
     }
 

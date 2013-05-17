@@ -16,11 +16,11 @@ import se.ejp.traci.math.Vector2D;
 import se.ejp.traci.model.material.Color;
 import se.ejp.traci.util.WeakCache;
 
-public class PngImage extends NonUniform implements Interpolatable
+public class FileImage extends NonUniform implements Interpolatable
 {
     public enum RepeatPolicy { REPEAT, BORDER, STRETCH }
 
-    private static WeakCache<PngImage> cache = new WeakCache<PngImage>();
+    private static WeakCache<FileImage> cache = new WeakCache<FileImage>();
     private static Map<String, BufferedImage> imageCache = new HashMap<String, BufferedImage>();
 
     private final String filename;
@@ -31,7 +31,7 @@ public class PngImage extends NonUniform implements Interpolatable
 
     private final BufferedImage image;
 
-    private PngImage(final String filename, final RepeatPolicy repeater, final Projection2D projection,
+    private FileImage(final String filename, final RepeatPolicy repeater, final Projection2D projection,
             final Color borderColor, final Transformation transformation)
     {
         super(transformation);
@@ -44,16 +44,16 @@ public class PngImage extends NonUniform implements Interpolatable
         this.image = getImage(filename);
     }
 
-    public static PngImage make(final String filename, final String repeatPolicyStr, final String projStr)
+    public static FileImage make(final String filename, final String repeatPolicyStr, final String projStr)
     {
-        return cache.get(new PngImage(filename, RepeatPolicy.REPEAT, Projection2D.CYLINDER, Color.BLACK,
+        return cache.get(new FileImage(filename, RepeatPolicy.REPEAT, Projection2D.CYLINDER, Color.BLACK,
                 Transformations.identity()));
     }
 
     @Override
-    public PngImage transform(final Transformation newTr)
+    public FileImage transform(final Transformation newTr)
     {
-        return cache.get(new PngImage(filename, RepeatPolicy.REPEAT, Projection2D.CYLINDER, Color.BLACK, transformation
+        return cache.get(new FileImage(filename, RepeatPolicy.REPEAT, Projection2D.CYLINDER, Color.BLACK, transformation
                 .compose(newTr)));
     }
 
@@ -160,12 +160,12 @@ public class PngImage extends NonUniform implements Interpolatable
             return false;
         }
 
-        final PngImage otherPngImage = (PngImage) other;
+        final FileImage otherFileImage = (FileImage) other;
 
-        return transformation.equals(otherPngImage.transformation) &&
-               interpolator.equals(otherPngImage.interpolator) &&
-               repeatPolicy.equals(otherPngImage.repeatPolicy) &&
-               projection.equals(otherPngImage.projection) &&
-               borderColor.equals(otherPngImage.borderColor);
+        return transformation.equals(otherFileImage.transformation) &&
+               interpolator.equals(otherFileImage.interpolator) &&
+               repeatPolicy.equals(otherFileImage.repeatPolicy) &&
+               projection.equals(otherFileImage.projection) &&
+               borderColor.equals(otherFileImage.borderColor);
     }
 }

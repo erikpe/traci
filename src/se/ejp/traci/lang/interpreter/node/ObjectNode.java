@@ -23,7 +23,7 @@ import se.ejp.traci.math.Transformations;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
 import se.ejp.traci.model.material.pigment.Checker;
-import se.ejp.traci.model.material.pigment.PngImage;
+import se.ejp.traci.model.material.pigment.FileImage;
 import se.ejp.traci.model.material.pigment.Solid;
 import se.ejp.traci.model.shape.BoundingBox;
 import se.ejp.traci.model.shape.csg.Difference;
@@ -50,7 +50,7 @@ public class ObjectNode implements TraciNode
         BBOX          ("bbox",         BoundingBox.class,     "make"),
         POINTLIGHT    ("pointlight",   PointLight.class,      "make"),
         AMBIENTLIGHT  ("ambientlight", AmbientLight.class,    "make"),
-        IMAGE         ("image",        PngImage.class,        "make"),
+        IMAGE         ("image",        FileImage.class,       "make"),
         SOLID         ("solid",        Solid.class,           "make"),
         CHECKER       ("checker",      Checker.class,         "make"),
         IDENTITY      ("identity",     Transformations.class, "identity"),
