@@ -111,10 +111,6 @@ public class ObjectNode implements TraciNode
 
     private static Object make(final ObjectType objectType, final List<TraciValue> traciArgs)
     {
-        if (objectType == ObjectType.IMAGE)
-        {
-            final int i = 23;
-        }
         final Class<?>[] argTypes = new Class<?>[traciArgs.size()];
         final Object[] args = new Object[traciArgs.size()];
 
