@@ -9,6 +9,7 @@ import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 
 import se.ejp.traci.lang.parser.TraciTreeWalkerBase;
+import se.ejp.traci.model.shape.BoundingBox;
 import se.ejp.traci.model.shape.primitive.Primitive;
 
 public class TreeWalkerPrimitiveShapeTest extends TraciTreeWalkerBase
@@ -31,7 +32,16 @@ public class TreeWalkerPrimitiveShapeTest extends TraciTreeWalkerBase
         assertEquals(ObjectNode.class, node.getClass());
         final ObjectNode objectNode = (ObjectNode) node;
         assertEquals(id, objectNode.objectType.id);
-        assertTrue(Primitive.class.isAssignableFrom(objectNode.objectType.clazz));
+
+        if ("bbox".equals(id))
+        {
+            assertEquals(BoundingBox.class, objectNode.objectType.clazz);
+        }
+        else
+        {
+            assertTrue(Primitive.class.isAssignableFrom(objectNode.objectType.clazz));
+        }
+
         assertEquals(numArgs, objectNode.argNodes.size());
 
         if (hasBlock)
@@ -141,5 +151,11 @@ public class TreeWalkerPrimitiveShapeTest extends TraciTreeWalkerBase
     public void testTorus() throws RecognitionException
     {
         runTest("torus");
+    }
+
+    @Test
+    public void testBoundingBox() throws RecognitionException
+    {
+        runTest("bbox");
     }
 }

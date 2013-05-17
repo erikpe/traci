@@ -124,4 +124,9 @@ public class BoundingBox implements Transformable, Cloneable
     {
         return "BoundingBox";
     }
+
+    public Transformation getTransformation()
+    {
+        return transformation;
+    }
 }

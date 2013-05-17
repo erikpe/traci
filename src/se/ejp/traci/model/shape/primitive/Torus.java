@@ -5,13 +5,13 @@ import java.util.Arrays;
 import se.ejp.traci.math.PolynomSolver;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.render.Ray;
 import se.ejp.traci.render.Point.Type;
+import se.ejp.traci.render.Ray;
 
 public class Torus extends Primitive
 {
-    final double r;
-    final double r2;
+    public final double r;
+    public final double r2;
 
     public Torus(final Double r)
     {
