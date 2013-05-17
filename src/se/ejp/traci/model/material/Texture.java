@@ -45,7 +45,10 @@ public class Texture
     @Override
     public int hashCode()
     {
-        return 31 * pigment.hashCode() + finish.hashCode();
+        int hash = getClass().hashCode();
+        hash = 31 * hash + pigment.hashCode();
+        hash = 31 * hash + finish.hashCode();
+        return hash;
     }
 
     @Override

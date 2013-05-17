@@ -36,7 +36,9 @@ public class Solid extends Pigment
     @Override
     public int hashCode()
     {
-        return color.hashCode();
+        int hash = getClass().hashCode();
+        hash = 31 * hash + color.hashCode();
+        return hash;
     }
 
     @Override

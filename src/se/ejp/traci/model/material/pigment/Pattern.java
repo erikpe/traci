@@ -1,8 +1,11 @@
 package se.ejp.traci.model.material.pigment;
 
-import se.ejp.traci.model.material.pigment.NonUniform.NonUniformPigment;
+import se.ejp.traci.math.Transformation;
 
-public abstract class Pattern implements NonUniformPigment
+public abstract class Pattern extends NonUniform
 {
-    // TODO: implement
+    protected Pattern(final Transformation transformation)
+    {
+        super(transformation);
+    }
 }

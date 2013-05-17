@@ -32,7 +32,7 @@ public class Material
 
     public Material setTexture(final Texture newTexture)
     {
-        return Material.make(texture);
+        return Material.make(newTexture);
     }
 
     public Material setPigment(final Pigment newPigment)
@@ -48,7 +48,9 @@ public class Material
     @Override
     public int hashCode()
     {
-        return texture.hashCode();
+        int hash = getClass().hashCode();
+        hash = 31 * hash + texture.hashCode();
+        return hash;
     }
 
     @Override

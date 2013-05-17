@@ -74,12 +74,10 @@ public class Color
     @Override
     public int hashCode()
     {
-        int hash = 0;
-
+        int hash = getClass().hashCode();
         hash = 31 * hash + Double.valueOf(r).hashCode();
         hash = 31 * hash + Double.valueOf(g).hashCode();
         hash = 31 * hash + Double.valueOf(b).hashCode();
-
         return hash;
     }
 

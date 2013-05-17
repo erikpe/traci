@@ -33,13 +33,11 @@ public class Finish
     @Override
     public int hashCode()
     {
-        int hash = 0;
-
+        int hash = getClass().hashCode();
         hash = 31 * hash + Double.valueOf(specCoeff).hashCode();
         hash = 31 * hash + Double.valueOf(diffCoeff).hashCode();
         hash = 31 * hash + Double.valueOf(shininess).hashCode();
         hash = 31 * hash + Double.valueOf(reflectiveness).hashCode();
-
         return hash;
     }
 

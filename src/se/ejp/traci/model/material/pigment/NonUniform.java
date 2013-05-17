@@ -4,31 +4,20 @@ import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.material.Color;
 
-public class NonUniform extends Pigment
+public abstract class NonUniform extends Pigment
 {
-    public static interface NonUniformPigment
-    {
-        public Color getColorTransformed(final Vector p);
-    }
+    protected final Transformation transformation;
 
-    private final NonUniformPigment nonUniformPigment;
-    private final Transformation transformation;
-
-    public NonUniform(final Transformation transformation, final NonUniformPigment nonUniformPigment)
+    protected NonUniform(final Transformation transformation)
     {
-        this.nonUniformPigment = nonUniformPigment;
         this.transformation = transformation;
     }
 
-    @Override
-    public NonUniform transform(final Transformation tr)
-    {
-        return new NonUniform(transformation.compose(tr), nonUniformPigment);
-    }
+    protected abstract Color getColorTransformed(final Vector vec);
 
     @Override
     public Color getColor(final Vector p)
     {
-        return nonUniformPigment.getColorTransformed(transformation.pointInv(p));
+        return getColorTransformed(transformation.pointInv(p));
     }
 }

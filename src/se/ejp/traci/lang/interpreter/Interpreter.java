@@ -6,13 +6,11 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.interpreter.node.BlockNode;
 import se.ejp.traci.main.Result;
 import se.ejp.traci.main.options.Settings;
-import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.Scene;
 import se.ejp.traci.model.material.Color;
 import se.ejp.traci.model.material.pigment.Checker;
-import se.ejp.traci.model.material.pigment.NonUniform;
 import se.ejp.traci.model.shape.Shape;
 import se.ejp.traci.model.shape.csg.Union;
 import se.ejp.traci.model.shape.primitive.Plane;
@@ -76,7 +74,7 @@ public class Interpreter
         }
 
         final Plane plane = Plane.make();
-        plane.setPigment(new NonUniform(Transformations.identity(), new Checker(Color.WHITE, Color.BLACK)));
+        plane.setPigment(Checker.make(Color.WHITE, Color.BLACK));
         rootUnion.add(plane);
 
         Shape optimizedRoot = rootUnion.optimize();

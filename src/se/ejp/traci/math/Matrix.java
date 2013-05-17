@@ -228,13 +228,11 @@ public class Matrix
     @Override
     public int hashCode()
     {
-        int hash = 0;
-
+        int hash = getClass().hashCode();
         for (int i = 0; i < data.length; ++i)
         {
             hash = 31 * hash + Double.valueOf(data[i]).hashCode();
         }
-
         return hash;
     }
 
