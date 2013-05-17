@@ -2,7 +2,6 @@ package se.ejp.traci.lang.interpreter.node;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,17 +74,20 @@ public class ObjectNode implements TraciNode
             this.clazz = clazz;
             this.methodName = methodName;
         }
-    }
 
-    private static final Map<String, ObjectType> typeMap;
-    static
-    {
-        final Map<String, ObjectType> types = new HashMap<String, ObjectType>();
-        for (final ObjectType objectType : ObjectType.values())
+        private static final Map<String, ObjectType> idMap = new HashMap<String, ObjectType>();
+        static
         {
-            types.put(objectType.id, objectType);
+            for (final ObjectType objectType : ObjectType.values())
+            {
+                idMap.put(objectType.id, objectType);
+            }
         }
-        typeMap = Collections.<String, ObjectType>unmodifiableMap(types);
+
+        private static ObjectType get(final String id)
+        {
+            return idMap.get(id);
+        }
     }
 
     final ObjectType objectType;
@@ -96,7 +98,7 @@ public class ObjectNode implements TraciNode
     public ObjectNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
         assert argNodes != null;
-        this.objectType = typeMap.get(typeStr);
+        this.objectType = ObjectType.get(typeStr);
         this.argNodes = argNodes;
         this.blockNode = blockNode;
         this.token = (TraciToken) token;
@@ -109,6 +111,10 @@ public class ObjectNode implements TraciNode
 
     private static Object make(final ObjectType objectType, final List<TraciValue> traciArgs)
     {
+        if (objectType == ObjectType.IMAGE)
+        {
+            final int i = 23;
+        }
         final Class<?>[] argTypes = new Class<?>[traciArgs.size()];
         final Object[] args = new Object[traciArgs.size()];
 

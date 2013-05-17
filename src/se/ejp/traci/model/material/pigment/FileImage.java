@@ -18,7 +18,7 @@ import se.ejp.traci.util.WeakCache;
 
 public class FileImage extends NonUniform implements Interpolatable
 {
-    public enum RepeatPolicy { REPEAT, BORDER, STRETCH }
+    private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
     private static WeakCache<FileImage> cache = new WeakCache<FileImage>();
     private static Map<String, BufferedImage> imageCache = new HashMap<String, BufferedImage>();
@@ -31,12 +31,12 @@ public class FileImage extends NonUniform implements Interpolatable
 
     private final BufferedImage image;
 
-    private FileImage(final String filename, final RepeatPolicy repeater, final Projection2D projection,
+    private FileImage(final String filename, final RepeatPolicy repeatPolicy, final Projection2D projection,
             final Color borderColor, final Transformation transformation)
     {
         super(transformation);
 
-        this.repeatPolicy = repeater;
+        this.repeatPolicy = repeatPolicy;
         this.projection = projection;
         this.borderColor = borderColor;
         this.filename = filename;
@@ -44,17 +44,35 @@ public class FileImage extends NonUniform implements Interpolatable
         this.image = getImage(filename);
     }
 
+    public static FileImage make(final String filename, final String repeatPolicyStr, final String projStr,
+            final Color borderColor)
+    {
+        final RepeatPolicy repeat = RepeatPolicy.get(repeatPolicyStr);
+
+//        if (repeat == null)
+//        {
+//            throw new InterpreterRuntimeException(null, null, "Unknown repeat policy") { };
+//        }
+//
+        final Projection2D proj = Projection2D.get(projStr);
+//
+//        if (proj == null)
+//        {
+//            throw new InterpreterRuntimeException(null, null, "Unknown projection") { };
+//        }
+
+        return cache.get(new FileImage(filename, repeat, proj, borderColor, Transformations.identity()));
+    }
+
     public static FileImage make(final String filename, final String repeatPolicyStr, final String projStr)
     {
-        return cache.get(new FileImage(filename, RepeatPolicy.REPEAT, Projection2D.CYLINDER, Color.BLACK,
-                Transformations.identity()));
+        return make(filename, repeatPolicyStr, projStr, DEFAULT_BORDER_COLOR);
     }
 
     @Override
     public FileImage transform(final Transformation newTr)
     {
-        return cache.get(new FileImage(filename, RepeatPolicy.REPEAT, Projection2D.CYLINDER, Color.BLACK, transformation
-                .compose(newTr)));
+        return cache.get(new FileImage(filename, repeatPolicy, projection, borderColor, transformation.compose(newTr)));
     }
 
     private static BufferedImage getImage(final String filename)

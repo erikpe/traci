@@ -75,7 +75,7 @@ public class Interpreter
 
         final Plane plane = Plane.make();
         plane.setPigment(Checker.make(Color.WHITE, Color.BLACK));
-        rootUnion.add(plane);
+        //rootUnion.add(plane);
 
         Shape optimizedRoot = rootUnion.optimize();
         if (optimizedRoot == null)

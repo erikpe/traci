@@ -4,6 +4,7 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
+import se.ejp.traci.model.material.pigment.Pigment;
 import se.ejp.traci.model.material.pigment.Solid;
 import se.ejp.traci.model.shape.BoundingBox;
 import se.ejp.traci.model.shape.csg.Csg;
@@ -61,6 +62,10 @@ public class Entities
         else if (object instanceof Texture)
         {
             return new TextureEntity((Texture) object);
+        }
+        else if (object instanceof Pigment)
+        {
+            return new PigmentEntity((Pigment) object);
         }
 
         throw new RuntimeException();
@@ -267,6 +272,28 @@ public class Entities
 
             case COLOR:
                 obj = obj.setPigment(Solid.make(value.getColor()));
+
+            default:
+                throw new RuntimeException();
+            }
+        }
+    }
+
+    private static class PigmentEntity extends EntityHelper<Pigment>
+    {
+        private PigmentEntity(final Pigment pigment)
+        {
+            super(pigment);
+        }
+
+        @Override
+        public void applyValue(final TraciValue value)
+        {
+            switch (value.getType())
+            {
+            case TRANSFORMATION:
+                obj = obj.transform(value.getTransformation());
+                break;
 
             default:
                 throw new RuntimeException();
