@@ -2,6 +2,7 @@ package se.ejp.traci.lang.interpreter;
 
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.math.Transformation;
+import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
 import se.ejp.traci.model.material.pigment.Pigment;
@@ -66,6 +67,10 @@ public class Entities
         else if (object instanceof Pigment)
         {
             return new PigmentEntity((Pigment) object);
+        }
+        else if (object instanceof Light)
+        {
+            return new LightEntity((Light) object);
         }
 
         throw new RuntimeException();
@@ -306,6 +311,28 @@ public class Entities
         private BoundingBoxEntity(final BoundingBox bBox)
         {
             super(bBox);
+        }
+
+        @Override
+        public void applyValue(final TraciValue value)
+        {
+            switch (value.getType())
+            {
+            case TRANSFORMATION:
+                obj.transform(value.getTransformation());
+                break;
+
+            default:
+                throw new RuntimeException();
+            }
+        }
+    }
+
+    private static class LightEntity extends EntityHelper<Light>
+    {
+        private LightEntity(final Light light)
+        {
+            super(light);
         }
 
         @Override

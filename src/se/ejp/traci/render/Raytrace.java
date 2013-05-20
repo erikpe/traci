@@ -43,7 +43,7 @@ public class Raytrace
         Color colorTotal;
         if (scene.ambientLight != null)
         {
-            colorTotal = hitPointColor.mul(scene.ambientLight.color);
+            colorTotal = hitPointColor.mul(scene.ambientLight.getColor());
         }
         else
         {
@@ -52,7 +52,7 @@ public class Raytrace
 
         for (final PointLight light : scene.pointLights)
         {
-            final Vector toLight = light.location.sub(hitPoint);
+            final Vector toLight = light.getLocation().sub(hitPoint);
             final Vector dirToLight = toLight.normalize();
 
             /**
@@ -71,7 +71,7 @@ public class Raytrace
             }
 
             final double distCoeff = 1.0 / (distToLight * distToLight);
-            final Color lightAtPoint = light.color.mul(distCoeff);
+            final Color lightAtPoint = light.getColor().mul(distCoeff);
 
             /**
              * Diffuse light
@@ -92,7 +92,7 @@ public class Raytrace
                 final double shininess = finish.shininess;
                 final double specCoeff = finish.specCoeff;
 
-                final Color colorSpec = light.color.mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
+                final Color colorSpec = light.getColor().mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
                 colorTotal = colorTotal.add(colorSpec);
             }
         }

@@ -36,6 +36,10 @@ public class InterpreterObjectBase extends InterpreterBase
             snippets.add("val = " + id + "(); return val;");
             snippets.add("val = " + id + " { }; return val;");
             snippets.add("val = " + id + "() { }; return val;");
+            snippets.add("val = " + id + "; return val { };");
+            snippets.add("val = " + id + "(); return val { };");
+            snippets.add("val = " + id + " { }; return val { };");
+            snippets.add("val = " + id + "() { }; return val { };");
         }
         else if (args != null && modifiers == null)
         {
@@ -43,6 +47,8 @@ public class InterpreterObjectBase extends InterpreterBase
             snippets.add("return " + id + "(" + args + ") { };");
             snippets.add("val = " + id + "(" + args + "); return val;");
             snippets.add("val = " + id + "(" + args + ") { }; return val;");
+            snippets.add("val = " + id + "(" + args + "); return val { };");
+            snippets.add("val = " + id + "(" + args + ") { }; return val { };");
         }
         else if (args == null && modifiers != null)
         {
@@ -50,6 +56,8 @@ public class InterpreterObjectBase extends InterpreterBase
             snippets.add("return " + id + "() { " + modifiers + " };");
             snippets.add("val = " + id + " { " + modifiers + " }; return val;");
             snippets.add("val = " + id + "() { " + modifiers + " }; return val;");
+            snippets.add("val = " + id + " { " + modifiers + " }; return val { };");
+            snippets.add("val = " + id + "() { " + modifiers + " }; return val { };");
             snippets.add("val = " + id + "; return val { " + modifiers + " };");
             snippets.add("val = " + id + "(); return val { " + modifiers + " };");
         }
@@ -57,6 +65,7 @@ public class InterpreterObjectBase extends InterpreterBase
         {
             snippets.add("return " + id + "(" + args + ") { " + modifiers + " };");
             snippets.add("val = " + id + "(" + args + ") { " + modifiers + " }; return val;");
+            snippets.add("val = " + id + "(" + args + ") { " + modifiers + " }; return val { };");
             snippets.add("val = " + id + "(" + args + "); return val { " + modifiers + " };");
         }
 

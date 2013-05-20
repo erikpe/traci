@@ -182,6 +182,9 @@ public class TraciValue implements Cloneable
         case BOUNDING_BOX:
             return new TraciValue(getBoundingBox().clone());
 
+        case LIGHT:
+            return new TraciValue(getLight().clone());
+
         default:
             throw new InterpreterInternalException("Trying to clone() value of type " + type.toString());
         }

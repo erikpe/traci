@@ -1,10 +1,11 @@
 package se.ejp.traci.model.light;
 
+import se.ejp.traci.math.Transformation;
 import se.ejp.traci.model.material.Color;
 
 public class AmbientLight extends Light
 {
-    public final Color color;
+    private final Color color;
 
     private AmbientLight(final Color color)
     {
@@ -14,5 +15,16 @@ public class AmbientLight extends Light
     public static AmbientLight make(final Color color)
     {
         return new AmbientLight(color);
+    }
+
+    @Override
+    public void transform(final Transformation transformation)
+    {
+        // Intentionally left blank
+    }
+
+    public Color getColor()
+    {
+        return color;
     }
 }
