@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.antlr.runtime.RecognitionException;
@@ -20,583 +19,213 @@ import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.shape.primitive.Box;
 import se.ejp.traci.model.shape.primitive.Cylinder;
 import se.ejp.traci.model.shape.primitive.Plane;
+import se.ejp.traci.model.shape.primitive.Primitive;
 import se.ejp.traci.model.shape.primitive.Sphere;
 import se.ejp.traci.model.shape.primitive.Torus;
 
 public class InterpreterPrimitiveShapeTest extends InterpreterBase
 {
+    private static final Transformation EYE = Transformations.identity();
+
+    @SuppressWarnings("unchecked")
+    private <P extends Primitive> P run(final String code, final Class<P> clazz, final Transformation tr)
+            throws RecognitionException, InterpreterRuntimeException
+    {
+        runInterpreter(code);
+        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
+        assertEquals(clazz, value.getPrimitive().getClass());
+        assertEquals(tr, value.getPrimitive().getTransformation());
+        return (P) value.getPrimitive();
+    }
+
+    private void runFail(final String code, final String id, final Class<? extends InterpreterRuntimeException> eClass)
+            throws RecognitionException
+    {
+        try
+        {
+            runInterpreter(code);
+            fail("Missing exception");
+        }
+        catch (final InterpreterIllegalArguments e)
+        {
+            assertEquals(eClass, e.getClass());
+            assertEquals(id, e.function);
+        }
+        catch (final InterpreterRuntimeException e)
+        {
+            assertEquals(eClass, e.getClass());
+        }
+    }
+
+    private List<String> getSnippets(final String id, final String args, final String modifiers)
+    {
+        final List<String> snippets = new ArrayList<String>();
+
+        if (args == null && modifiers == null)
+        {
+            snippets.add("return " + id + ";");
+            snippets.add("return " + id + "();");
+            snippets.add("return " + id + " { };");
+            snippets.add("return " + id + "() { };");
+            snippets.add("val = " + id + "; return val;");
+            snippets.add("val = " + id + "(); return val;");
+            snippets.add("val = " + id + " { }; return val;");
+            snippets.add("val = " + id + "() { }; return val;");
+        }
+        else if (args != null && modifiers == null)
+        {
+            snippets.add("return " + id + "(" + args + ");");
+            snippets.add("return " + id + "(" + args + ") { };");
+            snippets.add("val = " + id + "(" + args + "); return val;");
+            snippets.add("val = " + id + "(" + args + ") { }; return val;");
+        }
+        else if (args == null && modifiers != null)
+        {
+            snippets.add("return " + id + " { " + modifiers + " };");
+            snippets.add("return " + id + "() { " + modifiers + " };");
+            snippets.add("val = " + id + " { " + modifiers + " }; return val;");
+            snippets.add("val = " + id + "() { " + modifiers + " }; return val;");
+            snippets.add("val = " + id + "; return val { " + modifiers + " };");
+            snippets.add("val = " + id + "(); return val { " + modifiers + " };");
+        }
+        else if (args != null && modifiers != null)
+        {
+            snippets.add("return " + id + "(" + args + ") { " + modifiers + " };");
+            snippets.add("val = " + id + "(" + args + ") { " + modifiers + " }; return val;");
+            snippets.add("val = " + id + "(" + args + "); return val { " + modifiers + " };");
+        }
+
+        return snippets;
+    }
+
+    private <P extends Primitive> List<P> runTests(final String id, final Class<P> clazz, final String args,
+            final String modifiers, final Transformation tr) throws RecognitionException,
+            InterpreterRuntimeException
+    {
+        final List<P> res = new ArrayList<P>();
+        for (final String code : getSnippets(id, args, modifiers))
+        {
+            res.add(run(code, clazz, tr));
+        }
+        return res;
+    }
+
+    private void runTestsFail(final Class<? extends InterpreterRuntimeException> eClass, final String id,
+            final String args, final String modifiers) throws RecognitionException
+    {
+        for (final String code : getSnippets(id, args, modifiers))
+        {
+            runFail(code, id, eClass);
+        }
+    }
+
     @Test
     public void testBox() throws RecognitionException, InterpreterRuntimeException
     {
-        final Transformation eye = Transformations.identity();
-        final Transformation t0 = Transformations.translate(1.0, 2.0, 3.0);
-        final Transformation t1 = Transformations.scalez(2.23);
+        final String args = "[1.0, 10.0, 100.0], [4.0, 14.0, 105.0]";
+        final String modifiers = "translate([10.0, 20.0, 30.0]); scale(.5);";
 
-        runInterpreter("return box;");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        final Transformation tr0 = Transformations.scale(3.0, 4.0, 5.0);
+        final Transformation tr1 = Transformations.translate(1.0, 10.0, 100.0);
+        final Transformation tr2 = Transformations.translate(10.0, 20.0, 30.0);
+        final Transformation tr3 = Transformations.scale(0.5);
 
-        runInterpreter("return box();");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        runTests("box", Box.class, null, null,      EYE);
+        runTests("box", Box.class, args, null,      tr0.compose(tr1));
+        runTests("box", Box.class, null, modifiers, tr2.compose(tr3));
+        runTests("box", Box.class, args, modifiers, tr0.compose(tr1).compose(tr2).compose(tr3));
 
-        runInterpreter("return box() { };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
-
-        runInterpreter("return box() { translate [1, 2, 3]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(t0, value.getPrimitive().getTransformation());
-
-        runInterpreter("return box() { translate [1, 2, 3]; scalez 2.23; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
-
-        runInterpreter("return box() { translate([1, 2, 3]) { scalez 2.23; }; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
-
-        runInterpreter("return box([1,2,3], [4,5,6]);");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-
-        runInterpreter("return box([1,2,3], [4,5,6]) { translate [1, 2, 3]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-
-        runInterpreter("return box([1,10,100], [4,14,105]);");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-        {
-            final Transformation tmp0 = Transformations.scale(3.0, 4.0, 5.0);
-            final Transformation tmp1 = Transformations.translate(1.0, 10.0, 100.0);
-            assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());
-        }
-
-        runInterpreter("return box([1,10,100], [4,14,105]) { translate [10,20,30]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Box.class, value.getPrimitive().getClass());
-        {
-            final Transformation tmp0 = Transformations.scale(3.0, 4.0, 5.0);
-            final Transformation tmp1 = Transformations.translate(1.0, 10.0, 100.0);
-            final Transformation tmp2 = Transformations.translate(10.0, 20.0, 30.0);
-            assertEquals(tmp0.compose(tmp1).compose(tmp2), value.getPrimitive().getTransformation());
-        }
-
-        try
-        {
-            runInterpreter("return box([1,2,3]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("box", e.function);
-            assertEquals(Collections.singletonList(Type.VECTOR), e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return box([1,2,3], 4, 1<2);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            final List<Type> expectedArgTypes = new ArrayList<Type>();
-            expectedArgTypes.add(Type.VECTOR);
-            expectedArgTypes.add(Type.NUMBER);
-            expectedArgTypes.add(Type.BOOLEAN);
-            assertEquals("box", e.function);
-            assertEquals(expectedArgTypes, e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
+        runTestsFail(InterpreterIllegalArguments.class, "box", "[1.0, 10.0, 100.0]", null);
+        runTestsFail(InterpreterIllegalArguments.class, "box", "[1.0, 10.0, 100.0], 23", null);
     }
 
     @Test
     public void testCylinder() throws RecognitionException, InterpreterRuntimeException
     {
-        final Transformation eye = Transformations.identity();
-        final Transformation t0 = Transformations.translate(1.0, 2.0, 3.0);
-        final Transformation t1 = Transformations.scalez(2.23);
+        final String args = "2.23, [1.0, 10.0, 100.0], [4.0, 14.0, 105.0]";
+        final String modifiers = "translate([10.0, 20.0, 30.0]); scale(.5);";
 
-        runInterpreter("return cylinder;");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        final Vector v0 = Vector.make(1.0, 10.0, 100.0);
+        final Vector v1 = Vector.make(4.0, 14.0, 105.0);
+        final double length = v1.sub(v0).length();
 
-        runInterpreter("return cylinder();");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        final Transformation tr0 = Transformations.scale(2.23, length, 2.23);
+        final Transformation tr1 = Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0));
+        final Transformation tr2 = Transformations.translate(v0);
+        final Transformation tr3 = Transformations.translate(10.0, 20.0, 30.0);
+        final Transformation tr4 = Transformations.scale(0.5);
 
-        runInterpreter("return cylinder() { };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        runTests("cylinder", Cylinder.class, null, null,      EYE);
+        runTests("cylinder", Cylinder.class, args, null,      tr0.compose(tr1).compose(tr2));
+        runTests("cylinder", Cylinder.class, null, modifiers, tr3.compose(tr4));
+        runTests("cylinder", Cylinder.class, args, modifiers, tr0.compose(tr1).compose(tr2).compose(tr3).compose(tr4));
 
-        runInterpreter("return cylinder() { translate [1, 2, 3]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-        assertEquals(t0, value.getPrimitive().getTransformation());
-
-        runInterpreter("return cylinder() { translate [1, 2, 3]; scalez 2.23; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
-
-        runInterpreter("return cylinder() { translate([1, 2, 3]) { scalez 2.23; }; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
-
-        runInterpreter("return cylinder(2.23, [1,2,3], [4,5,6]);");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-
-        runInterpreter("return cylinder(2.23, [1,2,3], [4,5,6]) { translate [1, 2, 3]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-
-        runInterpreter("return cylinder(2.23, [1,10,100], [4,14,105]);");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-        {
-            final Vector v0 = Vector.make(1, 10, 100);
-            final Vector v1 = Vector.make(4, 14, 105);
-            final double length = v1.sub(v0).length();
-            final Transformation tmp0 = Transformations.scale(2.23, length, 2.23);
-            final Transformation tmp1 = Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0));
-            final Transformation tmp2 = Transformations.translate(v0);
-            assertEquals(tmp0.compose(tmp1).compose(tmp2), value.getPrimitive().getTransformation());
-        }
-
-        runInterpreter("return cylinder(2.23, [1,10,100], [4,14,105]) { translate [10,20,30]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Cylinder.class, value.getPrimitive().getClass());
-        {
-            final Vector v0 = Vector.make(1, 10, 100);
-            final Vector v1 = Vector.make(4, 14, 105);
-            final double length = v1.sub(v0).length();
-            final Transformation tmp0 = Transformations.scale(2.23, length, 2.23);
-            final Transformation tmp1 = Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0));
-            final Transformation tmp2 = Transformations.translate(v0);
-            final Transformation tmp3 = Transformations.translate(10.0, 20.0, 30.0);
-            assertEquals(tmp0.compose(tmp1).compose(tmp2).compose(tmp3), value.getPrimitive().getTransformation());
-        }
-
-        try
-        {
-            runInterpreter("return cylinder([1,2,3]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("cylinder", e.function);
-            assertEquals(Collections.singletonList(Type.VECTOR), e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return cylinder([1,2,3], 4, 1<2);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            final List<Type> expectedArgTypes = new ArrayList<Type>();
-            expectedArgTypes.add(Type.VECTOR);
-            expectedArgTypes.add(Type.NUMBER);
-            expectedArgTypes.add(Type.BOOLEAN);
-            assertEquals("cylinder", e.function);
-            assertEquals(expectedArgTypes, e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return cylinder([1,2,3], [4,5,6]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("cylinder", e.function);
-        }
-
-        try
-        {
-            runInterpreter("return cylinder(1);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("cylinder", e.function);
-        }
-
-        try
-        {
-            runInterpreter("return cylinder(1, 2);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("cylinder", e.function);
-        }
+        runTestsFail(InterpreterIllegalArguments.class, "cylinder", "[1.0, 10.0, 100.0], [4.0, 14.0, 105.0]", null);
+        runTestsFail(InterpreterIllegalArguments.class, "cylinder", "[1.0, 10.0, 100.0], [4.0, 14.0, 105.0], 23", null);
     }
 
     @Test
     public void testPlane() throws RecognitionException, InterpreterRuntimeException
     {
-        final Transformation eye = Transformations.identity();
-        final Transformation t0 = Transformations.translate(1.0, 2.0, 3.0);
-        final Transformation t1 = Transformations.scalez(2.23);
+        final String modifiers = "translate([10.0, 20.0, 30.0]); rotx(2.23);";
 
-        runInterpreter("return plane;");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Plane.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        final Transformation tr0 = Transformations.translate(10.0, 20.0, 30.0);
+        final Transformation tr1 = Transformations.rotx(2.23);
 
-        runInterpreter("return plane();");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Plane.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        runTests("plane", Plane.class, null, null,      EYE);
+        runTests("plane", Plane.class, null, modifiers, tr0.compose(tr1));
 
-        runInterpreter("return plane() { };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Plane.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
-
-        runInterpreter("return plane() { translate [1, 2, 3]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Plane.class, value.getPrimitive().getClass());
-        assertEquals(t0, value.getPrimitive().getTransformation());
-
-        runInterpreter("return plane() { translate [1, 2, 3]; scalez 2.23; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Plane.class, value.getPrimitive().getClass());
-        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
-
-        runInterpreter("return plane() { translate([1, 2, 3]) { scalez 2.23; }; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Plane.class, value.getPrimitive().getClass());
-        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
-
-        runInterpreter("return plane() { translate [10,20,30]; scalex 2.23; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Plane.class, value.getPrimitive().getClass());
-        {
-            final Transformation tmp0 = Transformations.translate(10.0, 20.0, 30.0);
-            final Transformation tmp1 = Transformations.scalex(2.23);
-            assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());
-        }
-
-        try
-        {
-            runInterpreter("return plane([1,2,3]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("plane", e.function);
-            assertEquals(Collections.singletonList(Type.VECTOR), e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return plane([1,2,3], 4, 1<2);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            final List<Type> expectedArgTypes = new ArrayList<Type>();
-            expectedArgTypes.add(Type.VECTOR);
-            expectedArgTypes.add(Type.NUMBER);
-            expectedArgTypes.add(Type.BOOLEAN);
-            assertEquals("plane", e.function);
-            assertEquals(expectedArgTypes, e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return plane([1,2,3], [4,5,6]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("plane", e.function);
-        }
-
-        try
-        {
-            runInterpreter("return plane(2.23, [1,2,3], [4,5,6]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("plane", e.function);
-        }
-
-        try
-        {
-            runInterpreter("return plane(1);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("plane", e.function);
-        }
-
-        try
-        {
-            runInterpreter("return plane(1, 2);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("plane", e.function);
-        }
+        runTestsFail(InterpreterIllegalArguments.class, "plane", "2.23", null);
     }
 
     @Test
     public void testSphere() throws RecognitionException, InterpreterRuntimeException
     {
-        final Transformation eye = Transformations.identity();
-        final Transformation t0 = Transformations.translate(1.0, 2.0, 3.0);
-        final Transformation t1 = Transformations.scalez(2.23);
+        final String args = "2.23";
+        final String modifiers = "translate([10.0, 20.0, 30.0]); scale(.5);";
 
-        runInterpreter("return sphere;");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        final Transformation tr0 = Transformations.scale(2.23);
+        final Transformation tr1 = Transformations.translate(10.0, 20.0, 30.0);
+        final Transformation tr2 = Transformations.scale(0.5);
 
-        runInterpreter("return sphere();");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
+        runTests("sphere", Sphere.class, null, null,      EYE);
+        runTests("sphere", Sphere.class, args, null,      tr0);
+        runTests("sphere", Sphere.class, null, modifiers, tr1.compose(tr2));
+        runTests("sphere", Sphere.class, args, modifiers, tr0.compose(tr1).compose(tr2));
 
-        runInterpreter("return sphere() { };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        assertEquals(eye, value.getPrimitive().getTransformation());
-
-        runInterpreter("return sphere() { translate [1, 2, 3]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        assertEquals(t0, value.getPrimitive().getTransformation());
-
-        runInterpreter("return sphere() { translate [1, 2, 3]; scalez 2.23; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
-
-        runInterpreter("return sphere() { translate([1, 2, 3]) { scalez 2.23; }; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        assertEquals(t0.compose(t1), value.getPrimitive().getTransformation());
-
-        runInterpreter("return sphere() { translate [10,20,30]; scalex 2.23; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        {
-            final Transformation tmp0 = Transformations.translate(10.0, 20.0, 30.0);
-            final Transformation tmp1 = Transformations.scalex(2.23);
-            assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());
-        }
-
-        runInterpreter("return sphere(2.23);");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        {
-            assertEquals(Transformations.scale(2.23), value.getPrimitive().getTransformation());
-        }
-
-        runInterpreter("return sphere(2.23) { translate [10,20,30]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Sphere.class, value.getPrimitive().getClass());
-        {
-            final Transformation tmp0 = Transformations.scale(2.23);
-            final Transformation tmp1 = Transformations.translate(10.0, 20.0, 30.0);
-            assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());
-        }
-
-        try
-        {
-            runInterpreter("return sphere([1,2,3]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("sphere", e.function);
-            assertEquals(Collections.singletonList(Type.VECTOR), e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return sphere([1,2,3], 4, 1<2);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            final List<Type> expectedArgTypes = new ArrayList<Type>();
-            expectedArgTypes.add(Type.VECTOR);
-            expectedArgTypes.add(Type.NUMBER);
-            expectedArgTypes.add(Type.BOOLEAN);
-            assertEquals("sphere", e.function);
-            assertEquals(expectedArgTypes, e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return sphere([1,2,3], [4,5,6]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("sphere", e.function);
-        }
-
-        try
-        {
-            runInterpreter("return sphere(2.23, [1,2,3], [4,5,6]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("sphere", e.function);
-        }
-
-        try
-        {
-            runInterpreter("return sphere(1, 2);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("sphere", e.function);
-        }
+        runTestsFail(InterpreterIllegalArguments.class, "sphere", "[1.0, 10.0, 100.0]", null);
+        runTestsFail(InterpreterIllegalArguments.class, "sphere", "17, 23", null);
     }
 
     @Test
     public void testTorus() throws RecognitionException, InterpreterRuntimeException
     {
-        runInterpreter("return torus(.23);");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Torus.class, value.getPrimitive().getClass());
-        assertEquals(.23, ((Torus) value.getPrimitive()).smallRadius(), 0);
-        assertEquals(Transformations.identity(), value.getPrimitive().getTransformation());
+        final String args0 = "0.23";
+        final String args1 = "0.23, 2.5";
+        final String modifiers = "translate([10.0, 20.0, 30.0]); scale(.5);";
 
-        runInterpreter("return torus(.23) { };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Torus.class, value.getPrimitive().getClass());
-        assertEquals(.23, ((Torus) value.getPrimitive()).smallRadius(), 0);
-        assertEquals(Transformations.identity(), value.getPrimitive().getTransformation());
+        final Transformation tr0 = Transformations.scale(2.5);
+        final Transformation tr1 = Transformations.translate(10.0, 20.0, 30.0);
+        final Transformation tr2 = Transformations.scale(0.5);
 
-        runInterpreter("return torus(.23) { rotz 2.2; translate [10,20,30]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Torus.class, value.getPrimitive().getClass());
+        final List<Torus> res0 = new ArrayList<Torus>();
+        res0.addAll(runTests("torus", Torus.class, args0, null,      EYE));
+        res0.addAll(runTests("torus", Torus.class, args0, modifiers, tr1.compose(tr2)));
+        for (final Torus torus: res0)
         {
-            assertEquals(.23, ((Torus) value.getPrimitive()).smallRadius(), 0);
-            final Transformation tmp0 = Transformations.rotz(2.2);
-            final Transformation tmp1 = Transformations.translate(10.0, 20.0, 30.0);
-            assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());
+            assertEquals(0.23, torus.smallRadius(), 0);
         }
 
-        runInterpreter("return torus(.23, 2);");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Torus.class, value.getPrimitive().getClass());
-        assertEquals(.23/2.0, ((Torus) value.getPrimitive()).smallRadius(), 0);
-        assertEquals(Transformations.scale(2.0), value.getPrimitive().getTransformation());
-
-        runInterpreter("return torus(.23, 2) { };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Torus.class, value.getPrimitive().getClass());
-        assertEquals(.23/2.0, ((Torus) value.getPrimitive()).smallRadius(), 0);
-        assertEquals(Transformations.scale(2.0), value.getPrimitive().getTransformation());
-
-        runInterpreter("return torus(.23, 2) { translate [10,20,30]; };");
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(Torus.class, value.getPrimitive().getClass());
+        final List<Torus> res1 = new ArrayList<Torus>();
+        res1.addAll(runTests("torus", Torus.class, args1, null,      tr0));
+        res1.addAll(runTests("torus", Torus.class, args1, modifiers, tr0.compose(tr1).compose(tr2)));
+        for (final Torus torus : res1)
         {
-            assertEquals(.23/2.0, ((Torus) value.getPrimitive()).smallRadius(), 0);
-            final Transformation tmp0 = Transformations.scale(2.0);
-            final Transformation tmp1 = Transformations.translate(10.0, 20.0, 30.0);
-            assertEquals(tmp0.compose(tmp1), value.getPrimitive().getTransformation());
+            assertEquals(0.23 / 2.5, torus.smallRadius(), 0);
         }
 
-        try
-        {
-            runInterpreter("return torus;");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("torus", e.function);
-        }
-
-        try
-        {
-            runInterpreter("return torus([1,2,3]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("torus", e.function);
-            assertEquals(Collections.singletonList(Type.VECTOR), e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return torus([1,2,3], 4, 1<2);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            final List<Type> expectedArgTypes = new ArrayList<Type>();
-            expectedArgTypes.add(Type.VECTOR);
-            expectedArgTypes.add(Type.NUMBER);
-            expectedArgTypes.add(Type.BOOLEAN);
-            assertEquals("torus", e.function);
-            assertEquals(expectedArgTypes, e.gotArgTypes);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
-        }
-
-        try
-        {
-            runInterpreter("return torus([1,2,3], [4,5,6]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("torus", e.function);
-        }
-        try
-        {
-            runInterpreter("return torus(2.23, [1,2,3], [4,5,6]);");
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals("torus", e.function);
-        }
+        runTestsFail(InterpreterIllegalArguments.class, "torus", null, null);
+        runTestsFail(InterpreterIllegalArguments.class, "torus", "[1.0, 10.0, 100.0]", null);
+        runTestsFail(InterpreterIllegalArguments.class, "torus", ".23, 1<2", null);
     }
 }
