@@ -62,6 +62,7 @@ public class InterpreterBase
 
     protected void runInterpreter(final String code) throws RecognitionException, InterpreterRuntimeException
     {
+        System.out.println(code);
         run(new ANTLRStringStream(code));
     }
 

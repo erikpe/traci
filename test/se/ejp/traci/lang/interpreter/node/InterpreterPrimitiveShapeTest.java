@@ -1,7 +1,6 @@
 package se.ejp.traci.lang.interpreter.node;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.List;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 
-import se.ejp.traci.lang.interpreter.InterpreterBase;
 import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalArguments;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
@@ -23,100 +21,24 @@ import se.ejp.traci.model.shape.primitive.Primitive;
 import se.ejp.traci.model.shape.primitive.Sphere;
 import se.ejp.traci.model.shape.primitive.Torus;
 
-public class InterpreterPrimitiveShapeTest extends InterpreterBase
+public class InterpreterPrimitiveShapeTest extends InterpreterObjectBase
 {
     private static final Transformation EYE = Transformations.identity();
 
-    @SuppressWarnings("unchecked")
-    private <P extends Primitive> P run(final String code, final Class<P> clazz, final Transformation tr)
-            throws RecognitionException, InterpreterRuntimeException
+    public InterpreterPrimitiveShapeTest()
     {
-        runInterpreter(code);
-        assertEquals(Type.PRIMITIVE_SHAPE, value.getType());
-        assertEquals(clazz, value.getPrimitive().getClass());
-        assertEquals(tr, value.getPrimitive().getTransformation());
-        return (P) value.getPrimitive();
-    }
-
-    private void runFail(final String code, final String id, final Class<? extends InterpreterRuntimeException> eClass)
-            throws RecognitionException
-    {
-        try
-        {
-            runInterpreter(code);
-            fail("Missing exception");
-        }
-        catch (final InterpreterIllegalArguments e)
-        {
-            assertEquals(eClass, e.getClass());
-            assertEquals(id, e.function);
-        }
-        catch (final InterpreterRuntimeException e)
-        {
-            assertEquals(eClass, e.getClass());
-        }
-    }
-
-    private List<String> getSnippets(final String id, final String args, final String modifiers)
-    {
-        final List<String> snippets = new ArrayList<String>();
-
-        if (args == null && modifiers == null)
-        {
-            snippets.add("return " + id + ";");
-            snippets.add("return " + id + "();");
-            snippets.add("return " + id + " { };");
-            snippets.add("return " + id + "() { };");
-            snippets.add("val = " + id + "; return val;");
-            snippets.add("val = " + id + "(); return val;");
-            snippets.add("val = " + id + " { }; return val;");
-            snippets.add("val = " + id + "() { }; return val;");
-        }
-        else if (args != null && modifiers == null)
-        {
-            snippets.add("return " + id + "(" + args + ");");
-            snippets.add("return " + id + "(" + args + ") { };");
-            snippets.add("val = " + id + "(" + args + "); return val;");
-            snippets.add("val = " + id + "(" + args + ") { }; return val;");
-        }
-        else if (args == null && modifiers != null)
-        {
-            snippets.add("return " + id + " { " + modifiers + " };");
-            snippets.add("return " + id + "() { " + modifiers + " };");
-            snippets.add("val = " + id + " { " + modifiers + " }; return val;");
-            snippets.add("val = " + id + "() { " + modifiers + " }; return val;");
-            snippets.add("val = " + id + "; return val { " + modifiers + " };");
-            snippets.add("val = " + id + "(); return val { " + modifiers + " };");
-        }
-        else if (args != null && modifiers != null)
-        {
-            snippets.add("return " + id + "(" + args + ") { " + modifiers + " };");
-            snippets.add("val = " + id + "(" + args + ") { " + modifiers + " }; return val;");
-            snippets.add("val = " + id + "(" + args + "); return val { " + modifiers + " };");
-        }
-
-        return snippets;
+        super(Type.PRIMITIVE_SHAPE);
     }
 
     private <P extends Primitive> List<P> runTests(final String id, final Class<P> clazz, final String args,
-            final String modifiers, final Transformation tr) throws RecognitionException,
-            InterpreterRuntimeException
+            final String modifiers, final Transformation tr) throws RecognitionException, InterpreterRuntimeException
     {
-        final List<P> res = new ArrayList<P>();
-        for (final String code : getSnippets(id, args, modifiers))
+        final List<P> res = runTests(id, clazz, args, modifiers);
+        for (final Primitive primitive : res)
         {
-            res.add(run(code, clazz, tr));
+            assertEquals(tr, primitive.getTransformation());
         }
         return res;
-    }
-
-    private void runTestsFail(final Class<? extends InterpreterRuntimeException> eClass, final String id,
-            final String args, final String modifiers) throws RecognitionException
-    {
-        for (final String code : getSnippets(id, args, modifiers))
-        {
-            runFail(code, id, eClass);
-        }
     }
 
     @Test
