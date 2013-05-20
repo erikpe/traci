@@ -134,6 +134,8 @@ expr returns [TraciNode node]
         { $node = new ObjectNode($PIGMENT.text, $function_call_args.nodes, $block.node, $PIGMENT.token); }
     | ^(FINISH function_call_args)
         { $node = new ObjectNode($FINISH.text, $function_call_args.nodes, null, $FINISH.token); }
+    | ^(CAMERA function_call_args block?)
+        { $node = new ObjectNode($CAMERA.text, $function_call_args.nodes, $block.node, $CAMERA.token); }
     | INT     { $node = new ConstNode(new TraciValue(Double.valueOf($INT.text))); }
     | FLOAT   { $node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text))); }
     | QSTRING { $node = new ConstNode(new TraciValue(ParserUtilities.unquoteQstring($QSTRING.text))); }

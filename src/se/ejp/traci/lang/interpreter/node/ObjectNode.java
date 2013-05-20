@@ -19,6 +19,7 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.parser.TraciToken;
 import se.ejp.traci.math.Transformations;
+import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
 import se.ejp.traci.model.material.Finish;
@@ -66,7 +67,8 @@ public class ObjectNode implements TraciNode
         ROT_VEC_TO_VEC("rotVecToVec",  Transformations.class, "rotVecToVec"),
         ROT_AROUND    ("rotAround",    Transformations.class, "rotAround"),
         FINISH        ("finish",       Finish.class,          "make"),
-        TEXTURE       ("texture",      Texture.class,         "make");
+        TEXTURE       ("texture",      Texture.class,         "make"),
+        CAMERA        ("camera",       Camera.class,          "make");
 
         final String id;
         final Class<?> clazz;

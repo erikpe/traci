@@ -2,6 +2,7 @@ package se.ejp.traci.lang.interpreter;
 
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.math.Transformation;
+import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
@@ -71,6 +72,10 @@ public class Entities
         else if (object instanceof Light)
         {
             return new LightEntity((Light) object);
+        }
+        else if (object instanceof Camera)
+        {
+            return new CameraEntity((Camera) object);
         }
 
         throw new RuntimeException();
@@ -333,6 +338,28 @@ public class Entities
         private LightEntity(final Light light)
         {
             super(light);
+        }
+
+        @Override
+        public void applyValue(final TraciValue value)
+        {
+            switch (value.getType())
+            {
+            case TRANSFORMATION:
+                obj.transform(value.getTransformation());
+                break;
+
+            default:
+                throw new RuntimeException();
+            }
+        }
+    }
+
+    private static class CameraEntity extends EntityHelper<Camera>
+    {
+        private CameraEntity(final Camera camera)
+        {
+            super(camera);
         }
 
         @Override

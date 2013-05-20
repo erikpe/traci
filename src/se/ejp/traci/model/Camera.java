@@ -8,28 +8,35 @@ import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
 
-public class Camera implements Transformable
+public class Camera implements Transformable, Cloneable
 {
-    private final double aspectRatio;
-    private final double fovx;
-    private final double fovy;
+    private boolean initialized;
+
+    private double aspectRatio;
+    private double fovx;
+    private double fovy;
 
     private Transformation transformation;
-    public final double focalDist = 45;
-    public final double aperture = .4;
+    public double focalDist = 45;
+    public double aperture = .4;
 
-    private final double xx;
-    private final double yy;
+    private double xx;
+    private double yy;
 
-    public Camera(final Vector location, final Vector lookAt, final Vector up, final Settings settings)
+    private Camera(final Vector location, final Vector lookAt, final Vector up)
     {
-        this.transformation = Transformations.camera(location, lookAt, up);
+        transformation = Transformations.camera(location, lookAt, up);
+        initialized = false;
+    }
 
-        this.aspectRatio = ((double) settings.getWidth()) / settings.getHeight();
-        this.fovx = (settings.getFov() / 360.0) * Math.PI * 2.0;
-        this.fovy = fovx / aspectRatio;
-        this.xx = 2.0 * Math.tan(fovx / 2.0);
-        this.yy = 2.0 * Math.tan(fovy / 2.0);
+    public static Camera make(final Vector location, final Vector lookAt, final Vector up)
+    {
+        return new Camera(location, lookAt, up);
+    }
+
+    public static Camera make(final Vector location, final Vector lookAt)
+    {
+        return make(location, lookAt, Vector.UNIT_Y);
     }
 
     @Override
@@ -38,8 +45,28 @@ public class Camera implements Transformable
         transformation = transformation.compose(tr);
     }
 
+    public Transformation getTransformation()
+    {
+        return transformation;
+    }
+
+    public void initialize(final Settings settings)
+    {
+        aspectRatio = ((double) settings.getWidth()) / settings.getHeight();
+        fovx = (settings.getFov() / 360.0) * Math.PI * 2.0;
+        fovy = fovx / aspectRatio;
+        xx = 2.0 * Math.tan(fovx / 2.0);
+        yy = 2.0 * Math.tan(fovy / 2.0);
+        initialized = true;
+    }
+
     public Vector[] getLocAndDir(final double lookX, final double lookY, final Settings settings, final Random randomSource)
     {
+        if (!initialized)
+        {
+            throw new RuntimeException("Camera not initialized with settings yet");
+        }
+
         final Vector[] res = new Vector[2];
         final Vector location;
 
@@ -68,5 +95,11 @@ public class Camera implements Transformable
         res[1] = transformation.dir(dir);
 
         return res;
+    }
+
+    @Override
+    public Camera clone() throws CloneNotSupportedException
+    {
+        return (Camera) super.clone();
     }
 }

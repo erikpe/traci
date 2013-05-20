@@ -182,6 +182,7 @@ primary_expr
     | texture
     | pigment
     | finish
+    | camera
     | vector
     | color
     | LPAR! expr RPAR!
@@ -240,6 +241,10 @@ pigment
 
 finish
     : FINISH function_call_args -> ^(FINISH function_call_args)
+    ;
+
+camera
+    : CAMERA function_call_args block? -> ^(CAMERA function_call_args block?)
     ;
 
 vector 
@@ -312,6 +317,10 @@ PIGMENT
 
 FINISH
     : ('finish')
+    ;
+
+CAMERA
+    : ('camera')
     ;
 
 ID  : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*

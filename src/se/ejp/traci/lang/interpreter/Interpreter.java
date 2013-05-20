@@ -6,10 +6,7 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.interpreter.node.BlockNode;
 import se.ejp.traci.main.Result;
 import se.ejp.traci.main.options.Settings;
-import se.ejp.traci.math.Vector;
-import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.Scene;
-import se.ejp.traci.model.shape.Shape;
 import se.ejp.traci.model.shape.csg.Union;
 import se.ejp.traci.util.Log;
 import se.ejp.traci.util.Utilities;
@@ -74,12 +71,22 @@ public class Interpreter
         //plane.setPigment(Checker.make(Color.WHITE, Color.BLACK));
         //rootUnion.add(plane);
 
-        Shape optimizedRoot = rootUnion.optimize();
-        if (optimizedRoot == null)
+//        !!! TODO: beore using optimize(), determine what effects it has on bounding boxes. !!!
+//        Shape optimizedRoot = rootUnion.optimize();
+//        if (optimizedRoot == null)
+//        {
+//            optimizedRoot = Union.make();
+//        }
+//        scene.setRootShape(optimizedRoot);
+        scene.setRootShape(rootUnion);
+
+        if (scene.camera == null)
         {
-            optimizedRoot = Union.make();
+            Log.ERROR("In file: '" + settings.getInputFilename() + "': No camera object specified");
+            return Result.RUNTIME_ERROR;
         }
-        scene.setRootShape(optimizedRoot);
+
+        scene.camera.initialize(settings);
 
         final long stop = System.currentTimeMillis();
         Log.INFO("Scene constructed in " + Utilities.millisecondsToString(stop - start));
@@ -88,13 +95,19 @@ public class Interpreter
 //        final Vector camLookAt = Vector.make(0, 0, 0);
 //        final Camera cam = new Camera(camLocation, camLookAt, Vector.UNIT_Y, settings);
         //Airplane
-        Vector loc = Vector.make(-2.4*2, 6.7*2, 8.5*2);
-        final Vector lookAt = Vector.make(7*2, 1.3*3, -1*2);
-        loc = lookAt.add(loc.sub(lookAt).mul(2));
-        final Vector camLocation = Vector.make(-2.4*2, 6.7*2, 8.5*2);
-        final Vector camLookAt = Vector.make(7*2, 1.3*2, -1*2);
-        final Camera cam = new Camera(loc, lookAt, Vector.UNIT_Y, settings);
-        scene.setCamera(cam);
+
+
+
+//        Vector loc = Vector.make(-2.4*2, 6.7*2, 8.5*2);
+//        final Vector lookAt = Vector.make(7*2, 1.3*3, -1*2);
+//        loc = lookAt.add(loc.sub(lookAt).mul(2));
+//        final Vector camLocation = Vector.make(-2.4*2, 6.7*2, 8.5*2);
+//        final Vector camLookAt = Vector.make(7*2, 1.3*2, -1*2);
+//        final Camera cam = new Camera(loc, lookAt, Vector.UNIT_Y, settings);
+
+
+
+        //scene.setCamera(cam);
 
         return Result.SUCCESS;
     }

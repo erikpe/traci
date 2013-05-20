@@ -59,6 +59,10 @@ public class Context
         {
             scene.addLight(value.getLight());
         }
+        else if (value.getType() == Type.CAMERA)
+        {
+            scene.setCamera(value.getCamera());
+        }
         else
         {
             entity.applyValue(value);

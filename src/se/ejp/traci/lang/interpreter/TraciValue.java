@@ -3,6 +3,7 @@ package se.ejp.traci.lang.interpreter;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Vector;
+import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.material.Color;
 import se.ejp.traci.model.material.Finish;
@@ -31,7 +32,8 @@ public class TraciValue implements Cloneable
         FINISH(Finish.class),
         PIGMENT(Pigment.class),
         COLOR(Color.class),
-        LIGHT(Light.class);
+        LIGHT(Light.class),
+        CAMERA(Camera.class);
 
         public final Class<?> clazz;
 
@@ -150,6 +152,11 @@ public class TraciValue implements Cloneable
         return (Light) value;
     }
 
+    public Camera getCamera()
+    {
+        return (Camera) value;
+    }
+
     @Override
     public String toString()
     {
@@ -184,6 +191,9 @@ public class TraciValue implements Cloneable
 
         case LIGHT:
             return new TraciValue(getLight().clone());
+
+        case CAMERA:
+            return new TraciValue(getCamera().clone());
 
         default:
             throw new InterpreterInternalException("Trying to clone() value of type " + type.toString());

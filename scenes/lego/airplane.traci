@@ -1,12 +1,13 @@
 #include "common/basic-units.traci"
 #include "bricks/all-bricks.traci"
 
-global BLACK = color [.15, .15, .15];
-global BLACK_LIGHT = color [.2, .2, .2];
-global GRAY = color [.85, .85, .85];
-global YELLOW = color [1, 1, 0];
-global WHITE = color [1, 1, 1];
-global RED = color [1, 0, 0];
+global LEGO_FINISH = finish(0.3, 0.3, 50.0, 0.1);
+global BLACK = texture { color [.15, .15, .15]; LEGO_FINISH; };
+global BLACK_LIGHT = texture { color [.15, .15, .15]; LEGO_FINISH; };
+global GRAY = texture { color [.85, .85, .85]; LEGO_FINISH; };
+global YELLOW = texture { color [1, 1, 0]; LEGO_FINISH; };
+global WHITE = texture { color [1, 1, 1]; LEGO_FINISH; };
+global RED = texture { color [1, 0, 0]; LEGO_FINISH; };
 
 def pieces1 ()
 {
@@ -208,13 +209,6 @@ def pieces9 ()
     };
 }
 
-a = 0.099668652491162;
-alpha = 1.1148591426671;
-beta = 1.0093762740913;
-gamma = 1.0173572368314;
-foo = 0.12430945820273;
-bar = 1.2145277951583;
-
 def pieces10 ()
 {
     return union {
@@ -242,7 +236,6 @@ def pieces11 ()
     };
 }
 
-#if 1
 def airplane ()
 {
     return union {
@@ -266,43 +259,12 @@ def airplane ()
 }
 
 airplane();
-#endif
 
-#if 0
-cylinder(.02, ORIGO, X*20) {
-    color [1, 0, 0];
-};
+pointlight([-30, 15, 40], color [1,1,1]*30*200);
+pointlight([60, 15, 30], color [1,1,1]*6000);
+ambientlight(color [1,1,1]*.15);
 
-cylinder(.02, ORIGO, Y*20) {
-    color [0, 1, 0];
-};
-
-cylinder(.02, ORIGO, Z*20) {
-    color [0, 0, 1];
-};
-#endif
-
-//pieces11 ();
-
-//legoTechnicAxlePin () { YELLOW; scale 2; }
-
-//legoTechnicLiftarm_2 () { GRAY; }
-
-//cornerHelper (.1);
-//roundedBox4 (.5, .6, .7, .1);
-
-//legoTechnicBushToothed () { GRAY; }
-//legoTechnicBrickWithHoles_1x2() { YELLOW; }
-//legoTechnicAxle(2) { BLACK; translate -Z;}
-
-//legoTechnicBush () { GRAY; }
-
-//legoTechnicAxlePin() { GRAY; }
-//legoTechnicBushToothed () { YELLOW; translate Y*2; scale 3;}
-//legoTechnicPlateWithToothedEnds_1x5 () { GRAY; }
-
-pointlight([-30, 15, 40], WHITE*30*200);
-pointlight([60, 15, 30], WHITE*6000);
-ambientlight(WHITE*.15);
-
-//camera([-10, 15, 15], [8, 2, 0], Y);
+loc = [-2.4*2, 6.7*2, 8.5*2];
+lookAt = [7*2, 1.3*3, -1*2];
+loc = lookAt + (loc - lookAt)*2;
+camera(loc, lookAt, Y);
