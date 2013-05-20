@@ -19,15 +19,15 @@ public class Finish
         this.reflectiveness = reflectiveness;
     }
 
-    public static Finish make(final double specCoeff, final double diffCoeff, final double shininess,
-            final double reflectiveness)
+    public static Finish make(final Double specCoeff, final Double diffCoeff, final Double shininess,
+            final Double reflectiveness)
     {
         return cache.get(new Finish(specCoeff, diffCoeff, shininess, reflectiveness));
     }
 
     public static Finish getDefault()
     {
-        return make(0.3, 0.3, 50, 0.1);
+        return make(0.3, 0.3, 50.0, 0.1);
     }
 
     @Override

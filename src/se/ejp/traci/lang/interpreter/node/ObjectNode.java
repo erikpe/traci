@@ -21,6 +21,7 @@ import se.ejp.traci.lang.parser.TraciToken;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
+import se.ejp.traci.model.material.Finish;
 import se.ejp.traci.model.material.pigment.Checker;
 import se.ejp.traci.model.material.pigment.FileImage;
 import se.ejp.traci.model.material.pigment.Solid;
@@ -62,7 +63,8 @@ public class ObjectNode implements TraciNode
         SCALEY        ("scaley",       Transformations.class, "scaley"),
         SCALEZ        ("scalez",       Transformations.class, "scalez"),
         ROT_VEC_TO_VEC("rotVecToVec",  Transformations.class, "rotVecToVec"),
-        ROT_AROUND    ("rotAround",    Transformations.class, "rotAround");
+        ROT_AROUND    ("rotAround",    Transformations.class, "rotAround"),
+        FINISH        ("finish",       Finish.class,          "make");
 
         final String id;
         final Class<?> clazz;

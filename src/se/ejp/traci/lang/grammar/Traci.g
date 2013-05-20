@@ -180,6 +180,7 @@ primary_expr
     | transformation
     | light
     | pigment
+    | finish
     | vector
     | color
     | LPAR! expr RPAR!
@@ -230,6 +231,10 @@ light
 pigment
     : PIGMENT function_call_args block? -> ^(PIGMENT function_call_args block?)
     | PIGMENT block?                    -> ^(PIGMENT ^(ARGS) block?)
+    ;
+
+finish
+    : FINISH function_call_args -> ^(FINISH function_call_args)
     ;
 
 vector 
@@ -294,6 +299,10 @@ LIGHT
 
 PIGMENT
     : ('solid' | 'image' | 'checker')
+    ;
+
+FINISH
+    : ('finish')
     ;
 
 ID  : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*
