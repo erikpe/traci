@@ -128,6 +128,8 @@ expr returns [TraciNode node]
     	{ $node = new TransformationNode($TRANSFORMATION.text, $function_call_args.nodes, $block.node, $TRANSFORMATION.token); }
     | ^(LIGHT function_call_args block?)
         { $node = new ObjectNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
+    | ^(TEXTURE block?)
+        { $node = new ObjectNode($TEXTURE.text, Collections.<TraciNode>emptyList(), $block.node, $TEXTURE.token); }
     | ^(PIGMENT function_call_args block?)
         { $node = new ObjectNode($PIGMENT.text, $function_call_args.nodes, $block.node, $PIGMENT.token); }
     | ^(FINISH function_call_args)

@@ -22,6 +22,7 @@ import se.ejp.traci.math.Transformations;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
 import se.ejp.traci.model.material.Finish;
+import se.ejp.traci.model.material.Texture;
 import se.ejp.traci.model.material.pigment.Checker;
 import se.ejp.traci.model.material.pigment.FileImage;
 import se.ejp.traci.model.material.pigment.Solid;
@@ -64,7 +65,8 @@ public class ObjectNode implements TraciNode
         SCALEZ        ("scalez",       Transformations.class, "scalez"),
         ROT_VEC_TO_VEC("rotVecToVec",  Transformations.class, "rotVecToVec"),
         ROT_AROUND    ("rotAround",    Transformations.class, "rotAround"),
-        FINISH        ("finish",       Finish.class,          "make");
+        FINISH        ("finish",       Finish.class,          "make"),
+        TEXTURE       ("texture",      Texture.class,         "make");
 
         final String id;
         final Class<?> clazz;
@@ -161,7 +163,6 @@ public class ObjectNode implements TraciNode
             final Entity entity = Entities.makeEntity(value.getObject());
             blockNode.eval(context.newEntity(entity));
             value = entity.getValue();
-            assert object == value.getObject();
         }
 
         return value;

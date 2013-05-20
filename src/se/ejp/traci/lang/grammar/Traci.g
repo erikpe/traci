@@ -179,6 +179,7 @@ primary_expr
     | bbox
     | transformation
     | light
+    | texture
     | pigment
     | finish
     | vector
@@ -226,6 +227,10 @@ transformation
 light
     : LIGHT function_call_args block? -> ^(LIGHT function_call_args block?)
     | LIGHT block?                    -> ^(LIGHT ^(ARGS) block?)
+    ;
+
+texture
+    : TEXTURE block? -> ^(TEXTURE block?)
     ;
 
 pigment
@@ -295,6 +300,10 @@ COLOR
 
 LIGHT
     : ('pointlight' | 'ambientlight')
+    ;
+
+TEXTURE
+    : ('texture')
     ;
 
 PIGMENT

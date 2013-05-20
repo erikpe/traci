@@ -2,22 +2,21 @@ package se.ejp.traci.model.material.pigment;
 
 import se.ejp.traci.model.material.Color;
 
-public abstract class Interpolator
+public enum Interpolator
 {
-    public static Interpolator NEAREST_NEIGHBOUR = new Interpolator()
+    NEAREST_NEIGHBOUR
     {
         @Override
         public Color interpolate(final Interpolatable image, final double x, final double y)
         {
             return image.getAt(Math.round(x), Math.round(y));
         }
-    };
+    },
 
-    public static Interpolator BI_LINEAR = new Interpolator()
+    BI_LINEAR
     {
         @Override
-        public Color interpolate(final Interpolatable image, final double x,
-                final double y)
+        public Color interpolate(final Interpolatable image, final double x, final double y)
         {
             final long xFloor = (long) Math.floor(x);
             final long yFloor = (long) Math.floor(y);
@@ -42,13 +41,12 @@ public abstract class Interpolator
 
             return SW.add(NW).add(SE).add(NE);
         }
-    };
+    },
 
-    public static Interpolator BI_CUBIC_SPLINE = new Interpolator()
+    BI_CUBIC_SPLINE
     {
         @Override
-        public Color interpolate(final Interpolatable image, final double x,
-                final double y)
+        public Color interpolate(final Interpolatable image, final double x, final double y)
         {
             throw new UnsupportedOperationException();
         }

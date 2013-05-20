@@ -20,4 +20,9 @@ public abstract class NonUniform extends Pigment
     {
         return getColorTransformed(transformation.pointInv(p));
     }
+
+    public Transformation getTransformation()
+    {
+        return transformation;
+    }
 }

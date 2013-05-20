@@ -10,8 +10,8 @@ public class Checker extends Pattern
 {
     private static WeakCache<Checker> cache = new WeakCache<Checker>();
 
-    private final Color color1;
-    private final Color color2;
+    public final Color color1;
+    public final Color color2;
 
     private Checker(final Color color1, final Color color2, final Transformation transformation)
     {

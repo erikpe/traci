@@ -9,11 +9,8 @@ import se.ejp.traci.main.options.Settings;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.Scene;
-import se.ejp.traci.model.material.Color;
-import se.ejp.traci.model.material.pigment.Checker;
 import se.ejp.traci.model.shape.Shape;
 import se.ejp.traci.model.shape.csg.Union;
-import se.ejp.traci.model.shape.primitive.Plane;
 import se.ejp.traci.util.Log;
 import se.ejp.traci.util.Utilities;
 
@@ -73,8 +70,8 @@ public class Interpreter
             // Ignore
         }
 
-        final Plane plane = Plane.make();
-        plane.setPigment(Checker.make(Color.WHITE, Color.BLACK));
+        //final Plane plane = Plane.make();
+        //plane.setPigment(Checker.make(Color.WHITE, Color.BLACK));
         //rootUnion.add(plane);
 
         Shape optimizedRoot = rootUnion.optimize();

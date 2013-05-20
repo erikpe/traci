@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.math.Projection2D;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
@@ -45,26 +46,27 @@ public class FileImage extends NonUniform implements Interpolatable
     }
 
     public static FileImage make(final String filename, final String repeatPolicyStr, final String projStr,
-            final Color borderColor)
+            final Color borderColor) throws InterpreterRuntimeException
     {
         final RepeatPolicy repeat = RepeatPolicy.get(repeatPolicyStr);
 
-//        if (repeat == null)
-//        {
-//            throw new InterpreterRuntimeException(null, null, "Unknown repeat policy") { };
-//        }
-//
+        if (repeat == null)
+        {
+            throw new InterpreterRuntimeException(null, null, "Unknown repeat policy") { };
+        }
+
         final Projection2D proj = Projection2D.get(projStr);
-//
-//        if (proj == null)
-//        {
-//            throw new InterpreterRuntimeException(null, null, "Unknown projection") { };
-//        }
+
+        if (proj == null)
+        {
+            throw new InterpreterRuntimeException(null, null, "Unknown projection") { };
+        }
 
         return cache.get(new FileImage(filename, repeat, proj, borderColor, Transformations.identity()));
     }
 
     public static FileImage make(final String filename, final String repeatPolicyStr, final String projStr)
+            throws InterpreterRuntimeException
     {
         return make(filename, repeatPolicyStr, projStr, DEFAULT_BORDER_COLOR);
     }

@@ -22,24 +22,29 @@ public class Texture
         return cache.get(new Texture(pigment, finish));
     }
 
+    public static Texture make()
+    {
+        return getDefault();
+    }
+
     public static Texture getDefault()
     {
-        return Texture.make(Pigment.getDefault(), Finish.getDefault());
+        return make(Pigment.getDefault(), Finish.getDefault());
     }
 
     public Texture transform(final Transformation transformation)
     {
-        return Texture.make(pigment.transform(transformation), finish);
+        return make(pigment.transform(transformation), finish);
     }
 
     public Texture setPigment(final Pigment newPigment)
     {
-        return Texture.make(newPigment, finish);
+        return make(newPigment, finish);
     }
 
     public Texture setFinish(final Finish newFinish)
     {
-        return Texture.make(pigment, newFinish);
+        return make(pigment, newFinish);
     }
 
     @Override
