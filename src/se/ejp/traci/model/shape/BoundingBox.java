@@ -109,21 +109,9 @@ public class BoundingBox implements Transformable, Cloneable
         return false;
     }
 
-    @Override
-    public Object clone()
+    public Transformation getTransformation()
     {
-        try
-        {
-            final BoundingBox res = (BoundingBox) super.clone();
-            res.transformation = transformation;
-
-            return res;
-        }
-        catch (final CloneNotSupportedException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        return transformation;
     }
 
     @Override
@@ -132,8 +120,9 @@ public class BoundingBox implements Transformable, Cloneable
         return "BoundingBox";
     }
 
-    public Transformation getTransformation()
+    @Override
+    public BoundingBox clone() throws CloneNotSupportedException
     {
-        return transformation;
+        return (BoundingBox) super.clone();
     }
 }

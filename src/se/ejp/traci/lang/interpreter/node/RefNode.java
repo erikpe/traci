@@ -4,9 +4,10 @@ import org.antlr.runtime.Token;
 
 import se.ejp.traci.lang.interpreter.Context;
 import se.ejp.traci.lang.interpreter.Entities;
-import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.Entities.Entity;
+import se.ejp.traci.lang.interpreter.TraciValue;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
+import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterUndefinedIdentifier;
 import se.ejp.traci.lang.parser.TraciToken;
@@ -27,7 +28,16 @@ public class RefNode implements TraciNode
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        TraciValue value = context.getValue(id);
+        TraciValue value;
+
+        try
+        {
+            value = context.getValue(id);
+        }
+        catch (final CloneNotSupportedException e)
+        {
+            throw new InterpreterInternalException("Unable to clone object");
+        }
 
         if (value == null)
         {

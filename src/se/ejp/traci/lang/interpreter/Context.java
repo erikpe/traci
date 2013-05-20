@@ -80,7 +80,7 @@ public class Context
         localMemory.put(id, value);
     }
 
-    public TraciValue getValue(final String id)
+    public TraciValue getValue(final String id) throws CloneNotSupportedException
     {
         TraciValue value = localMemory.get(id);
 

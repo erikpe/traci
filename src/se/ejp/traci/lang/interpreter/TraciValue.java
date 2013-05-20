@@ -157,7 +157,7 @@ public class TraciValue implements Cloneable
     }
 
     @Override
-    public Object clone()
+    public Object clone() throws CloneNotSupportedException
     {
         switch (type)
         {

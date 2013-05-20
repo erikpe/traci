@@ -129,15 +129,16 @@ public abstract class Csg extends Shape implements Iterable<Shape>
     }
 
     @Override
-    public Object clone()
+    public Csg clone() throws CloneNotSupportedException
     {
         final Csg res = (Csg) super.clone();
+
         res.shapes = new Shape[numShapes];
         res.numShapes = numShapes;
 
         for (int i = 0; i < numShapes; ++i)
         {
-            res.shapes[i] = (Shape) shapes[i].clone();
+            res.shapes[i] = shapes[i].clone();
         }
 
         return res;

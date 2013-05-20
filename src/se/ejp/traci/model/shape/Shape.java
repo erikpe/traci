@@ -20,16 +20,8 @@ public abstract class Shape implements Transformable, Cloneable
     public abstract Shape optimize();
 
     @Override
-    public Object clone()
+    public Shape clone() throws CloneNotSupportedException
     {
-        try
-        {
-            return super.clone();
-        }
-        catch (final CloneNotSupportedException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        return (Shape) super.clone();
     }
 }

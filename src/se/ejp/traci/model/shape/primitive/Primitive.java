@@ -103,13 +103,4 @@ public abstract class Primitive extends Shape
     {
         return transformation;
     }
-
-    @Override
-    public Object clone()
-    {
-        final Primitive res = (Primitive) super.clone();
-        res.transformation = transformation;
-        res.material = material;
-        return res;
-    }
 }
