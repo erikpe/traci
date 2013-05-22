@@ -22,7 +22,7 @@ public class InterpreterObjectBase extends InterpreterBase
         this.type = type;
     }
 
-    protected static List<String> getSnippets(final String id, final String args, final String modifiers)
+    private static List<String> getSnippets(final String id, final String args, final String modifiers)
     {
         final List<String> snippets = new ArrayList<String>();
 
