@@ -2,6 +2,7 @@ package se.ejp.traci.model.shape.csg;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -126,6 +127,11 @@ public abstract class Csg extends Shape implements Iterable<Shape>
 
         shapes = tmpShapes.toArray(new Shape[numShapes]);
         return this;
+    }
+
+    public List<Shape> getShapes()
+    {
+        return Collections.unmodifiableList(Arrays.asList(shapes));
     }
 
     @Override
