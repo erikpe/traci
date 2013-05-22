@@ -76,49 +76,19 @@ public class ParserRunner
         catch (final RecognitionException e)
         {
             encounteredErrors = true;
-            final StringBuilder sb = new StringBuilder();
-            if (e.token != null)
-            {
-                final IncludeLocation location = ((TraciToken) e.token).location;
-                location.toString(sb);
-                sb.append('\n');
-            }
-            sb.append("Parse error: ").append(e.getMessage());
-            Log.ERROR(sb.toString());
+            Log.ERROR(ParserUtilities.makeErrorMessage(e, "Parse error"));
         }
 
         for (final ParseError error : lexer.getLexerErrors())
         {
             encounteredErrors = true;
-            final StringBuilder sb = new StringBuilder();
-
-            if (error.includeLocation != null)
-            {
-                error.includeLocation.toString(sb);
-                sb.append('\n');
-            }
-
-            sb.append("Lexer error: ");
-            sb.append(error.msg);
-
-            Log.ERROR(sb.toString());
+            Log.ERROR(error.fullMsg());
         }
 
         for (final ParseError error : parser.getParseErrors())
         {
             encounteredErrors = true;
-            final StringBuilder sb = new StringBuilder();
-
-            if (error.includeLocation != null)
-            {
-                error.includeLocation.toString(sb);
-                sb.append('\n');
-            }
-
-            sb.append("Parse error: ");
-            sb.append(error.msg);
-
-            Log.ERROR(sb.toString());
+            Log.ERROR(error.fullMsg());
         }
 
         if (encounteredErrors)
@@ -143,19 +113,7 @@ public class ParserRunner
         catch (final RecognitionException e)
         {
             encounteredErrors = true;
-            final StringBuilder sb = new StringBuilder();
-
-            if (e.token != null)
-            {
-                final IncludeLocation location = ((TraciToken) e.token).location;
-                location.toString(sb);
-                sb.append('\n');
-            }
-
-            final String msg = walker.getErrorMessage(e, walker.getTokenNames());
-            sb.append("Tree walker error: ").append(msg);
-
-            Log.ERROR(sb.toString());
+            Log.ERROR(ParserUtilities.makeErrorMessage(e, "Tree walker error"));
         }
 
         if (encounteredErrors)

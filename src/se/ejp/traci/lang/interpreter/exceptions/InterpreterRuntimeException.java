@@ -16,4 +16,24 @@ public abstract class InterpreterRuntimeException extends Exception
         this.callStack = callStack;
         this.msg = msg;
     }
+
+    public String fullMsg()
+    {
+        final StringBuilder sb = new StringBuilder();
+
+        if (includeLocation != null)
+        {
+            includeLocation.toString(sb);
+            sb.append('\n');
+        }
+
+        sb.append("Runtime error: ").append(msg).append('\n');
+
+        if (callStack != null)
+        {
+            callStack.format(sb, includeLocation.fileLocation);
+        }
+
+        return sb.toString();
+    }
 }

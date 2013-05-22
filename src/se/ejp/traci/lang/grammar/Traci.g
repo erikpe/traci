@@ -34,7 +34,7 @@ public void displayRecognitionError(String[] tokenNames, RecognitionException e)
         location = ((TraciToken) e.token).location;
     }
 
-    parseErrors.add(new ParseError(e, location, msg));
+    parseErrors.add(new ParseError(e, location, msg, ParseError.Source.PARSER));
 }
 
 public List<ParseError> getParseErrors()
@@ -103,7 +103,7 @@ public void displayRecognitionError(String[] tokenNames, RecognitionException e)
         location = new IncludeLocation(new FileLocation(currentFilename, e.line, e.charPositionInLine), includeStack);
     }
 
-    lexerErrors.add(new ParseError(e, location, msg));
+    lexerErrors.add(new ParseError(e, location, msg, ParseError.Source.LEXER));
 }
 
 public List<ParseError> getLexerErrors()
