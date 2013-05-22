@@ -72,6 +72,30 @@ public class InterpreterObjectBase extends InterpreterBase
         return snippets;
     }
 
+    private static List<String> getSnippetsNoArgs(final String id, final String modifiers)
+    {
+        final List<String> snippets = new ArrayList<String>();
+
+        if (modifiers == null)
+        {
+            snippets.add("return " + id + ";");
+            snippets.add("return " + id + " { };");
+            snippets.add("val = " + id + "; return val;");
+            snippets.add("val = " + id + " { }; return val;");
+            snippets.add("val = " + id + "; return val { };");
+            snippets.add("val = " + id + " { }; return val { };");
+        }
+        else
+        {
+            snippets.add("return " + id + " { " + modifiers + " };");
+            snippets.add("val = " + id + " { " + modifiers + " }; return val;");
+            snippets.add("val = " + id + " { " + modifiers + " }; return val { };");
+            snippets.add("val = " + id + "; return val { " + modifiers + " };");
+        }
+
+        return snippets;
+    }
+
     @SuppressWarnings("unchecked")
     private <P> P run(final String code, final Class<P> clazz) throws RecognitionException, InterpreterRuntimeException
     {
@@ -105,6 +129,17 @@ public class InterpreterObjectBase extends InterpreterBase
     {
         final List<P> res = new ArrayList<P>();
         for (final String code : getSnippets(id, args, modifiers))
+        {
+            res.add(run(code, clazz));
+        }
+        return res;
+    }
+
+    protected <P> List<P> runTestsNoArgs(final String id, final Class<P> clazz, final String modifiers)
+            throws RecognitionException, InterpreterRuntimeException
+    {
+        final List<P> res = new ArrayList<P>();
+        for (final String code : getSnippetsNoArgs(id, modifiers))
         {
             res.add(run(code, clazz));
         }
