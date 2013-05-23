@@ -1,6 +1,5 @@
 package se.ejp.traci.model.material;
 
-
 public class Color
 {
     public final double r, g, b, transmit;

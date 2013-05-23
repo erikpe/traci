@@ -26,7 +26,7 @@ private final List<ParseError> parseErrors = new ArrayList<ParseError>();
 
 public void displayRecognitionError(String[] tokenNames, RecognitionException e)
 {
-    String msg = getErrorMessage(e, tokenNames);
+    String msg = getErrorMessage(e, ParseError.getCustomTokenNames(this));
     IncludeLocation location = null;
 
     if (e.token instanceof TraciToken)
@@ -275,6 +275,7 @@ LPAR : '(';
 RPAR : ')';
 LCURLY : '{';
 RCURLY : '}';
+DOTS : '..';
 
 DEF : 'def';
 RETURN : 'return';
@@ -285,7 +286,6 @@ ELSE : 'else';
 BBOX : 'bbox';
 FOR : 'for';
 IN : 'in';
-DOTS : '..';
 
 PRIMITIVE_SHAPE
     : ('box' | 'cylinder' | 'plane' | 'sphere' | 'torus')
