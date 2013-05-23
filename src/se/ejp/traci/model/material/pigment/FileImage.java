@@ -149,7 +149,7 @@ public class FileImage extends NonUniform implements Interpolatable
     @Override
     public Color getAt(final long x, final long y)
     {
-        return Color.makeRGB(image.getRGB((int) x, (int) y));
+        return Color.fromRGB(image.getRGB((int) x, (int) y));
     }
 
     @Override

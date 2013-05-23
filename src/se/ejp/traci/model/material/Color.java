@@ -1,10 +1,9 @@
 package se.ejp.traci.model.material;
 
-import se.ejp.traci.math.Vector;
 
 public class Color
 {
-    public final double r, g, b;
+    public final double r, g, b, transmit;
 
     public static final Color BLACK = Color.make(0, 0, 0);
     public static final Color WHITE = Color.make(1, 1, 1);
@@ -15,24 +14,25 @@ public class Color
     public static final Color CYAN = Color.make(0, 1, 1);
     public static final Color MAGENTA = Color.make(1, 0, 1);
 
-    private Color(final double r, final double g, final double b)
+    private Color(final double r, final double g, final double b, final double transmit)
     {
         this.r = r;
         this.g = g;
         this.b = b;
+        this.transmit = transmit;
+    }
+
+    public static Color make(final double r, final double g, final double b, final double transmit)
+    {
+        return new Color(r, g, b, transmit);
     }
 
     public static Color make(final double r, final double g, final double b)
     {
-        return new Color(r, g, b);
+        return make(r, g, b, 0.0);
     }
 
-    public static Color make(final Vector v)
-    {
-        return make(v.x(), v.y(), v.z());
-    }
-
-    public static Color makeRGB(final int rgb)
+    public static Color fromRGB(final int rgb)
     {
         final double r = ((rgb >> 16) & 0xff) / 255.0;
         final double g = ((rgb >> 8) & 0xff) / 255.0;
@@ -43,32 +43,32 @@ public class Color
 
     public Color mul(final double val)
     {
-        return make(r * val, g * val, b * val);
+        return make(r * val, g * val, b * val, transmit * val);
     }
 
     public Color mul(final Color color)
     {
-        return make(r * color.r, g * color.g, b * color.b);
+        return make(r * color.r, g * color.g, b * color.b, transmit * color.transmit);
     }
 
     public Color div(final double val)
     {
-        return make(r / val, g / val, b / val);
+        return make(r / val, g / val, b / val, transmit / val);
     }
 
     public Color add(final Color color)
     {
-        return make(r + color.r, g + color.g, b + color.b);
+        return make(r + color.r, g + color.g, b + color.b, transmit + color.transmit);
     }
 
     public Color sub(final Color color)
     {
-        return make(r - color.r, g - color.g, b - color.b);
+        return make(r - color.r, g - color.g, b - color.b, transmit - color.transmit);
     }
 
     public Color neg()
     {
-        return make(-r, -g, -b);
+        return make(-r, -g, -b, -transmit);
     }
 
     @Override
@@ -78,6 +78,7 @@ public class Color
         hash = 31 * hash + Double.valueOf(r).hashCode();
         hash = 31 * hash + Double.valueOf(g).hashCode();
         hash = 31 * hash + Double.valueOf(b).hashCode();
+        hash = 31 * hash + Double.valueOf(transmit).hashCode();
         return hash;
     }
 
@@ -101,12 +102,13 @@ public class Color
 
         return Double.valueOf(r).equals(Double.valueOf(otherColor.r)) &&
                Double.valueOf(g).equals(Double.valueOf(otherColor.g)) &&
-               Double.valueOf(b).equals(Double.valueOf(otherColor.b));
+               Double.valueOf(b).equals(Double.valueOf(otherColor.b)) &&
+               Double.valueOf(transmit).equals(Double.valueOf(otherColor.transmit));
     }
 
     @Override
     public String toString()
     {
-        return "[" + r + "," + g + "," + b + "]";
+        return "[" + r + "," + g + "," + b + ", " + transmit + "]";
     }
 }

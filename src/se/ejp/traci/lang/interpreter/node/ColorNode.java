@@ -16,25 +16,30 @@ import se.ejp.traci.model.material.Color;
 
 public class ColorNode implements TraciNode
 {
-    private final List<TraciNode> nodes;
-    private final TraciToken token;
+    final List<TraciNode> nodes;
+    final TraciToken token;
 
-    public ColorNode(final TraciNode aNode, final TraciNode bNode, final TraciNode cNode, final Token token)
+    public ColorNode(final TraciNode r, final TraciNode g, final TraciNode b, final TraciNode transmit, final Token token)
     {
-        this.nodes = new ArrayList<TraciNode>(3);
+        this.nodes = new ArrayList<TraciNode>();
         this.token = (TraciToken) token;
 
-        nodes.add(aNode);
-        nodes.add(bNode);
-        nodes.add(cNode);
+        nodes.add(r);
+        nodes.add(g);
+        nodes.add(b);
+
+        if (transmit != null)
+        {
+            nodes.add(transmit);
+        }
     }
 
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        final List<Double> values = new ArrayList<Double>(3);
+        final List<Double> values = new ArrayList<Double>();
 
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < nodes.size(); ++i)
         {
             final TraciValue value = nodes.get(i).eval(context);
 
@@ -45,6 +50,11 @@ public class ColorNode implements TraciNode
             }
 
             values.add(value.getNumber());
+        }
+
+        if (values.size() == 4)
+        {
+            return new TraciValue(Color.make(values.get(0), values.get(1), values.get(2), values.get(3)));
         }
 
         return new TraciValue(Color.make(values.get(0), values.get(1), values.get(2)));

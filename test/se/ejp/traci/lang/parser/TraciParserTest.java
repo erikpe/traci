@@ -50,9 +50,17 @@ public class TraciParserTest extends TraciParserBase
         assertNoError();
         assertEquals(TraciParser.BLOCK, parseTree.getType());
         assertEquals(1, parseTree.getChildCount());
-        final Tree node = parseTree.getChild(0);
+        Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.COLOR, node.getType());
         assertEquals(3, node.getChildCount());
+
+        runParser("color [.5, 2.23, .17, .5];");
+        assertNoError();
+        assertEquals(TraciParser.BLOCK, parseTree.getType());
+        assertEquals(1, parseTree.getChildCount());
+        node = parseTree.getChild(0);
+        assertEquals(TraciParser.COLOR, node.getType());
+        assertEquals(4, node.getChildCount());
 
         runParser("color [.5, 2.23, .17;");
         assertError(MissingTokenException.class);
@@ -66,7 +74,7 @@ public class TraciParserTest extends TraciParserBase
         runParser("color [.5, 2.23];");
         assertError(MismatchedTokenException.class);
 
-        runParser("color [.5, 2.23, .17, 5];");
+        runParser("color [.5, 2.23, .17, 5, 7];");
         assertError(MismatchedTokenException.class);
         assertError(UnwantedTokenException.class);
     }

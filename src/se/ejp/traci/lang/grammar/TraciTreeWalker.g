@@ -116,8 +116,8 @@ expr returns [TraciNode node]
         { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node, $ID.token); }
     | ^(VECTOR LBRACKET a=expr b=expr c=expr)
         { $node = new VectorNode($a.node, $b.node, $c.node, $LBRACKET.token); }
-    | ^(COLOR a=expr b=expr c=expr)
-        { $node = new ColorNode($a.node, $b.node, $c.node, $COLOR.token); }
+    | ^(COLOR r=expr g=expr b=expr transmit=expr?)
+        { $node = new ColorNode($r.node, $g.node, $b.node, $transmit.node, $COLOR.token); }
     | ^(PRIMITIVE_SHAPE function_call_args block?)
         { $node = new ObjectNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
     | ^(CSG_SHAPE block?)

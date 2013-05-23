@@ -204,4 +204,13 @@ public class TraciLexerTest extends TraciLexerBase
         assertToken(4, TraciLexer.CSG_SHAPE, "intersection", Token.DEFAULT_CHANNEL, 1, 17);
         assertToken(5, TraciLexer.EOF,       null,           Token.DEFAULT_CHANNEL, 1, 29);
     }
+
+    @Test
+    public void testColor()
+    {
+        runLexer("color");
+        assertNoError();
+        assertToken(0, TraciLexer.COLOR, "color", Token.DEFAULT_CHANNEL, 1, 0);
+        assertToken(1, TraciLexer.EOF,   null,    Token.DEFAULT_CHANNEL, 1, 5);
+    }
 }

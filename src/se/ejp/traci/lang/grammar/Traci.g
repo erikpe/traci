@@ -252,7 +252,7 @@ vector
     ;
 
 color
-    : COLOR LBRACKET expr COMMA_OP expr COMMA_OP expr RBRACKET -> ^(COLOR expr*)
+    : COLOR LBRACKET expr COMMA_OP expr COMMA_OP expr (COMMA_OP expr)? RBRACKET -> ^(COLOR expr*)
     ;
 
 LTE_OP : '<=';
