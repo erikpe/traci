@@ -3,15 +3,18 @@
   <property name="version" value="0.0.1" />
 
   <property name="src.dir" value="src" />
-  <property name="build.dir" value="build" />
   <property name="lib.dir" value="lib" />
-  <property name="tmp.dir" value="tmp" />
-  <property name="test.src.dir" value="test" />
-  <property name="test.build.dir" value="test.build" />
-  <property name="test.output.dir" value="test.output" />
-  <property name="test.report.dir" value="test.report" />
   <property name="scenes.dir" value="scenes" />
   <property name="images.dir" value="images" />
+  <property name="test.src.dir" value="test" />
+  <property name="testcode.dir" value="testcode" />
+
+  <property name="build.dir" value="build" />
+  <property name="src.build.dir" value="${build.dir}/bin" />
+  <property name="test.build.dir" value="${build.dir}/test.bin" />
+  <property name="test.output.dir" value="${build.dir}/test.output" />
+  <property name="test.report.dir" value="${build.dir}/test.report" />
+  <property name="tmp.dir" value="${build.dir}/tmp" />
 
   <property name="antlr.dir" value="antlr-3.5" />
   <property name="antlr.jar" value="${lib.dir}/${antlr.dir}/antlr-3.5-complete-no-st3.jar" />
@@ -39,13 +42,9 @@
     <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciTreeWalker.java" />
     <delete file="${src.dir}/se/ejp/traci/lang/parser/Traci.tokens" />
     <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciTreeWalker.tokens" />
-    <delete dir="${build.dir}" />
-    <delete dir="${test.build.dir}" />
-    <delete dir="${tmp.dir}" />
-    <delete dir="${test.output.dir}" />
-    <delete dir="${test.report.dir}" />
     <delete file="${jarfile}" />
     <delete file="${src-distfile}" />
+    <delete dir="${build.dir}" />
   </target>
 
   <target name="generate-parser">
@@ -60,8 +59,8 @@
   </target>
 
   <target name="compile" depends="generate-parser">
-    <mkdir dir="${build.dir}" />
-    <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+    <mkdir dir="${src.build.dir}" />
+    <javac srcdir="${src.dir}" destdir="${src.build.dir}" includeantruntime="false">
       <classpath>
         <pathelement location="${antlr-runtime.jar}" />
         <pathelement location="${commons-cli.jar}" />
@@ -74,7 +73,7 @@
     <mkdir dir="${test.build.dir}" />
     <javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
       <classpath>
-        <pathelement location="${build.dir}" />
+        <pathelement location="${src.build.dir}" />
         <pathelement location="${antlr-runtime.jar}" />
         <pathelement location="${commons-cli.jar}" />
         <pathelement location="${anarres-cpp.jar}" />
@@ -119,7 +118,7 @@
 
   <target name="jar" depends="compile, unpack-libs">
     <jar destfile="${jarfile}">
-      <fileset dir="${build.dir}" />
+      <fileset dir="${src.build.dir}" />
       <fileset dir="${src.dir}" />
       <fileset dir="${tmp.dir}/${antlr.dir}" />
       <fileset dir="${tmp.dir}/${commons-cli.dir}" />
@@ -138,6 +137,7 @@
         <include name="${scenes.dir}/" />
         <include name="${images.dir}/" />
         <include name="${lib.dir}/" />
+        <include name="${testcode.dir}/" />
         <include name="build.xml" />
         <include name="README" />
         <include name="COPYING" />
@@ -150,7 +150,7 @@
     <mkdir dir="${test.output.dir}" />
     <junit failureProperty="test.failure" printsummary="yes" haltonfailure="no" showoutput="no">
       <classpath>
-        <pathelement location="${build.dir}" />
+        <pathelement location="${src.build.dir}" />
         <pathelement location="${test.build.dir}" />
         <pathelement location="${antlr-runtime.jar}" />
         <pathelement location="${commons-cli.jar}" />
