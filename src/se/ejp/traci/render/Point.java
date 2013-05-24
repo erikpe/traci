@@ -9,7 +9,7 @@ public class Point
     {
         ENTER,
         LEAVE,
-        INTERSECT
+        INTERSECT;
     }
 
     public final double dist;

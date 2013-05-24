@@ -7,6 +7,7 @@ import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.material.Color;
 import se.ejp.traci.model.material.Finish;
+import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
 import se.ejp.traci.model.material.pigment.Pigment;
@@ -33,7 +34,8 @@ public class TraciValue implements Cloneable
         PIGMENT(Pigment.class),
         COLOR(Color.class),
         LIGHT(Light.class),
-        CAMERA(Camera.class);
+        CAMERA(Camera.class),
+        INTERIOR(Interior.class);
 
         public final Class<?> clazz;
 
@@ -157,6 +159,11 @@ public class TraciValue implements Cloneable
         return (Camera) value;
     }
 
+    public Interior getInterior()
+    {
+        return (Interior) value;
+    }
+
     @Override
     public String toString()
     {
@@ -178,6 +185,7 @@ public class TraciValue implements Cloneable
         case FINISH:
         case PIGMENT:
         case COLOR:
+        case INTERIOR:
             return this; // These are immuatable, no need to clone
 
         case PRIMITIVE_SHAPE:

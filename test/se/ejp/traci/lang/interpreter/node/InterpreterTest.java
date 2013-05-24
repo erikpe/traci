@@ -9,8 +9,9 @@ import se.ejp.traci.lang.interpreter.InterpreterBase;
 import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.material.Interior;
 
-public class InterpreterColorTest extends InterpreterBase
+public class InterpreterTest extends InterpreterBase
 {
     @Test
     public void testColor() throws RecognitionException, InterpreterRuntimeException
@@ -46,5 +47,19 @@ public class InterpreterColorTest extends InterpreterBase
         assertEquals(0.2, color.g, 0);
         assertEquals(0.3, color.b, 0);
         assertEquals(0.4, color.transmit, 0);
+    }
+
+    @Test
+    public void testInterior() throws RecognitionException, InterpreterRuntimeException
+    {
+        runInterpreter("return interior(1.1);");
+        assertEquals(Type.INTERIOR, value.getType());
+        Interior interior = value.getInterior();
+        assertEquals(1.1, interior.ior, 0);
+
+        runInterpreter("val = interior(1.3); return val;");
+        assertEquals(Type.INTERIOR, value.getType());
+        interior = value.getInterior();
+        assertEquals(1.3, interior.ior, 0);
     }
 }

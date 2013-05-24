@@ -8,6 +8,7 @@ import java.util.List;
 
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.model.material.Finish;
+import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
 import se.ejp.traci.model.material.pigment.Pigment;
@@ -97,6 +98,15 @@ public abstract class Csg extends Shape implements Iterable<Shape>
         for (final Shape shape : shapes)
         {
             shape.setFinish(finish);
+        }
+    }
+
+    @Override
+    public void setInterior(final Interior interior)
+    {
+        for (final Shape shape : shapes)
+        {
+            shape.setInterior(interior);
         }
     }
 

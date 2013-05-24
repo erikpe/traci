@@ -44,6 +44,21 @@ public class TraciParserTest extends TraciParserBase
     }
 
     @Test
+    public void testInterior() throws RecognitionException
+    {
+        runParser("interior(1.1);");
+        assertNoError();
+        assertEquals(TraciParser.BLOCK, parseTree.getType());
+        assertEquals(1, parseTree.getChildCount());
+        final Tree node = parseTree.getChild(0);
+        assertEquals(TraciParser.INTERIOR, node.getType());
+        assertEquals(1, node.getChildCount());
+
+        runParser("interior;");
+        assertError(MismatchedTokenException.class);
+    }
+
+    @Test
     public void testColor() throws RecognitionException
     {
         runParser("color [.5, 2.23, .17];");
@@ -156,9 +171,4 @@ public class TraciParserTest extends TraciParserBase
         runParserPreprocessedFile("testcode/fibonacci.traci");
         assertNoError();
     }
-
-     @Test
-     public void testTransformation() throws RecognitionException
-     {
-     }
 }

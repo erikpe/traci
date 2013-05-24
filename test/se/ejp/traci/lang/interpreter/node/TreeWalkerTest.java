@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import se.ejp.traci.lang.parser.TraciTreeWalkerBase;
 
-public class TreeWalkerColorTest extends TraciTreeWalkerBase
+public class TreeWalkerTest extends TraciTreeWalkerBase
 {
     @Test
     public void testColor() throws RecognitionException
@@ -35,5 +35,18 @@ public class TreeWalkerColorTest extends TraciTreeWalkerBase
         {
             assertEquals(ConstNode.class, child.getClass());
         }
+    }
+
+    @Test
+    public void testInterior() throws RecognitionException
+    {
+        runTreeWalker("interior(1.1);");
+        assertEquals(1, rootNode.getStatements().size());
+        final TraciNode statement = rootNode.getStatements().get(0);
+        assertEquals(ObjectNode.class, statement.getClass());
+        final ObjectNode objectNode = (ObjectNode) statement;
+        assertEquals(1, objectNode.argNodes.size());
+        assertEquals("interior", objectNode.token.getText());
+        assertEquals(ConstNode.class, objectNode.argNodes.get(0).getClass());
     }
 }

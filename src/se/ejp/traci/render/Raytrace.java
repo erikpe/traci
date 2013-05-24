@@ -5,13 +5,20 @@ import se.ejp.traci.model.Scene;
 import se.ejp.traci.model.light.PointLight;
 import se.ejp.traci.model.material.Color;
 import se.ejp.traci.model.material.Finish;
+import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.pigment.Pigment;
 import se.ejp.traci.model.shape.primitive.Primitive;
 
 public class Raytrace
 {
-    protected static Color raytrace(final Scene scene, final int depth, final Vector p, final Vector dir)
+    protected static Color raytrace(final Scene scene, final int depth, final Vector p, final Vector dir,
+            final Interior inside)
     {
+        if (depth < 0)
+        {
+            return Color.BLACK;
+        }
+
         final Ray ray = scene.rootShape.shootRay(p, dir);
 
         if (ray == null)
@@ -98,15 +105,65 @@ public class Raytrace
         }
 
         /**
-         * Reflection
+         * Refraction
          */
-        if (depth > 0)
+        if (hitPointColor.transmit > 0.0)
         {
-            final Vector rr = dir.sub(normal.mul(dir.mul(2).dot(normal)));
-            final Color colorReflect = raytrace(scene, depth - 1, hitPoint, rr.normalize());
-            colorTotal = colorTotal.add(colorReflect.mul(finish.reflectiveness));
+            final Interior newInside;
+            switch (hit.type)
+            {
+            case ENTER:
+                newInside = obj.getMaterial().interior;
+                break;
+
+            case LEAVE:
+                newInside = Interior.SURROUNDING_INTERIOR;
+                break;
+
+            default: // INTERSECT
+                newInside = inside;
+                break;
+            }
+
+            final Vector refract;
+            if (inside.ior != newInside.ior)
+            {
+                refract = refract(normal, dir, inside.ior, newInside.ior);
+            }
+            else
+            {
+                refract = dir;
+            }
+
+            if (refract != null)
+            {
+                final Color colorRefract = raytrace(scene, depth - 1, hitPoint, refract, newInside);
+                colorTotal = colorTotal.add(colorRefract);
+            }
         }
 
+        /**
+         * Reflection
+         */
+        final Vector rr = dir.sub(normal.mul(dir.mul(2).dot(normal)));
+        final Color colorReflect = raytrace(scene, depth - 1, hitPoint, rr, inside);
+        colorTotal = colorTotal.add(colorReflect.mul(finish.reflectiveness));
+
         return colorTotal;
+    }
+
+    private static Vector refract(final Vector normal, final Vector incident, final double n1, final double n2)
+    {
+        final double n = n1 / n2;
+        final double cosI = -normal.dot(incident);
+        final double sinT2 = n * n * (1.0 - cosI * cosI);
+
+        if (sinT2 > 1.0)
+        {
+            return null; // Total internal reflection
+        }
+
+        final double cosT = Math.sqrt(1.0 - sinT2);
+        return incident.mul(n).add(normal.mul(n * cosI - cosT)).normalize();
     }
 }

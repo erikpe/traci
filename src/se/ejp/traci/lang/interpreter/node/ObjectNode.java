@@ -23,6 +23,7 @@ import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
 import se.ejp.traci.model.material.Finish;
+import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.Texture;
 import se.ejp.traci.model.material.pigment.Checker;
 import se.ejp.traci.model.material.pigment.FileImage;
@@ -68,7 +69,8 @@ public class ObjectNode implements TraciNode
         ROT_AROUND    ("rotAround",    Transformations.class, "rotAround"),
         FINISH        ("finish",       Finish.class,          "make"),
         TEXTURE       ("texture",      Texture.class,         "make"),
-        CAMERA        ("camera",       Camera.class,          "make");
+        CAMERA        ("camera",       Camera.class,          "make"),
+        INTERIOR      ("interior",     Interior.class,        "make");
 
         final String id;
         final Class<?> clazz;

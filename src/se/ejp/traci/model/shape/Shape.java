@@ -3,6 +3,7 @@ package se.ejp.traci.model.shape;
 import se.ejp.traci.math.Transformable;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.material.Finish;
+import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
 import se.ejp.traci.model.material.pigment.Pigment;
@@ -17,6 +18,7 @@ public abstract class Shape implements Transformable, Cloneable
     public abstract void setTexture(final Texture texture);
     public abstract void setPigment(final Pigment pigment);
     public abstract void setFinish(final Finish finish);
+    public abstract void setInterior(final Interior interior);
     public abstract Shape optimize();
 
     @Override

@@ -213,4 +213,13 @@ public class TraciLexerTest extends TraciLexerBase
         assertToken(0, TraciLexer.COLOR, "color", Token.DEFAULT_CHANNEL, 1, 0);
         assertToken(1, TraciLexer.EOF,   null,    Token.DEFAULT_CHANNEL, 1, 5);
     }
+
+    @Test
+    public void testInterior()
+    {
+        runLexer("interior");
+        assertNoError();
+        assertToken(0, TraciLexer.INTERIOR, "interior", Token.DEFAULT_CHANNEL, 1, 0);
+        assertToken(1, TraciLexer.EOF,      null,       Token.DEFAULT_CHANNEL, 1, 8);
+    }
 }

@@ -4,6 +4,7 @@ import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.material.Finish;
+import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
 import se.ejp.traci.model.material.pigment.Pigment;
@@ -92,6 +93,12 @@ public abstract class Primitive extends Shape
     public void setFinish(final Finish finish)
     {
         material = material.setFinish(finish);
+    }
+
+    @Override
+    public void setInterior(final Interior interior)
+    {
+        material = material.setInterior(interior);
     }
 
     public Material getMaterial()
