@@ -1,7 +1,8 @@
 package se.ejp.traci.lang.interpreter.node;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,11 +96,6 @@ public class ObjectNode implements TraciNode
                 idMap.put(objectType.id, objectType);
             }
         }
-
-        private static ObjectType get(final String id)
-        {
-            return idMap.get(id);
-        }
     }
 
     final ObjectType objectType;
@@ -107,13 +103,20 @@ public class ObjectNode implements TraciNode
     final BlockNode blockNode;
     final TraciToken token;
 
+    private final Object[] argValues;
+    private final Class<?>[] argClasses;
+    private final Type[] argTypes;
+
     public ObjectNode(final String typeStr, final List<TraciNode> argNodes, final BlockNode blockNode, final Token token)
     {
-        assert argNodes != null;
-        this.objectType = ObjectType.get(typeStr);
+        this.objectType = ObjectType.idMap.get(typeStr);
         this.argNodes = argNodes;
         this.blockNode = blockNode;
         this.token = (TraciToken) token;
+
+        this.argValues = new Object[argNodes.size()];
+        this.argClasses = new Class<?>[argNodes.size()];
+        this.argTypes = new Type[argNodes.size()];
 
         if (objectType == null)
         {
@@ -121,49 +124,55 @@ public class ObjectNode implements TraciNode
         }
     }
 
-    private static Object make(final ObjectType objectType, final List<TraciValue> traciArgs)
+    private void evalArgs(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        final Class<?>[] argTypes = new Class<?>[traciArgs.size()];
-        final Object[] args = new Object[traciArgs.size()];
-
-        for (int i = 0; i < traciArgs.size(); ++i)
+        for (int i = 0; i < argNodes.size(); ++i)
         {
-            argTypes[i] = traciArgs.get(i).getType().clazz;
-            args[i] = traciArgs.get(i).getObject();
+            final TraciValue value = argNodes.get(i).eval(context);
+            argValues[i] = value.getObject();
+            argClasses[i] = value.getType().clazz;
+            argTypes[i] = value.getType();
         }
+    }
 
+    private Object make(final Method method) throws InterpreterRuntimeException
+    {
         try
         {
-            final Method method = objectType.clazz.getMethod(objectType.methodName, argTypes);
-            return method.invoke(null, args);
+            return method.invoke(null, argValues);
+        }
+        catch (final InvocationTargetException e)
+        {
+            final Throwable cause = e.getCause();
+            if (cause instanceof InterpreterRuntimeException)
+            {
+                throw (InterpreterRuntimeException) cause;
+            }
+            throw new InterpreterInternalException(cause);
         }
         catch (final Exception e)
         {
-            return null;
+            throw new InterpreterInternalException(e);
         }
     }
 
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        final List<TraciValue> args = new ArrayList<TraciValue>(argNodes.size());
-        for (final TraciNode argNode : argNodes)
+        evalArgs(context);
+
+        final Method method;
+        try
         {
-            args.add(argNode.eval(context));
+            method = objectType.clazz.getMethod(objectType.methodName, argClasses);
+        }
+        catch (final NoSuchMethodException e)
+        {
+            throw new InterpreterIllegalArguments(token.location, context.callStack, objectType.id,
+                    Arrays.asList(argTypes));
         }
 
-        final Object object = make(objectType, args);
-        if (object == null)
-        {
-            final List<Type> argTypes = new ArrayList<Type>(args.size());
-            for (final TraciValue val : args)
-            {
-                argTypes.add(val.getType());
-            }
-
-            throw new InterpreterIllegalArguments(token.location, context.callStack, objectType.id, argTypes);
-        }
-
+        final Object object = make(method);
         TraciValue value = new TraciValue(object);
 
         if (blockNode != null)

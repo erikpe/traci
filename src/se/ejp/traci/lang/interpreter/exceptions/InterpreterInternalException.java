@@ -7,4 +7,9 @@ public class InterpreterInternalException extends RuntimeException
     {
         super(msg);
     }
+
+    public InterpreterInternalException(final Throwable e)
+    {
+        super(e);
+    }
 }

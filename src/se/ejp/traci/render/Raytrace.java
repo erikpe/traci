@@ -125,19 +125,19 @@ public class Raytrace
                 break;
             }
 
-            final Vector refract;
+            final Vector refractDir;
             if (inside.ior != newInside.ior)
             {
-                refract = refract(normal, dir, inside.ior, newInside.ior);
+                refractDir = refract(normal, dir, inside.ior, newInside.ior);
             }
             else
             {
-                refract = dir;
+                refractDir = dir;
             }
 
-            if (refract != null)
+            if (refractDir != null)
             {
-                final Color colorRefract = raytrace(scene, depth - 1, hitPoint, refract, newInside);
+                final Color colorRefract = raytrace(scene, depth - 1, hitPoint, refractDir, newInside);
                 colorTotal = colorTotal.add(colorRefract);
             }
         }
