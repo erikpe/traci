@@ -50,9 +50,14 @@ public class TraciParserTest extends TraciParserBase
         assertNoError();
         assertEquals(TraciParser.BLOCK, parseTree.getType());
         assertEquals(1, parseTree.getChildCount());
-        final Tree node = parseTree.getChild(0);
+        Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.INTERIOR, node.getType());
         assertEquals(1, node.getChildCount());
+        node = node.getChild(0);
+        assertEquals(TraciParser.ARGS, node.getType());
+        assertEquals(1, node.getChildCount());
+        node = node.getChild(0);
+        assertEquals(TraciParser.FLOAT, node.getType());
 
         runParser("interior;");
         assertError(MismatchedTokenException.class);
@@ -67,6 +72,9 @@ public class TraciParserTest extends TraciParserBase
         assertEquals(1, parseTree.getChildCount());
         Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.COLOR, node.getType());
+        assertEquals(1, node.getChildCount());
+        node = node.getChild(0);
+        assertEquals(TraciParser.ARGS, node.getType());
         assertEquals(3, node.getChildCount());
 
         runParser("color [.5, 2.23, .17, .5];");
@@ -75,6 +83,9 @@ public class TraciParserTest extends TraciParserBase
         assertEquals(1, parseTree.getChildCount());
         node = parseTree.getChild(0);
         assertEquals(TraciParser.COLOR, node.getType());
+        assertEquals(1, node.getChildCount());
+        node = node.getChild(0);
+        assertEquals(TraciParser.ARGS, node.getType());
         assertEquals(4, node.getChildCount());
 
         runParser("color [.5, 2.23, .17;");
@@ -101,9 +112,13 @@ public class TraciParserTest extends TraciParserBase
         assertNoError();
         assertEquals(TraciParser.BLOCK, parseTree.getType());
         assertEquals(1, parseTree.getChildCount());
-        final Tree node = parseTree.getChild(0);
+        Tree node = parseTree.getChild(0);
         assertEquals(TraciParser.VECTOR, node.getType());
-        assertEquals(4, node.getChildCount());
+        assertEquals(2, node.getChildCount());
+        assertEquals(TraciParser.LBRACKET, node.getChild(0).getType());
+        node = node.getChild(1);
+        assertEquals(TraciParser.ARGS, node.getType());
+        assertEquals(3, node.getChildCount());
 
         runParser("[.5, 2.23, .17;");
         assertError(MissingTokenException.class);

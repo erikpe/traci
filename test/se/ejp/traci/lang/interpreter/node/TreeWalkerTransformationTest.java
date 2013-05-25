@@ -26,18 +26,18 @@ public class TreeWalkerTransformationTest extends TraciTreeWalkerBase
             node = funCallNode.argNodes.get(0);
         }
 
-        assertEquals(TransformationNode.class, node.getClass());
-        final TransformationNode trNode = (TransformationNode) node;
-        assertEquals(id, trNode.transformationType.id);
-        assertEquals(numArgs, trNode.argNodes.size());
+        assertEquals(ObjectNode.class, node.getClass());
+        final ObjectNode objectNode = (ObjectNode) node;
+        assertEquals(id, objectNode.objectType.id);
+        assertEquals(numArgs, objectNode.argNodes.size());
 
         if (hasBlock)
         {
-            assertNotNull(trNode.blockNode);
+            assertNotNull(objectNode.blockNode);
         }
         else
         {
-            assertNull(trNode.blockNode);
+            assertNull(objectNode.blockNode);
         }
     }
 

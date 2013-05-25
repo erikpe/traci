@@ -31,6 +31,16 @@ public class Color
         return make(r, g, b, 0.0);
     }
 
+    public static Color make(final Double r, final Double g, final Double b, final Double transmit)
+    {
+        return make(r.doubleValue(), g.doubleValue(), b.doubleValue(), transmit.doubleValue());
+    }
+
+    public static Color make(final Double r, final Double g, final Double b)
+    {
+        return make(r.doubleValue(), g.doubleValue(), b.doubleValue(), 0.0);
+    }
+
     public static Color fromRGB(final int rgb)
     {
         final double r = ((rgb >> 16) & 0xff) / 255.0;

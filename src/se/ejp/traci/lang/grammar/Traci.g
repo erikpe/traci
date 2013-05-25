@@ -253,11 +253,11 @@ camera
     ;
 
 vector 
-    : LBRACKET expr COMMA_OP expr COMMA_OP expr RBRACKET -> ^(VECTOR LBRACKET expr*)
+    : LBRACKET expr COMMA_OP expr COMMA_OP expr RBRACKET -> ^(VECTOR LBRACKET ^(ARGS expr*))
     ;
 
 color
-    : COLOR LBRACKET expr COMMA_OP expr COMMA_OP expr (COMMA_OP expr)? RBRACKET -> ^(COLOR expr*)
+    : COLOR LBRACKET expr COMMA_OP expr COMMA_OP expr (COMMA_OP expr)? RBRACKET -> ^(COLOR ^(ARGS expr*))
     ;
 
 LTE_OP : '<=';

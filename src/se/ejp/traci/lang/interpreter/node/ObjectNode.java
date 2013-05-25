@@ -19,9 +19,11 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.parser.TraciToken;
 import se.ejp.traci.math.Transformations;
+import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
+import se.ejp.traci.model.material.Color;
 import se.ejp.traci.model.material.Finish;
 import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.Texture;
@@ -70,7 +72,9 @@ public class ObjectNode implements TraciNode
         FINISH        ("finish",       Finish.class,          "make"),
         TEXTURE       ("texture",      Texture.class,         "make"),
         CAMERA        ("camera",       Camera.class,          "make"),
-        INTERIOR      ("interior",     Interior.class,        "make");
+        INTERIOR      ("interior",     Interior.class,        "make"),
+        COLOR         ("color",        Color.class,           "make"),
+        VECTOR        ("vector[]",     Vector.class,          "make");
 
         final String id;
         final Class<?> clazz;

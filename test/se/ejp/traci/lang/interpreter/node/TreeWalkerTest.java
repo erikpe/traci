@@ -15,11 +15,11 @@ public class TreeWalkerTest extends TraciTreeWalkerBase
         runTreeWalker("color [.1, .2, .3];");
         assertEquals(1, rootNode.getStatements().size());
         TraciNode statement = rootNode.getStatements().get(0);
-        assertEquals(ColorNode.class, statement.getClass());
-        ColorNode colorNode = (ColorNode) statement;
-        assertEquals(3, colorNode.nodes.size());
+        assertEquals(ObjectNode.class, statement.getClass());
+        ObjectNode colorNode = (ObjectNode) statement;
+        assertEquals(3, colorNode.argNodes.size());
         assertEquals("color", colorNode.token.getText());
-        for (final TraciNode child : colorNode.nodes)
+        for (final TraciNode child : colorNode.argNodes)
         {
             assertEquals(ConstNode.class, child.getClass());
         }
@@ -27,11 +27,11 @@ public class TreeWalkerTest extends TraciTreeWalkerBase
         runTreeWalker("color [.1, .2, .3, .4];");
         assertEquals(1, rootNode.getStatements().size());
         statement = rootNode.getStatements().get(0);
-        assertEquals(ColorNode.class, statement.getClass());
-        colorNode = (ColorNode) statement;
-        assertEquals(4, colorNode.nodes.size());
+        assertEquals(ObjectNode.class, statement.getClass());
+        colorNode = (ObjectNode) statement;
+        assertEquals(4, colorNode.argNodes.size());
         assertEquals("color", colorNode.token.getText());
-        for (final TraciNode child : colorNode.nodes)
+        for (final TraciNode child : colorNode.argNodes)
         {
             assertEquals(ConstNode.class, child.getClass());
         }

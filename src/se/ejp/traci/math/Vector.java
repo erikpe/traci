@@ -27,6 +27,11 @@ public class Vector
         return new Vector(x, y, z);
     }
 
+    public static Vector make(final Double x, final Double y, final Double z)
+    {
+        return make(x.doubleValue(), y.doubleValue(), z.doubleValue());
+    }
+
     public double x()
     {
         return x;

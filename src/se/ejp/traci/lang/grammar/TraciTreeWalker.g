@@ -21,7 +21,6 @@ import se.ejp.traci.lang.interpreter.functions.FunctionSet;
 import se.ejp.traci.lang.interpreter.node.AssignNode;
 import se.ejp.traci.lang.interpreter.node.BinaryOpNode;
 import se.ejp.traci.lang.interpreter.node.BlockNode;
-import se.ejp.traci.lang.interpreter.node.ColorNode;
 import se.ejp.traci.lang.interpreter.node.ConstNode;
 import se.ejp.traci.lang.interpreter.node.ForNode;
 import se.ejp.traci.lang.interpreter.node.FunctionCallNode;
@@ -32,9 +31,7 @@ import se.ejp.traci.lang.interpreter.node.Op;
 import se.ejp.traci.lang.interpreter.node.RefNode;
 import se.ejp.traci.lang.interpreter.node.ReturnNode;
 import se.ejp.traci.lang.interpreter.node.TraciNode;
-import se.ejp.traci.lang.interpreter.node.TransformationNode;
 import se.ejp.traci.lang.interpreter.node.UnaryOpNode;
-import se.ejp.traci.lang.interpreter.node.VectorNode;
 import se.ejp.traci.lang.interpreter.node.WhileNode;
 
 import java.util.Collections;
@@ -114,10 +111,10 @@ expr returns [TraciNode node]
     | ^(REF ID block?)               { $node = new RefNode($ID.text, $block.node, $ID.token); }
     | ^(FUNCALL ID function_call_args block?)
         { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node, $ID.token); }
-    | ^(VECTOR LBRACKET a=expr b=expr c=expr)
-        { $node = new VectorNode($a.node, $b.node, $c.node, $LBRACKET.token); }
-    | ^(COLOR r=expr g=expr b=expr transmit=expr?)
-        { $node = new ColorNode($r.node, $g.node, $b.node, $transmit.node, $COLOR.token); }
+    | ^(VECTOR LBRACKET function_call_args)
+        { $node = new ObjectNode("vector[]", $function_call_args.nodes, null, $LBRACKET.token); }
+    | ^(COLOR function_call_args)
+        { $node = new ObjectNode($COLOR.text, $function_call_args.nodes, null, $COLOR.token); }
     | ^(PRIMITIVE_SHAPE function_call_args block?)
         { $node = new ObjectNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
     | ^(CSG_SHAPE block?)
@@ -125,7 +122,7 @@ expr returns [TraciNode node]
     | ^(BBOX function_call_args block?)
         { $node = new ObjectNode($BBOX.text, $function_call_args.nodes, $block.node, $BBOX.token); }
     | ^(TRANSFORMATION function_call_args block?)
-    	{ $node = new TransformationNode($TRANSFORMATION.text, $function_call_args.nodes, $block.node, $TRANSFORMATION.token); }
+    	{ $node = new ObjectNode($TRANSFORMATION.text, $function_call_args.nodes, $block.node, $TRANSFORMATION.token); }
     | ^(LIGHT function_call_args block?)
         { $node = new ObjectNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
     | ^(TEXTURE block?)
