@@ -9,6 +9,7 @@ import se.ejp.traci.util.WeakCache;
 public class Checker extends Pattern
 {
     private static WeakCache<Checker> cache = new WeakCache<Checker>();
+    private final int hash;
 
     public final Color color1;
     public final Color color2;
@@ -18,6 +19,7 @@ public class Checker extends Pattern
         super(transformation);
         this.color1 = color1;
         this.color2 = color2;
+        this.hash = calcHash();
     }
 
     public static Checker make(final Color color1, final Color color2)
@@ -45,6 +47,11 @@ public class Checker extends Pattern
     @Override
     public int hashCode()
     {
+        return hash;
+    }
+
+    private int calcHash()
+    {
         int hash = getClass().hashCode();
         hash = 31 * hash + transformation.hashCode();
         hash = 31 * hash + color1.hashCode();
@@ -63,7 +70,11 @@ public class Checker extends Pattern
         {
             return true;
         }
-        else if (other.getClass() != getClass())
+        else if (getClass() != other.getClass())
+        {
+            return false;
+        }
+        else if (hashCode() != other.hashCode())
         {
             return false;
         }

@@ -8,12 +8,14 @@ import se.ejp.traci.util.WeakCache;
 public class Solid extends Pigment
 {
     private static final WeakCache<Solid> cache = new WeakCache<Solid>();
+    private final int hash;
 
     public final Color color;
 
     private Solid(final Color color)
     {
         this.color = color;
+        this.hash = calcHash();
     }
 
     public static Solid make(final Color color)
@@ -36,6 +38,11 @@ public class Solid extends Pigment
     @Override
     public int hashCode()
     {
+        return hash;
+    }
+
+    private int calcHash()
+    {
         int hash = getClass().hashCode();
         hash = 31 * hash + color.hashCode();
         return hash;
@@ -52,7 +59,11 @@ public class Solid extends Pigment
         {
             return true;
         }
-        else if (other.getClass() != getClass())
+        else if (getClass() != other.getClass())
+        {
+            return false;
+        }
+        else if (hashCode() != other.hashCode())
         {
             return false;
         }

@@ -5,6 +5,7 @@ import se.ejp.traci.util.WeakCache;
 public class Finish
 {
     private static final WeakCache<Finish> cache = new WeakCache<Finish>();
+    private final int hash;
 
     public final double specCoeff;
     public final double diffCoeff;
@@ -17,6 +18,7 @@ public class Finish
         this.diffCoeff = diffCoeff;
         this.shininess = shininess;
         this.reflectiveness = reflectiveness;
+        this.hash = calcHash();
     }
 
     public static Finish make(final Double specCoeff, final Double diffCoeff, final Double shininess,
@@ -32,6 +34,11 @@ public class Finish
 
     @Override
     public int hashCode()
+    {
+        return hash;
+    }
+
+    private int calcHash()
     {
         int hash = getClass().hashCode();
         hash = 31 * hash + Double.valueOf(specCoeff).hashCode();
@@ -52,7 +59,11 @@ public class Finish
         {
             return true;
         }
-        else if (other.getClass() != getClass())
+        else if (getClass() != other.getClass())
+        {
+            return false;
+        }
+        else if (hashCode() != other.hashCode())
         {
             return false;
         }

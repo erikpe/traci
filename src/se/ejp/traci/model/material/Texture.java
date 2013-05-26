@@ -7,6 +7,7 @@ import se.ejp.traci.util.WeakCache;
 public class Texture
 {
     private static WeakCache<Texture> cache = new WeakCache<Texture>();
+    private final int hash;
 
     public final Pigment pigment;
     public final Finish finish;
@@ -15,6 +16,7 @@ public class Texture
     {
         this.pigment = pigment;
         this.finish = finish;
+        this.hash = calcHash();
     }
 
     public static Texture make(final Pigment pigment, final Finish finish)
@@ -50,6 +52,11 @@ public class Texture
     @Override
     public int hashCode()
     {
+        return hash;
+    }
+
+    private int calcHash()
+    {
         int hash = getClass().hashCode();
         hash = 31 * hash + pigment.hashCode();
         hash = 31 * hash + finish.hashCode();
@@ -67,7 +74,11 @@ public class Texture
         {
             return true;
         }
-        else if (other.getClass() != getClass())
+        else if (getClass() != other.getClass())
+        {
+            return false;
+        }
+        else if (hashCode() != other.hashCode())
         {
             return false;
         }

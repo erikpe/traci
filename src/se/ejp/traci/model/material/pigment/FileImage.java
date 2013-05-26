@@ -21,8 +21,9 @@ public class FileImage extends NonUniform implements Interpolatable
 {
     private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
-    private static WeakCache<FileImage> cache = new WeakCache<FileImage>();
     private static Map<String, BufferedImage> imageCache = new HashMap<String, BufferedImage>();
+    private static WeakCache<FileImage> cache = new WeakCache<FileImage>();
+    private final int hash;
 
     private final String filename;
     private final Interpolator interpolator = Interpolator.BI_LINEAR;
@@ -43,6 +44,8 @@ public class FileImage extends NonUniform implements Interpolatable
         this.filename = filename;
 
         this.image = getImage(filename);
+
+        this.hash = calcHash();
     }
 
     public static FileImage make(final String filename, final String repeatPolicyStr, final String projStr,
@@ -155,6 +158,11 @@ public class FileImage extends NonUniform implements Interpolatable
     @Override
     public int hashCode()
     {
+        return hash;
+    }
+
+    private int calcHash()
+    {
         int hash = getClass().hashCode();
         hash = 31 * hash + transformation.hashCode();
         hash = 31 * hash + interpolator.hashCode();
@@ -175,7 +183,11 @@ public class FileImage extends NonUniform implements Interpolatable
         {
             return true;
         }
-        else if (other.getClass() != getClass())
+        else if (getClass() != other.getClass())
+        {
+            return false;
+        }
+        else if (hashCode() != other.hashCode())
         {
             return false;
         }

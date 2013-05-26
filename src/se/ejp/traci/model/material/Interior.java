@@ -5,31 +5,49 @@ import se.ejp.traci.util.WeakCache;
 public class Interior
 {
     private static final WeakCache<Interior> cache = new WeakCache<Interior>();
+    private final int hash;
 
-    public static final Interior SURROUNDING_INTERIOR = make(1.0);
+    public static final Interior SURROUNDING_INTERIOR = getDefault();
 
     public final double ior;
+    public final double falloff;
+    public final Color color;
 
-    private Interior(final double ior)
+    private Interior(final double ior, final double falloff, final Color color)
     {
         this.ior = ior;
+        this.falloff = falloff;
+        this.color = color;
+        this.hash = calcHash();
+    }
+
+    public static Interior make(final Double ior, final Double falloff, final Color color)
+    {
+        return cache.get(new Interior(ior, falloff, color));
     }
 
     public static Interior make(final Double ior)
     {
-        return cache.get(new Interior(ior));
+        return make(ior, 0.0, Color.BLACK);
     }
 
     public static Interior getDefault()
     {
-        return make(1.0);
+        return make(1.0, 0.0, Color.BLACK);
     }
 
     @Override
     public int hashCode()
     {
+        return hash;
+    }
+
+    private int calcHash()
+    {
         int hash = getClass().hashCode();
         hash = 31 * hash + Double.valueOf(ior).hashCode();
+        hash = 31 * hash + Double.valueOf(falloff).hashCode();
+        hash = 31 * hash + color.hashCode();
         return hash;
     }
 
@@ -44,13 +62,20 @@ public class Interior
         {
             return true;
         }
-        else if (other.getClass() != getClass())
+        else if (getClass() != other.getClass())
+        {
+            return false;
+        }
+        else if (hashCode() != other.hashCode())
         {
             return false;
         }
 
         final Interior otherInterior = (Interior) other;
-        return Double.valueOf(ior).equals(Double.valueOf(otherInterior.ior));
+
+        return Double.valueOf(ior).equals(Double.valueOf(otherInterior.ior)) &&
+               Double.valueOf(falloff).equals(Double.valueOf(otherInterior.falloff)) &&
+               color.equals(otherInterior.color);
     }
 
     @Override
