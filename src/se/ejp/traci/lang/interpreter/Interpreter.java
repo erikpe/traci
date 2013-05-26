@@ -2,6 +2,7 @@ package se.ejp.traci.lang.interpreter;
 
 import se.ejp.traci.lang.interpreter.Entities.Entity;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
+import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.interpreter.node.BlockNode;
 import se.ejp.traci.main.Result;
@@ -46,12 +47,17 @@ public class Interpreter
             Log.ERROR(e.fullMsg());
             return Result.RUNTIME_ERROR;
         }
+        catch (final InterpreterInternalException e)
+        {
+            Log.ERROR(e.fullMsg());
+            return Result.INTERNAL_ERROR;
+        }
         catch (final FunctionReturnException e)
         {
             // Ignore
         }
 
-        // !!! TODO: beore using optimize(), determine what effects it has on bounding boxes.
+        // !!! TODO: before using optimize(), determine what effects it has on bounding boxes.
         // Shape optimizedRoot = rootUnion.optimize();
         // if (optimizedRoot == null)
         // {

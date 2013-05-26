@@ -30,7 +30,7 @@ public class Log
     {
         if (logLevel.compareTo(level) >= 0)
         {
-            final String[] lines = msg.split("\n");
+            final String[] lines = msg.split("\\r?\\n");
 
             for (int i = 0; i < lines.length; ++i)
             {

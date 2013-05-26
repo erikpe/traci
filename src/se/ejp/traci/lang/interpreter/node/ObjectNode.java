@@ -124,7 +124,7 @@ public class ObjectNode implements TraciNode
         }
     }
 
-    private void evalArgs(final Context context) throws FunctionReturnException, InterpreterRuntimeException
+    private void evalArgNodes(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
         for (int i = 0; i < argNodes.size(); ++i)
         {
@@ -159,7 +159,7 @@ public class ObjectNode implements TraciNode
     @Override
     public TraciValue eval(final Context context) throws FunctionReturnException, InterpreterRuntimeException
     {
-        evalArgs(context);
+        evalArgNodes(context);
 
         final Method method;
         try

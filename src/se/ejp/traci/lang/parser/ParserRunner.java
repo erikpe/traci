@@ -11,6 +11,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 
 import se.ejp.traci.lang.interpreter.Interpreter;
+import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.node.BlockNode;
 import se.ejp.traci.main.Result;
 import se.ejp.traci.main.options.Settings;
@@ -103,7 +104,6 @@ public class ParserRunner
     {
         final CommonTreeNodeStream nodes = new CommonTreeNodeStream(tree);
         final TraciTreeWalker walker = new TraciTreeWalker(nodes);
-        boolean encounteredErrors = false;
 
         BlockNode blockNode = null;
         try
@@ -112,13 +112,13 @@ public class ParserRunner
         }
         catch (final RecognitionException e)
         {
-            encounteredErrors = true;
             Log.ERROR(ParserUtilities.makeErrorMessage(e, "Tree walker error"));
-        }
-
-        if (encounteredErrors)
-        {
             return Result.PARSE_ERROR;
+        }
+        catch (final InterpreterInternalException e)
+        {
+            Log.ERROR(e.fullMsg());
+            return Result.INTERNAL_ERROR;
         }
 
         interpreter = new Interpreter(settings, blockNode);

@@ -8,7 +8,8 @@ public enum Result
     PARSE_ERROR(-2),
     RUNTIME_ERROR(-3),
     INVALID_ARGUMENT_ERROR(-4),
-    PREPROCESSOR_ERROR(-5);
+    PREPROCESSOR_ERROR(-5),
+    INTERNAL_ERROR(-6);
 
     public final int code;
 
