@@ -26,7 +26,7 @@ public class Log
 
     private static LogLevel logLevel = LogLevel.INFO;
 
-    private static void handleMessage(final LogLevel level, final String msg)
+    private static synchronized void handleMessage(final LogLevel level, final String msg)
     {
         if (logLevel.compareTo(level) >= 0)
         {

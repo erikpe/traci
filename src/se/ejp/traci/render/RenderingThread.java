@@ -43,13 +43,16 @@ public class RenderingThread extends Thread
 
     private final Queue<WorkBlock> workQueue;
     private final BlockRenderer renderer;
+    private final ProgressReporter progressReporter;
 
-    RenderingThread(final BlockRenderer renderer, final Queue<WorkBlock> workQueue)
+    RenderingThread(final BlockRenderer renderer, final Queue<WorkBlock> workQueue,
+            final ProgressReporter progressReporter)
     {
         super("Rendering thread #" + nextIndex());
 
         this.renderer = renderer;
         this.workQueue = workQueue;
+        this.progressReporter = progressReporter;
     }
 
     @Override
@@ -64,6 +67,7 @@ public class RenderingThread extends Thread
         {
             Log.DEBUG(msgPrefix + "starting work on block at " + block.toString());
             renderer.renderBlock(block);
+            progressReporter.reportBlockDone();
             Log.DEBUG(msgPrefix + "finished with block at " + block.toString());
         }
 

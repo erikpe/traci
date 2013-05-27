@@ -79,10 +79,11 @@ public class Renderer implements BlockRenderer
          */
         final List<RenderingThread> renderingThreads = new ArrayList<RenderingThread>();
         final int numThreads = settings.getNumThreads();
+        final ProgressReporter progressReporter = new ProgressReporter(10000, workQueue.size());
 
         for (int i = 0; i < numThreads; ++i)
         {
-            renderingThreads.add(new RenderingThread(this, workQueue));
+            renderingThreads.add(new RenderingThread(this, workQueue, progressReporter));
         }
 
         Log.INFO("Spawning " + numThreads + " rendering thread" + (numThreads == 1 ? "" : "s") + " wokning on " +
@@ -96,6 +97,7 @@ public class Renderer implements BlockRenderer
         {
             return result;
         }
+        progressReporter.start();
         final long start = System.currentTimeMillis();
         for (final Thread thread : renderingThreads)
         {
@@ -119,6 +121,7 @@ public class Renderer implements BlockRenderer
         }
 
         final long stop = System.currentTimeMillis();
+        progressReporter.finish();
         result = area.finish();
         if (result != Result.SUCCESS)
         {
