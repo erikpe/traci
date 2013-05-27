@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import se.ejp.traci.lang.interpreter.exceptions.InterpreterIOException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.math.Projection2D;
 import se.ejp.traci.math.Transformation;
@@ -19,8 +20,6 @@ import se.ejp.traci.util.WeakCache;
 
 public class FileImage extends NonUniform implements Interpolatable
 {
-    private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
-
     private static Map<String, BufferedImage> imageCache = new HashMap<String, BufferedImage>();
     private static WeakCache<FileImage> cache = new WeakCache<FileImage>();
     private final int hash;
@@ -34,16 +33,16 @@ public class FileImage extends NonUniform implements Interpolatable
     private final BufferedImage image;
 
     private FileImage(final String filename, final RepeatPolicy repeatPolicy, final Projection2D projection,
-            final Color borderColor, final Transformation transformation)
+            final Color borderColor, final Transformation transformation, final BufferedImage image)
     {
         super(transformation);
 
+        this.filename = filename;
         this.repeatPolicy = repeatPolicy;
         this.projection = projection;
         this.borderColor = borderColor;
-        this.filename = filename;
 
-        this.image = getImage(filename);
+        this.image = image;
 
         this.hash = calcHash();
     }
@@ -51,36 +50,28 @@ public class FileImage extends NonUniform implements Interpolatable
     public static FileImage make(final String filename, final String repeatPolicyStr, final String projStr,
             final Color borderColor) throws InterpreterRuntimeException
     {
-        final RepeatPolicy repeat = RepeatPolicy.get(repeatPolicyStr);
+        final BufferedImage image = getCachedImage(filename);
+        final RepeatPolicy repeatPolicy = getRepeatPolicy(repeatPolicyStr);
+        final Projection2D projection = getProjection(projStr);
+        final Transformation eye = Transformations.identity();
 
-        if (repeat == null)
-        {
-            throw new InterpreterRuntimeException(null, null, "Unknown repeat policy") { };
-        }
-
-        final Projection2D proj = Projection2D.get(projStr);
-
-        if (proj == null)
-        {
-            throw new InterpreterRuntimeException(null, null, "Unknown projection") { };
-        }
-
-        return cache.get(new FileImage(filename, repeat, proj, borderColor, Transformations.identity()));
+        return cache.get(new FileImage(filename, repeatPolicy, projection, borderColor, eye, image));
     }
 
     public static FileImage make(final String filename, final String repeatPolicyStr, final String projStr)
             throws InterpreterRuntimeException
     {
-        return make(filename, repeatPolicyStr, projStr, DEFAULT_BORDER_COLOR);
+        return make(filename, repeatPolicyStr, projStr, Color.BLACK);
     }
 
     @Override
-    public FileImage transform(final Transformation newTr)
+    public FileImage transform(final Transformation tr)
     {
-        return cache.get(new FileImage(filename, repeatPolicy, projection, borderColor, transformation.compose(newTr)));
+        final Transformation newTr = transformation.compose(tr);
+        return cache.get(new FileImage(filename, repeatPolicy, projection, borderColor, newTr, image));
     }
 
-    private static BufferedImage getImage(final String filename)
+    private static BufferedImage getCachedImage(final String filename) throws InterpreterIOException
     {
         BufferedImage tmpImage = imageCache.get(filename);
 
@@ -94,14 +85,65 @@ public class FileImage extends NonUniform implements Interpolatable
             }
             catch (final IOException e)
             {
-                System.err.println(" *** ERROR: Failed to read file: " + filename);
-                System.exit(-1);
+                throw new InterpreterIOException(null, null, "Unable to read file: '" + filename + "'", e);
             }
 
             imageCache.put(filename, tmpImage);
         }
 
         return tmpImage;
+    }
+
+    private static RepeatPolicy getRepeatPolicy(final String repeatPolicyStr) throws InterpreterRuntimeException
+    {
+        final RepeatPolicy repeatPolicy = RepeatPolicy.get(repeatPolicyStr);
+
+        if (repeatPolicy != null)
+        {
+            return repeatPolicy;
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Unable to create 'image':").append('\n');
+        sb.append("Argument 2: Unknown repeat policy: \"").append(repeatPolicyStr).append("\"").append('\n');
+        sb.append("Must be one of following: [");
+
+        String delim = "";
+        for (final String repID : RepeatPolicy.getAllPolicies())
+        {
+            sb.append(delim).append("\"").append(repID).append("\"");
+            delim = ", ";
+        }
+
+        sb.append(']');
+
+        throw new InterpreterRuntimeException(null, null, sb.toString());
+    }
+
+    private static Projection2D getProjection(final String projStr) throws InterpreterRuntimeException
+    {
+        final Projection2D projection = Projection2D.get(projStr);
+
+        if (projection != null)
+        {
+            return projection;
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Unable to create 'image':").append('\n');
+        sb.append("Argument 2: Unknown projection type: \"").append(projStr).append("\"").append('\n');
+        sb.append("Must be one of following: [");
+
+        String delim = "";
+        for (final String repID : Projection2D.getAllProjections())
+        {
+            sb.append(delim).append("\"").append(repID).append("\"");
+            delim = ", ";
+        }
+
+        sb.append(']');
+
+        throw new InterpreterRuntimeException(null, null, sb.toString());
     }
 
     @Override
@@ -165,6 +207,7 @@ public class FileImage extends NonUniform implements Interpolatable
     {
         int hash = getClass().hashCode();
         hash = 31 * hash + transformation.hashCode();
+        hash = 31 * hash + filename.hashCode();
         hash = 31 * hash + interpolator.hashCode();
         hash = 31 * hash + repeatPolicy.hashCode();
         hash = 31 * hash + projection.hashCode();
@@ -195,6 +238,7 @@ public class FileImage extends NonUniform implements Interpolatable
         final FileImage otherFileImage = (FileImage) other;
 
         return transformation.equals(otherFileImage.transformation) &&
+               filename.equals(otherFileImage.filename) &&
                interpolator.equals(otherFileImage.interpolator) &&
                repeatPolicy.equals(otherFileImage.repeatPolicy) &&
                projection.equals(otherFileImage.projection) &&

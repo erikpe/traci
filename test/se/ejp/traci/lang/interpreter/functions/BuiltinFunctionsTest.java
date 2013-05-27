@@ -45,8 +45,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals("sin", e.function);
             assertEquals(1, e.expectedNumArgs);
             assertEquals(0, e.gotNumArgs);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
 
         try
@@ -59,8 +59,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals("sin", e.function);
             assertEquals(1, e.expectedNumArgs);
             assertEquals(2, e.gotNumArgs);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
 
         try
@@ -74,8 +74,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals(Collections.singleton(Type.NUMBER), e.expectedArgType);
             assertEquals(Type.VECTOR, e.gotArgType);
             assertEquals(1, e.argIndex);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
     }
 
@@ -108,8 +108,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals("cos", e.function);
             assertEquals(1, e.expectedNumArgs);
             assertEquals(0, e.gotNumArgs);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
 
         try
@@ -122,8 +122,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals("cos", e.function);
             assertEquals(1, e.expectedNumArgs);
             assertEquals(2, e.gotNumArgs);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
 
         try
@@ -137,8 +137,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals(Collections.singleton(Type.NUMBER), e.expectedArgType);
             assertEquals(Type.VECTOR, e.gotArgType);
             assertEquals(1, e.argIndex);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
     }
 
@@ -167,8 +167,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals("length", e.function);
             assertEquals(1, e.expectedNumArgs);
             assertEquals(0, e.gotNumArgs);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
 
         try
@@ -181,8 +181,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals("length", e.function);
             assertEquals(1, e.expectedNumArgs);
             assertEquals(2, e.gotNumArgs);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
 
         try
@@ -195,8 +195,8 @@ public class BuiltinFunctionsTest extends InterpreterBase
             assertEquals("length", e.function);
             assertEquals(Collections.singleton(Type.VECTOR), e.expectedArgType);
             assertEquals(Type.NUMBER, e.gotArgType);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
     }
 

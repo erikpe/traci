@@ -135,7 +135,7 @@ public class ObjectNode implements TraciNode
         }
     }
 
-    private Object make(final Method method) throws InterpreterRuntimeException
+    private Object make(final Method method, final Context context) throws InterpreterRuntimeException
     {
         try
         {
@@ -144,10 +144,19 @@ public class ObjectNode implements TraciNode
         catch (final InvocationTargetException e)
         {
             final Throwable cause = e.getCause();
+
             if (cause instanceof InterpreterRuntimeException)
             {
-                throw (InterpreterRuntimeException) cause;
+                final InterpreterRuntimeException ire = (InterpreterRuntimeException) cause;
+                ire.setLocation(token.location);
+                ire.setCallStack(context.callStack);
+                throw ire;
             }
+            else if (cause instanceof InterpreterInternalException)
+            {
+                throw (InterpreterInternalException) cause;
+            }
+
             throw new InterpreterInternalException(cause);
         }
         catch (final Exception e)
@@ -172,7 +181,7 @@ public class ObjectNode implements TraciNode
                     Arrays.asList(argTypes));
         }
 
-        final Object object = make(method);
+        final Object object = make(method, context);
         TraciValue value = new TraciValue(object);
 
         if (blockNode != null)

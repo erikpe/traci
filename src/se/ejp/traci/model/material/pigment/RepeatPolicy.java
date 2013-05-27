@@ -2,6 +2,7 @@ package se.ejp.traci.model.material.pigment;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public enum RepeatPolicy
 {
@@ -28,5 +29,10 @@ public enum RepeatPolicy
     public static RepeatPolicy get(final String id)
     {
         return idMap.get(id);
+    }
+
+    public static Set<String> getAllPolicies()
+    {
+        return idMap.keySet();
     }
 }

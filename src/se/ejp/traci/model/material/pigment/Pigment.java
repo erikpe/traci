@@ -18,13 +18,13 @@ public abstract class Pigment
     public int hashCode()
     {
         // All concrete subclasses should override this method
-        throw new RuntimeException("Pigment.hashCode() called");
+        throw new UnsupportedOperationException("Pigment.hashCode() called");
     }
 
     @Override
     public boolean equals(final Object other)
     {
         // All concrete subclasses should override this method
-        throw new RuntimeException("Pigment.equals(Object) called");
+        throw new UnsupportedOperationException("Pigment.equals(Object) called");
     }
 }

@@ -46,15 +46,15 @@ public class InterpreterPigmentTest extends InterpreterObjectBase
 
         for (final Checker checker : runTests("checker", Checker.class, args, null))
         {
-            assertEquals(Color.make(.5, .5, .5), checker.getColor1());
-            assertEquals(Color.make(.1, .2, .3), checker.getColor2());
+            assertEquals(Color.make(.5, .5, .5), checker.color1.color);
+            assertEquals(Color.make(.1, .2, .3), checker.color2.color);
             assertEquals(Transformations.identity(), checker.getTransformation());
         }
 
         for (final Checker checker: runTests("checker", Checker.class, args, modifiers))
         {
-            assertEquals(Color.make(.5, .5, .5), checker.getColor1());
-            assertEquals(Color.make(.1, .2, .3), checker.getColor2());
+            assertEquals(Color.make(.5, .5, .5), checker.color1.color);
+            assertEquals(Color.make(.1, .2, .3), checker.color2.color);
             assertEquals(Transformations.rotx(2.23), checker.getTransformation());
         }
     }

@@ -99,8 +99,8 @@ public class InterpreterTest extends InterpreterBase
             assertEquals(Type.NUMBER, e.leftType);
             assertEquals("+", e.op);
             assertEquals(Type.BOOLEAN, e.rightType);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(2, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(2, e.getLocation().fileLocation.col);
         }
     }
 
@@ -125,8 +125,8 @@ public class InterpreterTest extends InterpreterBase
             assertEquals(Type.TRANSFORMATION, e.leftType);
             assertEquals("*", e.op);
             assertEquals(Type.NUMBER, e.rightType);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(9, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(9, e.getLocation().fileLocation.col);
         }
     }
 }

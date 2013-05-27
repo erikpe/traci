@@ -16,7 +16,7 @@ public class InterpreterIllegalArguments extends InterpreterRuntimeException
     {
         final StringBuilder sb = new StringBuilder();
 
-        sb.append("Unable to call '").append(function);
+        sb.append("Unable to create '").append(function);
         sb.append("' with arguments: (");
 
         for (int i = 0; i < gotArgTypes.size(); ++i)

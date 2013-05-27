@@ -8,12 +8,9 @@ public class MaterialColor
     private static final WeakCache<MaterialColor> cache = new WeakCache<MaterialColor>();
     private final int hash;
 
-    public static final MaterialColor BLACK = make(0.0, 0.0, 0.0);
-    public static final MaterialColor WHITE = make(1.0, 1.0, 1.0);
+    public final Color color;
 
-    private final Color color;
-
-    public MaterialColor(final Color color)
+    private MaterialColor(final Color color)
     {
         this.color = color;
         hash = calcHash();
@@ -22,21 +19,6 @@ public class MaterialColor
     public static MaterialColor make(final Color color)
     {
         return cache.get(new MaterialColor(color));
-    }
-
-    public static MaterialColor make(final Double r, final Double g, final Double b, final Double transmit)
-    {
-        return make(Color.make(r, g, b, transmit));
-    }
-
-    public static MaterialColor make(final Double r, final Double g, final Double b)
-    {
-        return make(Color.make(r, g, b));
-    }
-
-    public Color getColor()
-    {
-        return color;
     }
 
     @Override

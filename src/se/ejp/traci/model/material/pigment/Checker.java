@@ -12,8 +12,8 @@ public class Checker extends Pattern
     private static WeakCache<Checker> cache = new WeakCache<Checker>();
     private final int hash;
 
-    private final MaterialColor color1;
-    private final MaterialColor color2;
+    public final MaterialColor color1;
+    public final MaterialColor color2;
 
     private Checker(final Color color1, final Color color2, final Transformation transformation)
     {
@@ -31,7 +31,7 @@ public class Checker extends Pattern
     @Override
     public Checker transform(final Transformation newTr)
     {
-        return cache.get(new Checker(color1.getColor(), color2.getColor(), transformation.compose(newTr)));
+        return cache.get(new Checker(color1.color, color2.color, transformation.compose(newTr)));
     }
 
     @Override
@@ -39,20 +39,10 @@ public class Checker extends Pattern
     {
         if ((Math.round(p.x()) + Math.round(p.y()) + Math.round(p.z())) % 2 == 0)
         {
-            return color1.getColor();
+            return color1.color;
         }
 
-        return color2.getColor();
-    }
-
-    public Color getColor1()
-    {
-        return color1.getColor();
-    }
-
-    public Color getColor2()
-    {
-        return color2.getColor();
+        return color2.color;
     }
 
     @Override

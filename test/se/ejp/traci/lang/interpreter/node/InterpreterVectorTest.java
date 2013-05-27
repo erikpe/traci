@@ -33,8 +33,8 @@ public class InterpreterVectorTest extends InterpreterBase
         catch (final InterpreterIllegalArguments e)
         {
             assertEquals("vector[]", e.function);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
 
         try
@@ -45,8 +45,8 @@ public class InterpreterVectorTest extends InterpreterBase
         catch (final InterpreterIllegalArguments e)
         {
             assertEquals("vector[]", e.function);
-            assertEquals(1, e.includeLocation.fileLocation.row);
-            assertEquals(7, e.includeLocation.fileLocation.col);
+            assertEquals(1, e.getLocation().fileLocation.row);
+            assertEquals(7, e.getLocation().fileLocation.col);
         }
     }
 }

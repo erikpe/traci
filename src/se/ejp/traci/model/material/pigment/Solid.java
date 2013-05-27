@@ -27,7 +27,7 @@ public class Solid extends Pigment
     @Override
     public Color getColor(final Vector p)
     {
-        return color.getColor();
+        return color.color;
     }
 
     @Override

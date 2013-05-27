@@ -4,17 +4,37 @@ import se.ejp.traci.lang.interpreter.CallStack;
 import se.ejp.traci.lang.parser.IncludeLocation;
 
 @SuppressWarnings("serial")
-public abstract class InterpreterRuntimeException extends Exception
+public class InterpreterRuntimeException extends Exception
 {
-    public final IncludeLocation includeLocation;
-    public final CallStack callStack;
-    public final String msg;
+    private IncludeLocation includeLocation;
+    private CallStack callStack;
+    private final String msg;
 
     public InterpreterRuntimeException(final IncludeLocation includeLocation, final CallStack callStack, final String msg)
     {
         this.includeLocation = includeLocation;
         this.callStack = callStack;
         this.msg = msg;
+    }
+
+    public void setLocation(final IncludeLocation includeLocation)
+    {
+        this.includeLocation = includeLocation;
+    }
+
+    public void setCallStack(final CallStack callStack)
+    {
+        this.callStack = callStack;
+    }
+
+    public IncludeLocation getLocation()
+    {
+        return includeLocation;
+    }
+
+    public CallStack getCallStack()
+    {
+        return callStack;
     }
 
     public String fullMsg()
@@ -27,12 +47,13 @@ public abstract class InterpreterRuntimeException extends Exception
             sb.append('\n');
         }
 
-        sb.append("Runtime error: ").append(msg).append('\n');
-
         if (callStack != null)
         {
             callStack.format(sb, includeLocation.fileLocation);
+            sb.append('\n');
         }
+
+        sb.append("Runtime error: ").append(msg).append('\n');
 
         return sb.toString();
     }

@@ -2,6 +2,7 @@ package se.ejp.traci.math;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public enum Projection2D
 {
@@ -65,6 +66,11 @@ public enum Projection2D
     public static Projection2D get(final String id)
     {
         return idMap.get(id);
+    }
+
+    public static Set<String> getAllProjections()
+    {
+        return idMap.keySet();
     }
 
     public abstract Vector2D project(final Vector p);
