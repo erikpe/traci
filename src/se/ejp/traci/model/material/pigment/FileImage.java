@@ -131,7 +131,7 @@ public class FileImage extends NonUniform implements Interpolatable
 
         final StringBuilder sb = new StringBuilder();
         sb.append("Unable to create 'image':").append('\n');
-        sb.append("Argument 2: Unknown projection type: \"").append(projStr).append("\"").append('\n');
+        sb.append("Argument 3: Unknown projection type: \"").append(projStr).append("\"").append('\n');
         sb.append("Must be one of following: [");
 
         String delim = "";
