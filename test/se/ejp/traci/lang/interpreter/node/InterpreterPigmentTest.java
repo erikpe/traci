@@ -9,7 +9,7 @@ import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 import se.ejp.traci.model.material.pigment.Checker;
 import se.ejp.traci.model.material.pigment.FileImage;
 import se.ejp.traci.model.material.pigment.Solid;

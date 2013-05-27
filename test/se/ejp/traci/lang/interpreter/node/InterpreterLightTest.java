@@ -10,9 +10,9 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
+import se.ejp.traci.model.Color;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
-import se.ejp.traci.model.material.Color;
 
 public class InterpreterLightTest extends InterpreterObjectBase
 {

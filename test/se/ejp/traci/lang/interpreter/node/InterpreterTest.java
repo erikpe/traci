@@ -8,7 +8,7 @@ import org.junit.Test;
 import se.ejp.traci.lang.interpreter.InterpreterBase;
 import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 import se.ejp.traci.model.material.Interior;
 
 public class InterpreterTest extends InterpreterBase

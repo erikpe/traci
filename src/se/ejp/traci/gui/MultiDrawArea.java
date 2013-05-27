@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import se.ejp.traci.main.Result;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 public class MultiDrawArea extends AbstractDrawArea
 {

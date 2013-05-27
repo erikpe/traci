@@ -1,6 +1,6 @@
 package se.ejp.traci.model.material.pigment;
 
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 public enum Interpolator
 {

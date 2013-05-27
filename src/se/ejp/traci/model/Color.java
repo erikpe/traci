@@ -1,4 +1,4 @@
-package se.ejp.traci.model.material;
+package se.ejp.traci.model;
 
 public class Color
 {

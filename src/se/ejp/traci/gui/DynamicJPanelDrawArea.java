@@ -9,7 +9,7 @@ import java.util.TimerTask;
 import javax.swing.JPanel;
 
 import se.ejp.traci.main.Result;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 @SuppressWarnings("serial")
 public class DynamicJPanelDrawArea extends JPanel implements DrawArea

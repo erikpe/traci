@@ -2,7 +2,7 @@ package se.ejp.traci.model.light;
 
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 public class PointLight extends Light
 {

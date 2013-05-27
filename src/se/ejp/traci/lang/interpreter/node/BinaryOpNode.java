@@ -9,7 +9,7 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterIllegalOperatorArgume
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.parser.TraciToken;
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 public class BinaryOpNode implements TraciNode
 {

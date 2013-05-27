@@ -1,5 +1,6 @@
 package se.ejp.traci.model.material;
 
+import se.ejp.traci.model.Color;
 import se.ejp.traci.util.WeakCache;
 
 public class MaterialColor

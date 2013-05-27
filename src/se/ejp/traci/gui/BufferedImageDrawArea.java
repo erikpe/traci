@@ -2,7 +2,7 @@ package se.ejp.traci.gui;
 
 import java.awt.image.BufferedImage;
 
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 public class BufferedImageDrawArea extends AbstractDrawArea
 {

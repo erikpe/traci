@@ -2,7 +2,7 @@ package se.ejp.traci.model.material.pigment;
 
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Vector;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 import se.ejp.traci.model.material.MaterialColor;
 import se.ejp.traci.util.WeakCache;
 

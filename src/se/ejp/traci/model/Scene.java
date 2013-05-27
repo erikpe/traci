@@ -6,7 +6,6 @@ import java.util.List;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.light.PointLight;
-import se.ejp.traci.model.material.Color;
 import se.ejp.traci.model.shape.Shape;
 
 public class Scene

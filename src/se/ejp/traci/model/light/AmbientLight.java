@@ -1,7 +1,7 @@
 package se.ejp.traci.model.light;
 
 import se.ejp.traci.math.Transformation;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 public class AmbientLight extends Light
 {

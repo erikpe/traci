@@ -14,7 +14,7 @@ import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.math.Vector2D;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 import se.ejp.traci.util.WeakCache;
 
 public class FileImage extends NonUniform implements Interpolatable

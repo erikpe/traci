@@ -1,9 +1,9 @@
 package se.ejp.traci.render;
 
 import se.ejp.traci.math.Vector;
+import se.ejp.traci.model.Color;
 import se.ejp.traci.model.Scene;
 import se.ejp.traci.model.light.PointLight;
-import se.ejp.traci.model.material.Color;
 import se.ejp.traci.model.material.Finish;
 import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.pigment.Pigment;

@@ -1,6 +1,6 @@
 package se.ejp.traci.gui;
 
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 public class NullDrawArea extends AbstractDrawArea
 {

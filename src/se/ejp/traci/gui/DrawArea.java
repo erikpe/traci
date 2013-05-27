@@ -1,7 +1,7 @@
 package se.ejp.traci.gui;
 
 import se.ejp.traci.main.Result;
-import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.Color;
 
 public interface DrawArea
 {
