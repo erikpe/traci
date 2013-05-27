@@ -11,13 +11,13 @@ public class Interior
 
     public final double ior;
     public final double falloff;
-    public final Color color;
+    private final MaterialColor color;
 
     private Interior(final double ior, final double falloff, final Color color)
     {
         this.ior = ior;
         this.falloff = falloff;
-        this.color = color;
+        this.color = MaterialColor.make(color);
         this.hash = calcHash();
     }
 

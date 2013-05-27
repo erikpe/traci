@@ -4,6 +4,7 @@ import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.material.MaterialColor;
 import se.ejp.traci.util.WeakCache;
 
 public class Checker extends Pattern
@@ -11,14 +12,14 @@ public class Checker extends Pattern
     private static WeakCache<Checker> cache = new WeakCache<Checker>();
     private final int hash;
 
-    public final Color color1;
-    public final Color color2;
+    private final MaterialColor color1;
+    private final MaterialColor color2;
 
     private Checker(final Color color1, final Color color2, final Transformation transformation)
     {
         super(transformation);
-        this.color1 = color1;
-        this.color2 = color2;
+        this.color1 = MaterialColor.make(color1);
+        this.color2 = MaterialColor.make(color2);
         this.hash = calcHash();
     }
 
@@ -30,7 +31,7 @@ public class Checker extends Pattern
     @Override
     public Checker transform(final Transformation newTr)
     {
-        return cache.get(new Checker(color1, color2, transformation.compose(newTr)));
+        return cache.get(new Checker(color1.getColor(), color2.getColor(), transformation.compose(newTr)));
     }
 
     @Override
@@ -38,10 +39,20 @@ public class Checker extends Pattern
     {
         if ((Math.round(p.x()) + Math.round(p.y()) + Math.round(p.z())) % 2 == 0)
         {
-            return color1;
+            return color1.getColor();
         }
 
-        return color2;
+        return color2.getColor();
+    }
+
+    public Color getColor1()
+    {
+        return color1.getColor();
+    }
+
+    public Color getColor2()
+    {
+        return color2.getColor();
     }
 
     @Override

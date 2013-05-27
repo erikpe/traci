@@ -3,6 +3,7 @@ package se.ejp.traci.model.material.pigment;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.material.Color;
+import se.ejp.traci.model.material.MaterialColor;
 import se.ejp.traci.util.WeakCache;
 
 public class Solid extends Pigment
@@ -10,11 +11,11 @@ public class Solid extends Pigment
     private static final WeakCache<Solid> cache = new WeakCache<Solid>();
     private final int hash;
 
-    public final Color color;
+    private final MaterialColor color;
 
     private Solid(final Color color)
     {
-        this.color = color;
+        this.color = MaterialColor.make(color);
         this.hash = calcHash();
     }
 
@@ -26,7 +27,7 @@ public class Solid extends Pigment
     @Override
     public Color getColor(final Vector p)
     {
-        return color;
+        return color.getColor();
     }
 
     @Override

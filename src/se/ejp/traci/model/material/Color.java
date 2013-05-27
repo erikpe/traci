@@ -102,7 +102,7 @@ public class Color
         {
             return true;
         }
-        else if (other.getClass() != getClass())
+        else if (getClass() != other.getClass())
         {
             return false;
         }

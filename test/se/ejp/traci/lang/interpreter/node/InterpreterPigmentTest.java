@@ -8,6 +8,7 @@ import org.junit.Test;
 import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.math.Transformations;
+import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.material.Color;
 import se.ejp.traci.model.material.pigment.Checker;
 import se.ejp.traci.model.material.pigment.FileImage;
@@ -28,12 +29,12 @@ public class InterpreterPigmentTest extends InterpreterObjectBase
 
         for (final Solid solid : runTests("solid", Solid.class, args, null))
         {
-            assertEquals(Color.make(.1, .2, .3), solid.color);
+            assertEquals(Color.make(.1, .2, .3), solid.getColor(Vector.ORIGO));
         }
 
         for (final Solid solid: runTests("solid", Solid.class, args, modifiers))
         {
-            assertEquals(Color.make(.1, .2, .3), solid.color);
+            assertEquals(Color.make(.1, .2, .3), solid.getColor(Vector.ORIGO));
         }
     }
 
@@ -45,15 +46,15 @@ public class InterpreterPigmentTest extends InterpreterObjectBase
 
         for (final Checker checker : runTests("checker", Checker.class, args, null))
         {
-            assertEquals(Color.make(.5, .5, .5), checker.color1);
-            assertEquals(Color.make(.1, .2, .3), checker.color2);
+            assertEquals(Color.make(.5, .5, .5), checker.getColor1());
+            assertEquals(Color.make(.1, .2, .3), checker.getColor2());
             assertEquals(Transformations.identity(), checker.getTransformation());
         }
 
         for (final Checker checker: runTests("checker", Checker.class, args, modifiers))
         {
-            assertEquals(Color.make(.5, .5, .5), checker.color1);
-            assertEquals(Color.make(.1, .2, .3), checker.color2);
+            assertEquals(Color.make(.5, .5, .5), checker.getColor1());
+            assertEquals(Color.make(.1, .2, .3), checker.getColor2());
             assertEquals(Transformations.rotx(2.23), checker.getTransformation());
         }
     }
