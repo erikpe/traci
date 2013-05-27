@@ -5,6 +5,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import se.ejp.traci.util.Log;
+import se.ejp.traci.util.Utilities;
 
 public class ProgressReporter
 {
@@ -14,6 +15,7 @@ public class ProgressReporter
     private final AtomicInteger blocksDone = new AtomicInteger(0);
 
     private Timer reportTimer = null;
+    private long startTime;
 
     public ProgressReporter(final long reportIntervalMs, final int blocks)
     {
@@ -28,8 +30,24 @@ public class ProgressReporter
 
     private void report()
     {
+        final StringBuilder sb = new StringBuilder();
+
         final int done = blocksDone.get();
-        Log.INFO(((100 * done) / blocks) + "% done (" + done + "/" + blocks + " blocks)");
+
+        sb.append((100 * done) / blocks).append("% done (");
+        sb.append(done).append('/').append(blocks).append(" blocks)");
+
+        if (done > 0)
+        {
+            final long currentTime = System.currentTimeMillis();
+            final long timeTaken = currentTime - startTime;
+            final long estimatedTotalTime = (long) (timeTaken / (((double) done) / blocks));
+            final long estimatedRemainingTime = estimatedTotalTime - timeTaken;
+
+            sb.append(" Estimated time remaining: ").append(Utilities.millisecondsToString(estimatedRemainingTime));
+        }
+
+        Log.INFO(sb.toString());
     }
 
     public void start()
@@ -45,6 +63,7 @@ public class ProgressReporter
 
         reportTimer = new Timer();
         reportTimer.schedule(task, reportIntervalMs, reportIntervalMs);
+        startTime = System.currentTimeMillis();
     }
 
     public void finish()
