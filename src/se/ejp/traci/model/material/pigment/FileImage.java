@@ -24,11 +24,11 @@ public class FileImage extends NonUniform implements Interpolatable
     private static WeakCache<FileImage> cache = new WeakCache<FileImage>();
     private final int hash;
 
-    private final String filename;
-    private final Interpolator interpolator = Interpolator.BI_LINEAR;
-    private final RepeatPolicy repeatPolicy;
-    private final Projection2D projection;
-    private final Color borderColor;
+    public final String filename;
+    public final Interpolator interpolator = Interpolator.BI_LINEAR;
+    public final RepeatPolicy repeatPolicy;
+    public final Projection2D projection;
+    public final Color borderColor;
 
     private final BufferedImage image;
 

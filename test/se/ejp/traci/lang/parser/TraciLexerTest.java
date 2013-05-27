@@ -146,80 +146,78 @@ public class TraciLexerTest extends TraciLexerBase
         assertTrue(tok.location.includePath.isEmpty());
     }
 
+    private void testTokens(final String[] ids, final int tokenType)
+    {
+        final StringBuilder sb = new StringBuilder();
+
+        for (final String id : ids)
+        {
+            sb.append(id).append(' ');
+        }
+
+        runLexer(sb.toString());
+        assertNoError();
+        assertEquals(ids.length*2 + 1, tokens.size());
+
+        int col = 0;
+        for (int i = 0; i < ids.length; ++i)
+        {
+            assertToken(i*2, tokenType, ids[i], Token.DEFAULT_CHANNEL, 1, col);
+            col += ids[i].length();
+            assertToken(i*2 + 1, TraciLexer.WS, " ", Token.HIDDEN_CHANNEL, 1, col);
+            col += 1;
+        }
+
+        assertToken(ids.length*2, TraciLexer.EOF, null, Token.DEFAULT_CHANNEL, 1, col);
+    }
+
     @Test
     public void testTransformation()
     {
-        runLexer("translate scale scalex scaley scalez rotx roty rotz rotAround rotVecToVec identity");
-        assertNoError();
-        assertToken( 0, TraciLexer.TRANSFORMATION, "translate",   Token.DEFAULT_CHANNEL, 1,  0);
-        assertToken( 1, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1,  9);
-        assertToken( 2, TraciLexer.TRANSFORMATION, "scale",       Token.DEFAULT_CHANNEL, 1, 10);
-        assertToken( 3, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 15);
-        assertToken( 4, TraciLexer.TRANSFORMATION, "scalex",      Token.DEFAULT_CHANNEL, 1, 16);
-        assertToken( 5, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 22);
-        assertToken( 6, TraciLexer.TRANSFORMATION, "scaley",      Token.DEFAULT_CHANNEL, 1, 23);
-        assertToken( 7, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 29);
-        assertToken( 8, TraciLexer.TRANSFORMATION, "scalez",      Token.DEFAULT_CHANNEL, 1, 30);
-        assertToken( 9, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 36);
-        assertToken(10, TraciLexer.TRANSFORMATION, "rotx",        Token.DEFAULT_CHANNEL, 1, 37);
-        assertToken(11, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 41);
-        assertToken(12, TraciLexer.TRANSFORMATION, "roty",        Token.DEFAULT_CHANNEL, 1, 42);
-        assertToken(13, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 46);
-        assertToken(14, TraciLexer.TRANSFORMATION, "rotz",        Token.DEFAULT_CHANNEL, 1, 47);
-        assertToken(15, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 51);
-        assertToken(16, TraciLexer.TRANSFORMATION, "rotAround",   Token.DEFAULT_CHANNEL, 1, 52);
-        assertToken(17, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 61);
-        assertToken(18, TraciLexer.TRANSFORMATION, "rotVecToVec", Token.DEFAULT_CHANNEL, 1, 62);
-        assertToken(19, TraciLexer.WS,             " ",           Token.HIDDEN_CHANNEL,  1, 73);
-        assertToken(20, TraciLexer.TRANSFORMATION, "identity",    Token.DEFAULT_CHANNEL, 1, 74);
-        assertToken(21, TraciLexer.EOF,            null,          Token.DEFAULT_CHANNEL, 1, 82);
+        final String[] tokens = new String[] { "translate", "scale", "scalex", "scaley", "scalez", "rotx", "roty",
+                                               "rotz", "rotAround", "rotVecToVec", "identity" };
+        testTokens(tokens, TraciLexer.TRANSFORMATION);
     }
 
     @Test
     public void testPrimitiveShape()
     {
-        runLexer("box cylinder plane sphere torus");
-        assertNoError();
-        assertToken(0, TraciLexer.PRIMITIVE_SHAPE, "box",      Token.DEFAULT_CHANNEL, 1,  0);
-        assertToken(1, TraciLexer.WS,              " ",        Token.HIDDEN_CHANNEL,  1,  3);
-        assertToken(2, TraciLexer.PRIMITIVE_SHAPE, "cylinder", Token.DEFAULT_CHANNEL, 1,  4);
-        assertToken(3, TraciLexer.WS,              " ",        Token.HIDDEN_CHANNEL,  1, 12);
-        assertToken(4, TraciLexer.PRIMITIVE_SHAPE, "plane",    Token.DEFAULT_CHANNEL, 1, 13);
-        assertToken(5, TraciLexer.WS,              " ",        Token.HIDDEN_CHANNEL,  1, 18);
-        assertToken(6, TraciLexer.PRIMITIVE_SHAPE, "sphere",   Token.DEFAULT_CHANNEL, 1, 19);
-        assertToken(7, TraciLexer.WS,              " ",        Token.HIDDEN_CHANNEL,  1, 25);
-        assertToken(8, TraciLexer.PRIMITIVE_SHAPE, "torus",    Token.DEFAULT_CHANNEL, 1, 26);
-        assertToken(9, TraciLexer.EOF,             null,       Token.DEFAULT_CHANNEL, 1, 31);
+        testTokens(new String[] { "box", "cylinder", "plane", "sphere", "torus" }, TraciLexer.PRIMITIVE_SHAPE);
     }
 
     @Test
     public void testCsgShape()
     {
-        runLexer("union difference intersection");
-        assertNoError();
-        assertToken(0, TraciLexer.CSG_SHAPE, "union",        Token.DEFAULT_CHANNEL, 1,  0);
-        assertToken(1, TraciLexer.WS,        " ",            Token.HIDDEN_CHANNEL,  1,  5);
-        assertToken(2, TraciLexer.CSG_SHAPE, "difference",   Token.DEFAULT_CHANNEL, 1,  6);
-        assertToken(3, TraciLexer.WS,        " ",            Token.HIDDEN_CHANNEL,  1, 16);
-        assertToken(4, TraciLexer.CSG_SHAPE, "intersection", Token.DEFAULT_CHANNEL, 1, 17);
-        assertToken(5, TraciLexer.EOF,       null,           Token.DEFAULT_CHANNEL, 1, 29);
+        testTokens(new String[] { "union", "difference", "intersection" }, TraciLexer.CSG_SHAPE);
     }
 
     @Test
     public void testColor()
     {
-        runLexer("color");
-        assertNoError();
-        assertToken(0, TraciLexer.COLOR, "color", Token.DEFAULT_CHANNEL, 1, 0);
-        assertToken(1, TraciLexer.EOF,   null,    Token.DEFAULT_CHANNEL, 1, 5);
+        testTokens(new String[] { "color" }, TraciLexer.COLOR);
     }
 
     @Test
     public void testInterior()
     {
-        runLexer("interior");
-        assertNoError();
-        assertToken(0, TraciLexer.INTERIOR, "interior", Token.DEFAULT_CHANNEL, 1, 0);
-        assertToken(1, TraciLexer.EOF,      null,       Token.DEFAULT_CHANNEL, 1, 8);
+        testTokens(new String[] { "interior" }, TraciLexer.INTERIOR);
+    }
+
+    @Test
+    public void testPigment()
+    {
+        testTokens(new String[] { "solid", "checker", "image" }, TraciLexer.PIGMENT);
+    }
+
+    @Test
+    public void testCamera()
+    {
+        testTokens(new String[] { "camera" }, TraciLexer.CAMERA);
+    }
+
+    @Test
+    public void testFinish()
+    {
+        testTokens(new String[] { "finish" }, TraciLexer.FINISH);
     }
 }
