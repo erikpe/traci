@@ -53,7 +53,7 @@ public class InterpreterRuntimeException extends Exception
             sb.append('\n');
         }
 
-        sb.append("Runtime error: ").append(msg).append('\n');
+        sb.append("Runtime error: ").append(msg);
 
         return sb.toString();
     }

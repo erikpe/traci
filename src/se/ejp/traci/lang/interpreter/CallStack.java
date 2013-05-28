@@ -40,21 +40,16 @@ public class CallStack
         sb.append("    at ").append(currentFunction);
         if (currentLocation != null)
         {
-            sb.append(" (").append(currentLocation.toString()).append(")\n");
+            sb.append(" (").append(currentLocation.toString()).append(")");
         }
         else
         {
-            sb.append(" (<unknown location>)\n");
+            sb.append(" (<unknown location>)");
         }
 
         for (int i = functions.size() - 1; i >= 0; --i)
         {
-            if (i < functions.size() - 1)
-            {
-                sb.append('\n');
-            }
-
-            sb.append("    at ").append(functions.get(i));
+            sb.append("\n    at ").append(functions.get(i));
             sb.append(" (").append(fileLocations.get(i).toString()).append(')');
         }
     }
