@@ -56,11 +56,11 @@ public class Utilities
 
         if (seconds == 1)
         {
-            sb.append(seconds + " second");
+            sb.append(seconds).append(" second");
         }
         else
         {
-            sb.append(seconds + " seconds");
+            sb.append(seconds).append(" seconds");
         }
 
         return sb.toString();

@@ -18,6 +18,7 @@ public class UtilitiesTest
         assertEquals("59.9 seconds", Utilities.millisecondsToString(59999));
         assertEquals("1 minute, 0 seconds", Utilities.millisecondsToString(60000));
         assertEquals("1 minute, 0 seconds", Utilities.millisecondsToString(60999));
+        assertEquals("1 minute, 1 second", Utilities.millisecondsToString(61000));
         assertEquals("2 minutes, 1 second", Utilities.millisecondsToString(60000*2 + 1000));
         assertEquals("3 days, 0 hours, 0 minutes, 0 seconds", Utilities.millisecondsToString(3*24*60*60000));
         assertEquals("3 days, 4 hours, 5 minutes, 6 seconds",

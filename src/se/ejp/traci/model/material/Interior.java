@@ -14,7 +14,7 @@ public class Interior
     public final double falloff;
     private final MaterialColor color;
 
-    private Interior(final double ior, final double falloff, final Color color)
+    private Interior(final double ior, final Color color, final double falloff)
     {
         this.ior = ior;
         this.falloff = falloff;
@@ -22,19 +22,19 @@ public class Interior
         this.hash = calcHash();
     }
 
-    public static Interior make(final Double ior, final Double falloff, final Color color)
+    public static Interior make(final Double ior, final Color color, final Double falloff)
     {
-        return cache.get(new Interior(ior, falloff, color));
+        return cache.get(new Interior(ior, color, falloff));
     }
 
     public static Interior make(final Double ior)
     {
-        return make(ior, 0.0, Color.BLACK);
+        return make(ior, Color.BLACK, 0.0);
     }
 
     public static Interior getDefault()
     {
-        return make(1.0, 0.0, Color.BLACK);
+        return make(1.0, Color.BLACK, 0.0);
     }
 
     @Override

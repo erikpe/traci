@@ -37,7 +37,7 @@ public class ProgressReporter
         sb.append((100 * done) / blocks).append("% done (");
         sb.append(done).append('/').append(blocks).append(" blocks)");
 
-        if (done > 0)
+        if (done > 0 && done < blocks)
         {
             final long currentTime = System.currentTimeMillis();
             final long timeTaken = currentTime - startTime;
