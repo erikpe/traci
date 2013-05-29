@@ -25,12 +25,12 @@ public class Plane extends Primitive
     @Override
     public Ray primitiveShootRay(final Vector p, final Vector dir)
     {
-        final double t = -p.y() / dir.y();
+        final double dist = -p.y() / dir.y();
 
-        if (t > -EPSILON)
+        if (dist > -EPSILON)
         {
             final Ray ray = Ray.make();
-            ray.add(t, this, Type.INTERSECT);
+            ray.add(dist, this, Type.INTERSECT);
             return ray;
         }
 

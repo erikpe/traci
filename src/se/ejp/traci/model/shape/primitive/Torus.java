@@ -55,14 +55,18 @@ public class Torus extends Primitive
 
         if (d >= 0)
         {
-            final double t = -a / 2 - Math.sqrt(d);
+            final double sqrtD = Math.sqrt(d);
+            final double ma2 = -a / 2;
 
-            if (t < 0)
+            final double near = ma2 - sqrtD;
+            final double far = ma2 + sqrtD;
+
+            if (far < -EPSILON)
             {
-                return Double.valueOf(0);
+                return null;
             }
 
-            return t;
+            return Math.max(0.0, near);
         }
 
         return null;
@@ -107,23 +111,28 @@ public class Torus extends Primitive
 
         Arrays.sort(roots);
 
-        if (roots[1] > -0.001)
+        for (int i = 0; i < roots.length; ++i)
+        {
+            roots[i] += move;
+        }
+
+        if (roots[1] > -EPSILON)
         {
             ray = Ray.make();
 
-            ray.add(roots[0] + move, this, Type.ENTER);
-            ray.add(roots[1] + move, this, Type.LEAVE);
+            ray.add(roots[0], this, Type.ENTER);
+            ray.add(roots[1], this, Type.LEAVE);
         }
 
-        if (roots.length == 4 && roots[3] > -0.001)
+        if (roots.length == 4 && roots[3] > -EPSILON)
         {
             if (ray == null)
             {
                 ray = Ray.make();
             }
 
-            ray.add(roots[2] + move, this, Type.ENTER);
-            ray.add(roots[3] + move, this, Type.LEAVE);
+            ray.add(roots[2], this, Type.ENTER);
+            ray.add(roots[3], this, Type.LEAVE);
         }
 
         return ray;

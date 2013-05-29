@@ -46,15 +46,15 @@ public class Sphere extends Primitive
             final double sqrtD = Math.sqrt(d);
             final double ma2 = -a / 2;
 
-            final double t0 = ma2 - sqrtD;
-            final double t1 = ma2 + sqrtD;
+            final double near = ma2 - sqrtD;
+            final double far = ma2 + sqrtD;
 
-            if (t1 > -EPSILON && t0 < t1)
+            if (far > -EPSILON && near < far)
             {
                 final Ray ray = Ray.make();
 
-                ray.add(t0, this, Type.ENTER);
-                ray.add(t1, this, Type.LEAVE);
+                ray.add(near, this, Type.ENTER);
+                ray.add(far, this, Type.LEAVE);
 
                 return ray;
             }
