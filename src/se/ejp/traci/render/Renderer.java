@@ -13,7 +13,6 @@ import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.Color;
 import se.ejp.traci.model.Scene;
-import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.shape.BoundingBox;
 import se.ejp.traci.model.shape.ShapeHelper;
 import se.ejp.traci.render.RenderingThread.BlockRenderer;
@@ -180,7 +179,7 @@ public class Renderer implements BlockRenderer
                     final double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
 
                     final Vector[] cam = camera.getLocAndDir(lookX, lookY, settings, block.randomSource);
-                    final Color rayColor = Raytrace.raytrace(scene, 5, cam[0], cam[1], Interior.SURROUNDING_INTERIOR);
+                    final Color rayColor = Raytrace.raytrace(scene, 5, cam[0], cam[1], null);
                     color = color.add(rayColor);
                 }
             }
