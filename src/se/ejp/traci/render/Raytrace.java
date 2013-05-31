@@ -6,7 +6,7 @@ import se.ejp.traci.model.Scene;
 import se.ejp.traci.model.light.PointLight;
 import se.ejp.traci.model.material.Finish;
 import se.ejp.traci.model.material.Interior;
-import se.ejp.traci.model.material.pigment.Pigment;
+import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.shape.primitive.Primitive;
 import se.ejp.traci.render.Point.Type;
 
@@ -15,21 +15,15 @@ public class Raytrace
     protected static Color raytrace(final Scene scene, final int depth, final Vector p, final Vector dir,
             final Interior inside)
     {
-        if (depth < 0)
+        if (depth <= 0)
         {
             return Color.BLACK;
         }
 
         final Ray ray = scene.rootShape.shootRay(p, dir);
 
-        if (ray == null)
-        {
-            return scene.backgroundColor;
-        }
-
-        final Point hit = ray.first();
-
-        if (hit == null)
+        final Point hit;
+        if (ray == null || (hit = ray.first()) == null)
         {
             return scene.backgroundColor;
         }
@@ -40,75 +34,89 @@ public class Raytrace
         final Vector hitPoint = p.add(dir.mul(dist));
         final Vector normal = obj.getNormalAt(hitPoint, dir);
 
-        final Pigment pigment = obj.getMaterial().texture.pigment;
-        final Finish finish = obj.getMaterial().texture.finish;
+        final Material material = obj.getMaterial();
+        final Finish finish = material.texture.finish;
 
-        final Color hitPointColor = pigment.getColor(hitPoint);
+        final Color hitPointColor = material.texture.pigment.getColor(hitPoint);
+
+        final boolean hasPhong = hitPointColor.transmit < 1.0;
+        final boolean hasRefraction = material.interior != Interior.OPAQUE && hitPointColor.transmit > 0.0;
+        final boolean hasReflection = hasRefraction || finish.reflectiveness > 0.0;
 
         /**
          * Ambient light
          */
-        Color colorTotal;
-        if (scene.ambientLight != null)
+        Color phongColor = Color.BLACK;
+        if (hasPhong)
         {
-            colorTotal = hitPointColor.mul(scene.ambientLight.getColor());
-        }
-        else
-        {
-            colorTotal = Color.BLACK;
-        }
-
-        for (final PointLight light : scene.pointLights)
-        {
-            final Vector toLight = light.getLocation().sub(hitPoint);
-            final Vector dirToLight = toLight.normalize();
-
-            /**
-             * Check if path to light is obstructed
-             */
-            final Ray lightRay2 = scene.rootShape.shootRay(hitPoint, dirToLight);
-            final double distToLight = toLight.length();
-            if (lightRay2 != null)
+            if (scene.ambientLight != null)
             {
-                final Point pp = lightRay2.first();
-                if (pp != null && pp.dist < distToLight)
+                phongColor = hitPointColor.mul(scene.ambientLight.getColor());
+            }
+
+            for (final PointLight light : scene.pointLights)
+            {
+                final Vector toLight = light.getLocation().sub(hitPoint);
+                final Vector dirToLight = toLight.normalize();
+
+                /**
+                 * Check if path to light is obstructed
+                 */
+                final Ray lightRay2 = scene.rootShape.shootRay(hitPoint, dirToLight);
+                final double distToLight = toLight.length();
+                if (lightRay2 != null)
                 {
-                    /* Light is obstructed */
-                    continue;
+                    final Point pp = lightRay2.first();
+                    if (pp != null && pp.dist < distToLight)
+                    {
+                        // Light is obstructed
+                        continue;
+                    }
+                }
+
+                final double distCoeff = 1.0 / (distToLight * distToLight);
+                final Color lightAtPoint = light.getColor().mul(distCoeff);
+
+                /**
+                 * Diffuse light
+                 */
+                final double c = Math.max(dirToLight.dot(normal), 0.0);
+                final Color colorDiff = hitPointColor.mul(lightAtPoint.mul(c * finish.diffCoeff));
+
+                phongColor = phongColor.add(colorDiff);
+
+                /**
+                 * Specular light
+                 */
+                final Vector lightRef = normal.mul(normal.mul(2).dot(dirToLight)).sub(dirToLight);
+                final double cosTheta = -lightRef.dot(dir);
+
+                if (cosTheta > 0)
+                {
+                    final double shininess = finish.shininess;
+                    final double specCoeff = finish.specCoeff;
+
+                    final Color colorSpec = light.getColor().mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
+                    phongColor = phongColor.add(colorSpec);
                 }
             }
+        }
 
-            final double distCoeff = 1.0 / (distToLight * distToLight);
-            final Color lightAtPoint = light.getColor().mul(distCoeff);
-
-            /**
-             * Diffuse light
-             */
-            final double c = Math.max(dirToLight.dot(normal), 0.0);
-            final Color colorDiff = hitPointColor.mul(lightAtPoint.mul(c * finish.diffCoeff));
-
-            colorTotal = colorTotal.add(colorDiff);
-
-            /**
-             * Specular light
-             */
-            final Vector lightRef = normal.mul(normal.mul(2).dot(dirToLight)).sub(dirToLight);
-            final double cosTheta = -lightRef.dot(dir);
-
-            if (cosTheta > 0)
-            {
-                final double shininess = finish.shininess;
-                final double specCoeff = finish.specCoeff;
-
-                final Color colorSpec = light.getColor().mul(Math.pow(cosTheta, shininess) * specCoeff * distCoeff);
-                colorTotal = colorTotal.add(colorSpec);
-            }
+        /**
+         * Reflection
+         */
+        Color reflectColor = null;
+        if (hasReflection)
+        {
+            final Vector reflectDir = dir.sub(normal.mul(dir.mul(2).dot(normal)));
+            reflectColor = raytrace(scene, depth - 1, hitPoint, reflectDir, inside);
         }
 
         /**
          * Refraction
          */
-        if (obj.getMaterial().interior != Interior.OPAQUE && hitPointColor.transmit > 0.0)
+        Color refractColor = null;
+        if (hasRefraction)
         {
             final Interior newInside;
             if (hit.type == Type.ENTER)
@@ -128,24 +136,34 @@ public class Raytrace
 
             if (refractDir != null)
             {
-                final Color colorRefract = raytrace(scene, depth - 1, hitPoint, refractDir, newInside);
-                colorTotal = colorTotal.add(colorRefract);
+                refractColor = raytrace(scene, depth - 1, hitPoint, refractDir, newInside);
+            }
+            else
+            {
+                // Total internal reflection
+                refractColor = Color.BLACK;
             }
         }
 
-        /**
-         * Reflection
-         */
-        final Vector rr = dir.sub(normal.mul(dir.mul(2).dot(normal)));
-        final Color colorReflect = raytrace(scene, depth - 1, hitPoint, rr, inside);
-        colorTotal = colorTotal.add(colorReflect.mul(finish.reflectiveness));
+        Color totalColor = phongColor;
+        if (hasReflection)
+        {
+            totalColor = totalColor.add(reflectColor.mul(finish.reflectiveness));
+            totalColor = totalColor.mul(1.0 - hitPointColor.transmit);
+
+            if (hasRefraction)
+            {
+                // TODO: weight in reflectColor according to fresnel's law
+                totalColor = totalColor.add(refractColor.mul(hitPointColor.transmit));
+            }
+        }
 
         if (inside != null)
         {
-            colorTotal = inside.filterThrough(colorTotal, dist);
+            totalColor = inside.filterThrough(totalColor, dist);
         }
 
-        return colorTotal;
+        return totalColor;
     }
 
     private static Vector refractDir(final Vector normal, final Vector incident, final Interior i1, final Interior i2)
