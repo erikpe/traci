@@ -179,7 +179,7 @@ public class Renderer implements BlockRenderer
                     final double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
 
                     final Vector[] cam = camera.getLocAndDir(lookX, lookY, settings, block.randomSource);
-                    final Color rayColor = Raytrace.raytrace(scene, 5, cam[0], cam[1], null);
+                    final Color rayColor = Raytrace.raytrace(scene, 10, cam[0], cam[1], null);
                     color = color.add(rayColor);
                 }
             }

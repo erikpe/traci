@@ -8,7 +8,6 @@ import se.ejp.traci.model.material.Finish;
 import se.ejp.traci.model.material.Interior;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.shape.primitive.Primitive;
-import se.ejp.traci.render.Point.Type;
 
 public class Raytrace
 {
@@ -115,34 +114,45 @@ public class Raytrace
         /**
          * Refraction
          */
-        Color refractColor = null;
+        Color fresnelColor = null;
         if (hasRefraction)
         {
+            final Vector refractDir;
             final Interior newInside;
-            if (hit.type == Type.ENTER)
+
+            switch (hit.type)
             {
+            case ENTER:
                 newInside = obj.getMaterial().interior;
-            }
-            else if (hit.type == Type.INTERSECT)
-            {
-                newInside = inside;
-            }
-            else // Type.LEAVE
-            {
+                refractDir = refractDir(normal, dir, inside, newInside);
+                break;
+
+            case LEAVE:
                 newInside = null;
+                refractDir = refractDir(normal, dir, inside, newInside);
+                break;
+
+            default: // INTERSECT
+                newInside = inside;
+                refractDir = dir;
+                break;
             }
 
-            final Vector refractDir = refractDir(normal, dir, inside, newInside);
+            final double reflectWeight = reflectance(normal, dir, inside, obj.getMaterial().interior);
+            final double refractWeight = (1.0 - reflectWeight);
 
+            Color refractColor = Color.BLACK;
             if (refractDir != null)
             {
+                //return Color.YELLOW.mul(reflectWeight);
                 refractColor = raytrace(scene, depth - 1, hitPoint, refractDir, newInside);
             }
-            else
-            {
-                // Total internal reflection
-                refractColor = Color.BLACK;
-            }
+//            else
+//            {
+//                return Color.RED;
+//            }
+
+            fresnelColor = reflectColor.mul(reflectWeight).add(refractColor.mul(refractWeight));
         }
 
         Color totalColor = phongColor;
@@ -150,12 +160,11 @@ public class Raytrace
         {
             totalColor = totalColor.add(reflectColor.mul(finish.reflectiveness));
             totalColor = totalColor.mul(1.0 - hitPointColor.transmit);
+        }
 
-            if (hasRefraction)
-            {
-                // TODO: weight in reflectColor according to fresnel's law
-                totalColor = totalColor.add(refractColor.mul(hitPointColor.transmit));
-            }
+        if (hasRefraction)
+        {
+            totalColor = totalColor.add(fresnelColor.mul(hitPointColor.transmit));
         }
 
         if (inside != null)
@@ -165,6 +174,26 @@ public class Raytrace
 
         return totalColor;
     }
+
+    private static double reflectance(final Vector normal, final Vector incident, final Interior i1, final Interior i2)
+    {
+        final double n1 = (i1 == null ? 1.0 : i1.ior);
+        final double n2 = (i2 == null ? 1.0 : i2.ior);
+
+        final double n = n1 / n2;
+        final double cosI = -normal.dot(incident);
+        final double sinT2 = n * n * (1.0 - cosI * cosI);
+
+        if (sinT2 > 1.0)
+        {
+            return 1.0; // Total internal reflection
+        }
+
+        final double cosT = Math.sqrt(1.0 - sinT2);
+        final double rOrth = (n1 * cosI - n2 * cosT) / (n1 * cosI + n2 * cosT);
+        final double rPar = (n2 * cosI - n1 * cosT) / (n2 * cosI + n1 * cosT);
+        return (rOrth * rOrth + rPar * rPar) / 2.0;
+}
 
     private static Vector refractDir(final Vector normal, final Vector incident, final Interior i1, final Interior i2)
     {

@@ -1,6 +1,5 @@
 package se.ejp.traci.render;
 
-import se.ejp.traci.model.shape.Shape;
 import se.ejp.traci.model.shape.primitive.Primitive;
 import se.ejp.traci.render.Point.Type;
 
@@ -40,7 +39,7 @@ public class Ray
         {
             final Point p = points[i];
 
-            if (p.dist > Shape.EPSILON)
+            if (p.dist > 0.00001)
             {
                 return p;
             }
