@@ -36,6 +36,7 @@ import se.ejp.traci.model.shape.csg.Difference;
 import se.ejp.traci.model.shape.csg.Intersection;
 import se.ejp.traci.model.shape.csg.Union;
 import se.ejp.traci.model.shape.primitive.Box;
+import se.ejp.traci.model.shape.primitive.Cone;
 import se.ejp.traci.model.shape.primitive.Cylinder;
 import se.ejp.traci.model.shape.primitive.Plane;
 import se.ejp.traci.model.shape.primitive.Sphere;
@@ -50,6 +51,7 @@ public class ObjectNode implements TraciNode
         PLANE         ("plane",        Plane.class,           "make"),
         SPHERE        ("sphere",       Sphere.class,          "make"),
         TORUS         ("torus",        Torus.class,           "make"),
+        CONE          ("cone",         Cone.class,            "make"),
         UNION         ("union",        Union.class,           "make"),
         DIFFERENCE    ("difference",   Difference.class,      "make"),
         INTERSECTION  ("intersection", Intersection.class,    "make"),

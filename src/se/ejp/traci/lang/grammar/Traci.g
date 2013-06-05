@@ -293,7 +293,7 @@ FOR : 'for';
 IN : 'in';
 
 PRIMITIVE_SHAPE
-    : ('box' | 'cylinder' | 'plane' | 'sphere' | 'torus')
+    : ('box' | 'cylinder' | 'plane' | 'sphere' | 'torus' | 'cone')
     ;
 
 CSG_SHAPE

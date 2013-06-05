@@ -20,9 +20,9 @@ public class Box extends Primitive
         final double ySize = Math.abs(v1.y() - v0.y());
         final double zSize = Math.abs(v1.z() - v0.z());
 
-        final double x = Math.min(v0.x(), v1.x());
-        final double y = Math.min(v0.y(), v1.y());
-        final double z = Math.min(v0.z(), v1.z());
+        final double x = min(v0.x(), v1.x());
+        final double y = min(v0.y(), v1.y());
+        final double z = min(v0.z(), v1.z());
 
         final Box box = make();
 

@@ -40,7 +40,6 @@ public class Sphere extends Primitive
         final double b = (p.dot(p) - 1) / c;
 
         final double d = (a * a) / 4 - b;
-
         if (d > 0)
         {
             final double sqrtD = Math.sqrt(d);

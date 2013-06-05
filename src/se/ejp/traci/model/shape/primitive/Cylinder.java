@@ -70,13 +70,14 @@ public class Cylinder extends Primitive
         final double a = (2 * px * dirx + 2 * pz * dirz) / g;
         final double b = (px * px + pz * pz - 1) / g;
 
-        if ((a * a) / 4 - b > 0)
+        final double d = (a * a) / 4.0 - b;
+        if (d > 0)
         {
             final double ma2 = -a / 2;
-            final double sq = Math.sqrt((a * a) / 4 - b);
+            final double root = Math.sqrt(d);
 
-            final double t0 = ma2 - sq;
-            final double t1 = ma2 + sq;
+            final double t0 = ma2 - root;
+            final double t1 = ma2 + root;
 
             near = max(near, t0);
             far = min(far, t1);
