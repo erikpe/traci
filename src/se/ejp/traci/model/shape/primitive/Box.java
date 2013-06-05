@@ -35,25 +35,7 @@ public class Box extends Primitive
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {
-        final double absX = Math.abs(p.x() - 0.5);
-        final double absY = Math.abs(p.y() - 0.5);
-        final double absZ = Math.abs(p.z() - 0.5);
-
-        if (absX > absY)
-        {
-            if (absX > absZ)
-            {
-                return Vector.UNIT_X;
-            }
-
-            return Vector.UNIT_Z;
-        }
-        else if (absY > absZ)
-        {
-            return Vector.UNIT_Y;
-        }
-
-        return Vector.UNIT_Z;
+        throw new UnsupportedOperationException("Box object should always have precalculated normal");
     }
 
     /**
@@ -72,28 +54,85 @@ public class Box extends Primitive
 
         final double x0 = -px / dirx;
         final double x1 = (1.0 - px) / dirx;
-
-        double near = min(x0, x1);
-        double far = max(x0, x1);
+        final double xMin = min(x0, x1);
+        final double xMax = max(x0, x1);
 
         final double y0 = -py / diry;
         final double y1 = (1.0 - py) / diry;
-
-        near = max(near, min(y0, y1));
-        far = min(far, max(y0, y1));
+        final double yMin = min(y0, y1);
+        final double yMax = max(y0, y1);
 
         final double z0 = -pz / dirz;
         final double z1 = (1.0 - pz) / dirz;
+        final double zMin = min(z0, z1);
+        final double zMax = max(z0, z1);
 
-        near = max(near, min(z0, z1));
-        far = min(far, max(z0, z1));
+        final double near;
+        final Vector n0;
+
+        if (xMin > yMin)
+        {
+            if (zMin > xMin)
+            {
+                near = zMin;
+                n0 = Vector.UNIT_Z;
+            }
+            else
+            {
+                near = xMin;
+                n0 = Vector.UNIT_X;
+            }
+        }
+        else
+        {
+            if (zMin > yMin)
+            {
+                near = zMin;
+                n0 = Vector.UNIT_Z;
+            }
+            else
+            {
+                near = yMin;
+                n0 = Vector.UNIT_Y;
+            }
+        }
+
+        final double far;
+        final Vector n1;
+
+        if (xMax < yMax)
+        {
+            if (zMax < xMax)
+            {
+                far = zMax;
+                n1 = Vector.UNIT_Z;
+            }
+            else
+            {
+                far = xMax;
+                n1 = Vector.UNIT_X;
+            }
+        }
+        else
+        {
+            if (zMax < yMax)
+            {
+                far = zMax;
+                n1 = Vector.UNIT_Z;
+            }
+            else
+            {
+                far = yMax;
+                n1 = Vector.UNIT_Y;
+            }
+        }
 
         if (far > -EPSILON && near < far)
         {
             final Ray ray = Ray.make();
 
-            ray.add(near, this, Type.ENTER, null);
-            ray.add(far, this, Type.LEAVE, null);
+            ray.add(near, this, Type.ENTER, n0);
+            ray.add(far, this, Type.LEAVE, n1);
 
             return ray;
         }

@@ -16,7 +16,7 @@ public class Plane extends Primitive
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {
-        return Vector.UNIT_Y;
+        throw new UnsupportedOperationException("Plane object should always have precalculated normal");
     }
 
     /**
