@@ -1,5 +1,6 @@
 package se.ejp.traci.render;
 
+import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.shape.primitive.Primitive;
 
 public class Point
@@ -14,17 +15,19 @@ public class Point
     public final double dist;
     public final Primitive obj;
     public final Type type;
+    public final Vector normal;
 
-    private Point(final double dist, final Primitive obj, final Type type)
+    private Point(final double dist, final Primitive obj, final Type type, final Vector normal)
     {
         this.dist = dist;
         this.obj = obj;
         this.type = type;
+        this.normal = normal;
     }
 
-    public static Point make(final double dist, final Primitive obj, final Type type)
+    public static Point make(final double dist, final Primitive obj, final Type type, final Vector normal)
     {
-        return new Point(dist, obj, type);
+        return new Point(dist, obj, type, normal);
     }
 
     public Point invert()
@@ -38,7 +41,7 @@ public class Point
         default: /* INTERSECT */ break;
         }
 
-        return Point.make(dist, obj, newType);
+        return Point.make(dist, obj, newType, normal);
     }
 
     @Override

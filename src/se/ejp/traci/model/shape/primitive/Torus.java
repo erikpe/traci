@@ -120,8 +120,8 @@ public class Torus extends Primitive
         {
             ray = Ray.make();
 
-            ray.add(roots[0], this, Type.ENTER);
-            ray.add(roots[1], this, Type.LEAVE);
+            ray.add(roots[0], this, Type.ENTER, null);
+            ray.add(roots[1], this, Type.LEAVE, null);
         }
 
         if (roots.length == 4 && roots[3] > -EPSILON)
@@ -131,8 +131,8 @@ public class Torus extends Primitive
                 ray = Ray.make();
             }
 
-            ray.add(roots[2], this, Type.ENTER);
-            ray.add(roots[3], this, Type.LEAVE);
+            ray.add(roots[2], this, Type.ENTER, null);
+            ray.add(roots[3], this, Type.LEAVE, null);
         }
 
         return ray;

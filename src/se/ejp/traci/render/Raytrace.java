@@ -31,7 +31,7 @@ public class Raytrace
         final Primitive obj = hit.obj;
 
         final Vector hitPoint = p.add(dir.mul(dist));
-        final Vector normal = obj.getNormalAt(hitPoint, dir);
+        final Vector normal = obj.getNormalAt(hitPoint, dir, hit.normal);
 
         final Material material = obj.getMaterial();
         final Finish finish = material.texture.finish;

@@ -34,9 +34,14 @@ public abstract class Primitive extends Shape
 
     protected abstract Vector primitiveGetNormalAt(final Vector p);
 
-    public Vector getNormalAt(final Vector p, final Vector dir)
+    public Vector getNormalAt(final Vector p, final Vector dir, final Vector precalculatedNormal)
     {
-        Vector normal = primitiveGetNormalAt(transformation.pointInv(p));
+        Vector normal = precalculatedNormal;
+        if (normal == null)
+        {
+            normal = primitiveGetNormalAt(transformation.pointInv(p));
+        }
+
         normal = transformation.normal(normal).normalize();
 
         if (dir.dot(normal) > 0)

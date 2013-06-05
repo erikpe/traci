@@ -1,5 +1,6 @@
 package se.ejp.traci.render;
 
+import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.shape.primitive.Primitive;
 import se.ejp.traci.render.Point.Type;
 
@@ -107,14 +108,14 @@ public class Ray
         return points[size - 1].dist;
     }
 
-    public void add(final double dist, final Primitive obj, final Type type)
+    public void add(final double dist, final Primitive obj, final Type type, final Vector normal)
     {
         if (size == maxSize)
         {
             increaseSize();
         }
 
-        points[size++] = Point.make(dist, obj, type);
+        points[size++] = Point.make(dist, obj, type, normal);
     }
 
     private void add(final Point p)

@@ -30,19 +30,7 @@ public class Cylinder extends Primitive
     @Override
     public Vector primitiveGetNormalAt(final Vector p)
     {
-        final double x = p.x();
-        final double y = p.y();
-        final double z = p.z();
-
-        final double dist = Math.sqrt(x * x + z * z);
-        final double h = 2.0 * Math.abs(y - 0.5);
-
-        if (h > dist)
-        {
-            return Vector.UNIT_Y;
-        }
-
-        return Vector.make(x, 0, z);
+        return Vector.make(p.x(), 0, p.z());
     }
 
     /**
@@ -79,15 +67,26 @@ public class Cylinder extends Primitive
             final double t0 = ma2 - root;
             final double t1 = ma2 + root;
 
-            near = max(near, t0);
-            far = min(far, t1);
+            Vector n0 = Vector.UNIT_Y;
+            if (t0 > near)
+            {
+                near = t0;
+                n0 = null;
+            }
+
+            Vector n1 = Vector.UNIT_Y;
+            if (t1 < far)
+            {
+                far = t1;
+                n1 = null;
+            }
 
             if (far > -EPSILON && near < far)
             {
                 final Ray ray = Ray.make();
 
-                ray.add(near, this, Type.ENTER);
-                ray.add(far, this, Type.LEAVE);
+                ray.add(near, this, Type.ENTER, n0);
+                ray.add(far, this, Type.LEAVE, n1);
 
                 return ray;
             }

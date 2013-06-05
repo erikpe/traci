@@ -92,8 +92,8 @@ public class Box extends Primitive
         {
             final Ray ray = Ray.make();
 
-            ray.add(near, this, Type.ENTER);
-            ray.add(far, this, Type.LEAVE);
+            ray.add(near, this, Type.ENTER, null);
+            ray.add(far, this, Type.LEAVE, null);
 
             return ray;
         }

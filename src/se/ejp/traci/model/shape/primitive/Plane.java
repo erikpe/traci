@@ -30,7 +30,7 @@ public class Plane extends Primitive
         if (dist > -EPSILON)
         {
             final Ray ray = Ray.make();
-            ray.add(dist, this, Type.INTERSECT);
+            ray.add(dist, this, Type.INTERSECT, Vector.UNIT_Y);
             return ray;
         }
 

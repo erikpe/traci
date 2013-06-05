@@ -9,11 +9,13 @@ public class Cone extends Primitive
 {
     private final double k, lower, upper;
 
-    private Cone(final double k, final double lower, final double upper)
+    private Cone(final Vector v0, final Double r0, final Vector v1, final Double r1)
     {
-        this.k = k;
-        this.lower = lower;
-        this.upper = upper;
+        final double length = v1.sub(v0).length();
+
+        this.lower = r0 * (length / (r1 - r0));
+        this.upper = lower + length;
+        this.k = r1 / upper;
     }
 
     public static Cone make(Vector v0, Double r0, Vector v1, Double r1)
@@ -29,14 +31,9 @@ public class Cone extends Primitive
             r1 = rTmp;
         }
 
-        final double length = v1.sub(v0).length();
-        final double lower = r0 * (length / (r1 - r0));
-        final double upper = lower + length;
-        final double k = r1 / upper;
+        final Cone cone = new Cone(v0, r0, v1, r1);
 
-        final Cone cone = new Cone(k, lower, upper);
-
-        cone.transform(Transformations.translate(0.0, -lower, 0.0));
+        cone.transform(Transformations.translate(0.0, -cone.lower, 0.0));
         cone.transform(Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0)));
         cone.transform(Transformations.translate(v0));
 
@@ -47,16 +44,9 @@ public class Cone extends Primitive
     protected Vector primitiveGetNormalAt(final Vector p)
     {
         final double x = p.x();
-        final double y = p.y();
         final double z = p.z();
 
-        double up = -k * Math.sqrt(x * x + z * z);
-        if (y < 0.0)
-        {
-            up = -up;
-        }
-
-        return Vector.make(x, 0, z);
+        return Vector.make(x, -k * Math.sqrt(x * x + z * z), z);
     }
 
     @Override
@@ -89,15 +79,26 @@ public class Cone extends Primitive
             final double t0 = ma2 - root;
             final double t1 = ma2 + root;
 
-            near = max(near, t0);
-            far = min(far, t1);
+            Vector n0 = Vector.UNIT_Y;
+            if (t0 > near)
+            {
+                near = t0;
+                n0 = null;
+            }
+
+            Vector n1 = Vector.UNIT_Y;
+            if (t1 < far)
+            {
+                far = t1;
+                n1 = null;
+            }
 
             if (far > -EPSILON && near < far)
             {
                 final Ray ray = Ray.make();
 
-                ray.add(t0, this, Type.ENTER);
-                ray.add(t1, this, Type.LEAVE);
+                ray.add(near, this, Type.ENTER, n0);
+                ray.add(far, this, Type.LEAVE, n1);
 
                 return ray;
             }
