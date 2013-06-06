@@ -345,11 +345,11 @@ FLOAT
     ;
 
 COMMENT
-    : '//' ~('\n'|'\r')* '\r'? '\n' { $channel=HIDDEN; }
-    | '/*' (options { greedy=false; } : .)* '*/' { $channel=HIDDEN; }
+    : '//' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
+    | '/*' (options {greedy=false;} : .)* '*/' {$channel=HIDDEN;}
     ;
 
-WS  : (' ' | '\t' | '\r' | '\n')+ { $channel=HIDDEN; }
+WS  : (' ' | '\t' | '\r' | '\n')+ {$channel=HIDDEN;}
     ;
 
 fragment
@@ -363,5 +363,5 @@ QSTRING
 
 PPLINE
     : '#line' WS+ row=INT WS QSTRING WS action=INT
-        { $channel=HIDDEN; ppLine($row.text, ParserUtilities.unquoteQstring($QSTRING.text), $action.text); }
+        {$channel=HIDDEN; ppLine($row.text, ParserUtilities.unquoteQstring($QSTRING.text), $action.text);}
     ;

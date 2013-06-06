@@ -54,88 +54,88 @@ node = new BlockNode(functionsThisScope);
 @after {
 functionsThisScope = functionsOuterScope;
 }
-    : ^(BLOCK ( statement    { $node.addStatement($statement.node); }
-              | function_def { functionsThisScope.put($function_def.node.id, $function_def.node); } )*)
+    : ^(BLOCK ( statement    {$node.addStatement($statement.node);}
+              | function_def {functionsThisScope.put($function_def.node.id, $function_def.node);} )*)
     ;
 
 function_def returns [FunctionNode node]
     : ^(DEF ID function_def_args block)
-        { $node = new FunctionNode($ID.text, $function_def_args.argIDs, $block.node); }
+        {$node = new FunctionNode($ID.text, $function_def_args.argIDs, $block.node);}
     ;
 
 function_def_args returns [List<String> argIDs]
 @init {
 argIDs = new ArrayList<String>();
 }
-    : ^(ARGS (ID { $argIDs.add($ID.text); } )*)
+    : ^(ARGS (ID {$argIDs.add($ID.text);} )*)
     ;
 
 function_call_args returns [List<TraciNode> nodes]
 @init {
 nodes = new ArrayList<TraciNode>();
 }
-    : ^(ARGS (expr { $nodes.add($expr.node); })*)
+    : ^(ARGS (expr {$nodes.add($expr.node);})*)
     ;
 
 statement returns [TraciNode node]
     : expr
-        { $node = $expr.node; }
+        {$node = $expr.node;}
     | ^(RETURN expr)
-        { $node = new ReturnNode($expr.node); }
+        {$node = new ReturnNode($expr.node);}
     | ^(IF expr a=block b=block?)
-        { $node = new IfElseNode($expr.node, $a.node, $b.node, $IF.token); }
+        {$node = new IfElseNode($expr.node, $a.node, $b.node, $IF.token);}
     | ^(WHILE expr block)
-        { $node = new WhileNode($expr.node, $block.node, $WHILE.token); }
+        {$node = new WhileNode($expr.node, $block.node, $WHILE.token);}
     | ^(FOR ID c=expr d=expr block)
-        { $node = new ForNode($ID.text, $c.node, $d.node, $block.node, $FOR.token); }
+        {$node = new ForNode($ID.text, $c.node, $d.node, $block.node, $FOR.token);}
     | ^(GLOBAL_ASSIGN ID expr)
-        { $node = new AssignNode($ID.text, $expr.node, true); }
+        {$node = new AssignNode($ID.text, $expr.node, true);}
     | ^(ASSIGN ID expr)
-        { $node = new AssignNode($ID.text, $expr.node, false); }
+        {$node = new AssignNode($ID.text, $expr.node, false);}
     ;
 
 expr returns [TraciNode node]
-    : ^(op=PLUS_OP a=expr b=expr)    { $node = new BinaryOpNode(Op.BINARY_ADD, $a.node, $b.node, $op.token); }
-    | ^(op=MINUS_OP a=expr b=expr)   { $node = new BinaryOpNode(Op.BINARY_SUB, $a.node, $b.node, $op.token); }
-    | ^(op=MUL_OP a=expr b=expr)     { $node = new BinaryOpNode(Op.BINARY_MUL, $a.node, $b.node, $op.token); }
-    | ^(op=DIV_OP a=expr b=expr)     { $node = new BinaryOpNode(Op.BINARY_DIV, $a.node, $b.node, $op.token); }
-    | ^(op=LT_OP a=expr b=expr)      { $node = new BinaryOpNode(Op.COMPARE_LT, $a.node, $b.node, $op.token); }
-    | ^(op=LTE_OP a=expr b=expr)     { $node = new BinaryOpNode(Op.COMPARE_LTE, $a.node, $b.node, $op.token); }
-    | ^(op=GT_OP a=expr b=expr)      { $node = new BinaryOpNode(Op.COMPARE_GT, $a.node, $b.node, $op.token); }
-    | ^(op=GTE_OP a=expr b=expr)     { $node = new BinaryOpNode(Op.COMPARE_GTE, $a.node, $b.node, $op.token); }
-    | ^(op=EQ_OP a=expr b=expr)      { $node = new BinaryOpNode(Op.COMPARE_EQ, $a.node, $b.node, $op.token); }
-    | ^(op=NEQ_OP a=expr b=expr)     { $node = new BinaryOpNode(Op.COMPARE_NEQ, $a.node, $b.node, $op.token); }
-    | ^(UNARY_OP op=PLUS_OP a=expr)  { $node = new UnaryOpNode(Op.UNARY_PLUS, $a.node, $op.token); }
-    | ^(UNARY_OP op=MINUS_OP a=expr) { $node = new UnaryOpNode(Op.UNARY_NEG, $a.node, $op.token); }
-    | ^(UNARY_OP op=NOT_OP a=expr)   { $node = new UnaryOpNode(Op.UNARY_NOT, $a.node, $op.token); }
-    | ^(REF ID block?)               { $node = new RefNode($ID.text, $block.node, $ID.token); }
+    : ^(op=PLUS_OP a=expr b=expr)    {$node = new BinaryOpNode(Op.BINARY_ADD, $a.node, $b.node, $op.token);}
+    | ^(op=MINUS_OP a=expr b=expr)   {$node = new BinaryOpNode(Op.BINARY_SUB, $a.node, $b.node, $op.token);}
+    | ^(op=MUL_OP a=expr b=expr)     {$node = new BinaryOpNode(Op.BINARY_MUL, $a.node, $b.node, $op.token);}
+    | ^(op=DIV_OP a=expr b=expr)     {$node = new BinaryOpNode(Op.BINARY_DIV, $a.node, $b.node, $op.token);}
+    | ^(op=LT_OP a=expr b=expr)      {$node = new BinaryOpNode(Op.COMPARE_LT, $a.node, $b.node, $op.token);}
+    | ^(op=LTE_OP a=expr b=expr)     {$node = new BinaryOpNode(Op.COMPARE_LTE, $a.node, $b.node, $op.token);}
+    | ^(op=GT_OP a=expr b=expr)      {$node = new BinaryOpNode(Op.COMPARE_GT, $a.node, $b.node, $op.token);}
+    | ^(op=GTE_OP a=expr b=expr)     {$node = new BinaryOpNode(Op.COMPARE_GTE, $a.node, $b.node, $op.token);}
+    | ^(op=EQ_OP a=expr b=expr)      {$node = new BinaryOpNode(Op.COMPARE_EQ, $a.node, $b.node, $op.token);}
+    | ^(op=NEQ_OP a=expr b=expr)     {$node = new BinaryOpNode(Op.COMPARE_NEQ, $a.node, $b.node, $op.token);}
+    | ^(UNARY_OP op=PLUS_OP a=expr)  {$node = new UnaryOpNode(Op.UNARY_PLUS, $a.node, $op.token);}
+    | ^(UNARY_OP op=MINUS_OP a=expr) {$node = new UnaryOpNode(Op.UNARY_NEG, $a.node, $op.token);}
+    | ^(UNARY_OP op=NOT_OP a=expr)   {$node = new UnaryOpNode(Op.UNARY_NOT, $a.node, $op.token);}
+    | ^(REF ID block?)               {$node = new RefNode($ID.text, $block.node, $ID.token);}
     | ^(FUNCALL ID function_call_args block?)
-        { $node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node, $ID.token); }
+        {$node = new FunctionCallNode($ID.text, $function_call_args.nodes, $block.node, $ID.token);}
     | ^(VECTOR LBRACKET function_call_args)
-        { $node = new ObjectNode("vector[]", $function_call_args.nodes, null, $LBRACKET.token); }
+        {$node = new ObjectNode("vector[]", $function_call_args.nodes, null, $LBRACKET.token);}
     | ^(COLOR function_call_args)
-        { $node = new ObjectNode($COLOR.text, $function_call_args.nodes, null, $COLOR.token); }
+        {$node = new ObjectNode($COLOR.text, $function_call_args.nodes, null, $COLOR.token);}
     | ^(PRIMITIVE_SHAPE function_call_args block?)
-        { $node = new ObjectNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token); }
+        {$node = new ObjectNode($PRIMITIVE_SHAPE.text, $function_call_args.nodes, $block.node, $PRIMITIVE_SHAPE.token);}
     | ^(CSG_SHAPE block?)
-        { $node = new ObjectNode($CSG_SHAPE.text, Collections.<TraciNode>emptyList(), $block.node, $CSG_SHAPE.token); }
+        {$node = new ObjectNode($CSG_SHAPE.text, Collections.<TraciNode>emptyList(), $block.node, $CSG_SHAPE.token);}
     | ^(BBOX function_call_args block?)
-        { $node = new ObjectNode($BBOX.text, $function_call_args.nodes, $block.node, $BBOX.token); }
+        {$node = new ObjectNode($BBOX.text, $function_call_args.nodes, $block.node, $BBOX.token);}
     | ^(TRANSFORMATION function_call_args block?)
-    	{ $node = new ObjectNode($TRANSFORMATION.text, $function_call_args.nodes, $block.node, $TRANSFORMATION.token); }
+    	{$node = new ObjectNode($TRANSFORMATION.text, $function_call_args.nodes, $block.node, $TRANSFORMATION.token);}
     | ^(LIGHT function_call_args block?)
-        { $node = new ObjectNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token); }
+        {$node = new ObjectNode($LIGHT.text, $function_call_args.nodes, $block.node, $LIGHT.token);}
     | ^(TEXTURE block?)
-        { $node = new ObjectNode($TEXTURE.text, Collections.<TraciNode>emptyList(), $block.node, $TEXTURE.token); }
+        {$node = new ObjectNode($TEXTURE.text, Collections.<TraciNode>emptyList(), $block.node, $TEXTURE.token);}
     | ^(PIGMENT function_call_args block?)
-        { $node = new ObjectNode($PIGMENT.text, $function_call_args.nodes, $block.node, $PIGMENT.token); }
+        {$node = new ObjectNode($PIGMENT.text, $function_call_args.nodes, $block.node, $PIGMENT.token);}
     | ^(FINISH function_call_args)
-        { $node = new ObjectNode($FINISH.text, $function_call_args.nodes, null, $FINISH.token); }
+        {$node = new ObjectNode($FINISH.text, $function_call_args.nodes, null, $FINISH.token);}
     | ^(INTERIOR function_call_args)
-        { $node = new ObjectNode($INTERIOR.text, $function_call_args.nodes, null, $INTERIOR.token); }
+        {$node = new ObjectNode($INTERIOR.text, $function_call_args.nodes, null, $INTERIOR.token);}
     | ^(CAMERA function_call_args block?)
-        { $node = new ObjectNode($CAMERA.text, $function_call_args.nodes, $block.node, $CAMERA.token); }
-    | INT     { $node = new ConstNode(new TraciValue(Double.valueOf($INT.text))); }
-    | FLOAT   { $node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text))); }
-    | QSTRING { $node = new ConstNode(new TraciValue(ParserUtilities.unquoteQstring($QSTRING.text))); }
+        {$node = new ObjectNode($CAMERA.text, $function_call_args.nodes, $block.node, $CAMERA.token);}
+    | INT     {$node = new ConstNode(new TraciValue(Double.valueOf($INT.text)));}
+    | FLOAT   {$node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text)));}
+    | QSTRING {$node = new ConstNode(new TraciValue(ParserUtilities.unquoteQstring($QSTRING.text)));}
     ;
