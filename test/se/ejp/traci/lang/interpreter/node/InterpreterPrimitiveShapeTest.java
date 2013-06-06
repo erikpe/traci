@@ -15,6 +15,7 @@ import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.shape.primitive.Box;
+import se.ejp.traci.model.shape.primitive.Cone;
 import se.ejp.traci.model.shape.primitive.Cylinder;
 import se.ejp.traci.model.shape.primitive.Plane;
 import se.ejp.traci.model.shape.primitive.Primitive;
@@ -149,5 +150,41 @@ public class InterpreterPrimitiveShapeTest extends InterpreterObjectBase
         runTestsFail(InterpreterIllegalArguments.class, "torus", null, null);
         runTestsFail(InterpreterIllegalArguments.class, "torus", "[1.0, 10.0, 100.0]", null);
         runTestsFail(InterpreterIllegalArguments.class, "torus", ".23, 1<2", null);
+    }
+
+    @Test
+    public void testCone() throws RecognitionException, InterpreterRuntimeException
+    {
+        final String args0 = "[1,2,3], .5, [4,5,6], .75";
+        final String args1 = "[4,5,6], .75, [1,2,3], .5";
+        final String modifiers = "translate([10.0, 20.0, 30.0]); scale(.5);";
+
+        final Vector v0 = Vector.make(1.0, 2.0, 3.0);
+        final Vector v1 = Vector.make(4.0, 5.0, 6.0);
+        final double length = v1.sub(v0).length();
+        final double lower = .5 * (length / (.75 - .5));
+        final double upper = lower + length;
+        final double k = .75 / upper;
+
+        final Transformation tr0 = Transformations.translate(0.0, -lower, 0.0);
+        final Transformation tr1 = Transformations.rotVecToVec(Vector.UNIT_Y, v1.sub(v0));
+        final Transformation tr2 = Transformations.translate(v0);
+        final Transformation tr3 = Transformations.translate(10.0, 20.0, 30.0);
+        final Transformation tr4 = Transformations.scale(.5);
+
+        final List<Cone> res = new ArrayList<Cone>();
+        res.addAll(runTests("cone", Cone.class, args0, null,      tr0.compose(tr1).compose(tr2)));
+        res.addAll(runTests("cone", Cone.class, args0, modifiers, tr0.compose(tr1).compose(tr2).compose(tr3).compose(tr4)));
+        res.addAll(runTests("cone", Cone.class, args1, null,      tr0.compose(tr1).compose(tr2)));
+        res.addAll(runTests("cone", Cone.class, args1, modifiers, tr0.compose(tr1).compose(tr2).compose(tr3).compose(tr4)));
+        for (final Cone cone : res)
+        {
+            assertEquals(lower, cone.lower(), 0);
+            assertEquals(upper, cone.upper(), 0);
+            assertEquals(k, cone.k(), 0);
+        }
+
+        runTestsFail(InterpreterIllegalArguments.class, "cone", null, null);
+        runTestsFail(InterpreterIllegalArguments.class, "cone", ".5, [1,2,3], .75, [4,5,6]", null);
     }
 }

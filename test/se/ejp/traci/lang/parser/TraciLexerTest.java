@@ -182,7 +182,7 @@ public class TraciLexerTest extends TraciLexerBase
     @Test
     public void testPrimitiveShape()
     {
-        testTokens(new String[] { "box", "cylinder", "plane", "sphere", "torus" }, TraciLexer.PRIMITIVE_SHAPE);
+        testTokens(new String[] { "box", "cylinder", "plane", "sphere", "torus", "cone" }, TraciLexer.PRIMITIVE_SHAPE);
     }
 
     @Test

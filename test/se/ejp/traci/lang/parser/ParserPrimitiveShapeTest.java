@@ -157,4 +157,10 @@ public class ParserPrimitiveShapeTest extends TraciParserBase
     {
         runTest("torus");
     }
+
+    @Test
+    public void testCone() throws RecognitionException
+    {
+        runTest("cone");
+    }
 }
