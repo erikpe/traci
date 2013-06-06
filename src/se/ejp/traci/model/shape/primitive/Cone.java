@@ -76,8 +76,15 @@ public class Cone extends Primitive
             final double ma2 = -a / 2;
             final double root = Math.sqrt(d);
 
-            final double t0 = ma2 - root;
-            final double t1 = ma2 + root;
+            double t0 = ma2 - root;
+            double t1 = ma2 + root;
+
+            if ((py + t0 * diry > 0.0) != (py + t1 * diry > 0.0))
+            {
+                final double tmp = t0;
+                t0 = t1;
+                t1 = tmp;
+            }
 
             Vector n0 = Vector.UNIT_Y;
             if (t0 > near)
@@ -105,5 +112,20 @@ public class Cone extends Primitive
         }
 
         return null;
+    }
+
+    public double k()
+    {
+        return k;
+    }
+
+    public double lower()
+    {
+        return lower;
+    }
+
+    public double upper()
+    {
+        return upper;
     }
 }
