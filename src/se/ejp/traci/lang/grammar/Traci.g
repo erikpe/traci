@@ -129,7 +129,7 @@ block
     ;
 
 statement
-    : IF LPAR expr RPAR block (ELSE block)?    -> ^(IF expr block block?)
+    : if_statement
     | WHILE LPAR expr RPAR block               -> ^(WHILE expr block)
     | FOR LPAR ID IN expr DOTS expr RPAR block -> ^(FOR ID expr expr block)
     | (ID ASSIGN) => assign
@@ -137,6 +137,10 @@ statement
     | expr SEMICOLON!
     | RETURN expr SEMICOLON                    -> ^(RETURN expr)
     | GLOBAL ID ASSIGN expr SEMICOLON          -> ^(GLOBAL_ASSIGN ID expr)
+    ;
+
+if_statement
+    : IF LPAR expr RPAR block (ELIF LPAR expr RPAR block)* (ELSE block)? -> ^(IF expr* block*)
     ;
 
 assign
@@ -287,6 +291,7 @@ RETURN : 'return';
 GLOBAL : 'global';
 WHILE : 'while';
 IF : 'if';
+ELIF : 'elif';
 ELSE : 'else';
 BBOX : 'bbox';
 FOR : 'for';

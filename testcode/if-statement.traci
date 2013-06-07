@@ -7,7 +7,7 @@ if (1 < 2) {
 if (1 < 2) {
     foo = foo + 1;
 }
-else {
+elif (22 > 11) {
     foo = foo - 1;
 }
 
@@ -20,6 +20,32 @@ else {
 
 if (1 > 2) {
     foo = foo + 100;
+}
+
+if (1 > 2) {
+    foo = foo - 33;
+}
+elif (323 < 321) {
+    foo = foo - 44;
+}
+elif (12 < 32) {
+    foo = foo + 1000;
+}
+else {
+    foo = foo + 123;
+}
+
+if (1 > 2) {
+    foo = foo - 33;
+}
+elif (323 < 321) {
+    foo = foo - 44;
+}
+elif (12 > 32) {
+    foo = foo + 1000;
+}
+else {
+    foo = foo + 123;
 }
 
 return foo;

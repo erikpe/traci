@@ -25,7 +25,7 @@ import se.ejp.traci.lang.interpreter.node.ConstNode;
 import se.ejp.traci.lang.interpreter.node.ForNode;
 import se.ejp.traci.lang.interpreter.node.FunctionCallNode;
 import se.ejp.traci.lang.interpreter.node.FunctionNode;
-import se.ejp.traci.lang.interpreter.node.IfElseNode;
+import se.ejp.traci.lang.interpreter.node.IfNode;
 import se.ejp.traci.lang.interpreter.node.ObjectNode;
 import se.ejp.traci.lang.interpreter.node.Op;
 import se.ejp.traci.lang.interpreter.node.RefNode;
@@ -80,10 +80,10 @@ nodes = new ArrayList<TraciNode>();
 statement returns [TraciNode node]
     : expr
         {$node = $expr.node;}
+    | if_statement
+        {$node = $if_statement.ifNode;}
     | ^(RETURN expr)
         {$node = new ReturnNode($expr.node);}
-    | ^(IF expr a=block b=block?)
-        {$node = new IfElseNode($expr.node, $a.node, $b.node, $IF.token);}
     | ^(WHILE expr block)
         {$node = new WhileNode($expr.node, $block.node, $WHILE.token);}
     | ^(FOR ID c=expr d=expr block)
@@ -92,6 +92,18 @@ statement returns [TraciNode node]
         {$node = new AssignNode($ID.text, $expr.node, true);}
     | ^(ASSIGN ID expr)
         {$node = new AssignNode($ID.text, $expr.node, false);}
+    ;
+
+if_statement returns [IfNode ifNode]
+@init {
+final List<TraciNode> condNodes = new ArrayList<TraciNode>();
+final List<BlockNode> blockNodes = new ArrayList<BlockNode>();
+Token ifToken = null;
+}
+@after {
+ifNode = new IfNode(condNodes, blockNodes, ifToken);
+}
+    : ^(IF {ifToken = $IF.token;} (expr {condNodes.add($expr.node);})* (block {blockNodes.add($block.node);})*)
     ;
 
 expr returns [TraciNode node]

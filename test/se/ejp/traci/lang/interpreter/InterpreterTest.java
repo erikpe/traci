@@ -59,7 +59,7 @@ public class InterpreterTest extends InterpreterBase
     {
         runInterpreterFile("testcode/if-statement.traci");
         assertEquals(Type.NUMBER, value.getType());
-        assertEquals(14, value.getNumber(), 0);
+        assertEquals(1014 + 123, value.getNumber(), 0);
     }
 
     @Test
