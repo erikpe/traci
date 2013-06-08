@@ -121,6 +121,7 @@ public class BinaryOpNode implements TraciNode
         switch (op)
         {
         case BINARY_MUL: return a.mul(b);
+        case BINARY_DIV: return a.div(b);
         default: return null;
         }
     }
@@ -139,6 +140,7 @@ public class BinaryOpNode implements TraciNode
         switch (op)
         {
         case BINARY_MUL: return a.mul(b);
+        case BINARY_DIV: return a.div(b);
         default: return null;
         }
     }

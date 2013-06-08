@@ -19,6 +19,11 @@ public class Material
         this.hash = calcHash();
     }
 
+    public static Material make()
+    {
+        return getDefault();
+    }
+
     public static Material make(final Texture texture, final Interior interior)
     {
         return cache.get(new Material(texture, interior));

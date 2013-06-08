@@ -145,6 +145,8 @@ expr returns [TraciNode node]
         {$node = new ObjectNode($FINISH.text, $function_call_args.nodes, null, $FINISH.token);}
     | ^(INTERIOR function_call_args)
         {$node = new ObjectNode($INTERIOR.text, $function_call_args.nodes, null, $INTERIOR.token);}
+    | ^(MATERIAL function_call_args block?)
+        {$node = new ObjectNode($MATERIAL.text, $function_call_args.nodes, $block.node, $MATERIAL.token);}
     | ^(CAMERA function_call_args block?)
         {$node = new ObjectNode($CAMERA.text, $function_call_args.nodes, $block.node, $CAMERA.token);}
     | INT     {$node = new ConstNode(new TraciValue(Double.valueOf($INT.text)));}

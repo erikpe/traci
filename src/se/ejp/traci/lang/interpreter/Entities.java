@@ -290,6 +290,11 @@ public class Entities
 
             case COLOR:
                 obj = obj.setPigment(Solid.make(value.getColor()));
+                break;
+
+            case INTERIOR:
+                obj = obj.setInterior(value.getInterior());
+                break;
 
             default:
                 throw new RuntimeException();

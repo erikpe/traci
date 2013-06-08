@@ -27,6 +27,7 @@ import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
 import se.ejp.traci.model.material.Finish;
 import se.ejp.traci.model.material.Interior;
+import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
 import se.ejp.traci.model.material.pigment.Checker;
 import se.ejp.traci.model.material.pigment.FileImage;
@@ -76,6 +77,7 @@ public class ObjectNode implements TraciNode
         TEXTURE       ("texture",      Texture.class,         "make"),
         CAMERA        ("camera",       Camera.class,          "make"),
         INTERIOR      ("interior",     Interior.class,        "make"),
+        MATERIAL      ("material",     Material.class,        "make"),
         COLOR         ("color",        Color.class,           "make"),
         VECTOR        ("vector[]",     Vector.class,          "make");
 

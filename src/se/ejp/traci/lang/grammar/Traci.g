@@ -187,6 +187,7 @@ primary_expr
     | pigment
     | finish
     | interior
+    | material
     | camera
     | vector
     | color
@@ -250,6 +251,11 @@ finish
 
 interior
     : INTERIOR function_call_args -> ^(INTERIOR function_call_args)
+    ;
+
+material
+    : MATERIAL function_call_args block? -> ^(MATERIAL function_call_args block?)
+    | MATERIAL block?                    -> ^(MATERIAL ^(ARGS) block?)
     ;
 
 camera
@@ -331,6 +337,10 @@ FINISH
 
 INTERIOR
     : ('interior')
+    ;
+
+MATERIAL
+    : ('material')
     ;
 
 CAMERA

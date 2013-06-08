@@ -186,7 +186,7 @@ public class TraciValue implements Cloneable
         case PIGMENT:
         case COLOR:
         case INTERIOR:
-            return this; // These are immuatable, no need to clone
+            return this; // These are immutable, no need to clone
 
         case PRIMITIVE_SHAPE:
             return new TraciValue(getPrimitive().clone());
