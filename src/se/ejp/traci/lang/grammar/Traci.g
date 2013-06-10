@@ -189,6 +189,7 @@ primary_expr
     | interior
     | material
     | camera
+    | skybox
     | vector
     | color
     | LPAR! expr RPAR!
@@ -260,6 +261,10 @@ material
 
 camera
     : CAMERA function_call_args block? -> ^(CAMERA function_call_args block?)
+    ;
+
+skybox
+    : SKYBOX function_call_args block? -> ^(SKYBOX function_call_args block?)
     ;
 
 vector 
@@ -345,6 +350,10 @@ MATERIAL
 
 CAMERA
     : ('camera')
+    ;
+
+SKYBOX
+    : ('skybox')
     ;
 
 ID  : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*

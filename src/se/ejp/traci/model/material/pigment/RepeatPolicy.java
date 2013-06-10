@@ -10,7 +10,7 @@ public enum RepeatPolicy
     BORDER("border"),
     STRETCH("stretch");
 
-    private final String id;
+    public final String id;
 
     private static final Map<String, RepeatPolicy> idMap = new HashMap<String, RepeatPolicy>();
     static

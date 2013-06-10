@@ -11,8 +11,7 @@ import se.ejp.traci.model.shape.primitive.Primitive;
 
 public class Raytrace
 {
-    protected static Color raytrace(final Scene scene, final int depth, final Vector p, final Vector dir,
-            final Interior inside)
+    protected static Color raytrace(final Scene scene, final int depth, final Vector p, final Vector dir, final Interior inside)
     {
         if (depth <= 0)
         {
@@ -24,6 +23,11 @@ public class Raytrace
         final Point hit;
         if (ray == null || (hit = ray.first()) == null)
         {
+            if (scene.skybox != null)
+            {
+                return scene.skybox.sample(dir);
+            }
+
             return scene.backgroundColor;
         }
 

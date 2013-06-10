@@ -6,15 +6,6 @@ import java.util.Set;
 
 public enum Projection2D
 {
-    XZ_PLANE("xz")
-    {
-        @Override
-        public Vector2D project(final Vector p)
-        {
-            return Vector2D.make(p.x(), p.z());
-        }
-    },
-
     XY_PLANE("xy")
     {
         @Override
@@ -24,12 +15,48 @@ public enum Projection2D
         }
     },
 
+    XZ_PLANE("xz")
+    {
+        @Override
+        public Vector2D project(final Vector p)
+        {
+            return Vector2D.make(p.x(), p.z());
+        }
+    },
+
+    YX_PLANE("yx")
+    {
+        @Override
+        public Vector2D project(final Vector p)
+        {
+            return Vector2D.make(p.y(), p.x());
+        }
+    },
+
     YZ_PLANE("yz")
     {
         @Override
         public Vector2D project(final Vector p)
         {
             return Vector2D.make(p.y(), p.z());
+        }
+    },
+
+    ZX_PLANE("zx")
+    {
+        @Override
+        public Vector2D project(final Vector p)
+        {
+            return Vector2D.make(p.z(), p.x());
+        }
+    },
+
+    ZY_PLANE("zy")
+    {
+        @Override
+        public Vector2D project(final Vector p)
+        {
+            return Vector2D.make(p.z(), p.y());
         }
     },
 

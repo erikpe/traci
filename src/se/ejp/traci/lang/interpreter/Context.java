@@ -63,6 +63,10 @@ public class Context
         {
             scene.setCamera(value.getCamera());
         }
+        else if (value.getType() == Type.SKYBOX)
+        {
+            scene.setSkybox(value.getSkybox());
+        }
         else
         {
             entity.applyValue(value);

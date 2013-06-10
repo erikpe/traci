@@ -16,6 +16,7 @@ public class Scene
     public AmbientLight ambientLight;
     public final List<PointLight> pointLights;
 
+    public Skybox skybox;
     public Color backgroundColor;
 
     public Scene()
@@ -37,6 +38,11 @@ public class Scene
     public void setRootShape(final Shape rootShape)
     {
         this.rootShape = rootShape;
+    }
+
+    public void setSkybox(final Skybox skybox)
+    {
+        this.skybox = skybox;
     }
 
     public void addLight(final Light light)

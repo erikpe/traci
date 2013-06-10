@@ -23,6 +23,7 @@ import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.Color;
+import se.ejp.traci.model.Skybox;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.PointLight;
 import se.ejp.traci.model.material.Finish;
@@ -79,7 +80,8 @@ public class ObjectNode implements TraciNode
         INTERIOR      ("interior",     Interior.class,        "make"),
         MATERIAL      ("material",     Material.class,        "make"),
         COLOR         ("color",        Color.class,           "make"),
-        VECTOR        ("vector[]",     Vector.class,          "make");
+        VECTOR        ("vector[]",     Vector.class,          "make"),
+        SKYBOX        ("skybox",       Skybox.class,          "make");
 
         final String id;
         final Class<?> clazz;

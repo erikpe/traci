@@ -5,6 +5,7 @@ import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.Color;
+import se.ejp.traci.model.Skybox;
 import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.material.Finish;
 import se.ejp.traci.model.material.Interior;
@@ -35,7 +36,8 @@ public class TraciValue implements Cloneable
         COLOR(Color.class),
         LIGHT(Light.class),
         CAMERA(Camera.class),
-        INTERIOR(Interior.class);
+        INTERIOR(Interior.class),
+        SKYBOX(Skybox.class);
 
         public final Class<?> clazz;
 
@@ -162,6 +164,11 @@ public class TraciValue implements Cloneable
     public Interior getInterior()
     {
         return (Interior) value;
+    }
+
+    public Skybox getSkybox()
+    {
+        return (Skybox) value;
     }
 
     @Override
