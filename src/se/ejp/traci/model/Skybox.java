@@ -13,7 +13,7 @@ import se.ejp.traci.model.material.pigment.RepeatPolicy;
 public class Skybox implements Transformable
 {
     private Transformation transformation;
-    private Pigment forward, right, back, left, up, down;
+    private final Pigment forward, right, back, left, up, down;
 
     private Skybox(final Pigment forward, final Pigment right, final Pigment back, final Pigment left,
             final Pigment up, final Pigment down)
@@ -61,13 +61,6 @@ public class Skybox implements Transformable
     public void transform(final Transformation tr)
     {
         transformation = transformation.compose(tr);
-
-        forward = forward.transform(tr);
-        right = right.transform(tr);
-        back = back.transform(tr);
-        left = left.transform(tr);
-        up = up.transform(tr);
-        down = down.transform(tr);
     }
 
     public Color sample(Vector dir)

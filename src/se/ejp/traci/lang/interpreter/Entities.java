@@ -1,8 +1,10 @@
 package se.ejp.traci.lang.interpreter;
 
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
+import se.ejp.traci.math.Transformable;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.model.Camera;
+import se.ejp.traci.model.Skybox;
 import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.material.Material;
 import se.ejp.traci.model.material.Texture;
@@ -51,7 +53,7 @@ public class Entities
         }
         else if (object instanceof BoundingBox)
         {
-            return new BoundingBoxEntity((BoundingBox) object);
+            return new TransformableEntity((BoundingBox) object);
         }
         else if (object instanceof Transformation)
         {
@@ -71,11 +73,15 @@ public class Entities
         }
         else if (object instanceof Light)
         {
-            return new LightEntity((Light) object);
+            return new TransformableEntity((Light) object);
         }
         else if (object instanceof Camera)
         {
-            return new CameraEntity((Camera) object);
+            return new TransformableEntity((Camera) object);
+        }
+        else if (object instanceof Skybox)
+        {
+            return new TransformableEntity((Skybox) object);
         }
 
         throw new RuntimeException();
@@ -324,55 +330,11 @@ public class Entities
         }
     }
 
-    private static class BoundingBoxEntity extends EntityHelper<BoundingBox>
+    private static class TransformableEntity extends EntityHelper<Transformable>
     {
-        private BoundingBoxEntity(final BoundingBox bBox)
+        private TransformableEntity(final Transformable transformable)
         {
-            super(bBox);
-        }
-
-        @Override
-        public void applyValue(final TraciValue value)
-        {
-            switch (value.getType())
-            {
-            case TRANSFORMATION:
-                obj.transform(value.getTransformation());
-                break;
-
-            default:
-                throw new RuntimeException();
-            }
-        }
-    }
-
-    private static class LightEntity extends EntityHelper<Light>
-    {
-        private LightEntity(final Light light)
-        {
-            super(light);
-        }
-
-        @Override
-        public void applyValue(final TraciValue value)
-        {
-            switch (value.getType())
-            {
-            case TRANSFORMATION:
-                obj.transform(value.getTransformation());
-                break;
-
-            default:
-                throw new RuntimeException();
-            }
-        }
-    }
-
-    private static class CameraEntity extends EntityHelper<Camera>
-    {
-        private CameraEntity(final Camera camera)
-        {
-            super(camera);
+            super(transformable);
         }
 
         @Override
