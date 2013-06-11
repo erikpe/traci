@@ -1,14 +1,14 @@
 package se.ejp.traci.gui;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import se.ejp.traci.main.Result;
 import se.ejp.traci.model.Color;
 
 public class MultiDrawArea extends AbstractDrawArea
 {
-    private final Collection<DrawArea> areas;
+    private final List<DrawArea> areas;
 
     public MultiDrawArea(final int width, final int height)
     {
@@ -26,9 +26,11 @@ public class MultiDrawArea extends AbstractDrawArea
     @Override
     public void draw(final long x, final long y, final Color color)
     {
-        for (final DrawArea area : areas)
+        final int size = areas.size();
+
+        for (int i = 0; i < size; ++i)
         {
-            area.draw(x, y, color);
+            areas.get(i).draw(x, y, color);
         }
     }
 

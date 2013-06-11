@@ -25,21 +25,23 @@ public class Main
         }
         final Settings settings = options.getSettings();
 
-        final PreprocessorRunner pp = new PreprocessorRunner(settings);
+        PreprocessorRunner pp = new PreprocessorRunner(settings);
         result = pp.run();
         if (result != Result.SUCCESS)
         {
             return result;
         }
         final String code = pp.getProcessedCode();
+        pp = null;
 
-        final ParserRunner parser = new ParserRunner(settings, code);
+        ParserRunner parser = new ParserRunner(settings, code);
         result = parser.run();
         if (result != Result.SUCCESS)
         {
             return result;
         }
-        final Interpreter interpreter = parser.getInterpreter();
+        Interpreter interpreter = parser.getInterpreter();
+        parser = null;
 
         result = interpreter.run();
         if (result != Result.SUCCESS)
@@ -47,6 +49,7 @@ public class Main
             return result;
         }
         final Scene scene = interpreter.getScene();
+        interpreter = null;
 
         final MultiDrawArea drawAreas = new MultiDrawArea(settings.getWidth(), settings.getHeight());
 

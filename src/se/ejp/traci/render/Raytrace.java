@@ -42,6 +42,7 @@ public class Raytrace
 
         final Color hitPointColor = material.texture.pigment.getColor(hitPoint);
 
+
         final boolean hasPhong = hitPointColor.transmit < 1.0;
         final boolean hasRefraction = material.interior != Interior.OPAQUE && hitPointColor.transmit > 0.0;
         final boolean hasReflection = hasRefraction || finish.reflectiveness > 0.0;
