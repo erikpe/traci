@@ -172,16 +172,6 @@ public class Options
             }
         });
 
-        addOption(new FloatOption(null, "fov", "field of view in degrees", "DEGREES", 40.0)
-        {
-            @Override
-            public Result handleOption(final double value, final boolean userSupplied)
-            {
-                settings.fov = (int) value;
-                return Result.SUCCESS;
-            }
-        });
-
         addOption(new IntOption(null, "focal-blur-samples", "number of samples per pixel for focal blur", "NUM", 0)
         {
             @Override

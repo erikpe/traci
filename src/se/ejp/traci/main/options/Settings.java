@@ -21,8 +21,6 @@ public class Settings
     Boolean aaEnabled = null;
     Integer aaLevel = null;
 
-    Integer fov = null;
-
     Integer workBlockWidth = null;
     Integer workBlockHeight = null;
 
@@ -91,11 +89,6 @@ public class Settings
     public String getInputFilename()
     {
         return inputFilename;
-    }
-
-    public long getFov()
-    {
-        return fov;
     }
 
     public List<String> getPreprocessorMacros()

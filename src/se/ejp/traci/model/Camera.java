@@ -12,31 +12,34 @@ public class Camera implements Transformable, Cloneable
 {
     private boolean initialized;
 
+    private final double fov;
+
     private double aspectRatio;
     private double fovx;
     private double fovy;
 
     private Transformation transformation;
-    public double focalDist = 45;
-    public double aperture = .4;
+    public double focalDist = 50;
+    public double aperture = 1.5;
 
     private double xx;
     private double yy;
 
-    private Camera(final Vector location, final Vector lookAt, final Vector up)
+    private Camera(final Vector location, final Vector lookAt, final Double fov, final Vector up)
     {
-        transformation = Transformations.camera(location, lookAt, up);
-        initialized = false;
+        this.transformation = Transformations.camera(location, lookAt, up);
+        this.initialized = false;
+        this.fov = fov;
     }
 
-    public static Camera make(final Vector location, final Vector lookAt, final Vector up)
+    public static Camera make(final Vector location, final Vector lookAt, final Double fov, final Vector up)
     {
-        return new Camera(location, lookAt, up);
+        return new Camera(location, lookAt, fov, up);
     }
 
-    public static Camera make(final Vector location, final Vector lookAt)
+    public static Camera make(final Vector location, final Vector lookAt, final Double fov)
     {
-        return make(location, lookAt, Vector.UNIT_Y);
+        return make(location, lookAt, fov, Vector.UNIT_Y);
     }
 
     @Override
@@ -53,7 +56,7 @@ public class Camera implements Transformable, Cloneable
     public void initialize(final Settings settings)
     {
         aspectRatio = ((double) settings.getWidth()) / settings.getHeight();
-        fovx = (settings.getFov() / 360.0) * Math.PI * 2.0;
+        fovx = (fov / 360.0) * Math.PI * 2.0;
         fovy = fovx / aspectRatio;
         xx = 2.0 * Math.tan(fovx / 2.0);
         yy = 2.0 * Math.tan(fovy / 2.0);

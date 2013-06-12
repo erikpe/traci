@@ -12,23 +12,41 @@ def lego_material(textureColor, interiorColor)
     };
 }
 
-global TRANSMIT = 0.9;
+#define REGULAR 1
+#define TRANSPARENT 1
+#define CLEAR 0
 
-/*
+#if REGULAR
+
+global TRANSMIT = 0.0;
 global BLACK = lego_material(color [.15, .15, .15, TRANSMIT], color [.15, .15, .15] / 2);
 global BLACK_LIGHT = lego_material(color [.15, .15, .15, TRANSMIT], color [.15, .15, .15] / 2);
 global GRAY = lego_material(color [.85, .85, .85, TRANSMIT], color [.85, .85, .85] / 2);
 global YELLOW = lego_material(color [1, 1, 0, TRANSMIT], color [1, 1, 0] / 2);
 global WHITE = lego_material(color [1, 1, 1, TRANSMIT], color [1, 1, 1] / 2);
 global RED = lego_material(color [1, 0, 0, TRANSMIT], color [1, 0, 0] / 2);
-*/
 
+#elif TRANSPARENT
+
+global TRANSMIT = 0.9;
+global BLACK = lego_material(color [.15, .15, .15, TRANSMIT], color [.15, .15, .15] / 2);
+global BLACK_LIGHT = lego_material(color [.15, .15, .15, TRANSMIT], color [.15, .15, .15] / 2);
+global GRAY = lego_material(color [.85, .85, .85, TRANSMIT], color [.85, .85, .85] / 2);
+global YELLOW = lego_material(color [1, 1, 0, TRANSMIT], color [1, 1, 0] / 2);
+global WHITE = lego_material(color [1, 1, 1, TRANSMIT], color [1, 1, 1] / 2);
+global RED = lego_material(color [1, 0, 0, TRANSMIT], color [1, 0, 0] / 2);
+
+#elif CLEAR
+
+global TRANSMIT = 0.9;
 global GRAY = lego_material(color [.85, .85, .85, TRANSMIT], color [.85, .85, .85] / 2);
 global BLACK = GRAY;
 global BLACK_LIGHT = GRAY;
 global YELLOW = GRAY;
 global WHITE = GRAY;
 global RED = GRAY;
+
+#endif
 
 def pieces1 ()
 {
@@ -293,18 +311,35 @@ airplane() {
     rotx PI*2*(20/360);
 };
 
-//table(30, .075) {
-//    rotx PI*2*(20/360);
-//};
-
 skybox("images/stormydays/forward.jpg", "images/stormydays/right.jpg", "images/stormydays/back.jpg",
-       "images/stormydays/left.jpg", "images/stormydays/up.jpg", "images/stormydays/down.jpg");
+       "images/stormydays/left.jpg", "images/stormydays/up.jpg", "images/stormydays/down.jpg") {
+    roty -.9;
+    rotx -.5;
+};
 
-pointlight([-30, 15, 40], color [1,1,1]*30*200*1.8);
-pointlight([60, 15, 30], color [1,1,1]*6000*1.8);
-ambientlight(color [1,1,1]*.15*1.8);
+#if REGULAR
+
+pointlight([-30, 15, 40], color [1,1,1]*30*200*1.0);
+pointlight([60, 15, 30], color [1,1,1]*6000*1.0);
+ambientlight(color [1,1,1]*.15*1.0);
+
+#elif TRANSPARENT
+
+pointlight([-30, 15, 40], color [1,1,1]*30*200*3);
+pointlight([60, 15, 30], color [1,1,1]*6000*3);
+ambientlight(color [1,1,1]*.15*3);
+
+#elif CLEAR
+
+pointlight([-30, 15, 40], color [1,1,1]*30*200*3);
+pointlight([60, 15, 30], color [1,1,1]*6000*3);
+ambientlight(color [1,1,1]*.15*3);
+
+#endif
 
 loc = [-2.4*2, 6.7*2, 8.5*2];
 lookAt = [7*2, 1.3*3, -1*2];
 loc = lookAt + (loc - lookAt)*2;
-camera(loc, lookAt, Y);
+up = Y;
+fov = 50.0;
+camera(loc, lookAt, fov, up);

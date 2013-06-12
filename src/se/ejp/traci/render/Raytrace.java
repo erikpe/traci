@@ -18,7 +18,7 @@ public class Raytrace
             return Color.BLACK;
         }
 
-        final Ray ray = scene.rootShape.shootRay(p, dir);
+        final Ray ray = scene.rootUnion.shootRay(p, dir);
 
         final Point hit;
         if (ray == null || (hit = ray.first()) == null)
@@ -66,7 +66,7 @@ public class Raytrace
                 /**
                  * Check if path to light is obstructed
                  */
-                final Ray lightRay2 = scene.rootShape.shootRay(hitPoint, dirToLight);
+                final Ray lightRay2 = scene.rootUnion.shootRay(hitPoint, dirToLight);
                 final double distToLight = toLight.length();
                 if (lightRay2 != null)
                 {

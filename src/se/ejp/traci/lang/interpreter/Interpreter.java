@@ -1,6 +1,5 @@
 package se.ejp.traci.lang.interpreter;
 
-import se.ejp.traci.lang.interpreter.Entities.Entity;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
@@ -8,7 +7,6 @@ import se.ejp.traci.lang.interpreter.node.BlockNode;
 import se.ejp.traci.main.Result;
 import se.ejp.traci.main.options.Settings;
 import se.ejp.traci.model.Scene;
-import se.ejp.traci.model.shape.csg.Union;
 import se.ejp.traci.util.Log;
 import se.ejp.traci.util.Utilities;
 
@@ -35,12 +33,10 @@ public class Interpreter
         Log.INFO("Constructing scene");
         final long start = System.currentTimeMillis();
 
-        final Union rootUnion = Union.make();
-        final Entity entity = Entities.makeEntity(rootUnion);
-
+        final Context rootContext = Context.newRootContext(scene);
         try
         {
-            blockNode.eval(Context.newRootContext(scene, entity));
+            blockNode.eval(rootContext);
         }
         catch (final InterpreterRuntimeException e)
         {
@@ -57,14 +53,13 @@ public class Interpreter
             // Ignore
         }
 
-        // !!! TODO: before using optimize(), determine what effects it has on bounding boxes.
+        // !!! TODO: before using Csg.optimize(), determine what effects it has on bounding boxes.
         // Shape optimizedRoot = rootUnion.optimize();
         // if (optimizedRoot == null)
         // {
         //     optimizedRoot = Union.make();
         // }
         // scene.setRootShape(optimizedRoot);
-        scene.setRootShape(rootUnion);
 
         if (scene.camera == null)
         {

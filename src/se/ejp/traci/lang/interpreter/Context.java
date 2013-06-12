@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.ejp.traci.lang.interpreter.Entities.Entity;
-import se.ejp.traci.lang.interpreter.TraciValue.Type;
 import se.ejp.traci.lang.interpreter.functions.Function;
 import se.ejp.traci.lang.interpreter.functions.FunctionSet;
 import se.ejp.traci.lang.parser.IncludeLocation.FileLocation;
@@ -12,17 +11,15 @@ import se.ejp.traci.model.Scene;
 
 public class Context
 {
-    private final Scene scene;
     private final FunctionSet functions;
     private final Map<String, TraciValue> globalMemory;
     private final Map<String, TraciValue> localMemory;
     private final Entity entity;
     public final CallStack callStack;
 
-    private Context(final Scene scene, final FunctionSet functions, final Map<String, TraciValue> globalMemory,
+    private Context(final FunctionSet functions, final Map<String, TraciValue> globalMemory,
             final Map<String, TraciValue> localMemory, final Entity entity, final CallStack callStack)
     {
-        this.scene = scene;
         this.functions = functions;
         this.globalMemory = globalMemory;
         this.localMemory = localMemory;
@@ -30,47 +27,31 @@ public class Context
         this.callStack = callStack;
     }
 
-    public static Context newRootContext(final Scene scene, final Entity rootEntity)
+    public static Context newRootContext(final Scene scene)
     {
-        return new Context(scene, null, new HashMap<String, TraciValue>(), new HashMap<String, TraciValue>(),
-                rootEntity, CallStack.makeEmpty());
+        final Entity sceneEntity = Entities.makeEntity(scene);
+        return new Context(null, new HashMap<String, TraciValue>(), new HashMap<String, TraciValue>(), sceneEntity, CallStack.makeEmpty());
     }
 
     public Context newFuncallContext(final FileLocation location, final String function)
     {
         final CallStack newCallStack = callStack.push(location, function);
-        return new Context(scene, null, globalMemory, new HashMap<String, TraciValue>(), Entities.NULL_ENTITY,
-                newCallStack);
+        return new Context(null, globalMemory, new HashMap<String, TraciValue>(), Entities.NULL_ENTITY, newCallStack);
     }
 
     public Context newEntity(final Entity newSurroundingEntity)
     {
-        return new Context(scene, functions, globalMemory, localMemory, newSurroundingEntity, callStack);
+        return new Context(functions, globalMemory, localMemory, newSurroundingEntity, callStack);
     }
 
     public Context newFunctions(final FunctionSet newFunctions)
     {
-        return new Context(scene, newFunctions, globalMemory, localMemory, entity, callStack);
+        return new Context(newFunctions, globalMemory, localMemory, entity, callStack);
     }
 
     public void applyValue(final TraciValue value)
     {
-        if (value.getType() == Type.LIGHT)
-        {
-            scene.addLight(value.getLight());
-        }
-        else if (value.getType() == Type.CAMERA)
-        {
-            scene.setCamera(value.getCamera());
-        }
-        else if (value.getType() == Type.SKYBOX)
-        {
-            scene.setSkybox(value.getSkybox());
-        }
-        else
-        {
-            entity.applyValue(value);
-        }
+        entity.applyValue(value);
     }
 
     public Function getFunction(final String id)

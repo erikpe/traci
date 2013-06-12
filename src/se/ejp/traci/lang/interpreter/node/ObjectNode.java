@@ -183,8 +183,7 @@ public class ObjectNode implements TraciNode
         }
         catch (final NoSuchMethodException e)
         {
-            throw new InterpreterIllegalArguments(token.location, context.callStack, objectType.id,
-                    Arrays.asList(argTypes));
+            throw new InterpreterIllegalArguments(token.location, context.callStack, objectType.id, Arrays.asList(argTypes));
         }
 
         final Object object = make(method, context);

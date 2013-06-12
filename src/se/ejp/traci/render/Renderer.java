@@ -42,9 +42,9 @@ public class Renderer implements BlockRenderer
 
     private Result renderScene()
     {
-        final int numPrim = ShapeHelper.numPrimitives(scene.rootShape);
-        final int numCsg = ShapeHelper.numCsgs(scene.rootShape);
-        final int numBBox = ShapeHelper.numBBoxes(scene.rootShape);
+        final int numPrim = ShapeHelper.numPrimitives(scene.rootUnion);
+        final int numCsg = ShapeHelper.numCsgs(scene.rootUnion);
+        final int numBBox = ShapeHelper.numBBoxes(scene.rootUnion);
 
         Log.INFO("Number of primitive objects: " + numPrim);
         Log.INFO("Number of csg objects: " + numCsg);

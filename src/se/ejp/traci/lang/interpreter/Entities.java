@@ -4,6 +4,7 @@ import se.ejp.traci.lang.interpreter.exceptions.InterpreterInternalException;
 import se.ejp.traci.math.Transformable;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.model.Camera;
+import se.ejp.traci.model.Scene;
 import se.ejp.traci.model.Skybox;
 import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.material.Material;
@@ -82,6 +83,10 @@ public class Entities
         else if (object instanceof Skybox)
         {
             return new TransformableEntity((Skybox) object);
+        }
+        else if (object instanceof Scene)
+        {
+            return new SceneEntity((Scene) object);
         }
 
         throw new RuntimeException();
@@ -344,6 +349,41 @@ public class Entities
             {
             case TRANSFORMATION:
                 obj.transform(value.getTransformation());
+                break;
+
+            default:
+                throw new RuntimeException();
+            }
+        }
+    }
+
+    private static class SceneEntity extends EntityHelper<Scene>
+    {
+        private SceneEntity(final Scene scene)
+        {
+            super(scene);
+        }
+
+        @Override
+        public void applyValue(final TraciValue value)
+        {
+            switch (value.getType())
+            {
+            case PRIMITIVE_SHAPE:
+            case CSG_SHAPE:
+                obj.rootUnion.add(value.getShape());
+                break;
+
+            case LIGHT:
+                obj.addLight(value.getLight());
+                break;
+
+            case CAMERA:
+                obj.setCamera(value.getCamera());
+                break;
+
+            case SKYBOX:
+                obj.setSkybox(value.getSkybox());
                 break;
 
             default:

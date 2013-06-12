@@ -35,8 +35,8 @@ public class InterpreterCameraTest extends InterpreterObjectBase
     @Test
     public void testCamera() throws RecognitionException, InterpreterRuntimeException
     {
-        final String args0 = "[1, 2, 3], [4, 5, 6]";
-        final String args1 = "[1, 2, 3], [4, 5, 6], [1, 0, 0]";
+        final String args0 = "[1, 2, 3], [4, 5, 6], 50.0";
+        final String args1 = "[1, 2, 3], [4, 5, 6], 40.5, [1, 0, 0]";
         final String modifiers = "translate [1, 1, 1]; rotx 2.23;";
 
         final Vector v0 = Vector.make(1.0, 2.0, 3.0);

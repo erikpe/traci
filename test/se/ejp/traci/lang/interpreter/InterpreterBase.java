@@ -14,7 +14,6 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 
-import se.ejp.traci.lang.interpreter.Entities.Entity;
 import se.ejp.traci.lang.interpreter.exceptions.FunctionReturnException;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterRuntimeException;
 import se.ejp.traci.lang.interpreter.node.BlockNode;
@@ -25,7 +24,6 @@ import se.ejp.traci.lang.preprocessor.PreprocessorRunner;
 import se.ejp.traci.main.Result;
 import se.ejp.traci.main.options.MockSettings;
 import se.ejp.traci.model.Scene;
-import se.ejp.traci.model.shape.csg.Union;
 
 public class InterpreterBase
 {
@@ -44,14 +42,13 @@ public class InterpreterBase
         final TraciTreeWalker walker = new TraciTreeWalker(new CommonTreeNodeStream(parseTree));
         final BlockNode rootNode = walker.block();
 
-        final Union rootUnion = Union.make();
-        final Entity entity = Entities.makeEntity(rootUnion);
         scene = new Scene();
         value = null;
 
+        final Context rootContext = Context.newRootContext(scene);
         try
         {
-            rootNode.eval(Context.newRootContext(scene, entity));
+            rootNode.eval(rootContext);
         }
         catch (final FunctionReturnException e)
         {

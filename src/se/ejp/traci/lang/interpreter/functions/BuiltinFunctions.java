@@ -13,7 +13,6 @@ import se.ejp.traci.lang.parser.IncludeLocation;
 
 public class BuiltinFunctions
 {
-
     private abstract static class BuiltinFunction implements Function
     {
         protected final String id;
@@ -30,14 +29,17 @@ public class BuiltinFunctions
         }
     }
 
-    private abstract static class UnaryNumericalFunction extends BuiltinFunction
+    private abstract static class TypeCheckedBuiltinFunction extends BuiltinFunction
     {
-        private UnaryNumericalFunction(final String id)
+        private final Type[] argTypes;
+
+        private TypeCheckedBuiltinFunction(final String id, final Type ... argTypes)
         {
             super(id);
+            this.argTypes = argTypes;
         }
 
-        protected abstract double calc(final double arg);
+        protected abstract TraciValue invoke(final List<TraciValue> args);
 
         @Override
         public TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
@@ -45,68 +47,58 @@ public class BuiltinFunctions
         {
             final IncludeLocation location = funcallNode.getToken().location;
 
-            if (args.size() != 1)
+            if (args.size() != argTypes.length)
             {
-                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
+                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, argTypes.length, args.size());
             }
 
-            final TraciValue arg = args.get(0);
-
-            if (arg.getType() != Type.NUMBER)
+            for (int i = 0; i < args.size(); ++i)
             {
-                throw new InterpreterIllegalArgumentType(location, context.callStack, id, Type.NUMBER, arg.getType(), 1);
+                if (argTypes[i] != null && args.get(i).getType() != argTypes[i])
+                {
+                    throw new InterpreterIllegalArgumentType(location, context.callStack, id, argTypes[i],
+                            args.get(i).getType(), i + 1);
+                }
             }
 
-            return new TraciValue(calc(arg.getNumber()));
+            return invoke(args);
         }
     }
 
-    private static final BuiltinFunction RAND = new BuiltinFunction("rand")
+    private abstract static class UnaryNumericalFunction extends TypeCheckedBuiltinFunction
+    {
+        private UnaryNumericalFunction(final String id)
+        {
+            super(id, Type.NUMBER);
+        }
+
+        protected abstract double calc(final double arg);
+
+        @Override
+        public TraciValue invoke(final List<TraciValue> args)
+        {
+            return new TraciValue(calc(args.get(0).getNumber()));
+        }
+    }
+
+    private static final BuiltinFunction RAND = new TypeCheckedBuiltinFunction("rand")
     {
         private final Random random = new Random(0);
 
         @Override
-        public final TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
-                throws InterpreterIllegalNumberOfArguments
+        public final TraciValue invoke(final List<TraciValue> args)
         {
-            final IncludeLocation location = funcallNode.getToken().location;
-
-            if (args.size() != 0)
-            {
-                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
-            }
-
             return new TraciValue(random.nextDouble());
         }
     };
 
-    private static final BuiltinFunction RANDINT = new BuiltinFunction("randint")
+    private static final BuiltinFunction RANDINT = new TypeCheckedBuiltinFunction("randint", Type.NUMBER, Type.NUMBER)
     {
         private final Random random = new Random(0);
 
         @Override
-        public final TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
-                throws InterpreterIllegalNumberOfArguments, InterpreterIllegalArgumentType
+        public final TraciValue invoke(final List<TraciValue> args)
         {
-            final IncludeLocation location = funcallNode.getToken().location;
-
-            if (args.size() != 2)
-            {
-                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
-            }
-
-            if (args.get(0).getType() != Type.NUMBER)
-            {
-                throw new InterpreterIllegalArgumentType(location, context.callStack, id, Type.NUMBER, args.get(0)
-                        .getType(), 1);
-            }
-
-            if (args.get(1).getType() != Type.NUMBER)
-            {
-                throw new InterpreterIllegalArgumentType(location, context.callStack, id, Type.NUMBER, args.get(1)
-                        .getType(), 1);
-            }
-
             final int start = args.get(0).getNumber().intValue();
             final int end = args.get(1).getNumber().intValue();
             final int value = random.nextInt(end - start + 1) + start;
@@ -115,19 +107,11 @@ public class BuiltinFunctions
         }
     };
 
-    private static final BuiltinFunction PRINT = new BuiltinFunction("print")
+    private static final BuiltinFunction PRINT = new TypeCheckedBuiltinFunction("print", (Type) null)
     {
         @Override
-        public TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
-                throws InterpreterIllegalNumberOfArguments
+        public TraciValue invoke(final List<TraciValue> args)
         {
-            final IncludeLocation location = funcallNode.getToken().location;
-
-            if (args.size() != 1)
-            {
-                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
-            }
-
             System.out.println(args.get(0).toString());
             return null;
         }
@@ -160,33 +144,35 @@ public class BuiltinFunctions
         }
     };
 
-    private static final BuiltinFunction LENGTH = new BuiltinFunction("length")
+    private static final BuiltinFunction LENGTH = new TypeCheckedBuiltinFunction("length", Type.VECTOR)
     {
         @Override
-        public TraciValue invoke(final FunctionCallNode funcallNode, final Context context, final List<TraciValue> args)
-                throws InterpreterIllegalNumberOfArguments, InterpreterIllegalArgumentType
+        public TraciValue invoke(final List<TraciValue> args)
         {
-            final IncludeLocation location = funcallNode.getToken().location;
+            return new TraciValue(args.get(0).getVector().length());
+        }
+    };
 
-            if (args.size() != 1)
-            {
-                throw new InterpreterIllegalNumberOfArguments(location, context.callStack, id, 1, args.size());
-            }
+    private static final BuiltinFunction DOT_PRODUCT = new TypeCheckedBuiltinFunction("dot", Type.VECTOR, Type.VECTOR)
+    {
+        @Override
+        public TraciValue invoke(final List<TraciValue> args)
+        {
+            return new TraciValue(args.get(0).getVector().dot(args.get(1).getVector()));
+        }
+    };
 
-            if (args.get(0).getType() != Type.VECTOR)
-            {
-                throw new InterpreterIllegalArgumentType(location, context.callStack, id, Type.VECTOR, args.get(0)
-                        .getType(), 1);
-            }
-
-            final Double length = args.get(0).getVector().length();
-
-            return new TraciValue(length);
+    private static final BuiltinFunction CROSS_PRODUCT = new TypeCheckedBuiltinFunction("cross", Type.VECTOR, Type.VECTOR)
+    {
+        @Override
+        public TraciValue invoke(final List<TraciValue> args)
+        {
+            return new TraciValue(args.get(0).getVector().cross(args.get(1).getVector()));
         }
     };
 
     private static final BuiltinFunction[] ALL_BUILTIN_FUNCTIONS = new BuiltinFunction[] { PRINT, SIN, COS, RAND,
-            RANDINT, SQRT, LENGTH };
+            RANDINT, SQRT, LENGTH, DOT_PRODUCT, CROSS_PRODUCT };
 
     public static FunctionSet getAll()
     {

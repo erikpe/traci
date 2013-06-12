@@ -6,11 +6,11 @@ import java.util.List;
 import se.ejp.traci.model.light.AmbientLight;
 import se.ejp.traci.model.light.Light;
 import se.ejp.traci.model.light.PointLight;
-import se.ejp.traci.model.shape.Shape;
+import se.ejp.traci.model.shape.csg.Union;
 
 public class Scene
 {
-    public Shape rootShape;
+    public final Union rootUnion;
     public Camera camera;
 
     public AmbientLight ambientLight;
@@ -21,7 +21,7 @@ public class Scene
 
     public Scene()
     {
-        this.rootShape = null;
+        this.rootUnion = Union.make();
         this.camera = null;
 
         this.ambientLight = null;
@@ -33,11 +33,6 @@ public class Scene
     public void setCamera(final Camera camera)
     {
         this.camera = camera;
-    }
-
-    public void setRootShape(final Shape rootShape)
-    {
-        this.rootShape = rootShape;
     }
 
     public void setSkybox(final Skybox skybox)
