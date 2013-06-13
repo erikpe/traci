@@ -67,7 +67,7 @@ public class Camera implements Transformable, Cloneable
     {
         if (!initialized)
         {
-            throw new RuntimeException("Camera not initialized with settings yet");
+            throw new IllegalStateException("Camera not initialized with settings yet");
         }
 
         final Vector[] res = new Vector[2];

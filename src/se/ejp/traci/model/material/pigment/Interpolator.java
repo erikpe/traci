@@ -48,7 +48,7 @@ public enum Interpolator
         @Override
         public Color interpolate(final Interpolatable image, final double x, final double y)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Bicubic spline interpolator not yet implemented");
         }
     };
 
