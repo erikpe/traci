@@ -228,7 +228,7 @@ public class Matrix
     @Override
     public int hashCode()
     {
-        int hash = getClass().hashCode();
+        int hash = getClass().hashCode() | 0x0000001;
         for (int i = 0; i < data.length; ++i)
         {
             hash = 31 * hash + Double.valueOf(data[i]).hashCode();

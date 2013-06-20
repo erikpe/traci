@@ -205,7 +205,7 @@ public class FileImage extends NonUniform implements Interpolatable
 
     private int calcHash()
     {
-        int hash = getClass().hashCode();
+        int hash = getClass().hashCode() | 0x0000001;
         hash = 31 * hash + transformation.hashCode();
         hash = 31 * hash + filename.hashCode();
         hash = 31 * hash + interpolator.hashCode();

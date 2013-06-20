@@ -99,6 +99,16 @@ public class Vector
     }
 
     @Override
+    public int hashCode()
+    {
+        int hash = getClass().hashCode() | 0x0000001;
+        hash = 31 * hash + Double.valueOf(x).hashCode();
+        hash = 31 * hash + Double.valueOf(y).hashCode();
+        hash = 31 * hash + Double.valueOf(z).hashCode();
+        return hash;
+    }
+
+    @Override
     public boolean equals(final Object other)
     {
         if (other == null)

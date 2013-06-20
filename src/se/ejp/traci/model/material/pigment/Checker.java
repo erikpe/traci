@@ -53,7 +53,7 @@ public class Checker extends Pattern
 
     private int calcHash()
     {
-        int hash = getClass().hashCode();
+        int hash = getClass().hashCode() | 0x0000001;
         hash = 31 * hash + transformation.hashCode();
         hash = 31 * hash + color1.hashCode();
         hash = 31 * hash + color2.hashCode();

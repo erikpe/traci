@@ -67,7 +67,7 @@ public class Material
 
     private int calcHash()
     {
-        int hash = getClass().hashCode();
+        int hash = getClass().hashCode() | 0x0000001;
         hash = 31 * hash + texture.hashCode();
         hash = 31 * hash + interior.hashCode();
         return hash;

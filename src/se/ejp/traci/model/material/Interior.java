@@ -81,7 +81,7 @@ public class Interior
 
     private int calcHash()
     {
-        int hash = getClass().hashCode();
+        int hash = getClass().hashCode() | 0x0000001;
         hash = 31 * hash + Double.valueOf(ior).hashCode();
         hash = 31 * hash + color.hashCode();
         hash = 31 * hash + Double.valueOf(falloff).hashCode();

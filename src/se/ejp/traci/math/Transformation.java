@@ -62,7 +62,7 @@ public class Transformation
     @Override
     public int hashCode()
     {
-        int hash = getClass().hashCode();
+        int hash = getClass().hashCode() | 0x0000001;
         hash = 31 * hash + mat.hashCode();
         hash = 31 * hash + invMat.hashCode();
         return hash;

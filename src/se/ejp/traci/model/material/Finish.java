@@ -40,7 +40,7 @@ public class Finish
 
     private int calcHash()
     {
-        int hash = getClass().hashCode();
+        int hash = getClass().hashCode() | 0x0000001;
         hash = 31 * hash + Double.valueOf(specCoeff).hashCode();
         hash = 31 * hash + Double.valueOf(diffCoeff).hashCode();
         hash = 31 * hash + Double.valueOf(shininess).hashCode();

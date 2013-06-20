@@ -83,7 +83,7 @@ public class Color
     @Override
     public int hashCode()
     {
-        int hash = getClass().hashCode();
+        int hash = getClass().hashCode() | 0x0000001;
         hash = 31 * hash + Double.valueOf(r).hashCode();
         hash = 31 * hash + Double.valueOf(g).hashCode();
         hash = 31 * hash + Double.valueOf(b).hashCode();
