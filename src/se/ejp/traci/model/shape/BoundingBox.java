@@ -1,7 +1,5 @@
 package se.ejp.traci.model.shape;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import se.ejp.traci.math.Transformable;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
@@ -9,9 +7,6 @@ import se.ejp.traci.math.Vector;
 
 public class BoundingBox implements Transformable, Cloneable
 {
-    public static final AtomicLong miss = new AtomicLong(1);
-    public static final AtomicLong hit = new AtomicLong(1);
-
     private Transformation transformation;
 
     private BoundingBox()
@@ -69,10 +64,10 @@ public class BoundingBox implements Transformable, Cloneable
         final double x0 = -transP.x() / transDir.x();
         final double x1 = (1.0 - transP.x()) / transDir.x();
 
-        double far = max(x0, x1);
         double near = min(x0, x1);
+        double far = max(x0, x1);
 
-        if (far < 0)
+        if (far < 0.0)
         {
             return false;
         }
@@ -83,12 +78,11 @@ public class BoundingBox implements Transformable, Cloneable
         final double y0 = -transP.y() / transDir.y();
         final double y1 = (1.0 - transP.y()) / transDir.y();
 
-        far = min(far, max(y0, y1));
         near = max(near, min(y0, y1));
+        far = min(far, max(y0, y1));
 
-        if (far < 0 || far < near)
+        if (far < 0.0 || far < near)
         {
-            //miss.incrementAndGet();
             return false;
         }
 
@@ -101,12 +95,12 @@ public class BoundingBox implements Transformable, Cloneable
         near = max(near, min(z0, z1));
         far = min(far, max(z0, z1));
 
-        if (far > 0 && near < far)
+        if (far < 0.0 || far < near)
         {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     public Transformation getTransformation()

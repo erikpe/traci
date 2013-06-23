@@ -13,7 +13,6 @@ import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.Camera;
 import se.ejp.traci.model.Color;
 import se.ejp.traci.model.Scene;
-import se.ejp.traci.model.shape.BoundingBox;
 import se.ejp.traci.model.shape.ShapeHelper;
 import se.ejp.traci.render.RenderingThread.BlockRenderer;
 import se.ejp.traci.render.RenderingThread.WorkBlock;
@@ -128,13 +127,6 @@ public class Renderer implements BlockRenderer
         }
 
         Log.INFO("Successfully rendered scene in " + Utilities.millisecondsToString(stop - start));
-
-        if (settings.getDebug())
-        {
-            final long hit = BoundingBox.hit.get();
-            final long miss = BoundingBox.miss.get();
-            Log.INFO("Bounding-Box discard ratio: " + ((100 * miss) / (miss + hit)) + "% (" + miss + "/" + (miss + hit) + ")");
-        }
 
         return Result.SUCCESS;
     }
