@@ -19,8 +19,8 @@ public class Camera implements Transformable, Cloneable
     private double fovy;
 
     private Transformation transformation;
-    public double focalDist = 50;
-    public double aperture = 1.5;
+    public double focalDist = 45;
+    public double aperture = .5;
 
     private double xx;
     private double yy;

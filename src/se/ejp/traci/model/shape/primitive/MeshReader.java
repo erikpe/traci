@@ -16,9 +16,11 @@ import org.smurn.jply.util.NormalizingPlyReader;
 import org.smurn.jply.util.TesselationMode;
 import org.smurn.jply.util.TextureMode;
 
+import se.ejp.traci.util.Log;
+
 public class MeshReader
 {
-    public static class Mesh
+    public static class MeshData
     {
         public static final int VERTEX_SIZE = 6;
         public static final int TRIANGLE_SIZE = 3;
@@ -45,17 +47,12 @@ public class MeshReader
     }
 
     private static final int MAX_TRIANGLES_IN_LEAF = 10;
-    private static final Map<String, Mesh> cache = new HashMap<String, Mesh>();
+    private static final Map<String, MeshData> cache = new HashMap<String, MeshData>();
 
     private final String filename;
 
     private List<BSPNode> bspNodes = null;
-    private Mesh mesh;
-
-    public static void main(final String[] args) throws IOException
-    {
-        final Mesh m = new MeshReader("ply/bun_zipper.ply").read();
-    }
+    private MeshData meshData;
 
     public MeshReader(final String filename)
     {
@@ -64,24 +61,24 @@ public class MeshReader
 
     private void bspNodesToMesh()
     {
-        mesh.bspTree = new int[Mesh.BSP_NODE_SIZE * bspNodes.size()];
-        mesh.bboxes = new double[Mesh.BBOX_SIZE * bspNodes.size()];
-        mesh.numBspNode = bspNodes.size();
+        meshData.bspTree = new int[MeshData.BSP_NODE_SIZE * bspNodes.size()];
+        meshData.bboxes = new double[MeshData.BBOX_SIZE * bspNodes.size()];
+        meshData.numBspNode = bspNodes.size();
 
         int treeIdx = 0;
         int bboxIdx = 0;
 
         for (final BSPNode node : bspNodes)
         {
-            mesh.bspTree[treeIdx++] = node.a;
-            mesh.bspTree[treeIdx++] = node.b;
+            meshData.bspTree[treeIdx++] = node.a;
+            meshData.bspTree[treeIdx++] = node.b;
 
-            mesh.bboxes[bboxIdx++] = node.xLow;
-            mesh.bboxes[bboxIdx++] = node.xHigh;
-            mesh.bboxes[bboxIdx++] = node.yLow;
-            mesh.bboxes[bboxIdx++] = node.yHigh;
-            mesh.bboxes[bboxIdx++] = node.zLow;
-            mesh.bboxes[bboxIdx++] = node.zHigh;
+            meshData.bboxes[bboxIdx++] = node.xLow;
+            meshData.bboxes[bboxIdx++] = node.xHigh;
+            meshData.bboxes[bboxIdx++] = node.yLow;
+            meshData.bboxes[bboxIdx++] = node.yHigh;
+            meshData.bboxes[bboxIdx++] = node.zLow;
+            meshData.bboxes[bboxIdx++] = node.zHigh;
         }
     }
 
@@ -100,12 +97,12 @@ public class MeshReader
             vertices.add(element.getDouble("nz"));
         }
 
-        mesh.vertices = new double[vertices.size()];
-        mesh.numVertices = vertices.size() / Mesh.VERTEX_SIZE;
+        meshData.vertices = new double[vertices.size()];
+        meshData.numVertices = vertices.size() / MeshData.VERTEX_SIZE;
 
         for (int i = 0; i < vertices.size(); ++i)
         {
-            mesh.vertices[i] = vertices.get(i);
+            meshData.vertices[i] = vertices.get(i);
         }
     }
 
@@ -133,24 +130,26 @@ public class MeshReader
             triangles.add(indices[2]);
         }
 
-        mesh.triangles = new int[triangles.size()];
-        mesh.numTriangles = triangles.size() / Mesh.TRIANGLE_SIZE;
+        meshData.triangles = new int[triangles.size()];
+        meshData.numTriangles = triangles.size() / MeshData.TRIANGLE_SIZE;
 
         for (int i = 0; i < triangles.size(); ++i)
         {
-            mesh.triangles[i] = triangles.get(i);
+            meshData.triangles[i] = triangles.get(i);
         }
     }
 
-    public Mesh read() throws IOException
+    public MeshData read() throws IOException
     {
-        if ((mesh = cache.get(filename)) != null)
+        if ((meshData = cache.get(filename)) != null)
         {
-            return mesh;
+            return meshData;
         }
 
-        mesh = new Mesh();
-        cache.put(filename, mesh);
+        Log.INFO("Loading mesh data from '" + filename + "'");
+
+        meshData = new MeshData();
+        cache.put(filename, meshData);
 
         PlyReader plyReader = new PlyReaderFile(filename);
         plyReader = new NormalizingPlyReader(plyReader, TesselationMode.TRIANGLES, NormalMode.ADD_NORMALS_CCW,
@@ -172,20 +171,20 @@ public class MeshReader
         }
 
         bspNodes = new ArrayList<BSPNode>();
-        makeBspNode(0, mesh.numTriangles);
+        makeBspNode(0, meshData.numTriangles);
         bspNodesToMesh();
         bspNodes = null;
 
-        return mesh;
+        return meshData;
     }
 
     private boolean rightOfPlane(final int triIdx, final int axis, final double splitPlane)
     {
         double val0, val1, val2;
 
-        val0 = mesh.vertices[Mesh.VERTEX_SIZE * mesh.triangles[Mesh.TRIANGLE_SIZE * triIdx + 0] + axis];
-        val1 = mesh.vertices[Mesh.VERTEX_SIZE * mesh.triangles[Mesh.TRIANGLE_SIZE * triIdx + 1] + axis];
-        val2 = mesh.vertices[Mesh.VERTEX_SIZE * mesh.triangles[Mesh.TRIANGLE_SIZE * triIdx + 2] + axis];
+        val0 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[MeshData.TRIANGLE_SIZE * triIdx + 0] + axis];
+        val1 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[MeshData.TRIANGLE_SIZE * triIdx + 1] + axis];
+        val2 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[MeshData.TRIANGLE_SIZE * triIdx + 2] + axis];
 
         val0 = val0 - splitPlane;
         val1 = val1 - splitPlane;
@@ -202,7 +201,7 @@ public class MeshReader
         int left = begin;
         int right = end - 1;
 
-        final int size = Mesh.TRIANGLE_SIZE;
+        final int size = MeshData.TRIANGLE_SIZE;
         final int[] tmpTriangle = new int[size];
 
         while (left < right)
@@ -217,9 +216,9 @@ public class MeshReader
             }
             else
             {
-                System.arraycopy(mesh.triangles, size * left,  tmpTriangle,    0,            size);
-                System.arraycopy(mesh.triangles, size * right, mesh.triangles, size * left,  size);
-                System.arraycopy(tmpTriangle,    0,            mesh.triangles, size * right, size);
+                System.arraycopy(meshData.triangles, size * left,  tmpTriangle,        0,            size);
+                System.arraycopy(meshData.triangles, size * right, meshData.triangles, size * left,  size);
+                System.arraycopy(tmpTriangle,        0,            meshData.triangles, size * right, size);
             }
         }
 
@@ -287,21 +286,21 @@ public class MeshReader
 
         for (int i = begin; i < end; ++i)
         {
-            final int v0 = mesh.triangles[Mesh.TRIANGLE_SIZE * i];
-            final int v1 = mesh.triangles[Mesh.TRIANGLE_SIZE * i + 1];
-            final int v2 = mesh.triangles[Mesh.TRIANGLE_SIZE * i + 2];
+            final int v0 = meshData.triangles[MeshData.TRIANGLE_SIZE * i];
+            final int v1 = meshData.triangles[MeshData.TRIANGLE_SIZE * i + 1];
+            final int v2 = meshData.triangles[MeshData.TRIANGLE_SIZE * i + 2];
 
-            final double v0_x = mesh.vertices[Mesh.VERTEX_SIZE * v0];
-            final double v0_y = mesh.vertices[Mesh.VERTEX_SIZE * v0 + 1];
-            final double v0_z = mesh.vertices[Mesh.VERTEX_SIZE * v0 + 2];
+            final double v0_x = meshData.vertices[MeshData.VERTEX_SIZE * v0];
+            final double v0_y = meshData.vertices[MeshData.VERTEX_SIZE * v0 + 1];
+            final double v0_z = meshData.vertices[MeshData.VERTEX_SIZE * v0 + 2];
 
-            final double v1_x = mesh.vertices[Mesh.VERTEX_SIZE * v1];
-            final double v1_y = mesh.vertices[Mesh.VERTEX_SIZE * v1 + 1];
-            final double v1_z = mesh.vertices[Mesh.VERTEX_SIZE * v1 + 2];
+            final double v1_x = meshData.vertices[MeshData.VERTEX_SIZE * v1];
+            final double v1_y = meshData.vertices[MeshData.VERTEX_SIZE * v1 + 1];
+            final double v1_z = meshData.vertices[MeshData.VERTEX_SIZE * v1 + 2];
 
-            final double v2_x = mesh.vertices[Mesh.VERTEX_SIZE * v2];
-            final double v2_y = mesh.vertices[Mesh.VERTEX_SIZE * v2 + 1];
-            final double v2_z = mesh.vertices[Mesh.VERTEX_SIZE * v2 + 2];
+            final double v2_x = meshData.vertices[MeshData.VERTEX_SIZE * v2];
+            final double v2_y = meshData.vertices[MeshData.VERTEX_SIZE * v2 + 1];
+            final double v2_z = meshData.vertices[MeshData.VERTEX_SIZE * v2 + 2];
 
             node.xLow = min(node.xLow, min(v0_x, min(v1_x, v2_x)));
             node.xHigh = max(node.xHigh, max(v0_x, max(v1_x, v2_x)));

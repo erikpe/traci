@@ -3,7 +3,7 @@ package se.ejp.traci.render;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.shape.primitive.Primitive;
 
-public class Point
+public class Point implements Comparable<Point>
 {
     public static enum Type
     {
@@ -57,5 +57,11 @@ public class Point
         }
 
         return "[" + strType + ": " + dist + "]";
+    }
+
+    @Override
+    public int compareTo(final Point other)
+    {
+        return (dist < other.dist ? -1 : (dist > other.dist ? 1 : 0));
     }
 }
