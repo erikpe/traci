@@ -1,7 +1,7 @@
 tree grammar TraciTreeWalker;
 
 options {
-    tokenVocab=Traci;
+    tokenVocab=TraciParser;
     ASTLabelType=CommonTree;
 }
 
