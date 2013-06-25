@@ -17,6 +17,7 @@ import se.ejp.traci.model.shape.ShapeHelper;
 import se.ejp.traci.render.RenderingThread.BlockRenderer;
 import se.ejp.traci.render.RenderingThread.WorkBlock;
 import se.ejp.traci.util.Log;
+import se.ejp.traci.util.Pair;
 import se.ejp.traci.util.Utilities;
 
 public class Renderer implements BlockRenderer
@@ -170,8 +171,8 @@ public class Renderer implements BlockRenderer
                     final double lookX = (x + subX) / (area.width() - 1); // [0.0 .. 1.0]
                     final double lookY = (y + subY) / (area.height() - 1); // [0.0 .. 1.0]
 
-                    final Vector[] cam = camera.getLocAndDir(lookX, lookY, settings, block.randomSource);
-                    final Color rayColor = Raytrace.raytrace(scene, 10, cam[0], cam[1], null);
+                    final Pair<Vector, Vector> cam = camera.getLocAndDir(lookX, lookY, settings, block.randomSource);
+                    final Color rayColor = Raytrace.raytrace(scene, 10, cam.first, cam.second, null);
                     color = color.add(rayColor);
                 }
             }

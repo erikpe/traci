@@ -7,6 +7,7 @@ import se.ejp.traci.math.Transformable;
 import se.ejp.traci.math.Transformation;
 import se.ejp.traci.math.Transformations;
 import se.ejp.traci.math.Vector;
+import se.ejp.traci.util.Pair;
 
 public class Camera implements Transformable, Cloneable
 {
@@ -63,16 +64,15 @@ public class Camera implements Transformable, Cloneable
         initialized = true;
     }
 
-    public Vector[] getLocAndDir(final double lookX, final double lookY, final Settings settings, final Random randomSource)
+    public Pair<Vector, Vector> getLocAndDir(final double lookX, final double lookY, final Settings settings,
+            final Random randomSource)
     {
         if (!initialized)
         {
             throw new IllegalStateException("Camera not initialized with settings yet");
         }
 
-        final Vector[] res = new Vector[2];
-        final Vector location;
-
+        Vector p = Vector.ORIGO;
         if (settings.getFocalBlurEnabled())
         {
             final double r = Math.sqrt(randomSource.nextDouble()) / 2.0;
@@ -81,23 +81,19 @@ public class Camera implements Transformable, Cloneable
             final double apertureX = r * Math.cos(phi);
             final double apertureY = r * Math.sin(phi);
 
-            location = Vector.make(aperture * apertureX, aperture * apertureY, 0);
-        }
-        else
-        {
-            location = Vector.ORIGO;
+            p = Vector.make(aperture * apertureX, aperture * apertureY, 0);
         }
 
         final double x = (lookX - 0.5) * xx;
         final double y = (0.5 - lookY) * yy;
 
         final Vector lookAt = Vector.make(x, y, 1).mul(focalDist);
-        final Vector dir = lookAt.sub(location).normalize();
+        Vector dir = lookAt.sub(p).normalize();
 
-        res[0] = transformation.point(location);
-        res[1] = transformation.dir(dir);
+        p = transformation.point(p);
+        dir = transformation.dir(dir);
 
-        return res;
+        return Pair.make(p, dir);
     }
 
     @Override
