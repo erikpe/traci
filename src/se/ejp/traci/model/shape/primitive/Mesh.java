@@ -56,8 +56,9 @@ public class Mesh extends Primitive
             return;
         }
 
-        final int a = meshData.bspTree[MeshData.BSP_NODE_SIZE * node];
-        final int b = meshData.bspTree[MeshData.BSP_NODE_SIZE * node + 1];
+        int idx = MeshData.BSP_NODE_SIZE * node;
+        final int a = meshData.bspTree[idx];
+        final int b = meshData.bspTree[++idx];
 
         if (a < 0)
         {
@@ -74,8 +75,8 @@ public class Mesh extends Primitive
     {
         int idx = MeshData.BBOX_SIZE * node;
 
-        final double xLow = meshData.bboxes[idx++];
-        final double xHigh = meshData.bboxes[idx++];
+        final double xLow = meshData.bboxes[idx];
+        final double xHigh = meshData.bboxes[++idx];
         final double px = p.x();
         final double dirx = dir.x();
 
@@ -90,8 +91,8 @@ public class Mesh extends Primitive
             return false;
         }
 
-        final double yLow = meshData.bboxes[idx++];
-        final double yHigh = meshData.bboxes[idx++];
+        final double yLow = meshData.bboxes[++idx];
+        final double yHigh = meshData.bboxes[++idx];
         final double py = p.y();
         final double diry = dir.y();
 
@@ -106,8 +107,8 @@ public class Mesh extends Primitive
             return false;
         }
 
-        final double zLow = meshData.bboxes[idx++];
-        final double zHigh = meshData.bboxes[idx++];
+        final double zLow = meshData.bboxes[++idx];
+        final double zHigh = meshData.bboxes[++idx];
         final double pz = p.z();
         final double dirz = dir.z();
 
@@ -150,7 +151,7 @@ public class Mesh extends Primitive
             x = meshData.vertices[idx];
             y = meshData.vertices[++idx];
             z = meshData.vertices[++idx];
-            final Vector V2= Vector.make(x, y, z);
+            final Vector V2 = Vector.make(x, y, z);
 
             // Find vectors for two edges sharing V0
             final Vector e1 = V1.sub(V0);

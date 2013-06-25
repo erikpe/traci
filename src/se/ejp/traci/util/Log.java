@@ -20,11 +20,11 @@ public class Log
             this.prefixOne = prefixOne;
             this.prefixTwo = prefixTwo;
             this.printStream = printStream;
-
         }
     }
 
-    private static LogLevel logLevel = LogLevel.INFO;
+    private static final LogLevel DEFAULT_LOG_LEVEL = LogLevel.INFO;
+    private static LogLevel logLevel = DEFAULT_LOG_LEVEL;
 
     private static synchronized void handleMessage(final LogLevel level, final String msg)
     {
@@ -34,15 +34,8 @@ public class Log
 
             for (int i = 0; i < lines.length; ++i)
             {
-                final String line;
-                if (i == 0)
-                {
-                    line = level.prefixOne + lines[i];
-                }
-                else
-                {
-                    line = level.prefixTwo + lines[i];
-                }
+                final String prefix = (i == 0 ? level.prefixOne : level.prefixTwo);
+                final String line = prefix + lines[i];
 
                 level.printStream.println(line);
             }

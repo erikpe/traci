@@ -42,7 +42,8 @@ public class IncludeLocation
             if (i == (includePath.size() - 1))
             {
                 sb.append("In file included from ");
-            } else
+            }
+            else
             {
                 sb.append("                 from ");
             }
@@ -54,7 +55,8 @@ public class IncludeLocation
             if (i == 0)
             {
                 sb.append(":\n");
-            } else
+            }
+            else
             {
                 sb.append(",\n");
             }

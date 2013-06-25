@@ -65,20 +65,20 @@ public class MeshReader
         meshData.bboxes = new double[MeshData.BBOX_SIZE * bspNodes.size()];
         meshData.numBspNode = bspNodes.size();
 
-        int treeIdx = 0;
-        int bboxIdx = 0;
+        int treeIdx = -1;
+        int bboxIdx = -1;
 
         for (final BSPNode node : bspNodes)
         {
-            meshData.bspTree[treeIdx++] = node.a;
-            meshData.bspTree[treeIdx++] = node.b;
+            meshData.bspTree[++treeIdx] = node.a;
+            meshData.bspTree[++treeIdx] = node.b;
 
-            meshData.bboxes[bboxIdx++] = node.xLow;
-            meshData.bboxes[bboxIdx++] = node.xHigh;
-            meshData.bboxes[bboxIdx++] = node.yLow;
-            meshData.bboxes[bboxIdx++] = node.yHigh;
-            meshData.bboxes[bboxIdx++] = node.zLow;
-            meshData.bboxes[bboxIdx++] = node.zHigh;
+            meshData.bboxes[++bboxIdx] = node.xLow;
+            meshData.bboxes[++bboxIdx] = node.xHigh;
+            meshData.bboxes[++bboxIdx] = node.yLow;
+            meshData.bboxes[++bboxIdx] = node.yHigh;
+            meshData.bboxes[++bboxIdx] = node.zLow;
+            meshData.bboxes[++bboxIdx] = node.zHigh;
         }
     }
 
@@ -182,9 +182,10 @@ public class MeshReader
     {
         double val0, val1, val2;
 
-        val0 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[MeshData.TRIANGLE_SIZE * triIdx + 0] + axis];
-        val1 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[MeshData.TRIANGLE_SIZE * triIdx + 1] + axis];
-        val2 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[MeshData.TRIANGLE_SIZE * triIdx + 2] + axis];
+        int idx = MeshData.TRIANGLE_SIZE * triIdx;
+        val0 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[idx]   + axis];
+        val1 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[++idx] + axis];
+        val2 = meshData.vertices[MeshData.VERTEX_SIZE * meshData.triangles[++idx] + axis];
 
         val0 = val0 - splitPlane;
         val1 = val1 - splitPlane;
@@ -286,21 +287,25 @@ public class MeshReader
 
         for (int i = begin; i < end; ++i)
         {
-            final int v0 = meshData.triangles[MeshData.TRIANGLE_SIZE * i];
-            final int v1 = meshData.triangles[MeshData.TRIANGLE_SIZE * i + 1];
-            final int v2 = meshData.triangles[MeshData.TRIANGLE_SIZE * i + 2];
+            int idx = MeshData.TRIANGLE_SIZE * i;
+            final int v0 = meshData.triangles[idx];
+            final int v1 = meshData.triangles[++idx];
+            final int v2 = meshData.triangles[++idx];
 
-            final double v0_x = meshData.vertices[MeshData.VERTEX_SIZE * v0];
-            final double v0_y = meshData.vertices[MeshData.VERTEX_SIZE * v0 + 1];
-            final double v0_z = meshData.vertices[MeshData.VERTEX_SIZE * v0 + 2];
+            idx = MeshData.VERTEX_SIZE * v0;
+            final double v0_x = meshData.vertices[idx];
+            final double v0_y = meshData.vertices[++idx];
+            final double v0_z = meshData.vertices[++idx];
 
-            final double v1_x = meshData.vertices[MeshData.VERTEX_SIZE * v1];
-            final double v1_y = meshData.vertices[MeshData.VERTEX_SIZE * v1 + 1];
-            final double v1_z = meshData.vertices[MeshData.VERTEX_SIZE * v1 + 2];
+            idx = MeshData.VERTEX_SIZE * v1;
+            final double v1_x = meshData.vertices[idx];
+            final double v1_y = meshData.vertices[++idx];
+            final double v1_z = meshData.vertices[++idx];
 
-            final double v2_x = meshData.vertices[MeshData.VERTEX_SIZE * v2];
-            final double v2_y = meshData.vertices[MeshData.VERTEX_SIZE * v2 + 1];
-            final double v2_z = meshData.vertices[MeshData.VERTEX_SIZE * v2 + 2];
+            idx = MeshData.VERTEX_SIZE * v2;
+            final double v2_x = meshData.vertices[idx];
+            final double v2_y = meshData.vertices[++idx];
+            final double v2_z = meshData.vertices[++idx];
 
             node.xLow = min(node.xLow, min(v0_x, min(v1_x, v2_x)));
             node.xHigh = max(node.xHigh, max(v0_x, max(v1_x, v2_x)));

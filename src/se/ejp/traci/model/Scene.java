@@ -50,6 +50,10 @@ public class Scene
         {
             setAmbientLight((AmbientLight) light);
         }
+        else
+        {
+            throw new IllegalArgumentException("Unknown light type: " + light.toString());
+        }
     }
 
     public void addPointLight(final PointLight pointLight)
