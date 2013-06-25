@@ -48,7 +48,8 @@
     <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciLexer.java" />
     <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciParser.java" />
     <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciTreeWalker.java" />
-    <delete file="${src.dir}/se/ejp/traci/lang/parser/Traci.tokens" />
+    <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciLexer.tokens" />
+    <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciParser.tokens" />
     <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciTreeWalker.tokens" />
   </target>
 
@@ -64,7 +65,8 @@
       <arg value="-make" />
       <arg value="-fo" />
       <arg value="${src.dir}/se/ejp/traci/lang/parser" />
-      <arg value="${src.dir}/se/ejp/traci/lang/grammar/Traci.g" />
+      <arg value="${src.dir}/se/ejp/traci/lang/grammar/TraciLexer.g" />
+      <arg value="${src.dir}/se/ejp/traci/lang/grammar/TraciParser.g" />
       <arg value="${src.dir}/se/ejp/traci/lang/grammar/TraciTreeWalker.g" />
     </java>
   </target>
