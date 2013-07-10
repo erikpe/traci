@@ -1,7 +1,6 @@
 package se.ejp.traci.math;
 
-
-public class Vector
+public final class Vector
 {
     private final double x, y, z;
 
