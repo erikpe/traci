@@ -179,7 +179,7 @@
         <include name="${testcode.dir}/" />
         <include name="build.xml" />
         <include name="README" />
-        <include name="COPYING" />
+        <include name="LICENSE" />
       </tarfileset>
     </tar>
   </target>
