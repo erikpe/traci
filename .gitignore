@@ -1,0 +1,6 @@
+/build/
+/traci-*.jar
+/traci-*.tar.gz
+/.fbprefs
+/.settings
+/*.png
