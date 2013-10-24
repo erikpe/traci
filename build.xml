@@ -1,4 +1,4 @@
-<project default="jar">
+<project name="traci" default="jar">
 
   <property name="version" value="0.0.1" />
 
