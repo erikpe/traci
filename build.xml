@@ -16,10 +16,10 @@
   <property name="test.report.dir" value="${build.dir}/test.report" />
   <property name="tmp.dir" value="${build.dir}/tmp" />
 
-  <property name="antlr.dir" value="antlr-3.5" />
-  <property name="antlr.jar" value="${lib.dir}/${antlr.dir}/antlr-3.5-complete-no-st3.jar" />
-  <property name="antlr-runtime.jar" value="${lib.dir}/${antlr.dir}/antlr-runtime-3.5.jar" />
-  <property name="antlr-runtime-sources.jar" value="${lib.dir}/${antlr.dir}/antlr-runtime-sources-3.5.jar" />
+  <property name="antlr.dir" value="antlr-3.5.1" />
+  <property name="antlr.jar" value="${lib.dir}/${antlr.dir}/antlr-3.5.1-complete-no-st3.jar" />
+  <property name="antlr-runtime.jar" value="${lib.dir}/${antlr.dir}/antlr-3.5.1-runtime.jar" />
+  <property name="antlr-runtime-sources.jar" value="${lib.dir}/${antlr.dir}/antlr-runtime-3.5.1-sources.jar" />
 
   <property name="commons-cli.dir" value="commons-cli-1.2" />
   <property name="commons-cli.jar" value="${lib.dir}/${commons-cli.dir}/commons-cli-1.2.jar" />
