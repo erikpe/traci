@@ -187,7 +187,7 @@
   <target name="run-tests" depends="compile, compile-tests">
     <delete dir="${test.output.dir}" />
     <mkdir dir="${test.output.dir}" />
-    <junit failureProperty="test.failure" printsummary="yes" haltonfailure="no" showoutput="no">
+    <junit failureProperty="test.failure" printsummary="yes" haltonfailure="no" showoutput="no" fork="yes" forkmode="once">
       <classpath>
         <pathelement location="${src.build.dir}" />
         <pathelement location="${test.build.dir}" />
@@ -199,6 +199,9 @@
         <pathelement location="${hamcrest.jar}" />
         <pathelement location="${junit.jar}" />
       </classpath>
+      <assertions>
+        <enable />
+      </assertions>
       <formatter type="xml" />
       <batchtest todir="${test.output.dir}">
         <fileset dir="${test.src.dir}" includes="**/*Test.java" />
