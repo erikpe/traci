@@ -59,7 +59,11 @@ public class Ray
         {
             return false;
         }
-        else if (ray.points[0].type == Type.LEAVE || ray.points[ray.size - 1].type == Type.ENTER)
+        else if (ray.points[0].type == Type.LEAVE)
+        {
+            return false;
+        }
+        else if (ray.points[ray.size - 1].type == Type.ENTER)
         {
             return false;
         }
@@ -106,6 +110,17 @@ public class Ray
     {
         assert size > 0;
         return points[size - 1].dist;
+    }
+
+    int numPoints()
+    {
+        return size;
+    }
+
+    Point getPoint(final int idx)
+    {
+        assert idx < size;
+        return points[idx];
     }
 
     public void add(final double dist, final Primitive obj, final Type type, final Vector normal)
