@@ -351,7 +351,7 @@ public class Ray
 
             case INTERSECT:
                 assert (insideMask & pointMask) == 0;
-                if ((insideMask |= pointMask) == 0x03)
+                if ((insideMask | pointMask) == 0x03)
                 {
                     newRay.add(pNear);
                 }
@@ -434,7 +434,7 @@ public class Ray
 
             case INTERSECT:
                 assert (insideMask & pointMask) == 0;
-                if ((insideMask |= pointMask) == 0x03)
+                if ((insideMask | pointMask) == 0x03)
                 {
                     newRay.add(pNear);
                 }
