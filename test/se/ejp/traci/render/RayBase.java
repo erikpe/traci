@@ -1,6 +1,7 @@
 package se.ejp.traci.render;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import se.ejp.traci.model.shape.primitive.Primitive;
@@ -29,9 +30,40 @@ public class RayBase
         return ray;
     }
 
+    protected Ray mulRay(final Ray ray, final int times, final double offset)
+    {
+        assertTrue(Ray.checkRay(ray));
+
+        if (ray == null)
+        {
+            return null;
+        }
+
+        final Ray res = Ray.make();
+        for (int i = 0; i < times; ++i)
+        {
+            for (int pIdx = 0; pIdx < ray.numPoints(); ++pIdx)
+            {
+                final Point p = ray.getPoint(pIdx);
+                res.add(offset * i + p.dist, p.obj, p.type, p.normal);
+            }
+        }
+        assertTrue(Ray.checkRay(res));
+
+        return res;
+    }
+
     protected void assertRayEquals(final Ray expected, final Ray res)
     {
+        assertTrue(Ray.checkRay(expected));
         assertTrue(Ray.checkRay(res));
+
+        if (expected == null)
+        {
+            assertNull(res);
+            return;
+        }
+
         assertEquals(expected.numPoints(), res.numPoints());
 
         for (int i = 0; i < expected.numPoints(); ++i)
