@@ -25,8 +25,6 @@ public class RayBase
             ray.add(point.dist, point.obj, point.type, point.normal);
         }
 
-        assertTrue(Ray.checkRay(ray));
-
         return ray;
     }
 

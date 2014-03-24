@@ -1,5 +1,7 @@
 package se.ejp.traci.render;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import se.ejp.traci.render.Point.Type;
@@ -8,6 +10,10 @@ public class RayDifferenceTest extends RayBase
 {
     private void assertRayDifference(final Ray expected, final Ray ray0, final Ray ray1)
     {
+        assertTrue(Ray.checkRay(expected));
+        assertTrue(Ray.checkRay(ray0));
+        assertTrue(Ray.checkRay(ray1));
+
         for (int times = 1; times <= 3; ++times)
         {
             final Ray r0 = mulRay(ray0, times, 10.0);
@@ -271,6 +277,11 @@ public class RayDifferenceTest extends RayBase
             expected1.add(i + 0.4, p2, Type.LEAVE, null);
             expected1.add(i + 0.5, p3, Type.INTERSECT, null);
         }
+
+        assertTrue(Ray.checkRay(expected0));
+        assertTrue(Ray.checkRay(expected1));
+        assertTrue(Ray.checkRay(ray0));
+        assertTrue(Ray.checkRay(ray1));
 
         Ray res = Ray.difference(ray0, ray1);
         assertRayEquals(expected0, res);

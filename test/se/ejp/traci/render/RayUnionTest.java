@@ -1,5 +1,7 @@
 package se.ejp.traci.render;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import se.ejp.traci.render.Point.Type;
@@ -8,6 +10,10 @@ public class RayUnionTest extends RayBase
 {
     private void assertRayUnion(final Ray expected, final Ray ray0, final Ray ray1)
     {
+        assertTrue(Ray.checkRay(expected));
+        assertTrue(Ray.checkRay(ray0));
+        assertTrue(Ray.checkRay(ray1));
+
         for (int times = 1; times <= 3; ++times)
         {
             final Ray r0 = mulRay(ray0, times, 10.0);
@@ -251,6 +257,10 @@ public class RayUnionTest extends RayBase
             expected.add(i + 0.3, p2, Type.ENTER, null);
             expected.add(i + 0.4, p2, Type.LEAVE, null);
         }
+
+        assertTrue(Ray.checkRay(expected));
+        assertTrue(Ray.checkRay(ray0));
+        assertTrue(Ray.checkRay(ray1));
 
         Ray res = Ray.union(ray0, ray1);
         assertRayEquals(expected, res);
