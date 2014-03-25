@@ -33,8 +33,13 @@ public class RayIntersectionTest extends RayBase
     {
         final Ray ray0 = makeRay(Point.make(1.0, p0, Type.INTERSECT, null));
 
+        final Ray ray1 = makeRay(
+                Point.make(1.0, p0, Type.ENTER, null),
+                Point.make(2.0, p0, Type.LEAVE, null));
+
         assertRayIntersect(null, null, null);
         assertRayIntersect(null, ray0, null);
+        assertRayIntersect(null, ray1, null);
     }
 
     /*
@@ -200,8 +205,8 @@ public class RayIntersectionTest extends RayBase
     }
 
     /*
-     * ray0:   | p0 |    | p1 |
-     * ray1: |        p2        |
+     * ray0:   | p0 |  I  | p1 |
+     * ray1: |        p2         |
      */
     @Test
     public void testOverlapping6()
@@ -209,6 +214,7 @@ public class RayIntersectionTest extends RayBase
         final Ray ray0 = makeRay(
                 Point.make(1.0, p0, Type.ENTER, null),
                 Point.make(2.0, p0, Type.LEAVE, null),
+                Point.make(2.5, p3, Type.INTERSECT, null),
                 Point.make(3.0, p1, Type.ENTER, null),
                 Point.make(4.0, p1, Type.LEAVE, null));
 
@@ -219,8 +225,31 @@ public class RayIntersectionTest extends RayBase
         final Ray expected = makeRay(
                 Point.make(1.0, p0, Type.ENTER, null),
                 Point.make(2.0, p0, Type.LEAVE, null),
+                Point.make(2.5, p3, Type.INTERSECT, null),
                 Point.make(3.0, p1, Type.ENTER, null),
                 Point.make(4.0, p1, Type.LEAVE, null));
+
+        assertRayIntersect(expected, ray0, ray1);
+    }
+
+    /*
+     * ray0:   | p0 |
+     * ray1: I    I    I
+     */
+    @Test
+    public void testOverlapping7()
+    {
+        final Ray ray0 = makeRay(
+                Point.make(1.0, p0, Type.ENTER, null),
+                Point.make(2.0, p0, Type.LEAVE, null));
+
+        final Ray ray1 = makeRay(
+                Point.make(0.5, p1, Type.INTERSECT, null),
+                Point.make(1.5, p2, Type.INTERSECT, null),
+                Point.make(2.5, p3, Type.INTERSECT, null));
+
+        final Ray expected = makeRay(
+                Point.make(1.5, p2, Type.INTERSECT, null));
 
         assertRayIntersect(expected, ray0, ray1);
     }

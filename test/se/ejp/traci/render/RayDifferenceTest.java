@@ -29,11 +29,21 @@ public class RayDifferenceTest extends RayBase
     public void testNull()
     {
         final Ray ray0 = makeRay(Point.make(1.0, p0, Type.INTERSECT, null));
-        final Ray expected = makeRay(Point.make(1.0, p0, Type.INTERSECT, null));
+        final Ray expected0 = makeRay(Point.make(1.0, p0, Type.INTERSECT, null));
+
+        final Ray ray1 = makeRay(
+                Point.make(1.0, p0, Type.ENTER, null),
+                Point.make(2.0, p0, Type.LEAVE, null));
+
+        final Ray expected1 = makeRay(
+                Point.make(1.0, p0, Type.ENTER, null),
+                Point.make(2.0, p0, Type.LEAVE, null));
 
         assertRayDifference(null, null, null);
+        assertRayDifference(expected0, ray0, null);
         assertRayDifference(null, null, ray0);
-        assertRayDifference(expected, ray0, null);
+        assertRayDifference(expected1, ray1, null);
+        assertRayDifference(null, null, ray1);
     }
 
     /*
@@ -224,8 +234,8 @@ public class RayDifferenceTest extends RayBase
     }
 
     /*
-     * ray0:   | p0 |    | p1 |
-     * ray1: |        p2        |
+     * ray0:   | p0 |  I  | p1 |
+     * ray1: |        p2         |
      */
     @Test
     public void testOverlapping6()
@@ -233,6 +243,7 @@ public class RayDifferenceTest extends RayBase
         final Ray ray0 = makeRay(
                 Point.make(1.0, p0, Type.ENTER, null),
                 Point.make(2.0, p0, Type.LEAVE, null),
+                Point.make(2.5, p3, Type.INTERSECT, null),
                 Point.make(3.0, p1, Type.ENTER, null),
                 Point.make(4.0, p1, Type.LEAVE, null));
 
@@ -250,6 +261,34 @@ public class RayDifferenceTest extends RayBase
 
         assertRayDifference(null, ray0, ray1);
         assertRayDifference(expected, ray1, ray0);
+    }
+
+    /*
+     * ray0:   | p0 |
+     * ray1: I    I    I
+     */
+    @Test
+    public void testOverlapping7()
+    {
+        final Ray ray0 = makeRay(
+                Point.make(1.0, p0, Type.ENTER, null),
+                Point.make(2.0, p0, Type.LEAVE, null));
+
+        final Ray ray1 = makeRay(
+                Point.make(0.5, p1, Type.INTERSECT, null),
+                Point.make(1.5, p2, Type.INTERSECT, null),
+                Point.make(2.5, p3, Type.INTERSECT, null));
+
+        final Ray expected0 = makeRay(
+                Point.make(1.0, p0, Type.ENTER, null),
+                Point.make(2.0, p0, Type.LEAVE, null));
+
+        final Ray expected1 = makeRay(
+                Point.make(0.5, p1, Type.INTERSECT, null),
+                Point.make(2.5, p3, Type.INTERSECT, null));
+
+        assertRayDifference(expected0, ray0, ray1);
+        assertRayDifference(expected1, ray1, ray0);
     }
 
     @Test
