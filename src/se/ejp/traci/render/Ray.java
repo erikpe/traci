@@ -233,7 +233,7 @@ public class Ray
             final Point pNear;
             final int pointMask;
 
-            if (p0.dist < p1.dist)
+            if (p0.dist <= p1.dist)
             {
                 pNear = p0;
                 pointMask = 0x01;
@@ -249,17 +249,27 @@ public class Ray
             switch (pNear.type)
             {
             case ENTER:
+                // We can't already be inside what we're entering
                 assert (insideMask & pointMask) == 0;
+
+                // If we weren't inside any object, add the point
                 if (insideMask == 0)
                 {
                     newRay.add(pNear);
                 }
+
+                // Update inside-mask (add pointMask)
                 insideMask |= pointMask;
                 break;
 
             case LEAVE:
+                // We must be inside what we're leaving
                 assert (insideMask & pointMask) != 0;
+
+                // Update inside-mask (remove pointMask)
                 insideMask &= ~pointMask;
+
+                // If we're not inside anything anymore, add the point
                 if (insideMask == 0)
                 {
                     newRay.add(pNear);
@@ -267,7 +277,10 @@ public class Ray
                 break;
 
             case INTERSECT:
+                // We can't already be inside the ray of the intersection
                 assert (insideMask & pointMask) == 0;
+
+                // If we weren't inside any object, add the point
                 if (insideMask == 0)
                 {
                     newRay.add(pNear);
@@ -332,8 +345,13 @@ public class Ray
             switch (pNear.type)
             {
             case ENTER:
+                // We can't be inside what we're entering
                 assert (insideMask & pointMask) == 0;
+
+                // Update inside-mask (add pointMask)
                 insideMask |= pointMask;
+
+                // If we're inside both rays, add point
                 if (insideMask == 0x03)
                 {
                     newRay.add(pNear);
@@ -341,16 +359,24 @@ public class Ray
                 break;
 
             case LEAVE:
+                // We must be inside what we're leaving
                 assert (insideMask & pointMask) != 0;
+
+                // If we were inside both rays, add point
                 if (insideMask == 0x03)
                 {
                     newRay.add(pNear);
                 }
+
+                // Update inside-mask (remove pointMask)
                 insideMask &= ~pointMask;
                 break;
 
             case INTERSECT:
+                // We can't already be inside the ray of the intersection
                 assert (insideMask & pointMask) == 0;
+
+                // If we were inside both rays, add point
                 if ((insideMask | pointMask) == 0x03)
                 {
                     newRay.add(pNear);
