@@ -24,7 +24,7 @@ public class Mesh extends Primitive
     {
         try
         {
-            return new Mesh(new MeshReader(filename).read());
+            return new Mesh(MeshReader.readFile(filename));
         }
         catch (final IOException e)
         {

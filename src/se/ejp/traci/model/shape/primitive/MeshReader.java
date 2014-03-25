@@ -1,6 +1,8 @@
 package se.ejp.traci.model.shape.primitive;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,14 +51,13 @@ public class MeshReader
     private static final int MAX_TRIANGLES_IN_LEAF = 10;
     private static final Map<String, MeshData> cache = new HashMap<String, MeshData>();
 
-    private final String filename;
+    private final List<BSPNode> bspNodes;
+    private final MeshData meshData;
 
-    private List<BSPNode> bspNodes = null;
-    private MeshData meshData;
-
-    public MeshReader(final String filename)
+    private MeshReader()
     {
-        this.filename = filename;
+        this.bspNodes = new ArrayList<BSPNode>();
+        this.meshData = new MeshData();
     }
 
     private void bspNodesToMesh()
@@ -139,8 +140,10 @@ public class MeshReader
         }
     }
 
-    public MeshData read() throws IOException
+    public static MeshData readFile(final String filename) throws IOException
     {
+        MeshData meshData;
+
         if ((meshData = cache.get(filename)) != null)
         {
             return meshData;
@@ -148,10 +151,20 @@ public class MeshReader
 
         Log.INFO("Loading mesh data from '" + filename + "'");
 
-        meshData = new MeshData();
+        meshData = read(new FileInputStream(filename));
         cache.put(filename, meshData);
 
-        PlyReader plyReader = new PlyReaderFile(filename);
+        return meshData;
+    }
+
+    public static MeshData read(final InputStream input) throws IOException
+    {
+        return new MeshReader().readInternal(input);
+    }
+
+    private MeshData readInternal(final InputStream input) throws IOException
+    {
+        PlyReader plyReader = new PlyReaderFile(input);
         plyReader = new NormalizingPlyReader(plyReader, TesselationMode.TRIANGLES, NormalMode.ADD_NORMALS_CCW,
                 TextureMode.PASS_THROUGH);
 
@@ -169,11 +182,10 @@ public class MeshReader
 
             elementReader.close();
         }
+        input.close();
 
-        bspNodes = new ArrayList<BSPNode>();
         makeBspNode(0, meshData.numTriangles);
         bspNodesToMesh();
-        bspNodes = null;
 
         return meshData;
     }
