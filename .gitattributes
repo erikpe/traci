@@ -1,0 +1,9 @@
+*	text=auto
+
+*.java	text
+*.traci	text
+*.g	text
+*.xml	text
+*.jpg	binary
+*.png	binary
+*.jar	binary
