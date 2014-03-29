@@ -125,7 +125,7 @@ public class MeshReaderTest
     @Test
     public void testBunny() throws IOException
     {
-        final MeshData data = MeshReader.readFile("testcode/bun_zipper_res4.ply");
+        final MeshData data = MeshReader.readFile("testcode/ply/bun_zipper_res4.ply");
         assertEquals(453, data.numVertices);
         assertEquals(948, data.numTriangles);
         assertMeshData(data);
@@ -134,7 +134,7 @@ public class MeshReaderTest
     @Test
     public void testIcosahedron() throws IOException
     {
-        final MeshData data = MeshReader.readFile("testcode/icosahedron.ply");
+        final MeshData data = MeshReader.readFile("testcode/ply/icosahedron.ply");
         assertEquals(12, data.numVertices);
         assertEquals(20, data.numTriangles);
         assertMeshData(data);
@@ -143,7 +143,7 @@ public class MeshReaderTest
     @Test
     public void testTetrahedron() throws IOException
     {
-        final MeshData data = MeshReader.readFile("testcode/tetrahedron.ply");
+        final MeshData data = MeshReader.readFile("testcode/ply/tetrahedron.ply");
         assertEquals(4, data.numVertices);
         assertEquals(4, data.numTriangles);
         assertMeshData(data);
