@@ -307,9 +307,11 @@ def table(z, thickness) {
     };
 }
 
-airplane() {
-    rotx PI*2*(20/360);
-};
+//airplane() {
+//    rotx PI*2*(20/360);
+//};
+
+mesh("testcode/tetrahedron.ply") { YELLOW; };
 
 skybox("images/stormydays/forward.jpg", "images/stormydays/right.jpg", "images/stormydays/back.jpg",
        "images/stormydays/left.jpg", "images/stormydays/up.jpg", "images/stormydays/down.jpg") {
@@ -337,9 +339,12 @@ ambientlight(color [1,1,1]*.15*3);
 
 #endif
 
-loc = [-2.4*2, 6.7*2, 8.5*2];
-lookAt = [7*2, 1.3*3, -1*2];
-loc = lookAt + (loc - lookAt)*2;
+loc = [-5, -5, -20];
+lookAt = ORIGO;
+
+//loc = [-2.4*2, 6.7*2, 8.5*2];
+//lookAt = [7*2, 1.3*3, -1*2];
+//loc = lookAt + (loc - lookAt)*2;
 up = Y;
 fov = 50.0;
 camera(loc, lookAt, fov, up);
