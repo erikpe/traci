@@ -41,16 +41,19 @@
   <property name="junit.jar" value="${lib.dir}/${junit.dir}/junit-4.11.jar" />
   <property name="hamcrest.jar" value="${lib.dir}/${junit.dir}/hamcrest-core-1.3.jar" />
 
-  <property name="jarfile" value="traci-${version}.jar" />
-  <property name="src-distfile" value="traci-${version}.tar.gz" />
+  <property name="jarfile" value="${ant.project.name}-${version}.jar" />
+  <property name="src-distfile" value="${ant.project.name}-${version}.tar.gz" />
+
+  <property name="parser.src.dir" value="${src.dir}/se/ejp/traci/lang/parser" />
+  <property name="grammar.src.dir" value="${src.dir}/se/ejp/traci/lang/grammar" />
 
   <target name="clean-generated-parser">
-    <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciLexer.java" />
-    <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciParser.java" />
-    <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciTreeWalker.java" />
-    <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciLexer.tokens" />
-    <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciParser.tokens" />
-    <delete file="${src.dir}/se/ejp/traci/lang/parser/TraciTreeWalker.tokens" />
+    <delete file="${parser.src.dir}/TraciLexer.java" />
+    <delete file="${parser.src.dir}/TraciParser.java" />
+    <delete file="${parser.src.dir}/TraciTreeWalker.java" />
+    <delete file="${parser.src.dir}/TraciLexer.tokens" />
+    <delete file="${parser.src.dir}/TraciParser.tokens" />
+    <delete file="${parser.src.dir}/TraciTreeWalker.tokens" />
   </target>
 
   <target name="clean" depends="clean-generated-parser">
@@ -64,10 +67,10 @@
       <arg value="-verbose" />
       <arg value="-make" />
       <arg value="-fo" />
-      <arg value="${src.dir}/se/ejp/traci/lang/parser" />
-      <arg value="${src.dir}/se/ejp/traci/lang/grammar/TraciLexer.g" />
-      <arg value="${src.dir}/se/ejp/traci/lang/grammar/TraciParser.g" />
-      <arg value="${src.dir}/se/ejp/traci/lang/grammar/TraciTreeWalker.g" />
+      <arg value="${parser.src.dir}" />
+      <arg value="${grammar.src.dir}/TraciLexer.g" />
+      <arg value="${grammar.src.dir}/TraciParser.g" />
+      <arg value="${grammar.src.dir}/TraciTreeWalker.g" />
     </java>
   </target>
 
@@ -170,7 +173,7 @@
 
   <target name="src-dist" depends="clean-generated-parser">
     <tar destfile="${src-distfile}" compression="gzip">
-      <tarfileset dir="." prefix="traci-${version}">
+      <tarfileset dir="." prefix="${ant.project.name}-${version}">
         <include name="${src.dir}/" />
         <include name="${test.src.dir}/" />
         <include name="${scenes.dir}/" />
