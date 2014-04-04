@@ -14,7 +14,7 @@
   <property name="test.build.dir" value="${build.dir}/test.bin" />
   <property name="test.output.dir" value="${build.dir}/test.output" />
   <property name="test.report.dir" value="${build.dir}/test.report" />
-  <property name="tmp.dir" value="${build.dir}/tmp" />
+  <property name="unpacked-libs.dir" value="${build.dir}/unpacked-libs" />
 
   <property name="antlr.dir" value="antlr-3.5.1" />
   <property name="antlr.jar" value="${lib.dir}/${antlr.dir}/antlr-3.5.1-complete-no-st3.jar" />
@@ -74,15 +74,11 @@
     </java>
   </target>
 
-  <target name="compile" depends="generate-parser">
+  <target name="compile" depends="generate-parser, unpack-libs">
     <mkdir dir="${src.build.dir}" />
     <javac srcdir="${src.dir}" destdir="${src.build.dir}" includeantruntime="false">
       <classpath>
-        <pathelement location="${antlr-runtime.jar}" />
-        <pathelement location="${commons-cli.jar}" />
-        <pathelement location="${anarres-cpp.jar}" />
-        <pathelement location="${jply.jar}" />
-        <pathelement location="${commons-lang3.jar}" />
+        <pathelement location="${unpacked-libs.dir}" />
       </classpath>
     </javac>
   </target>
@@ -92,79 +88,71 @@
     <javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
       <classpath>
         <pathelement location="${src.build.dir}" />
-        <pathelement location="${antlr-runtime.jar}" />
-        <pathelement location="${commons-cli.jar}" />
-        <pathelement location="${anarres-cpp.jar}" />
-        <pathelement location="${jply.jar}" />
-        <pathelement location="${commons-lang3.jar}" />
+        <pathelement location="${unpacked-libs.dir}" />
         <pathelement location="${junit.jar}" />
       </classpath>
     </javac>
   </target>
 
   <target name="unpack-libs">
-    <delete dir="${tmp.dir}" />
-    <unjar src="${antlr-runtime.jar}" dest="${tmp.dir}/${antlr.dir}">
+    <delete dir="${unpacked-libs.dir}" />
+    <unjar src="${antlr-runtime.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/antlr/runtime/**" />
       </patternset>
     </unjar>
-    <unjar src="${antlr-runtime-sources.jar}" dest="${tmp.dir}/${antlr.dir}">
+    <unjar src="${antlr-runtime-sources.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/antlr/runtime/**" />
       </patternset>
     </unjar>
-    <unjar src="${commons-cli.jar}" dest="${tmp.dir}/${commons-cli.dir}">
+    <unjar src="${commons-cli.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/apache/commons/cli/**" />
       </patternset>
     </unjar>
-    <unjar src="${commons-cli-sources.jar}" dest="${tmp.dir}/${commons-cli.dir}">
+    <unjar src="${commons-cli-sources.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/apache/commons/cli/**" />
       </patternset>
     </unjar>
-    <unjar src="${anarres-cpp.jar}" dest="${tmp.dir}/${anarres-cpp.dir}">
+    <unjar src="${anarres-cpp.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/anarres/**" />
       </patternset>
     </unjar>
-    <unjar src="${anarres-cpp-sources.jar}" dest="${tmp.dir}/${anarres-cpp.dir}">
+    <unjar src="${anarres-cpp-sources.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/anarres/**" />
       </patternset>
     </unjar>
-    <unjar src="${jply.jar}" dest="${tmp.dir}/${jply.dir}">
+    <unjar src="${jply.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/smurn/jply/**" />
       </patternset>
     </unjar>
-    <unjar src="${jply-sources.jar}" dest="${tmp.dir}/${jply.dir}">
+    <unjar src="${jply-sources.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/smurn/jply/**" />
       </patternset>
     </unjar>
-    <unjar src="${commons-lang3.jar}" dest="${tmp.dir}/${commons-lang3.dir}">
+    <unjar src="${commons-lang3.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/apache/commons/lang3/**" />
       </patternset>
     </unjar>
-    <unjar src="${commons-lang3-sources.jar}" dest="${tmp.dir}/${commons-lang3.dir}">
+    <unjar src="${commons-lang3-sources.jar}" dest="${unpacked-libs.dir}">
       <patternset>
         <include name="org/apache/commons/lang3/**" />
       </patternset>
     </unjar>
   </target>
 
-  <target name="jar" depends="compile, unpack-libs">
+  <target name="jar" depends="compile">
     <jar destfile="${jarfile}">
       <fileset dir="${src.build.dir}" />
       <fileset dir="${src.dir}" />
-      <fileset dir="${tmp.dir}/${antlr.dir}" />
-      <fileset dir="${tmp.dir}/${commons-cli.dir}" />
-      <fileset dir="${tmp.dir}/${anarres-cpp.dir}" />
-      <fileset dir="${tmp.dir}/${jply.dir}" />
-      <fileset dir="${tmp.dir}/${commons-lang3.dir}" />
+      <fileset dir="${unpacked-libs.dir}" />
       <manifest>
         <attribute name="Main-Class" value="se.ejp.traci.main.Main" />
       </manifest>
@@ -194,11 +182,7 @@
       <classpath>
         <pathelement location="${src.build.dir}" />
         <pathelement location="${test.build.dir}" />
-        <pathelement location="${antlr-runtime.jar}" />
-        <pathelement location="${commons-cli.jar}" />
-        <pathelement location="${anarres-cpp.jar}" />
-        <pathelement location="${jply.jar}" />
-        <pathelement location="${commons-lang3.jar}" />
+        <pathelement location="${unpacked-libs.dir}" />
         <pathelement location="${hamcrest.jar}" />
         <pathelement location="${junit.jar}" />
       </classpath>
