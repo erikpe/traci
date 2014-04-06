@@ -8,6 +8,7 @@ import java.util.List;
 import se.ejp.traci.lang.interpreter.exceptions.InterpreterIOException;
 import se.ejp.traci.math.Vector;
 import se.ejp.traci.model.shape.primitive.MeshReader.MeshData;
+import se.ejp.traci.render.Point.Type;
 import se.ejp.traci.render.Ray;
 import se.ejp.traci.util.ComparablePair;
 
@@ -46,10 +47,33 @@ public class Mesh extends Primitive
         shoot(p, dir, 0, points);
         Collections.sort(points);
 
-        return null;
+        if (points.isEmpty())
+        {
+            return null;
+        }
+
+        final Ray ray = Ray.make();
+        int idx = 0;
+        while (idx < points.size())
+        {
+            final ComparablePair<Double, Vector> p0 = points.get(idx++);
+
+            if (idx < points.size())
+            {
+                final ComparablePair<Double, Vector> p1 = points.get(idx++);
+                ray.add(p0.first, this, Type.ENTER, p0.second);
+                ray.add(p1.first, this, Type.LEAVE, p1.second);
+            }
+            else
+            {
+                ray.add(p0.first, this, Type.INTERSECT, p0.second);
+            }
+        }
+        return ray;
     }
 
-    private void shoot(final Vector p, final Vector dir, final int node, final List<ComparablePair<Double, Vector>> points)
+    private void shoot(final Vector p, final Vector dir, final int node,
+            final List<ComparablePair<Double, Vector>> points)
     {
         if (!bboxHit(p, dir, node))
         {
@@ -62,11 +86,13 @@ public class Mesh extends Primitive
 
         if (a < 0)
         {
+            assert b < 0;
             shoot(p, dir, -a, points);
             shoot(p, dir, -b, points);
         }
         else
         {
+            assert b >= 0;
             intersect(p, dir, a, b, points);
         }
     }
@@ -126,36 +152,49 @@ public class Mesh extends Primitive
         return true;
     }
 
-    private void intersect(final Vector O, final Vector D, final int begin, final int end, final List<ComparablePair<Double, Vector>> points)
+    private void intersect(final Vector O, final Vector D, final int begin, final int end,
+            final List<ComparablePair<Double, Vector>> points)
     {
         for (int i = begin; i < end; ++i)
         {
             int idx = MeshData.TRIANGLE_SIZE * i;
-            final int v0_idx = meshData.triangles[idx];
-            final int v1_idx = meshData.triangles[++idx];
+            final int v1_idx = meshData.triangles[idx];
             final int v2_idx = meshData.triangles[++idx];
+            final int v3_idx = meshData.triangles[++idx];
 
-            idx = MeshData.VERTEX_SIZE * v0_idx;
+            idx = MeshData.VERTEX_SIZE * v1_idx;
             double x = meshData.vertices[idx];
             double y = meshData.vertices[++idx];
             double z = meshData.vertices[++idx];
-            final Vector V0 = Vector.make(x, y, z);
-
-            idx = MeshData.VERTEX_SIZE * v1_idx;
-            x = meshData.vertices[idx];
+            final Vector v1 = Vector.make(x, y, z);
+            x = meshData.vertices[++idx];
             y = meshData.vertices[++idx];
             z = meshData.vertices[++idx];
-            final Vector V1 = Vector.make(x, y, z);
+            final Vector n1 = Vector.make(x, y, z);
 
             idx = MeshData.VERTEX_SIZE * v2_idx;
             x = meshData.vertices[idx];
             y = meshData.vertices[++idx];
             z = meshData.vertices[++idx];
-            final Vector V2 = Vector.make(x, y, z);
+            final Vector v2 = Vector.make(x, y, z);
+            x = meshData.vertices[++idx];
+            y = meshData.vertices[++idx];
+            z = meshData.vertices[++idx];
+            final Vector n2 = Vector.make(x, y, z);
+
+            idx = MeshData.VERTEX_SIZE * v3_idx;
+            x = meshData.vertices[idx];
+            y = meshData.vertices[++idx];
+            z = meshData.vertices[++idx];
+            final Vector v3 = Vector.make(x, y, z);
+            x = meshData.vertices[++idx];
+            y = meshData.vertices[++idx];
+            z = meshData.vertices[++idx];
+            final Vector n3 = Vector.make(x, y, z);
 
             // Find vectors for two edges sharing V0
-            final Vector e1 = V1.sub(V0);
-            final Vector e2 = V2.sub(V0);
+            final Vector e1 = v2.sub(v1);
+            final Vector e2 = v3.sub(v1);
 
             // Begin calculating determinant - also used to calculate u parameter
             final Vector P = D.cross(e2);
@@ -163,7 +202,7 @@ public class Mesh extends Primitive
             final double inv_det = 1.0 / det;
 
             // Calculate distance from V0 to ray origin
-            final Vector T = O.sub(V0);
+            final Vector T = O.sub(v1);
 
             // Calculate u parameter and test bound
             final double u = T.dot(P) * inv_det;
@@ -187,8 +226,20 @@ public class Mesh extends Primitive
             }
 
             final double t = e2.dot(Q) * inv_det;
+            final Vector hit = O.add(D.mul(t));
 
-            points.add(ComparablePair.make(t, Vector.UNIT_Y));
+            final double a1 = hit.sub(v3).cross(hit.sub(v2)).length() / 2.0;
+            final double a2 = hit.sub(v3).cross(hit.sub(v1)).length() / 2.0;
+            final double a3 = hit.sub(v2).cross(hit.sub(v1)).length() / 2.0;
+            final double tot_a = a1 + a2 + a3;
+
+            final double g1 = a1 / tot_a;
+            final double g2 = a2 / tot_a;
+            final double g3 = a3 / tot_a;
+
+            final Vector normal = n1.mul(g1).add(n2.mul(g2)).add(n3.mul(g3));
+
+            points.add(ComparablePair.make(t, normal));
         }
     }
 }
