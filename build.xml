@@ -37,8 +37,8 @@
   <property name="commons-lang3.jar" value="${lib.dir}/${commons-lang3.dir}/commons-lang3-3.1.jar" />
   <property name="commons-lang3-sources.jar" value="${lib.dir}/${commons-lang3.dir}/commons-lang3-3.1-sources.jar" />
 
-  <property name="junit.dir" value="junit-4.11" />
-  <property name="junit.jar" value="${lib.dir}/${junit.dir}/junit-4.11.jar" />
+  <property name="junit.dir" value="junit-4.12" />
+  <property name="junit.jar" value="${lib.dir}/${junit.dir}/junit-4.12.jar" />
   <property name="hamcrest.jar" value="${lib.dir}/${junit.dir}/hamcrest-core-1.3.jar" />
 
   <property name="jarfile" value="${ant.project.name}-${version}.jar" />
