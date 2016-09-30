@@ -13,12 +13,12 @@ public abstract class TraciOption extends Option
     final protected String optName;
     Integer sortingIdx = 0;
 
-    public static final Comparator<TraciOption> COMPARATOR = new Comparator<TraciOption>()
+    public static final Comparator<Option> COMPARATOR = new Comparator<Option>()
     {
         @Override
-        public int compare(final TraciOption o1, final TraciOption o2)
+        public int compare(final Option o1, final Option o2)
         {
-            return o1.sortingIdx.compareTo(o2.sortingIdx);
+            return ((TraciOption) o1).sortingIdx.compareTo(((TraciOption) o2).sortingIdx);
         }
     };
 
