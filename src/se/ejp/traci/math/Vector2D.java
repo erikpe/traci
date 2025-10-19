@@ -26,4 +26,35 @@ public class Vector2D
     {
         return y;
     }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = getClass().hashCode() | 0x0000001;
+        hash = 31 * hash + Double.valueOf(x).hashCode();
+        hash = 31 * hash + Double.valueOf(y).hashCode();
+        return hash;
+    }
+
+    @Override
+    public boolean equals(final Object other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        else if (other == this)
+        {
+            return true;
+        }
+        else if (other.getClass() != getClass())
+        {
+            return false;
+        }
+
+        final Vector2D otherVector = (Vector2D) other;
+
+        return Double.valueOf(x).equals(Double.valueOf(otherVector.x)) &&
+               Double.valueOf(y).equals(Double.valueOf(otherVector.y));
+    }
 }
