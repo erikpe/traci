@@ -50,6 +50,30 @@ public class FunctionSet
         return allFunctionIds;
     }
 
+    public FunctionSet clone()
+    {
+        final FunctionSet clonedOuterScope = (outerScope != null) ? outerScope.clone() : null;
+        final FunctionSet clonedFunctionSet = new FunctionSet(clonedOuterScope);
+
+        for (Map.Entry<String, Function> entry : functions.entrySet())
+        {
+            clonedFunctionSet.put(entry.getKey(), entry.getValue());
+        }
+
+        return clonedFunctionSet;
+    }
+
+    public void mergeFrom(final FunctionSet other)
+    {
+        if (other != null)
+        {
+            for (Map.Entry<String, Function> entry : other.functions.entrySet())
+            {
+                this.functions.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
     @Override
     public String toString()
     {
