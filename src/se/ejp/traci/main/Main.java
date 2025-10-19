@@ -51,6 +51,19 @@ public class Main
         final Scene scene = interpreter.getScene();
         interpreter = null;
 
+        // Check if rendering is requested but no camera exists
+        if (scene.camera == null && (settings.getDisplay() || settings.getOutputFilename() != null))
+        {
+            Log.ERROR("In file: '" + settings.getInputFilename() + "': No camera object specified, but rendering was requested");
+            return Result.RUNTIME_ERROR;
+        }
+
+        // If no rendering is requested, we're done
+        if (!settings.getDisplay() && settings.getOutputFilename() == null)
+        {
+            return Result.SUCCESS;
+        }
+
         final MultiDrawArea drawAreas = new MultiDrawArea(settings.getWidth(), settings.getHeight());
 
         if (settings.getDisplay())
@@ -76,6 +89,8 @@ public class Main
 
     public static void main(final String[] argv)
     {
+        Log.INFO("Launched with arguments: " + String.join(" ", argv));
+
         final Result result = run(argv);
 
         switch (result)

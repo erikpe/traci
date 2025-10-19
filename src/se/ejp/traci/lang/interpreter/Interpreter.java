@@ -63,11 +63,12 @@ public class Interpreter
 
         if (scene.camera == null)
         {
-            Log.ERROR("In file: '" + settings.getInputFilename() + "': No camera object specified");
-            return Result.RUNTIME_ERROR;
+            Log.INFO("No camera object specified");
         }
-
-        scene.camera.initialize(settings);
+        else
+        {
+            scene.camera.initialize(settings);
+        }
 
         final long stop = System.currentTimeMillis();
         Log.INFO("Scene constructed in " + Utilities.millisecondsToString(stop - start));
