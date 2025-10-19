@@ -34,10 +34,10 @@ public class PolynomSolverTest
         }
         for (double root : roots)
         {
-            double result = coeffs[0] * root * root * root + 
-                          coeffs[1] * root * root + 
-                          coeffs[2] * root + 
-                          coeffs[3];
+            double result = coeffs[0] * root * root * root +
+                            coeffs[1] * root * root +
+                            coeffs[2] * root +
+                            coeffs[3];
             assertEquals("Root " + root + " should satisfy the equation", 0.0, result, EPSILON);
         }
     }
@@ -52,11 +52,11 @@ public class PolynomSolverTest
         }
         for (double root : roots)
         {
-            double result = coeffs[0] * root * root * root * root + 
-                          coeffs[1] * root * root * root + 
-                          coeffs[2] * root * root + 
-                          coeffs[3] * root + 
-                          coeffs[4];
+            double result = coeffs[0] * root * root * root * root +
+                            coeffs[1] * root * root * root +
+                            coeffs[2] * root * root +
+                            coeffs[3] * root +
+                            coeffs[4];
             assertEquals("Root " + root + " should satisfy the equation", 0.0, result, EPSILON);
         }
     }

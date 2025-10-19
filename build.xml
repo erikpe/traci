@@ -9,6 +9,8 @@
   <property name="test.src.dir" value="test" />
   <property name="testcode.dir" value="testcode" />
 
+  <property name="test.showoutput" value="no" />
+
   <property name="build.dir" value="build" />
   <property name="src.build.dir" value="${build.dir}/bin" />
   <property name="test.build.dir" value="${build.dir}/test.bin" />
@@ -178,7 +180,7 @@
   <target name="run-tests" depends="compile, compile-tests">
     <delete dir="${test.output.dir}" />
     <mkdir dir="${test.output.dir}" />
-    <junit failureProperty="test.failure" printsummary="yes" haltonfailure="no" showoutput="no" fork="yes" forkmode="once">
+    <junit failureProperty="test.failure" printsummary="yes" haltonfailure="no" showoutput="${test.showoutput}" fork="yes" forkmode="once">
       <classpath>
         <pathelement location="${src.build.dir}" />
         <pathelement location="${test.build.dir}" />
