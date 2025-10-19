@@ -1,0 +1,46 @@
+// Test boolean literals
+x = true;
+y = false;
+
+// Test boolean operations with literals
+if (true) {
+    print("true literal works");
+}
+
+if (false) {
+    print("this should not print");
+}
+else {
+    print("false literal works");
+}
+
+// Test boolean in expressions
+a = true == true;
+b = true == false;
+c = false == false;
+
+// Test boolean with NOT operator
+d = !true;
+e = !false;
+
+// Test boolean in while loop
+count = 0;
+keep_going = true;
+while (keep_going) {
+    count = count + 1;
+    if (count > 5) {
+        keep_going = false;
+    }
+}
+
+// Test boolean assignment and comparison
+flag = true;
+if (flag == true) {
+    print("boolean comparison works");
+}
+
+// Test combining with comparison results
+is_positive = (10 > 0);
+is_equal = (5 == 5);
+
+return count;

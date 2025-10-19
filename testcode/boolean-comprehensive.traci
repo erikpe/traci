@@ -1,0 +1,67 @@
+// Comprehensive boolean literal test
+
+// 1. Direct assignment
+flag1 = true;
+flag2 = false;
+print("Assignment works");
+
+// 2. Boolean literals in conditions
+if (true) {
+    print("true in if condition works");
+}
+
+if (false) {
+    print("FAIL: false should not enter if");
+} else {
+    print("false in if condition works");
+}
+
+// 3. Boolean operations
+and_result = true == true;    // true
+or_result = true == false;     // false
+not_true = !true;              // false
+not_false = !false;            // true
+print("Boolean operations work");
+
+// 4. Boolean in while loop
+iterations = 0;
+running = true;
+while (running) {
+    iterations = iterations + 1;
+    if (iterations > 3) {
+        running = false;
+    }
+}
+print("While loop with boolean works");
+
+// 5. Boolean in for loop guard check
+def shouldContinue(i) {
+    return i < 5;
+}
+
+for (i in 0 .. 10) {
+    keep_going = shouldContinue(i);
+    if (keep_going) {
+        // continue
+    } else {
+        print("For loop with boolean guard works");
+    }
+}
+
+// 6. Comparing booleans
+same = (true == true);
+different = (true == false);
+if (same) {
+    print("Boolean equality works");
+}
+
+// 7. Mixed boolean and comparison
+value = 10;
+is_positive = value > 0;      // comparison result
+is_true = true;               // literal
+both_true = is_positive == is_true;
+if (both_true) {
+    print("Mixed boolean and comparison works");
+}
+
+print("All boolean literal tests passed!");

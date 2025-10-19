@@ -1,0 +1,19 @@
+// Simple test to verify boolean literal values
+a = true;
+b = false;
+
+if (a) {
+    print("true is truthy");
+}
+
+if (!b) {
+    print("false is falsy");
+}
+
+// Test boolean equality
+x = (true == true);   // should be true
+y = (false == false); // should be true
+z = (true == false);  // should be false
+
+// Return a boolean value
+return true;

@@ -131,6 +131,8 @@ constant
     : FLOAT
     | INT
     | QSTRING
+    | TRUE
+    | FALSE
     ;
 
 function_call

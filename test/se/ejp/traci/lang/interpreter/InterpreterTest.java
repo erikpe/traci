@@ -199,4 +199,89 @@ public class InterpreterTest extends InterpreterBase
         assertEquals(Type.NUMBER, value.getType());
         assertEquals(0, value.getNumber(), 0);
     }
+
+    @Test
+    public void testBooleanLiterals() throws RecognitionException, IOException, InterpreterRuntimeException
+    {
+        runInterpreterFile("testcode/boolean-literals.traci");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(6, value.getNumber(), 0);  // count should be 6
+    }
+
+    @Test
+    public void testBooleanSimpleFile() throws RecognitionException, IOException, InterpreterRuntimeException
+    {
+        runInterpreterFile("testcode/boolean-simple.traci");
+        assertEquals(Type.BOOLEAN, value.getType());
+        assertEquals(true, value.getBoolean());
+    }
+
+    @Test
+    public void testBooleanComprehensive() throws RecognitionException, IOException, InterpreterRuntimeException
+    {
+        // This file tests boolean literals in various contexts and uses print statements
+        // It doesn't return a value, so we just verify it runs without errors
+        runInterpreterFile("testcode/boolean-comprehensive.traci");
+        // No return value expected, just verify no exceptions thrown
+    }
+
+    @Test
+    public void testBooleanSimple() throws RecognitionException, InterpreterRuntimeException
+    {
+        // Test true literal
+        runInterpreter("return true;");
+        assertEquals(Type.BOOLEAN, value.getType());
+        assertEquals(true, value.getBoolean());
+
+        // Test false literal
+        runInterpreter("return false;");
+        assertEquals(Type.BOOLEAN, value.getType());
+        assertEquals(false, value.getBoolean());
+
+        // Test boolean in if
+        runInterpreter("x = 0; if (true) { x = 1; } return x;");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        // Test boolean equality
+        runInterpreter("return true == true;");
+        assertEquals(Type.BOOLEAN, value.getType());
+        assertEquals(true, value.getBoolean());
+
+        runInterpreter("return true == false;");
+        assertEquals(Type.BOOLEAN, value.getType());
+        assertEquals(false, value.getBoolean());
+
+        // Test boolean NOT
+        runInterpreter("return !true;");
+        assertEquals(Type.BOOLEAN, value.getType());
+        assertEquals(false, value.getBoolean());
+
+        runInterpreter("return !false;");
+        assertEquals(Type.BOOLEAN, value.getType());
+        assertEquals(true, value.getBoolean());
+    }
+
+    @Test
+    public void testBooleanInControlFlow() throws RecognitionException, InterpreterRuntimeException
+    {
+        // Test while loop with boolean
+        runInterpreter("count = 0; running = true; while (running) { count = count + 1; if (count > 3) { running = false; } } return count;");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(4, value.getNumber(), 0);
+
+        // Test if-else with boolean literals
+        runInterpreter("if (true) { return 1; } else { return 0; }");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        runInterpreter("if (false) { return 0; } else { return 1; }");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        // Test boolean from comparison
+        runInterpreter("is_positive = (10 > 0); if (is_positive) { return 1; } return 0;");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+    }
 }

@@ -101,6 +101,8 @@ ELSE : 'else';
 BBOX : 'bbox';
 FOR : 'for';
 IN : 'in';
+TRUE : 'true';
+FALSE : 'false';
 
 PRIMITIVE_SHAPE
     : ('box' | 'cylinder' | 'plane' | 'sphere' | 'torus' | 'cone' | 'mesh')

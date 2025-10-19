@@ -154,4 +154,6 @@ expr returns [TraciNode node]
     | INT     {$node = new ConstNode(new TraciValue(Double.valueOf($INT.text)));}
     | FLOAT   {$node = new ConstNode(new TraciValue(Double.valueOf($FLOAT.text)));}
     | QSTRING {$node = new ConstNode(new TraciValue(ParserUtilities.unquoteQstring($QSTRING.text)));}
+    | TRUE    {$node = new ConstNode(new TraciValue(Boolean.TRUE));}
+    | FALSE   {$node = new ConstNode(new TraciValue(Boolean.FALSE));}
     ;
