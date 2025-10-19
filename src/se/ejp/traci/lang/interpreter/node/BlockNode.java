@@ -48,4 +48,26 @@ public class BlockNode implements TraciNode
     {
         return statements;
     }
+
+    public BlockNode append(final BlockNode other)
+    {
+        final FunctionSet combinedFunctions = this.functions.clone();
+        combinedFunctions.mergeFrom(other.functions);
+
+        final BlockNode combined = new BlockNode(combinedFunctions);
+
+        // Add all statements from this node
+        for (final TraciNode statement : this.statements)
+        {
+            combined.addStatement(statement);
+        }
+
+        // Add all statements from the other node
+        for (final TraciNode statement : other.statements)
+        {
+            combined.addStatement(statement);
+        }
+
+        return combined;
+    }
 }
