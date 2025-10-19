@@ -1,5 +1,157 @@
-Build
-=====
+Traci — Java ray tracer with a custom scene language
+===================================================
 
-Traci is built by running ant:
-$ ant
+Traci is a small but capable ray tracer written in Java. It comes with its own scene description language (also called Traci) and a pipeline that preprocesses, parses, interprets, and renders scenes to a window and/or PNG.
+
+If you’re automating changes or exploring the codebase, see AGENTS.md for a code-level guide.
+
+• Entry point: `se.ejp.traci.main.Main`
+• Build tool: Apache Ant
+• Java level: 7/8-compatible (no streams/lambdas)
+
+
+Quick start
+-----------
+
+Prerequisites
+- JDK 8+ (OpenJDK is fine)
+- Apache Ant on your PATH
+
+Build a runnable jar:
+
+```bash
+ant jar
+```
+
+Run an example scene (Lego airplane) with on-screen preview:
+
+```bash
+java -jar traci-0.0.1.jar -d scenes/lego/airplane.traci
+```
+
+Save a PNG instead (headless):
+
+```bash
+java -jar traci-0.0.1.jar -o renders/airplane.png -w 1280 -h 720 scenes/lego/airplane.traci
+```
+
+
+The Traci language at a glance
+------------------------------
+
+Minimal scene (save as `example.traci`):
+
+```
+// camera
+camera([0, 1, -3], [0, 0, 0], 45, [0, 1, 0]);
+
+// lights
+ambientlight(color [1,1,1] * 0.2);
+pointlight([5, 5, -5], color [1,1,1] * 200);
+
+// object
+sphere(1.0) {
+	translate [0, 0, 0];
+	material {
+		pigment solid(color [0.2, 0.6, 1.0]);
+		finish(0.3, 0.3, 50.0, 0.1);
+	};
+}
+```
+
+Render it:
+
+```bash
+java -jar traci-0.0.1.jar -o renders/example.png -w 800 -h 600 example.traci
+```
+
+Language features include functions, control flow (if/elif/else, while, for i in a..b), vectors `[x,y,z]`, colors `color [r,g,b(,a)]`, shapes (sphere, box, mesh, CSG), transformations (translate/scale/rot*), materials/textures/pigments, lights, camera, and skybox. Preprocessor directives (`#include`, `#define`, `#if`) are supported.
+
+See AGENTS.md for the formal grammar keywords and object mapping.
+
+
+CLI reference (Common options)
+------------------------------
+
+- `-w, --width SIZE`       Image width (default 800)
+- `-h, --height SIZE`      Image height (default 600)
+- `-a, --aa-level LEVEL`   Antialiasing level (0=off)
+- `-o, --output FILE`      Save PNG to FILE
+- `-d, --display`          Show live render window (Swing)
+- `--focal-blur-samples N` Enable focal blur with N samples/pixel
+- `--workblock-width SIZE` Tile width (default 16)
+- `--workblock-height SIZE` Tile height (default 16)
+- `--threads N`            Number of worker threads (0 = auto)
+- `--debug`                Extra logging
+
+Preprocessor:
+- `-D NAME=VALUE`          Define macro (repeatable)
+- `-I DIR`                 Add include search dir (repeatable)
+- `--preprocessor-output FILE`  Save preprocessed source
+
+Full CLI details live in `src/se/ejp/traci/main/options` and are summarized in AGENTS.md.
+
+
+Build and test
+--------------
+
+Build the jar:
+
+```bash
+ant jar
+```
+
+Run tests (JUnit 4):
+
+```bash
+ant test
+```
+
+Reports:
+- XML results: `build/test.output/`
+- HTML report: `build/test.report/`
+
+
+Repository layout
+-----------------
+
+- `src/se/ejp/traci/main`       Entry point and CLI
+- `src/se/ejp/traci/lang`       Grammar (ANTLR), parser, preprocessor, interpreter
+- `src/se/ejp/traci/model`      Scene graph (shapes, materials, lights, camera, skybox)
+- `src/se/ejp/traci/render`     Renderer and raytracer
+- `src/se/ejp/traci/math`       Vectors, matrices, transforms
+- `src/se/ejp/traci/gui`        PNG and Swing draw areas
+- `scenes/`                     Example scenes
+- `test/`                       JUnit tests
+- `testcode/`                   Small language samples
+- `lib/`                        Vendored dependencies (ANTLR 3.5.2, Commons CLI, etc.)
+- `build.xml`                   Ant build
+- `AGENTS.md`                   In-depth guide for contributors/automation
+
+
+Troubleshooting
+---------------
+
+- “Command not found: ant” — Install Apache Ant and ensure it’s on PATH.
+- GUI display doesn’t appear — Ensure an X server is available (or run headless with `-o`).
+- Slow renders — Reduce resolution, AA level, or increase `--threads`.
+- Determinism — Rendering work blocks and builtins use seeded RNGs for reproducibility.
+
+
+Contributing
+------------
+
+Small, localized changes are preferred. If adding grammar or AST features, update the ANTLR grammars in `lang/grammar`, regenerate via Ant, and mirror the behavior in the interpreter nodes. See AGENTS.md for extension points and architecture.
+
+
+License
+-------
+
+See `LICENSE`.
+
+
+See also
+--------
+
+- AGENTS.md — deep-dive architecture and extension guide
+
