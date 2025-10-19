@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRStringStream;
@@ -29,6 +31,7 @@ public class InterpreterBase
 {
     protected Scene scene = null;
     protected TraciValue value = null;
+    protected BlockNode loadedBlockNode = null;
 
     private void run(final CharStream input) throws RecognitionException, InterpreterRuntimeException
     {
@@ -49,6 +52,48 @@ public class InterpreterBase
         try
         {
             rootNode.eval(rootContext);
+        }
+        catch (final FunctionReturnException e)
+        {
+            assertNotNull(e.value);
+            value = e.value;
+        }
+    }
+
+    private void load(final CharStream input) throws RecognitionException, InterpreterRuntimeException
+    {
+        final TraciLexer lexer = new TraciLexer(input);
+        final TraciParser parser = new TraciParser(new CommonTokenStream(lexer));
+        final CommonTree parseTree = (CommonTree) parser.scene().getTree();
+
+        assertTrue(lexer.getLexerErrors().isEmpty());
+        assertTrue(parser.getParseErrors().isEmpty());
+
+        final TraciTreeWalker walker = new TraciTreeWalker(new CommonTreeNodeStream(parseTree));
+        loadedBlockNode = walker.block();
+    }
+
+    private void runInContext(final CharStream input) throws RecognitionException, InterpreterRuntimeException
+    {
+        final TraciLexer lexer = new TraciLexer(input);
+        final TraciParser parser = new TraciParser(new CommonTokenStream(lexer));
+        final CommonTree parseTree = (CommonTree) parser.scene().getTree();
+
+        assertTrue(lexer.getLexerErrors().isEmpty());
+        assertTrue(parser.getParseErrors().isEmpty());
+
+        final TraciTreeWalker walker = new TraciTreeWalker(new CommonTreeNodeStream(parseTree));
+        final BlockNode snippetNode = walker.block();
+
+        final BlockNode combinedBlockNode = loadedBlockNode.append(snippetNode);
+
+        scene = new Scene();
+        value = null;
+
+        final Context rootContext = Context.newRootContext(scene);
+        try
+        {
+            combinedBlockNode.eval(rootContext);
         }
         catch (final FunctionReturnException e)
         {
@@ -78,5 +123,18 @@ public class InterpreterBase
         final Result result = pp.run();
         assertEquals(Result.SUCCESS, result);
         runInterpreter(pp.getProcessedCode());
+    }
+
+    protected void loadInterpreterFile(final String filename) throws RecognitionException, IOException,
+            InterpreterRuntimeException
+    {
+        load(new ANTLRFileStream(filename));
+    }
+
+    protected void runSnippet(final String code) throws RecognitionException, InterpreterRuntimeException
+    {
+        assertNotNull("Must call loadInterpreterFile before runSnippet", loadedBlockNode);
+        System.out.println(code);
+        runInContext(new ANTLRStringStream(code));
     }
 }
