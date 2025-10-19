@@ -129,4 +129,74 @@ public class InterpreterTest extends InterpreterBase
             assertEquals(9, e.getLocation().fileLocation.col);
         }
     }
+
+    @Test
+    public void testPrimeCheckerSnippets() throws RecognitionException, IOException, InterpreterRuntimeException
+    {
+        loadInterpreterFile("testcode/prime-checker.traci");
+
+        // Test small primes
+        runSnippet("return isPrime(2);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        runSnippet("return isPrime(3);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        runSnippet("return isPrime(5);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        runSnippet("return isPrime(7);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        runSnippet("return isPrime(11);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        // Test larger primes
+        runSnippet("return isPrime(23);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        runSnippet("return isPrime(97);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(1, value.getNumber(), 0);
+
+        // Test composite numbers
+        runSnippet("return isPrime(1);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 0);
+
+        runSnippet("return isPrime(4);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 0);
+
+        runSnippet("return isPrime(6);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 0);
+
+        runSnippet("return isPrime(9);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 0);
+
+        runSnippet("return isPrime(15);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 0);
+
+        runSnippet("return isPrime(20);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 0);
+
+        runSnippet("return isPrime(100);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 0);
+
+        // Test edge case
+        runSnippet("return isPrime(0);");
+        assertEquals(Type.NUMBER, value.getType());
+        assertEquals(0, value.getNumber(), 0);
+    }
 }

@@ -186,4 +186,18 @@ public class TraciParserTest extends TraciParserBase
         runParserPreprocessedFile("testcode/fibonacci.traci");
         assertNoError();
     }
+
+    @Test
+    public void testPrimeCheckerFromFile() throws RecognitionException, IOException
+    {
+        runParserFile("testcode/prime-checker.traci");
+        assertNoError();
+    }
+
+    @Test
+    public void testPrimeCheckerPreprocessedFile() throws RecognitionException, IOException
+    {
+        runParserPreprocessedFile("testcode/prime-checker.traci");
+        assertNoError();
+    }
 }

@@ -1,0 +1,54 @@
+// Prime number checker in Traci
+// Checks if a number is prime using trial division
+
+// Helper function to compute floor of a number
+def floor(x)
+{
+    // Simple floor implementation
+    // If x is negative, this won't work perfectly, but we only use positive numbers
+    if (x < 0) {
+        return 0 - floor(0 - x) - 1;
+    }
+    
+    // For positive numbers, subtract the fractional part
+    intPart = 0;
+    while (intPart + 1 <= x) {
+        intPart = intPart + 1;
+    }
+    return intPart;
+}
+
+// Helper function to check if a divides n
+def isDivisible(n, divisor)
+{
+    quotient = n / divisor;
+    intQuotient = floor(quotient);
+    return intQuotient * divisor == n;
+}
+
+def isPrime(n)
+{
+    if (n < 2) {
+        return 0;
+    }
+    
+    if (n == 2) {
+        return 1;
+    }
+    
+    // Check if divisible by 2
+    if (isDivisible(n, 2)) {
+        return 0;
+    }
+    
+    // Check odd divisors from 3 up to sqrt(n)
+    i = 3;
+    while (i * i <= n) {
+        if (isDivisible(n, i)) {
+            return 0;
+        }
+        i = i + 2;
+    }
+    
+    return 1;
+}
